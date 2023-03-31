@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+
+}
+
+.canvas{
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-transform: translate3d(0,0,0);
+}
+
+.background {
+    display:none;
+}
+
+.sprite {
+    display:none;
+}
+
+#moon {
+    display:none;
+}
+

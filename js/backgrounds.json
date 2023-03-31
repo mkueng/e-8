@@ -1,0 +1,84 @@
+{
+  "backgroundsImageData":
+  {
+    "backgroundStars": {
+      "id" : "backgroundStars",
+      "image": "backgroundStars.jpg",
+      "plane" : "",
+      "width" : 2000,
+      "height" : 1000
+    },
+    "haze_01": {
+      "id" : "haze_01",
+      "image" : "haze_01.png",
+      "width" : 2000,
+      "height" : 1000
+    },
+    "mars" : {
+      "id" : "mars",
+      "image" : "mars.png",
+      "width" : 500,
+      "height" : 500
+    },
+    "jupiter" : {
+      "id" : "jupiter",
+      "image" : "jupiter.png",
+      "width" : 1000,
+      "height" : 1000
+    },
+    "spaceStation_01" : {
+      "id" : "spaceStation_01",
+      "image" : "spaceStation_01.png",
+      "width" : 500,
+      "height" : 500
+    },
+    "sun" : {
+      "id" : "sun",
+      "image" : "sun.png",
+      "width" : 500,
+      "height" : 500
+    },
+    "moon" : {
+      "id" : "moon",
+      "image" : "moon.png",
+      "width" : 500,
+      "height" : 500
+    },
+    "m130" : {
+      "id" : "m130",
+      "image" : "m130.png",
+      "width" : 500,
+      "height" : 500
+    },
+    "asteroid_01" : {
+      "id" : "asteroid_01",
+      "image" : "asteroid_01.png",
+      "width" : 300,
+      "height" : 300
+    },
+    "asteroid_02" : {
+      "id" : "asteroid_02",
+      "image" : "asteroid_02.png",
+      "width" : 300,
+      "height" : 300
+    },
+    "asteroid_03" : {
+      "id" : "asteroid_03",
+      "image" : "asteroid_03.png",
+      "width" : 300,
+      "height" : 300
+    },
+    "asteroidField_01" : {
+      "id" : "asteroidField_01",
+      "image" : "asteroidField_01.png",
+      "width" : 300,
+      "height" : 300
+    },
+    "asteroidField_02" : {
+      "id" : "asteroidField_02",
+      "image" : "asteroidField_02.png",
+      "width" : 300,
+      "height" : 300
+    }
+  }
+}
