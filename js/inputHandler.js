@@ -25,8 +25,6 @@ class InputHandler {
         this.keyEvents[event.key] = true;
         InputHandler.publishKeyDown(event.key)
       }
-
-
     })
 
     document.addEventListener("keyup", (event) =>{

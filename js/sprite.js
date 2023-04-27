@@ -6,8 +6,8 @@ class Sprite extends GameObjectInterface{
     this.context = sprite.context;
     this.height = sprite.height;
     this.width = sprite.width;
-    this.x = sprite.x;
-    this.y = sprite.y;
+    this.x = 0;
+    this.y = 0;
     this.dy = sprite.dy;
     this.dx = sprite.dx;
     this.vx = sprite.vx;
@@ -23,6 +23,7 @@ class Sprite extends GameObjectInterface{
     this.step = sprite.step;
     this.callback = sprite.callback;
     this.animationCounter = 100;
+    this.stage = sprite.stage;
     return this;
   }
 
@@ -46,20 +47,19 @@ class Sprite extends GameObjectInterface{
         } else {
           if (this.loop === true) {
             this.currentFrame = 0;
-
           } else {
-            this.callback()
+            this.destroy();
           }
-
         }
       } else {
         this.context.drawImage(
           this.image,
-          this.x, this.y, this.width, this.height)
+          this.x+this.dx,
+          this.y+this.dy,
+          this.width,
+          this.height
+        )
       }
     }
   }
-
-
-
 }

@@ -1,35 +1,31 @@
 class GameController {
 
+  static music = new Audio("../resources/music/backgroundmusic.mp3");
+
   constructor() {
-
-    this.gameLoop = new GameLoop();
     new InputHandler();
-    this.canvasHandler = new CanvasHandler(this.gameLoop);
-    this.spriteHandler = new SpriteHandler(this.canvasHandler, this.gameLoop);
-    new BackgroundHandler(this.canvasHandler, this.gameLoop);
-    this.hud = new Hud(this.canvasHandler.getCanvas("shipinfo"))
-    this.gameLoop.addHud(this.hud);
-    const spaceship = this.spriteHandler.instantiateSpriteComposition("spaceship_01");
-    this.spriteHandler.addSpriteToGameLoop(spaceship);
+    GameController.music.volume = 0.0;
+    this.canvasHandler = new CanvasHandler();
+    this.gameLoop = new GameLoop(this.canvasHandler);
+    this.spriteHandler = new SpriteHandler(this.canvasHandler);
+    this.stagehandler = new StageHandler(this.spriteHandler);
 
-    let enemies = [];
+    this.stagehandler.instantiateStages().then(r => {
+      this.spriteHandler.addSpriteToGame(
+        SpriteHandler.spriteTypes.spaceships,
+        this.spriteHandler.createSpriteComposition("spaceship_01")
+      );
+      this.stagehandler.activateStage(1);
+      this.hud = new Hud(this.canvasHandler.getCanvas("shipinfo"));
+      this.gameLoop.addHud(this.hud);
+      this.gameLoop.startLoop();
+    });
 
-    for (let i=0; i < 2; i++) {
-      enemies[i]= this.spriteHandler.instantiateSprite("enemy_01", {});
-      enemies[i].setOponent(spaceship);
-      this.spriteHandler.addEnemySpriteToGameLoop(enemies[i]);
-    }
+    new BackgroundHandler(this.gameLoop, this.canvasHandler);
+    new SoundHandler();
+    new InfoHandler(this.canvasHandler);
 
-    setInterval(()=>{
-      let enemies = [];
-      for (let i=0; i < 2; i++) {
-        enemies[i]= this.spriteHandler.instantiateSprite("enemy_01", {});
-        enemies[i].setOponent(spaceship);
-        this.spriteHandler.addEnemySpriteToGameLoop(enemies[i]);
-      }
-    },5000)
 
-    this.gameLoop.startLoop()
-
+    //this.offScreenRender = new OffscreenRender();
   }
 }

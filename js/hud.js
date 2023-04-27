@@ -15,10 +15,10 @@ class Hud {
     this.context.font = "15px Helvetica";
     this.context.fillStyle = "white";
     this.image = document.querySelector("#hud");
-    this.width =  window.global.gameWidth;
-    this.height= 100;
-    this.x= 0;
-    this.y= window.global.gameHeight-100;
+    this.width =  window.global.gameWidth/1.5;
+    this.height= 150;
+    this.x=  window.global.gameWidth/6;
+    this.y= window.global.gameHeight-150;
     this.counter = 0;
     this.context.textAlign="left"
     this.shotsFired = 0;
@@ -29,8 +29,8 @@ class Hud {
     this.counter++;
     this.context.clearRect(0,0,window.global.gameWidth, window.global.gameHeight);
     this.context.drawImage(this.image, this.x,this.y, this.width,this.height);
-    this.context.fillText("GAMETIME: "+this.counter, 30, window.global.gameHeight-20);
-    this.context.fillText("FIRED: "+ Hud.props["shotsFired"], window.global.gameWidth-100, window.global.gameHeight-20);
+    //this.context.fillText("GAMETIME: "+this.counter, 30, window.global.gameHeight-20);
+    //this.context.fillText("FIRED: "+ Hud.props["shotsFired"], window.global.gameWidth-100, window.global.gameHeight-20);
   }
 
 

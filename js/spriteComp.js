@@ -23,7 +23,7 @@ class SpriteComp extends GameObjectInterface {
 
   render = ()=>{
 
-    this.context.clearRect(0,0, window.global.gameWidth, window.global.gameHeight);
+    //this.context.clearRect(0,0, window.global.gameWidth, window.global.gameHeight);
     for (let i = 0; i <  this.sT.length; i++) {
 
       if (this.sT[i].active === true) {

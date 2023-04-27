@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Runner</title>
+  <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+
+  <link href="/testing/unitTesting.css" rel="stylesheet"/>
+</head>
+<body style="font-family:'Courier New', Courier, monospace">
+  <script>
+    var ns = ns || {};
+    window.global = window.global || {};
+    const maxWidth = 1800
+    const maxHeight = 950;
+    const currentWidth = window.innerWidth;
+    const currentHeight = window.innerHeight;
+
+    window.global.gameHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
+    window.global.gameWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
+  </script>
+  <div id="game" style="display:none"></div>
+  <h4 class="titel">YMNYK  Unit Tests</h4>
+  <div id="testResults"></div>
+  <div id="selector"></div>
+  <div id="spinner" >
+    <image src="/testing/loading-spinner.jpeg" class="spinner"></image>
+  </div>
+  <div id="testResultsBar"></div>
+
+  <script src="/js/gameObjectInterface.js"></script>
+  <script src="/js/sprite.js?v=1.0"></script>
+  <script src="/js/spriteComp.js?v=1.0"></script>
+  <script src="/js/gameObjects/spaceship_01.js"></script>
+  <script src="/js/gameObjects/enemy_01.js?v=1.0"></script>
+  <script src="/js/gameObjects/enemy_01_shoot.js?v=1.0"></script>
+  <script src="/js/gameObjects/enemy_01_explosion.js?v=1.0"></script>
+  <script src="/js/gameObjects/enemy_02.js?v=1.0"></script>
+  <script src="/js/gameObjects/enemy_02_shoot.js?v=1.0"></script>
+  <script src="/js/gameObjects/enemy_02_explosion.js?v=1.0"></script>
+  <script src="/js/gameObjects/spaceship_01_photonTorpedo.js?v=1.0"></script>
+  <script src="/data/spriteTemplates/spaceship_01_templates.js"></script>
+  <script src="/data/spriteTemplates/enemy_01_templates.js"></script>
+
+
+  <script src="/data/spriteTemplates/enemy_01_templates.js"></script>
+  <script src="/data/spriteTemplates/enemy_02_templates.js"></script>
+  <script src="/data/spriteTemplates/spaceship_01_templates.js"></script>
+  <script src="/js/canvasHandler.js"></script>
+  <script src="/js/spriteHandler.js"></script>
+  <script src="/js/stages/stage.js"></script>
+  <script src="/js/stages/stage_01.js"></script>
+  <script src="/js/stages/stage_02.js"></script>
+  <script src="/js/stages/stageHandler.js"></script>
+  <script src="unitTesting.js"></script>
+  <script src="UT.js"></script>
+</body>
+</html>

@@ -1,148 +1,52 @@
 class SpriteHandler{
+  //static fields
 
-  constructor(canvasHandler, gameLoop){
-    this.gameLoop = gameLoop;
-    this.spriteTemplates = {
-      "spaceship_01" : {
-        id : "spaceship_01",
-        image: document.querySelector("#spaceship_01"),
-        width : 136,
-        height: 35,
-        x: 0,
-        y: 0,
-        dx : 0,
-        dy : 0,
-        vx: 0,
-        vy : 0,
-        frames : 1,
-        active : true,
-        spriteSheet : false,
-        context: canvasHandler.getCanvas("spaceship").context,
-        callback: null
-      },
-      "enemy_01" : {
-        id : "enemy_01",
-        class : Enemy_01,
-        image: document.querySelector("#enemy_01"),
-        width : 100,
-        height: 90,
-        x: window.global.gameWidth+100,
-        y: 0,
-        vy : 0,
-        vx : 0,
-        dx : 0,
-        dy : 0,
-        v: 0,
-        frames : 1,
-        currentFrame : 0,
-        currentStep : 100,
-        stride:0,
-        active : true,
-        spriteSheet : false,
-        context: canvasHandler.getCanvas("spaceship").context,
+  static spriteTypes = Object.freeze({
+    spaceships : "spaceships",
+    enemies : "enemies",
+    weapons : "weapons",
+    explosions: "explosions"
+  })
 
-        callback: null
-      },
-      "enemy_01_explosion": {
-        id : "enemy_01_explosion",
-        class : Enemy_01_explosion,
-        image: document.querySelector("#enemy_01_explosion"),
-        x : 200,
-        y: 200,
-        dx: 0,
-        dy: 0,
-        vx : 0,
-        vy : 0,
-        width: 100,
-        height: 90,
-        frames: 14,
-        currentFrame: 0,
-        stride : 304,
-        spriteSheet : true,
-        active : true,
-        loop : false,
-        step : 50 ,
-        currentStep : 0,
-        callback : ()=>{
-          this.destroyEnemyExplosionSprite(this.id)
-        },
-        context: canvasHandler.getCanvas("spaceship").context
-      },
+  static spaceships = [];
+  static weapons = [];
+  static enemies = [];
+  static explosions = [];
 
 
-      "exhaust_01" : {
-        id : "exhaust_02",
-        image: document.querySelector("#exhaust_01"),
-        width : 22,
-        height: 6,
-        x:0,
-        y:0,
-        dx: -15,
-        dy: +17,
-        frames : 7,
-        currentFrame : 0,
-        spriteSheet : true,
-        stride : 128,
-        active : true,
-        loop : true,
-        step : 1/5,
-        currentStep : 0,
-        context: canvasHandler.getCanvas("spaceship").context,
-        callback: null
-      },
-      "laser" : {
-      id : "laser",
-        image : document.querySelector("#laser"),
-        width :  window.global.gameWidth,
-        height: 32,
-        dx: +75,
-        dy: -8,
-        frames : 2,
-        currentFrame : 0,
-        spriteSheet: true,
-        stride : 32,
-        repeatX : window.global.gameWidth,
-        active : false,
-        context: canvasHandler.getCanvas("spaceship").context,
-        callback : null
-    },
-      "shoot_01" : {
-        id : "shoot_01",
-        image : document.querySelector("#shoot"),
-        class : Shoot_01,
-        width :  26,
-        height: 16,
-        dx: 125,
-        dy: 9,
-        x:100,
-        y:100,
-        frames : 5,
-        currentFrame : 0,
-        spriteSheet: true,
-        loop : true,
-        currentStep : 100,
-        step :1,
-        stride : 32,
-        repeatX : window.global.gameWidth,
-        active : true,
-        context: canvasHandler.getCanvas("spaceship").context,
-        callback : null
-      }
-  }
+
+  static spaceshipsRemoveQueue = [];
+  static enemiesRemoveQueue = [];
+  static weaponsRemoveQueue = [];
+  static explosionsRemoveQueue = [];
+
+  constructor(canvasHandler){
+    this.canvasHandler = canvasHandler;
+
+    this.spriteClasses = new Map([
+      ['Spaceship_01', Spaceship_01],
+      ['Shoot_01', Spaceship_01_photonTorpedo],
+      ['Enemy_01', Enemy_01],
+      ['Enemy_01_shoot', Enemy_01_shoot],
+      ['Enemy_01_explosion', Enemy_01_explosion],
+      ['Enemy_02', Enemy_02],
+      ['Enemy_02_shoot', Enemy_02_shoot],
+      ['Enemy_02_explosion', Enemy_02_explosion]
+    ])
 
     this.spriteCompositionTemplates = {
       "spaceship_01": {
         class: Spaceship_01,
         id: "spaceship_01",
         spriteTemplates: {
-          "spaceship_01": this.spriteTemplates["spaceship_01"],
-          "exhaust_01": this.spriteTemplates["exhaust_01"],
-          "laser": this.spriteTemplates["laser"]
+          "spaceship_01": ns.spaceship_01["spaceship_01"],
+          "exhaust_01": ns.spaceship_01["exhaust_01"],
+          "laser": ns.spaceship_01["laser"]
         },
         //spriteTemplates: [this.spriteTemplates["spaceship_01"], this.spriteTemplates["exhaust_01"],this.spriteTemplates["laser"] ],
-        context: canvasHandler.getCanvas("spaceship").context,
-        width: 187,
-        height: 42,
+        context: this.canvasHandler.getCanvas("spaceship").context,
+        width: 200,
+        height: 50,
         x: 200,
         y: 200,
         vx: 0,
@@ -150,51 +54,43 @@ class SpriteHandler{
         callback: null
       }
     }
-  }
 
 
-  instantiateSpriteComposition = (composition)=>{
-     return new this.spriteCompositionTemplates[composition].class(this.spriteCompositionTemplates[composition], this, this.gameLoop);
   }
 
-  instantiateSprite = (spriteName, props) =>{
-    this.spriteTemplates[spriteName].x = props.x ||  this.spriteTemplates[spriteName].x;
-    this.spriteTemplates[spriteName].y = props.y || this.spriteTemplates[spriteName].y;
-    return new this.spriteTemplates[spriteName].class(this.spriteTemplates[spriteName],this);
+  createSprite = (args) => {
+    const spriteTemplate = ns[args.type][args.sprite];
+    const spriteClass = spriteTemplate.class;
+    spriteTemplate.context = this.canvasHandler.getCanvas(spriteTemplate.canvas).context;
+    spriteTemplate.image = document.querySelector("#" + spriteTemplate.imageId);
+    if (spriteTemplate.width === 0) spriteTemplate.width = window.global.gameWidth;
+    spriteTemplate.stage = args.stage;
+    let sprites = {};
+
+    for (let i = 0; i < args.quantity; i++) {
+      const newSprite = new (this.spriteClasses.get(spriteClass))(spriteTemplate, this)
+      sprites[newSprite.id] = newSprite;
+    }
+    return sprites;
   }
 
-  addSpriteToGameLoop = (sprite) =>{
-    this.gameLoop.addSprite(sprite)
+  createSpriteComposition = (compositionName)=>{
+    let template = this.spriteCompositionTemplates[compositionName];
+    console.log("template:", template);
+    for (const compTemplate in template.spriteTemplates){
+      template.spriteTemplates[compTemplate].context = this.canvasHandler.getCanvas(template.spriteTemplates[compTemplate].canvas).context;
+      template.spriteTemplates[compTemplate].image = document.querySelector("#" + template.spriteTemplates[compTemplate].imageId);
+      if (template.spriteTemplates[compTemplate].width === 0 ) template.spriteTemplates[compTemplate].width=window.global.gameWidth;
+    }
+    return new this.spriteCompositionTemplates[compositionName].class(this.spriteCompositionTemplates[compositionName], this);
   }
 
-  addEnemySpriteToGameLoop = (sprite) =>{
-    this.gameLoop.addEnemySprite(sprite)
+  addSpriteToGame = (type, sprite) =>{
+    SpriteHandler[SpriteHandler.spriteTypes[type]].push(sprite);
   }
 
-  addEnemyExplosionSpriteToGameLoop = (sprite) =>{
-    this.gameLoop.addEnemyExplosionSprite(sprite)
-  }
+  removeSpriteFromGame = (type, id) =>{
+    SpriteHandler[type+"RemoveQueue"].push(id);
 
-  addWeaponSpriteToGameLoop = (sprite) =>{
-    this.gameLoop.addWeaponSprite(sprite)
-  }
-
-  destroySprite = (id) => {
-    //console.log("destroy:", id);
-    this.gameLoop.destroySprite(id);
-  }
-
-  destroyWeaponSprite = (id) => {
-    //console.log("destroyWeaponSprite:", id);
-    this.gameLoop.destroyWeaponSprite(id);
-  }
-
-  destroyEnemySprite = (id) => {
-   // console.log("destroyEnemySprite:", id);
-    this.gameLoop.destroyEnemySprite(id);
-  }
-  destroyEnemyExplosionSprite = (id) => {
-    // console.log("destroyEnemySprite:", id);
-    this.gameLoop.destroyEnemyExplosionSprite(id);
   }
 }

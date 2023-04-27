@@ -15,9 +15,9 @@ class Background {
 
   render = (dt)=>{
 
-    this.context.clearRect(0,0,window.global.gameWidth, window.global.gameHeight);
-    this.context.drawImage(this.image,this.x,this.y,this.width, this.height);
-    if (this.doubleDraw)  this.context.drawImage(this.image,this.x+this.width, this.y, this.width, this.height);
+ //   this.context.clearRect(0,0,window.global.gameWidth, window.global.gameHeight);
+    this.context.drawImage(this.image,this.x,this.y, this.width,this.height);
+    if (this.doubleDraw)  this.context.drawImage(this.image,this.x+this.width, this.y, this.width,this.height);
 
     if (this.x < 0-this.width){
       if (this.doubleDraw === true ) {
@@ -27,9 +27,7 @@ class Background {
       }
     }
     if (this.step !== 0) {
-      this.x -=(this.step);
+      this.x -=(this.step/2);
     }
-
   }
-
 }

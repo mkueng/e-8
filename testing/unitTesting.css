@@ -1,0 +1,47 @@
+body {
+  background-color:black;
+}
+
+.titel {
+  font-size:22px;
+  margin:0;
+  margin-bottom:20px;
+  color:white;
+}
+
+.results{
+  font-size:20px;
+  margin:0;
+}
+
+.results.green {
+  color:green;
+  margin-bottom:10px;
+}
+
+.results.red {
+  color:red;
+}
+
+.results.error {
+  color:red;
+  font-size:12px;
+  margin-bottom:10px;
+}
+
+.spinner {
+  position:fixed;
+  top:10px;
+  right:10px;
+  height:40px;
+  width:40px;
+  
+}
+#testResultsBar {
+  width:400px;
+  height:40px;
+  position:fixed;
+  top:10px;
+  right:60px;
+  z-index:-1;
+}

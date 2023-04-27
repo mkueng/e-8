@@ -24,11 +24,37 @@
 </head>
 
 <body>
+    <script>
+        var ns = ns || {}
+        window.global = window.global || {};
+        const maxWidth = 1800
+        const maxHeight = 950;
+        const currentWidth = window.innerWidth;
+        const currentHeight = window.innerHeight;
+
+        window.global.gameHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
+        window.global.gameWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
+
+    </script>
     <div id="wrapper">
         <button id="fullscreen"  value="fullscreen" style="display:none">FULLSCREEN</button>
-        <div id="game" style="position:relative"></div>
-        <img id="backgroundStars_01" class="background" src="resources/backgrounds/backgroundStars_01.jpg">
+        <div id="game"></div>
+
+        <video
+                style="filter:brightness(1%)"
+                src="resources/backgrounds/black-hole_dark.mp4"
+                class="video"
+                preload="auto"
+                autoplay
+                playsinline
+                webkit-playsinline
+                muted
+                hidden>
+        </video>
+
+        <img id="universe" class="background" src="resources/backgrounds/universe.png">
         <img id="moon" class="background" src="resources/backgrounds/moon.png">
+        <img id="mars" class="background" src="resources/backgrounds/mars.png">
         <img id="hud" class="background" src="resources/backgrounds/hud2.png">
         <img id="haze_01" class="background" src="resources/backgrounds/haze_01.png">
         <img id="asteroidField_01" class="background" src="resources/backgrounds/asteroidField_01.png">
@@ -38,30 +64,47 @@
         <img id="spaceship_01" class="sprite" src="resources/sprites/spaceship_02/spaceship_04.png">
         <img id="exhaust_02" class="sprite" src="resources/sprites/spaceship_02/exhaust/exhaust_0.png">
         <img id="exhaust_01" class="sprite" src="resources/sprites/spaceship_02/exhaust/exhaustSheet_01.png">
+        <img id="shield" class="sprite" src="resources/sprites/spaceship_02/shield.png">
         <img id="laser" class="sprite" src="resources/sprites/spaceship_02/laser_sheet.png">
         <img id="shoot" class="sprite" src="resources/sprites/spaceship_02/shoot_sheet.png">
-        <img id="enemy_01" class="sprite" src="resources/sprites/enemy_01/enemy_01.png">
+        <img id="enemy_01" class="sprite" src="resources/sprites/enemy_02.png">
         <img id="enemy_01_explosion" class="sprite" src="resources/sprites/enemy_01/enemy_01_explosion.png">
-
+        <img id="enemy_01_shoot" class="sprite" src="resources/sprites/enemy_01/enemy_01_shoot.png">
 
 
     </div>
 
     <script src="js/resourceLoader.js?v=1.0"></script>
+
+    <script src="js/stages/stage.js"></script>
+    <script src="js/stages/stage_01.js"></script>
+    <script src="js/stages/stage_02.js"></script>
+    <script src="js/stages/stageHandler.js"></script>
+    <script src="js/infoHandler.js"></script>
     <script src="js/spriteHandler.js?v=1.0"></script>
     <script src="js/gameController.js?v=1.0"></script>
     <script src="js/canvasHandler.js?v=1.0"></script>
     <script src="js/gameObjectInterface.js?v=1.0"></script>
     <script src="js/background.js?v=1.0"></script>
     <script src="js/backgroundHandler.js?v=1.0"></script>
+    <script src="js/soundHandler.js?v=1.0"></script>
     <script src="js/hud.js?v=1.0"></script>
     <script src="js/inputHandler.js?v=1.0"></script>
     <script src="js/sprite.js?v=1.0"></script>
     <script src="js/spriteComp.js?v=1.0"></script>
     <script src="js/gameObjects/spaceship_01.js?v=1.0"></script>
     <script src="js/gameObjects/enemy_01.js?v=1.0"></script>
+    <script src="js/gameObjects/enemy_01_shoot.js?v=1.0"></script>
     <script src="js/gameObjects/enemy_01_explosion.js?v=1.0"></script>
-    <script src="js/gameObjects/shoot_01.js?v=1.0"></script>
+    <script src="js/gameObjects/enemy_02.js?v=1.0"></script>
+    <script src="js/gameObjects/enemy_02_shoot.js?v=1.0"></script>
+    <script src="js/gameObjects/enemy_02_explosion.js?v=1.0"></script>
+    <script src="js/gameObjects/spaceship_01_photonTorpedo.js?v=1.0"></script>
+    <script src="data/spriteTemplates/spaceship_01_templates.js"></script>
+    <script src="data/spriteTemplates/enemy_01_templates.js"></script>
+
+    <script src="/js/workers/offScreenRender.js"></script>
+    <script src="/js/workers/offScreenRenderWorker.js"></script>
 
     <script src="js/gameLoop.js?v=1.0"></script>
     <script src="js/index.js?v=1.0"></script>
