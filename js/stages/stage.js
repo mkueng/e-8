@@ -1,38 +1,64 @@
+'use strict'
 class Stage {
 
-  #enemies = {};
-  #enemiesPools = {};
+  constructor(resourceHandler, gameObjectsPool){
+   this.gameObjectsPool = gameObjectsPool;
+   this.gameObjects = {};
+  }
 
-  #createEnemies = (enemies)=>{
+  instantiate = (gameObjects) =>{
 
-    for (const enemy in enemies){
-      const newEnemy = enemies[enemy];
-      const newEnemyInstances = this.spriteHandler.createSprite (
-        {
-          type: enemy,
-          sprite: enemy,
-          quantity : newEnemy.quantity,
-          stage : this,
-        }
-      )
-      this.#enemies[enemy] = [];
-      this.#enemies[enemy].push(newEnemyInstances);
-      for (const enemy in newEnemyInstances){
-        this.#enemiesPools[enemy] = [];
-        this.#enemiesPools[enemy].push(newEnemyInstances[enemy]);
+    return new Promise((resolve)=>{
+      this.instantiateGameObjects(gameObjects).then(() => {
+        console.log("gameObjects:", this.gameObjects);
+        resolve();
+      })
+    })
+  }
+
+  /**
+   *
+   * @param gameObjects
+   */
+  instantiateGameObjects = async (gameObjects) =>{
+    let initPromises = [];
+    for (const type in gameObjects){
+      this.gameObjects[type]={};
+      for (const gameObject in gameObjects[type]) {
+        const {id, amount, onStage, offStage, interval} = gameObjects[type][gameObject];
+        this.gameObjects[type][id] = {
+          pool: [],
+          onStage,
+          offStage,
+          interval,
+        };
+        initPromises.push(this.#instantiateGameObjectPool(type, id, amount))
       }
     }
-    console.log("enemies:", this.#enemies);
-    console.log("enemiesPools", this.#enemiesPools);
+    return await Promise.all(initPromises);
+
   }
 
-  constructor(spriteHandler, stageConfig){
-    this.spriteHandler = spriteHandler;
-    this.stageConfig = stageConfig;
-    this.#createEnemies(stageConfig.enemies);
+  /**
+   *
+   * @param category
+   * @param id
+   * @param amount
+   */
+  #instantiateGameObjectPool = async (category, id, amount)=>{
+    const gameObjectClass = this.gameObjectsPool.getGameObject(category, id);
+    for (let i = 0; i < amount; i++) {
+      this.gameObjects[category][id]['pool'].push(new gameObjectClass());
+    }
+
+    const resourcePromises =  this.gameObjects[category][id]['pool'].map((resourceObject)=>resourceObject.init() )
+    return await Promise.all(resourcePromises);
   }
 
-  activate = ()=>{
+  activate (){
+  }
+
+  end (){
 
   }
 }

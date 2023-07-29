@@ -14,11 +14,13 @@
     <meta property="og:url" content="">
     <meta property="og:description" content="YMNYK.">
     <meta property="og:image" content="image.png">
-
     <link rel="icon" href="/favicon.ico">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Exo+2&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css?v=1.0">
 
 </head>
@@ -32,76 +34,71 @@
         const currentWidth = window.innerWidth;
         const currentHeight = window.innerHeight;
 
-        window.global.gameHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
-        window.global.gameWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
+        window.global.screenHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
+        window.global.screenWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
+        window.global.centerHorizontal = window.global.screenWidth / 2;
+        window.global.centerVertical = window.global.screenHeight / 2;
+        window.global.centerLeft = window.global.screenWidth / 3;
+        window.global.centerRight = window.global.screenWidth - window.global.screenWidth / 3
+
 
     </script>
     <div id="wrapper">
         <button id="fullscreen"  value="fullscreen" style="display:none">FULLSCREEN</button>
-        <div id="game"></div>
-
-        <video
-                style="filter:brightness(1%)"
-                src="resources/backgrounds/black-hole_dark.mp4"
-                class="video"
-                preload="auto"
-                autoplay
-                playsinline
-                webkit-playsinline
-                muted
-                hidden>
-        </video>
-
-        <img id="universe" class="background" src="resources/backgrounds/universe.png">
-        <img id="moon" class="background" src="resources/backgrounds/moon.png">
-        <img id="mars" class="background" src="resources/backgrounds/mars.png">
-        <img id="hud" class="background" src="resources/backgrounds/hud2.png">
-        <img id="haze_01" class="background" src="resources/backgrounds/haze_01.png">
-        <img id="asteroidField_01" class="background" src="resources/backgrounds/asteroidField_01.png">
-        <img id="jupiter" class="background" src="resources/backgrounds/jupiter.png">
-        <img id="m130" class="background" src="resources/backgrounds/m130.png">
-        <img id="spaceStation_01" class="background" src="resources/backgrounds/spaceStation_01.png">
-        <img id="spaceship_01" class="sprite" src="resources/sprites/spaceship_02/spaceship_04.png">
-        <img id="exhaust_02" class="sprite" src="resources/sprites/spaceship_02/exhaust/exhaust_0.png">
-        <img id="exhaust_01" class="sprite" src="resources/sprites/spaceship_02/exhaust/exhaustSheet_01.png">
-        <img id="shield" class="sprite" src="resources/sprites/spaceship_02/shield.png">
-        <img id="laser" class="sprite" src="resources/sprites/spaceship_02/laser_sheet.png">
-        <img id="shoot" class="sprite" src="resources/sprites/spaceship_02/shoot_sheet.png">
-        <img id="enemy_01" class="sprite" src="resources/sprites/enemy_02.png">
-        <img id="enemy_01_explosion" class="sprite" src="resources/sprites/enemy_01/enemy_01_explosion.png">
-        <img id="enemy_01_shoot" class="sprite" src="resources/sprites/enemy_01/enemy_01_shoot.png">
-
+        <div id="game">
+            <div id="screenTooSmall" style="display:none">PLEASE ENLARGE BROWSERWINDOW</div>
+        </div>
 
     </div>
-
-    <script src="js/resourceLoader.js?v=1.0"></script>
+    <script src="js/config.js?v=1.0"></script>
+    <script src="js/logHandler.js?v=1.0"></script>
+    <script src="js/resource/resourceLoader.js?v=1.0"></script>
+    <script src="js/resource/resourceHandler.js?v=1.0"></script>
 
     <script src="js/stages/stage.js"></script>
     <script src="js/stages/stage_01.js"></script>
     <script src="js/stages/stage_02.js"></script>
     <script src="js/stages/stageHandler.js"></script>
+
     <script src="js/infoHandler.js"></script>
-    <script src="js/spriteHandler.js?v=1.0"></script>
+    <script src="js/sprite/spriteHandler.js?v=1.0"></script>
     <script src="js/gameController.js?v=1.0"></script>
+    <script src="js/fontHandler.js?v=1.0"></script>
     <script src="js/canvasHandler.js?v=1.0"></script>
-    <script src="js/gameObjectInterface.js?v=1.0"></script>
-    <script src="js/background.js?v=1.0"></script>
-    <script src="js/backgroundHandler.js?v=1.0"></script>
-    <script src="js/soundHandler.js?v=1.0"></script>
-    <script src="js/hud.js?v=1.0"></script>
+
+    <script src="js/gameObjects/gameObject.js?v=1.0"></script>
+    <script src="js/background/background.js?v=1.0"></script>
+    <script src="js/background/staticBackground.js?v=1.0"></script>
+    <script src="js/background/dynamicBackground.js?v=1.0"></script>
+    <script src="js/background/backgroundHandler.js?v=1.0"></script>
+    <script src="js/sound/soundHandler.js?v=1.0"></script>
+    <script src="js/hudHandler.js?v=1.0"></script>
     <script src="js/inputHandler.js?v=1.0"></script>
-    <script src="js/sprite.js?v=1.0"></script>
-    <script src="js/spriteComp.js?v=1.0"></script>
-    <script src="js/gameObjects/spaceship_01.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_01.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_01_shoot.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_01_explosion.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_02.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_02_shoot.js?v=1.0"></script>
-    <script src="js/gameObjects/enemy_02_explosion.js?v=1.0"></script>
-    <script src="js/gameObjects/spaceship_01_photonTorpedo.js?v=1.0"></script>
-    <script src="data/spriteTemplates/spaceship_01_templates.js"></script>
-    <script src="data/spriteTemplates/enemy_01_templates.js"></script>
+    <script src="js/sprite/sprite.js?v=1.0"></script>
+    <script src="js/sprite/spriteComp.js?v=1.0"></script>
+
+    <script src="js/gameObjects/gameObjectsPool.js?v=1.0"></script>
+    <script src="js/gameObjects/asteroids/asteroid_01.js?v=1.0"></script>
+    <script src="js/gameObjects/ships/ship.js?v=1.0"></script>
+    <script src="js/gameObjects/ships/ship_01.js?v=1.0"></script>
+    <script src="js/gameObjects/ships/spaceship_01.js?v=1.0"></script>
+    <script src="js/gameObjects/enemies/enemy.js?v=1.0"></script>
+    <script src="js/gameObjects/planets/planet.js?v=1.0"></script>
+    <script src="js/gameObjects/planets/planet_01.js?v=1.0"></script>
+    <script src="js/gameObjects/planets/planet_02.js?v=1.0"></script>
+    <script src="js/gameObjects/explosions/enemyExplosion.js?v=1.0"></script>
+    <script src="js/gameObjects/Weapons/enemyShoot.js?v=1.0"></script>
+    <script src="js/gameObjects/enemies/enemy_01.js?v=1.0"></script>
+    <script src="js/gameObjects/Weapons/enemy_01_shoot.js?v=1.0"></script>
+    <script src="js/gameObjects/explosions/enemy_01_explosion.js?v=1.0"></script>
+    <script src="js/gameObjects/enemies/enemy_02.js?v=1.0"></script>
+    <script src="js/gameObjects/Weapons/enemy_02_shoot.js?v=1.0"></script>
+    <script src="js/gameObjects/explosions/enemy_02_explosion.js?v=1.0"></script>
+    <script src="js/gameObjects/Weapons/spaceshipWeapon.js?v=1.0"></script>
+    <script src="js/gameObjects/Weapons/spaceship_01_photonTorpedo.js?v=1.0"></script>
+
+    <script src="data/spriteTemplates/enemy_01_template.js"></script>
+    <script src="data/spriteTemplates/enemy_02_template.js"></script>
 
     <script src="/js/workers/offScreenRender.js"></script>
     <script src="/js/workers/offScreenRenderWorker.js"></script>

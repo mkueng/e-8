@@ -18,9 +18,14 @@ class StageHandler {
   instantiateStages = async ()=>{
     const stageTemplates = await this.#loadStages();
     for (const stage in stageTemplates) {
-      this.#stages[stage]= new (this.stageClasses.get(stageTemplates[stage].class))(this.spriteHandler, stageTemplates[stage]);
+      const stageClass = this.stageClasses.get(stageTemplates[stage].class);
+      this.#stages[stage]= new (stageClass)(this.spriteHandler, stageTemplates[stage], this);
     }
     return this.#stages;
+  }
+
+  stageEnded= (stageId)=>{
+    console.log("stage ended: ", stageId);
   }
 
   activateStage = (stageNumber) =>{

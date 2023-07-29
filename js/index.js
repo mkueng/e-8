@@ -12,6 +12,21 @@ window.addEventListener("load", function() {
         console.log(error.message);
       });
   })
-  new GameController();
+
+  window.addEventListener('resize', (evt) => {
+    if (window.innerHeight === screen.height) {
+      console.log('FULL SCREEN');
+    } else {
+      console.log('NORMAL SCREEN');
+    }
+  });
+
+  if (window.global.screenWidth > 0 && window.global.screenHeight > 0) {
+    new GameController();
+  } else {
+
+
+  }
+
 })
 

@@ -1,29 +1,59 @@
 {
   "1" : {
+    "id" : "stage 1",
     "class" : "Stage_01",
     "backgrounds" : {
     },
     "enemies" : {
       "enemy_01" : {
-        "quantity" : 10
-
+          "quantity" : 2
       }
-
     },
     "sequence": [
       {
+        "id" : 1,
         "enemy" : "enemy_01",
-        "quantity" : 3,
-        "interval" : 1000,
+        "quantity" : 1,
+        "interval" : 200,
         "startTime" : 1000,
-        "endTime" : 10000
+        "endTime" : 60000
       },
       {
+        "id" : 2,
         "enemy" : "enemy_01",
+        "quantity" : 1,
+        "interval" : 2000,
+        "startTime" : 6000,
+        "endTime" : 70000
+      },
+      {
+        "id" : 3,
+        "enemy" : "enemy_01",
+        "quantity" : 1,
+        "interval" : 2000,
+        "startTime" : 12000,
+        "endTime" : 70000
+      }
+    ]
+  },
+  "2" : {
+    "id" : "stage 2",
+    "class" : "Stage_02",
+    "backgrounds" : {
+    },
+    "enemies" : {
+      "enemy_02" : {
+        "quantity" : 10
+      }
+    },
+    "sequence": [
+      {
+        "id" : 1,
+        "enemy" : "enemy_02",
         "quantity" : 5,
-        "interval" : 1000,
-        "startTime" : 10000,
-        "endTime" : 30000
+        "interval" : 2000,
+        "startTime" : 5000,
+        "endTime" : 60000
       }
     ]
   }

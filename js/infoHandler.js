@@ -3,13 +3,14 @@ class InfoHandler {
 
   static context;
   static render = function(renderTime){
-    InfoHandler.context.clearRect(0,0,window.global.gameWidth, window.global.gameHeight);
+    InfoHandler.context.clearRect(0,0,300, 100);
     InfoHandler.context.fillText("render performance: "+renderTime+" ms", 30, 20);
   }
 
   constructor(canvasHandler){
     InfoHandler.context = canvasHandler.getCanvas("performanceInfo").context;
-    InfoHandler.context.font = "15px Helvetica";
+    InfoHandler.context.setTransform(1, 0, 0, 1, 0, 0);
+    InfoHandler.context.font = "10px myFont";
     InfoHandler.context.fillStyle = "white";
   }
 

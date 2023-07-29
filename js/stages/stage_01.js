@@ -1,41 +1,30 @@
+'use strict'
 class Stage_01 extends Stage {
-  constructor(spriteHandler, stageConfig) {
-    super(spriteHandler, stageConfig);
-    this.stageConfig = stageConfig;
 
-    this.enemy_01 = this.spriteHandler.createSprite({
-      type:"enemy_01",
-      sprite: "enemy_01",
-      quantity :  this.stageConfig.enemies.enemy_01.quantity,
-      stage : this
+  
+  #gameObjectsTemplate = {
+    planets: {
+      planet_01: { id: "planet_01", amount: 1, onStage: 10000 },
+      planet_02: { id: "planet_02", amount: 1, onStage: 30000 },
+    },
+    enemies: {
+      enemy_01: { id: "enemy_01", amount: 2, onStage: 1000, offStage: 30000, interval: 3000 },
+      enemy_02: { id: "enemy_02", amount: 2, onStage: 2000, offStage: 50000, interval: 5000 },
+    },
+  };
 
-    })
 
-    /*
-    this.enemy_01_pool = [];
-    for (const enemy in this.enemy_01){
-      this.enemy_01_pool.push(this.enemy_01[enemy]);
-    }
+  constructor(resourceHandler, gameObjectsPool) {
+    super(resourceHandler, gameObjectsPool);
+    this.init();
+  }
+
+  init = ()=>{
+    this.instantiate(this.#gameObjectsTemplate).then(() => {
+      console.log("gameObjects:", this.gameObjects);
+    });
+
   }
 
 
-  activate = ()=>{
-    setInterval(()=>{
-      if (this.enemy_01_pool.length > 0) {
-        let newEnemy = this.enemy_01_pool.pop()
-        newEnemy.x =  window.global.gameWidth+100;
-        newEnemy.vx = Math.floor(Math.random()*3+1)*-1;
-        newEnemy.vy = 0;
-        newEnemy.active = true;
-        this.spriteHandler.addSpriteToGame(SpriteHandler.spriteTypes.enemies, newEnemy);
-      }
-
-    },1000)
-    */
-
-  }
-
-  destroyed= (id)=> {
-    this.enemy_01_pool.push(this.enemy_01[id]);
-  }
 }
