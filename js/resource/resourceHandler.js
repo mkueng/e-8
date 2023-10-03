@@ -5,6 +5,8 @@
  */
 class ResourceHandler {
 
+  static instance = new this();
+
   #resourceBasePath = "resources/";
   #resourcePool = {};
 
@@ -16,7 +18,8 @@ class ResourceHandler {
     backgrounds : "backgrounds/",
     asteroids : "asteroids/",
     stars : "stars/",
-    moons : "moons/"
+    moons : "moons/",
+    procedural : "procedural/"
   }
 
   #resources = {
@@ -36,6 +39,21 @@ class ResourceHandler {
       ships : {
         ship_01 : "ship_01.png",
         ship_02 : "ship_02.png"
+      },
+      asteroids : {
+        asteroidField_01 : "asteroidField_01.png",
+        asteroidField_02 : "asteroidField_02.png"
+      },
+      procedural : {
+
+        clamp: "clamp.png",
+        exhaust: "exhaust.png",
+        roundSquare: "roundSquare.png",
+        spear: "spear.png",
+        sphere: "sphere.png",
+        square: "square.png",
+        turbine: "turbine.png"
+
       }
     },
     sounds : {
@@ -82,7 +100,7 @@ class ResourceHandler {
         `/${id}/${resourceObj.category}/` +
         this.#resources[resourceObj.category][resourceObj.type][id];
     } catch (e){
-      Log.error("resourcePath not valid");
+      Log.error("resourcePath not valid:");
     }
   }
 
@@ -90,13 +108,10 @@ class ResourceHandler {
    *
    * @returns {ResourceHandler}
    */
-  constructor() {
-    if (!ResourceHandler.instance) {
+  invoke() {
       this.resourceLoader = new ResourceLoader();
       this.resourceMap = this.#createResourceMap();
-      ResourceHandler.instance = this;
-    }
-    return ResourceHandler.instance;
+      //console.log("resourceMap:", this.resourceMap);
   }
 
   /**

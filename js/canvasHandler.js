@@ -1,111 +1,48 @@
 class CanvasHandler {
 
+  //singleton
+  static instance = new this();
 
-  static #offScreenCanvases = {
+  #backgroundCanvases = {
     "backgroundFar": {
       "id": "backgroundFar",
-      "context" : null,
       "width": window.global.screenWidth,
       "height": window.global.screenHeight,
+      "class" : "fullscreenCanvas",
       "opacity": 1
     },
     "backgroundMiddle": {
       "id": "backgroundMiddle",
-      "context" : null,
       "width": window.global.screenWidth,
       "height": window.global.screenHeight,
+      "class" : "fullscreenCanvas",
       "opacity": 1
     },
     "backgroundInterim": {
       "id": "backgroundInterim",
-      "context" : null,
       "width": window.global.screenWidth,
       "height": window.global.screenHeight,
+      "class" : "fullscreenCanvas",
       "opacity": 1
     },
     "backgroundFront": {
       "id": "backgroundFront",
-      "context" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
+      "width": 900,
+      "height": 900,
+      "class" : "fullscreenCanvas",
       "opacity": 1
     },
     "backgroundFace": {
       "id": "backgroundFace",
-      "context" : null,
       "width": window.global.screenWidth,
       "height": window.global.screenHeight,
+      "class" : "fullscreenCanvas",
       "opacity": 1
     }
   }
 
-  static #canvases = {
-    "backgroundStatic": {
-      "id" : "backgroundStatic",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width" : window.global.screenWidth,
-      "height" : window.global.screenHeight,
-      "opacity" : 1
-    },
-    "backgroundFar": {
-      "id": "backgroundFar",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
-    },
-    "backgroundMiddle": {
-      "id": "backgroundMiddle",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 0.5
-    },
-    "backgroundInterim": {
-      "id": "backgroundInterim",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
-    },
-    "backgroundFront": {
-      "id": "backgroundFront",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
-    },
-    "backgroundFace": {
-      "id": "backgroundFace",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
-    },
+  #canvases = {
+
     "info": {
       "id": "info",
       "class" : "fullscreenCanvas",
@@ -292,40 +229,99 @@ class CanvasHandler {
     }
   }
 
-  static createCanvasNodes(){
-    for (const canvases in CanvasHandler.#canvases) {
+  invoke(){
+    this.createCanvasNodes();
+    this.createBackgroundCanvases();
+  }
+
+
+  createOffscreenCanvas = ({id, width, height})=>{
+    const canvas = new OffscreenCanvas(width, height);
+    canvas.id = id;
+    return canvas
+  }
+
+  /**
+   *
+   * @param id
+   * @param width
+   * @param height
+   * @param container
+   * @returns {HTMLCanvasElement}
+   */
+  createAdHocCanvas= ({ id, width, height, container}) => {
+    const canvas = document.createElement("canvas");
+    canvas.id = id;
+    canvas.width = width;
+    canvas.height = height
+    document.querySelector("#"+container).appendChild(canvas);
+    return canvas;
+  }
+
+  createBackgroundCanvases = ()=>{
+
+    for (const canvas in this.#backgroundCanvases) {
+      const newCanvas  = document.createElement("canvas");
+
+      newCanvas.id = this.#backgroundCanvases[canvas].id;
+      newCanvas.width = this.#backgroundCanvases[canvas].width;
+      newCanvas.height = this.#backgroundCanvases[canvas].height;
+      newCanvas.className = this.#backgroundCanvases[canvas].class;
+
+      this.#backgroundCanvases[canvas].canvas = newCanvas;
+      this.#backgroundCanvases[canvas].canvas = newCanvas.transferControlToOffscreen();
+      document.querySelector("#game").appendChild(newCanvas);
+
+    }
+  }
+
+
+  createCanvasNodes = ()=>{
+    for (const canvas in this.#canvases) {
       const newCanvas  = document.createElement("canvas");
       newCanvas.id = this.#canvases[canvas].id;
       newCanvas.width = this.#canvases[canvas].width;
       newCanvas.height = this.#canvases[canvas].height;
       newCanvas.className = this.#canvases[canvas].class;
-      CanvasHandler.#canvases[canvas].canvas = newCanvas;
-      CanvasHandler.#canvases[canvas].context = newCanvas.getContext("2d");
-      CanvasHandler.#canvases[canvas].context.imageSmoothingEnabled = true;
-      CanvasHandler.#canvases[canvas].context.imageSmoothingQuality = 'high';
-      CanvasHandler.#canvases[canvas].context.globalAlpha = this.#canvases[canvas].opacity || 0;
+      this.#canvases[canvas].canvas = newCanvas;
+      this.#canvases[canvas].context = newCanvas.getContext("2d");
+      this.#canvases[canvas].context.imageSmoothingEnabled = true;
+      this.#canvases[canvas].context.imageSmoothingQuality = 'high';
+      this.#canvases[canvas].context.globalAlpha = this.#canvases[canvas].opacity || 0;
 
-      if (CanvasHandler.#canvases[canvas].canvasStyles != null) {
-        for (const style in CanvasHandler.#canvases[canvas].canvasStyles ) {
-          newCanvas.style[style] = CanvasHandler.#canvases[canvas].canvasStyles[style];
+      if (this.#canvases[canvas].canvasStyles != null) {
+        for (const style in this.#canvases[canvas].canvasStyles ) {
+          newCanvas.style[style] = this.#canvases[canvas].canvasStyles[style];
         }
       }
 
-      if (CanvasHandler.#canvases[canvas].contextStyles != null) {
+      if (this.#canvases[canvas].contextStyles != null) {
 
-        for (const style in CanvasHandler.#canvases[canvas].contextStyles ) {
-          CanvasHandler.#canvases[canvas].context[style] = CanvasHandler.#canvases[canvas].contextStyles[style];
+        for (const style in this.#canvases[canvas].contextStyles ) {
+          this.#canvases[canvas].context[style] = this.#canvases[canvas].contextStyles[style];
         }
       }
+
       document.querySelector("#game").appendChild(newCanvas);
     }
+
+
+
   }
 
-  static getOffscreenCanvas = (id) => {
-    return this.#offScreenCanvases[id];
+  getBackgroundCanvas = (id)=>{
+    return this.#backgroundCanvases[id];
   }
 
-  static getCanvas =(id) =>{
+  getBackgroundCanvases = ()=>{
+    return this.#backgroundCanvases;
+  }
+
+  getOffscreenCanvas = (id) => {
+    return this.#backgroundCanvases[id];
+  }
+
+  getCanvas =(id) =>{
     return this.#canvases[id];
   }
 

@@ -2,11 +2,13 @@
 
 class GameObject {
 
+  
+
   /**
    *
    * @param params
    */
-  constructor(params){
+  constructor(params = {}){
     this.x = params.x || 0;
     this.y = params.y || 0;
     this.vx = params.vx || 0;
@@ -23,14 +25,13 @@ class GameObject {
     this.imageId = params.imageId || null;
     this.stage = this;
 
-    this.resourceHandler = new ResourceHandler();
 
   }
 
 
   init = ()=>{
     return new Promise((resolve, reject) =>{
-      this.resourceHandler.getResources([this.imageId]).then((image)=>{
+      ResourceHandler.instance.getResources([this.imageId]).then((image)=>{
         this.image = image;
         resolve()
       })
@@ -46,6 +47,12 @@ class GameObject {
   activate(){};
   deactivate(){};
   destroy(){};
-  render (dt){};
-  update (dt){};
+  render (dt){
+
+
+  };
+  update (dt){
+
+
+  };
 }

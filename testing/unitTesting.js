@@ -1,108 +1,99 @@
-UT = (function(){
+const UnitTest = (function () {
   'use strict';
-    
-  let testClasses = {};
+
   let testsRunning = 0;
   let hasTestFailed = false;
+  let testClasses = {};
 
-  return {  
- 
-    checkTestsRunning : function(){
-      if (testsRunning === 0) {
-        var element = document.getElementById("spinner")
-        element.style.display ="none";
+  function checkTestsRunning() {
+    if (testsRunning === 0) {
+      const spinner = document.getElementById("spinner");
+      spinner.style.display = "none";
 
-        element = document.getElementById("testResultsBar")
-        if (hasTestFailed) {
-          
-          element.style.backgroundColor = "red"} 
-          else{
-            element.style.backgroundColor = "green"
-          }
-      }
-    },
+      const testResultsBar = document.getElementById("testResultsBar");
+      testResultsBar.style.backgroundColor = hasTestFailed ? "red" : "green";
+    }
+  }
 
-    success: function(description){
-      console.log('\x1b[32m%s\x1b[0m', '\u2714 ' + description);
-      document.getElementById("testResults").innerHTML+="<p class='results green'>"+description+"</p>"
-      testsRunning --
-      this.checkTestsRunning();
+  function logResult(description, isSuccess) {
+    const colorCode = isSuccess ? '\x1b[32m' : '\x1b[31m';
+    const symbol = isSuccess ? '\u2714' : '\u2718';
 
-    },
+    console.log(`${colorCode}${symbol} ${description}`);
+    const resultClass = isSuccess ? 'green' : 'red';
+    document.getElementById("testResults").innerHTML += `<p class='results ${resultClass}'>${description}</p>`;
+  }
 
-    error: function(description, error){
-      console.log('\x1b[31m%s\x1b[0m', '\u2718 ' + description);
-      console.error(error);
-      document.getElementById("testResults").innerHTML+="<p class='results red'>"+description+"</p>"
-      document.getElementById("testResults").innerHTML+="<p class='results error'>"+error.stack+"</p>"
-      hasTestFailed = true;
-      testsRunning --;
-      this.checkTestsRunning();
- 
-    },
+  function handleError(description, error) {
+    console.error(error);
+    document.getElementById("testResults").innerHTML += `<p class='results error'>${description}</p>`;
+    document.getElementById("testResults").innerHTML += `<p class='results error'>${error.stack}</p>`;
+    hasTestFailed = true;
+  }
 
-    it: function(description, fn, params, assertFn) {
-      testsRunning ++;
+  return {
+    invokeTest: function (description, fn, params, assertFn) {
+      testsRunning++;
       try {
-        this.checkTestsRunning();
+        checkTestsRunning();
         assertFn(fn(params));
-        this.success(description)
+        logResult(description, true);
       } catch (error) {
-        this.error(description, error)
+        handleError(description, error);
+      } finally {
+        testsRunning--;
+        checkTestsRunning();
       }
     },
 
-    itAsync : async function(description, fn, params, assertFn){
-      testsRunning ++;
+    invokeTestAsync: async function (description, fn, params, assertFn) {
+      testsRunning++;
       try {
-        await fn(params).then((value) => {
-          try {
-            assertFn(value);
-            this.success(description);
-          } catch(error){
-            this.error(description, error);
-          }
-        })
+        const value = await fn(params);
+        assertFn(value);
+        logResult(description, true);
       } catch (error) {
-        this.error(description, error);
+        handleError(description, error);
+      } finally {
+        testsRunning--;
+        checkTestsRunning();
       }
     },
 
-    assertTrue: function(isTrue) {
+    assertTrue: function (isTrue) {
       if (!isTrue) {
         throw new Error();
       }
     },
 
-    assertFalse: function(isTrue) {
+    assertFalse: function (isTrue) {
       if (isTrue) {
         throw new Error();
       }
     },
 
-    assertEqual: function(evaluated, expected){
-      if(evaluated !== expected) {
+    assertEqual: function (evaluated, expected) {
+      if (evaluated !== expected) {
         throw new Error();
       }
     },
 
-    assertNotEqual: function(evaluated, expected){
-      if(evaluated == expected) {
+    assertNotEqual: function (evaluated, expected) {
+      if (evaluated === expected) {
         throw new Error();
       }
     },
 
-    setup: function(className, args) {
+    setup: function (className, args) {
       try {
-        testClasses[className] = eval (`new ${className}(...args)`);
+        testClasses[className] = new (eval(`${className}`))(...args);
       } catch (error) {
-        document.getElementById("testResults").innerHTML+="<p class='results error'>"+error.stack+"</p>"
+        document.getElementById("testResults").innerHTML += `<p class='results error'>${error.stack}</p>`;
       }
-    }, 
+    },
 
-    tc: function(className) {
-      return testClasses[className]
+    testClass: function (className) {
+      return testClasses[className];
     }
-  }
-
+  };
 })();

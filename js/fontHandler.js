@@ -1,6 +1,13 @@
+'use strict'
+
+/**
+ * singleton
+ */
 class FontHandler {
 
-  constructor(){
+  static instance = new this();
+
+  invoke(){
     this.myFont = new FontFace('myFont', 'url(resources/fonts/BrunoAceSC-Regular.ttf)');
   }
 
@@ -8,6 +15,5 @@ class FontHandler {
     await this.myFont.load().then(function (font) {
       document.fonts.add(font);
     });
-
   }
 }

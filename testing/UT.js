@@ -1,6 +1,6 @@
 const tests = [
 
-  "stageHandlerUT"
+  "proceduralShipUT"
 
 ]
 

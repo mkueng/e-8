@@ -18,9 +18,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&family=Exo+2&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/main.css?v=1.0">
 
 </head>
@@ -50,38 +48,52 @@
         </div>
 
     </div>
+
+    <!-- backgrounds -->
+    <img id="backdrop_01" class="background" src="resources/backgrounds/backdrop_01.jpg">
+    <img id="asteroidField_01" class="background" src="resources/asteroids/asteroidField_01/images/asteroidField_01.png">
+
+
+    <script src="util/util.js?v=1.0"></script>
     <script src="js/config.js?v=1.0"></script>
     <script src="js/logHandler.js?v=1.0"></script>
     <script src="js/resource/resourceLoader.js?v=1.0"></script>
     <script src="js/resource/resourceHandler.js?v=1.0"></script>
 
-    <script src="js/stages/stage.js"></script>
-    <script src="js/stages/stage_01.js"></script>
-    <script src="js/stages/stage_02.js"></script>
-    <script src="js/stages/stageHandler.js"></script>
+
 
     <script src="js/infoHandler.js"></script>
     <script src="js/sprite/spriteHandler.js?v=1.0"></script>
-    <script src="js/gameController.js?v=1.0"></script>
+
     <script src="js/fontHandler.js?v=1.0"></script>
     <script src="js/canvasHandler.js?v=1.0"></script>
 
     <script src="js/gameObjects/gameObject.js?v=1.0"></script>
-    <script src="js/background/background.js?v=1.0"></script>
-    <script src="js/background/staticBackground.js?v=1.0"></script>
-    <script src="js/background/dynamicBackground.js?v=1.0"></script>
-    <script src="js/background/backgroundHandler.js?v=1.0"></script>
+    <script src="js/backgroundObjects/background.js?v=1.0"></script>
+    <script src="js/backgroundObjects/staticBackground.js?v=1.0"></script>
+    <script src="js/backgroundObjects/dynamicBackground.js?v=1.0"></script>
+    <script src="js/backgroundObjects/backgroundHandler_old.js?v=1.0"></script>
     <script src="js/sound/soundHandler.js?v=1.0"></script>
     <script src="js/hudHandler.js?v=1.0"></script>
     <script src="js/inputHandler.js?v=1.0"></script>
     <script src="js/sprite/sprite.js?v=1.0"></script>
     <script src="js/sprite/spriteComp.js?v=1.0"></script>
 
-    <script src="js/gameObjects/gameObjectsPool.js?v=1.0"></script>
+    <!-- state -->
+    <script src="js/state/state.js?v=1.0"></script>
+    <script src="js/state/stateHandler.js?v=1.0"></script>
+
+    <!-- ship -->
+    <script src="js/ship/shipHandler.js?v=1.0"></script>
+    <script src="js/ship/ship.js?v=1.0"></script>
+    <script src="js/ship/ship_01.js?v=1.0"></script>
+    <script src="js/ship/spaceship_01.js?v=1.0"></script>
+
+
+
+
     <script src="js/gameObjects/asteroids/asteroid_01.js?v=1.0"></script>
-    <script src="js/gameObjects/ships/ship.js?v=1.0"></script>
-    <script src="js/gameObjects/ships/ship_01.js?v=1.0"></script>
-    <script src="js/gameObjects/ships/spaceship_01.js?v=1.0"></script>
+
     <script src="js/gameObjects/enemies/enemy.js?v=1.0"></script>
     <script src="js/gameObjects/planets/planet.js?v=1.0"></script>
     <script src="js/gameObjects/planets/planet_01.js?v=1.0"></script>
@@ -96,14 +108,35 @@
     <script src="js/gameObjects/explosions/enemy_02_explosion.js?v=1.0"></script>
     <script src="js/gameObjects/Weapons/spaceshipWeapon.js?v=1.0"></script>
     <script src="js/gameObjects/Weapons/spaceship_01_photonTorpedo.js?v=1.0"></script>
+    <script src="js/backgroundObjects/backgroundObject.js"></script>
+    <script src="js/backgroundObjects/asteroidfields/asteroidField_01.js"></script>
+    <script src="js/backgroundObjects/asteroidfields/asteroidField_02.js"></script>
+
 
     <script src="data/spriteTemplates/enemy_01_template.js"></script>
     <script src="data/spriteTemplates/enemy_02_template.js"></script>
 
-    <script src="/js/workers/offScreenRender.js"></script>
-    <script src="/js/workers/offScreenRenderWorker.js"></script>
 
+    <script src="/js/workers/backgroundWorker.js"></script>
+    <script src="/js/backgroundObjects/backgroundHandler.js"></script>
+
+    <script src="js/gameObjects/gameObjectsClasses.js?v=1.0"></script>
+    <script src="js/backgroundObjects/backgroundObjectsClasses.js?v=1.0"></script>
+
+    <script src="js/stages/stage.js"></script>
+    <script src="js/stages/stage_01.js"></script>
+    <script src="js/stages/stage_02.js"></script>
     <script src="js/gameLoop.js?v=1.0"></script>
+    <script src="js/proceduralShapes/planets/planet.js?v=1.0"></script>
+    <script src="js/proceduralShapes/noise.js?v=1.0"></script>
+    <script src="js/proceduralShapes/sphereImageLib.js?v=1.0"></script>
+
+    <script src="js/resource/resourceObject.js?v=1.0"></script>
+    <script src="js/proceduralShapes/ships/proceduralShipImage.js?v=1.0"></script>
+    <script src="js/proceduralShapes/ships/proceduralEnemyShipImage.js?v=1.0"></script>
+    <script src="js/proceduralShapes/ships/proceduralShipFactory.js?v=1.0"></script>
+    <script src="js/gameController.js?v=1.0"></script>
+    <script src="js/init.js?v=1.0"></script>
     <script src="js/index.js?v=1.0"></script>
 </body>
 </html>

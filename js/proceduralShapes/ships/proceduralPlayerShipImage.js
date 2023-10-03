@@ -1,0 +1,3 @@
+class ProceduralPlayerShipImage extends ProceduralShipImage {
+
+}

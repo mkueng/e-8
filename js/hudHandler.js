@@ -55,6 +55,7 @@ class HudHandler {
   }
   constructor(canvasHandler){
     this.canvasHandler = canvasHandler;
+   /*
     this.hudImage = document.querySelector("#hud");
 
     this.naviImage = document.querySelector("#navi");
@@ -73,6 +74,8 @@ class HudHandler {
     this.fillRectNavi = this.dynamicContextMiddle.fillRect.bind(this.dynamicContextMiddle);
     this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
+    */
+
   }
 
   render = (dt) =>{

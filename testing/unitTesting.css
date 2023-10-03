@@ -24,7 +24,7 @@ body {
 }
 
 .results.error {
-  color:red;
+  color:#ff9090;
   font-size:12px;
   margin-bottom:10px;
 }
