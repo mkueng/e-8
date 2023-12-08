@@ -1,57 +1,69 @@
 class ResourceObject {
 
-  static types = {
-    png : ".png",
-    jpg : ".jpg",
-    jpeg : ".jpeg",
-    mp3 : ".mp3"
+  static TYPES = {
+    png : "png",
+    jpg : "jpg",
+    jpeg : "jpeg",
+    mp3 : "mp3"
   }
 
-  #id
-  #filename
-  #type
-  #resourcePath
-  #resource
-  #category
+  static CATEGORIES = {
+    playerShip : "playerShip",
+    enemyShip : "enemyShip",
+    weapon : "weapon",
+    propulsion : "propulsion",
+    backdrop : "backdrop",
+    shield : "shield"
+  }
 
-  constructor({category, id, filename,type, resourcePath}) {
-    this.#category = category;
-    this.#id = id;
-    this.#filename = filename;
-    this.#type = type;
-    this.#resourcePath = resourcePath;
+  id
+  filename
+  fileType
+  resourcePath
+  resource
+  category
 
+  /**
+   *
+   * @param category
+   * @param filename
+   * @param fileType
+   * @param resourcePath
+   */
+  constructor({category, filename, fileType, resourcePath}) {
+    Object.assign(this,{category,filename,fileType,resourcePath})
+    this.id = crypto.randomUUID();
   }
 
   set resource(resource){
-    this.#resource = resource;
+    this.resource = resource;
   }
 
   get resource(){
-    return this.#resource;
+    return this.resource;
   }
 
   set category(category){
-    this.#category = category;
+    this.category = category;
   }
 
   get category(){
-    return this.#category;
+    return this.category;
   }
 
   get id() {
-    return this.#id;
+    return this.id;
   }
 
   get filename() {
-    return this.#filename;
+    return this.filename;
   }
 
   get type() {
-    return this.#type;
+    return this.fileType;
   }
 
   get resourcePath() {
-    return this.#resourcePath
+    return this.resourcePath
   }
 }

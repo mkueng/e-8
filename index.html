@@ -27,8 +27,8 @@
     <script>
         var ns = ns || {}
         window.global = window.global || {};
-        const maxWidth = 1800
-        const maxHeight = 950;
+        const maxWidth = 4000
+        const maxHeight = 1250;
         const currentWidth = window.innerWidth;
         const currentHeight = window.innerHeight;
 
@@ -50,91 +50,109 @@
     </div>
 
     <!-- backgrounds -->
-    <img id="backdrop_01" class="background" src="resources/backgrounds/backdrop_01.jpg">
-    <img id="asteroidField_01" class="background" src="resources/asteroids/asteroidField_01/images/asteroidField_01.png">
-
+    <img id="hud" class="" src="resources/hud/hud5.png" style="display:none">
+    <img id="navi-orb" class="" src="resources/hud/navi-orb.png" style="display:none">
+    <img id="navi" class="" src="resources/hud/navi.png" style="display:none">
 
     <script src="util/util.js?v=1.0"></script>
     <script src="js/config.js?v=1.0"></script>
     <script src="js/logHandler.js?v=1.0"></script>
     <script src="js/resource/resourceLoader.js?v=1.0"></script>
     <script src="js/resource/resourceHandler.js?v=1.0"></script>
-
-
-
     <script src="js/infoHandler.js"></script>
-    <script src="js/sprite/spriteHandler.js?v=1.0"></script>
-
+    <script src="js/sound/soundHandler.js?v=1.0"></script>
+    <script src="js/hudHandler.js?v=1.0"></script>
+    <script src="js/inputHandler.js?v=1.0"></script>
     <script src="js/fontHandler.js?v=1.0"></script>
     <script src="js/canvasHandler.js?v=1.0"></script>
 
     <script src="js/gameObjects/gameObject.js?v=1.0"></script>
-    <script src="js/backgroundObjects/background.js?v=1.0"></script>
-    <script src="js/backgroundObjects/staticBackground.js?v=1.0"></script>
-    <script src="js/backgroundObjects/dynamicBackground.js?v=1.0"></script>
-    <script src="js/backgroundObjects/backgroundHandler_old.js?v=1.0"></script>
-    <script src="js/sound/soundHandler.js?v=1.0"></script>
-    <script src="js/hudHandler.js?v=1.0"></script>
-    <script src="js/inputHandler.js?v=1.0"></script>
-    <script src="js/sprite/sprite.js?v=1.0"></script>
-    <script src="js/sprite/spriteComp.js?v=1.0"></script>
+    <script src="js/resource/resourceObject.js?v=1.0"></script>
 
     <!-- state -->
     <script src="js/state/state.js?v=1.0"></script>
     <script src="js/state/stateHandler.js?v=1.0"></script>
 
+    <!-- weapon -->
+    <script src="js/weapon/weapon.js?v=1.0"></script>
+    <script src="js/weapon/photonTorpedo.js?v=1.0"></script>
+    <script src="js/weapon/photonTorpedoFireAndForget.js?v=1.0"></script>
+    <script src="js/weapon/photonTorpedoEnemy.js?v=1.0"></script>
+    <script src="js/weapon/weaponFactory.js?v=1.0"></script>
+
     <!-- ship -->
-    <script src="js/ship/shipHandler.js?v=1.0"></script>
-    <script src="js/ship/ship.js?v=1.0"></script>
-    <script src="js/ship/ship_01.js?v=1.0"></script>
-    <script src="js/ship/spaceship_01.js?v=1.0"></script>
+    <script src="js/playerShip/playerShipHandler.js?v=1.0"></script>
+    <script src="js/playerShip/playerShip.js?v=1.0"></script>
+    <script src="js/playerShip/classAPlayerShip.js?v=1.0"></script>
+    <script src="js/playerShip/classBPlayerShip.js?v=1.0"></script>
+    <script src="js/playerShip/playerShipFactory.js?v=1.0"></script>
+
+    <!-- enemyShip -->
+    <script src="js/procedural/ships/proceduralShipImage.js?v=1.0"></script>
+    <script src="js/enemyShip/proceduralEnemyShipImageType1.js?v=1.0"></script>
+    <script src="js/enemyShip/enemyShipHandler.js?v=1.0"></script>
+    <script src="js/enemyShip/enemyShipFactory.js?v=1.0"></script>
+    <script src="js/enemyShip/enemyShip.js?v=1.0"></script>
+
+    <!-- trail -->
+    <script src="js/engineTrail/engineTrail.js?v=1.0"></script>
+    <script src="js/engineTrail/engineTrailA.js?v=1.0"></script>
+    <script src="js/engineTrail/engineTrailFactory.js?v=1.0"></script>
+
+    <!-- propulsion -->
+    <script src="js/propulsion/propulsion.js?v=1.0"></script>
+    <script src="js/propulsion/propulsionIonA.js?v=1.0"></script>
+    <script src="js/propulsion/propulsionIonB.js?v=1.0"></script>
+    <script src="js/propulsion/propulsionFactory.js?v=1.0"></script>
+
+    <!-- shield -->
+    <script src="js/shield/shield.js?v=1.0"></script>
+    <script src="js/shield/classAShield.js?v=1.0"></script>
+    <script src="js/shield/shieldFactory.js?v=1.0"></script>
 
 
+    <!-- explosion -->
+    <script src="js/explosion/explosion.js?v=1.0"></script>
+    <script src="js/explosion/classAPlayerShipExplosion.js?v=1.0"></script>
+    <script src="js/explosion/classAEnemyShipExplosion.js?v=1.0"></script>
+    <script src="js/explosion/explosionFactory.js?v=1.0"></script>
+
+    <!-- gameObject -->
+    <script src="js/gameObjects/gameObjectsHandler.js?v=1.0"></script>
 
 
-    <script src="js/gameObjects/asteroids/asteroid_01.js?v=1.0"></script>
+    <!-- backdrop -->
+    <script src="js/backdrop/backdrop.js?v=1.0"></script>
 
-    <script src="js/gameObjects/enemies/enemy.js?v=1.0"></script>
-    <script src="js/gameObjects/planets/planet.js?v=1.0"></script>
-    <script src="js/gameObjects/planets/planet_01.js?v=1.0"></script>
-    <script src="js/gameObjects/planets/planet_02.js?v=1.0"></script>
-    <script src="js/gameObjects/explosions/enemyExplosion.js?v=1.0"></script>
-    <script src="js/gameObjects/Weapons/enemyShoot.js?v=1.0"></script>
-    <script src="js/gameObjects/enemies/enemy_01.js?v=1.0"></script>
-    <script src="js/gameObjects/Weapons/enemy_01_shoot.js?v=1.0"></script>
-    <script src="js/gameObjects/explosions/enemy_01_explosion.js?v=1.0"></script>
-    <script src="js/gameObjects/enemies/enemy_02.js?v=1.0"></script>
-    <script src="js/gameObjects/Weapons/enemy_02_shoot.js?v=1.0"></script>
-    <script src="js/gameObjects/explosions/enemy_02_explosion.js?v=1.0"></script>
-    <script src="js/gameObjects/Weapons/spaceshipWeapon.js?v=1.0"></script>
-    <script src="js/gameObjects/Weapons/spaceship_01_photonTorpedo.js?v=1.0"></script>
-    <script src="js/backgroundObjects/backgroundObject.js"></script>
-    <script src="js/backgroundObjects/asteroidfields/asteroidField_01.js"></script>
-    <script src="js/backgroundObjects/asteroidfields/asteroidField_02.js"></script>
+    <!-- haze -->
+    <script src="js/haze/haze.js?v=1.0"></script>
+    <script src="js/haze/hazeHandler.js?v=1.0"></script>
 
+    <!-- image scaling -->
+    <script src="/js/workers/resizeImageWorker.js"></script>
 
-    <script src="data/spriteTemplates/enemy_01_template.js"></script>
-    <script src="data/spriteTemplates/enemy_02_template.js"></script>
+    <!-- resources -->
+    <script src="/js/workers/fetchResourcesWorker.js"></script>
 
+    <!-- collision -->
+    <script src="js/collisionDetection/collisionDetector.js?v=1.0"></script>
 
-    <script src="/js/workers/backgroundWorker.js"></script>
-    <script src="/js/backgroundObjects/backgroundHandler.js"></script>
+    <!-- galaxy -->
+    <script src="js/galaxy/galaxy.js?v=1.0"></script>
+    <script src="/js/workers/galaxy/galaxyWorker.js"></script>
+    <script src="/js/galaxy/planet.js"></script>
+    <script src="js/workers/galaxy/proceduralPlanet.js?v=1.0"></script>
+    <script src="js/workers/galaxy/noise.js?v=1.0"></script>
+    <script src="js/workers/galaxy/sphereImageLib.js?v=1.0"></script>
 
-    <script src="js/gameObjects/gameObjectsClasses.js?v=1.0"></script>
-    <script src="js/backgroundObjects/backgroundObjectsClasses.js?v=1.0"></script>
-
+    <!-- game -->
     <script src="js/stages/stage.js"></script>
     <script src="js/stages/stage_01.js"></script>
     <script src="js/stages/stage_02.js"></script>
     <script src="js/gameLoop.js?v=1.0"></script>
-    <script src="js/proceduralShapes/planets/planet.js?v=1.0"></script>
-    <script src="js/proceduralShapes/noise.js?v=1.0"></script>
-    <script src="js/proceduralShapes/sphereImageLib.js?v=1.0"></script>
 
-    <script src="js/resource/resourceObject.js?v=1.0"></script>
-    <script src="js/proceduralShapes/ships/proceduralShipImage.js?v=1.0"></script>
-    <script src="js/proceduralShapes/ships/proceduralEnemyShipImage.js?v=1.0"></script>
-    <script src="js/proceduralShapes/ships/proceduralShipFactory.js?v=1.0"></script>
+
+
     <script src="js/gameController.js?v=1.0"></script>
     <script src="js/init.js?v=1.0"></script>
     <script src="js/index.js?v=1.0"></script>

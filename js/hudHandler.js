@@ -1,5 +1,8 @@
 class HudHandler {
 
+
+   static instance = new this();
+
   static props = {
     shotsFired : 0
   }
@@ -18,52 +21,52 @@ class HudHandler {
   #initContexts = ()=>{
     // static
 
-    this.#staticContext = this.canvasHandler.getCanvas("hudStatic").context;
-    this.#staticContext.width = this.canvasHandler.getCanvas("hudStatic").width;
-    this.#staticContext.height = this.canvasHandler.getCanvas("hudStatic").height;
-
-    //dynamic middle
-    this.dynamicContextMiddle = this.canvasHandler.getCanvas("hudDynamicMiddle").context;
-    this.dynamicContextMiddle.width = this.canvasHandler.getCanvas("hudDynamicMiddle").width;
-    this.dynamicContextMiddle.height = this.canvasHandler.getCanvas("hudDynamicMiddle").height;
+    this.#staticContext = CanvasHandler.instance.getCanvas("hudStatic").context;
+    this.#staticContext.width = CanvasHandler.instance.getCanvas("hudStatic").width;
+    this.#staticContext.height = CanvasHandler.instance.getCanvas("hudStatic").height;
 
 
-    //dynamic left
-    this.#dynamicContextLeft = this.canvasHandler.getCanvas("hudDynamicLeft").context;
-    this.#dynamicContextLeft.width = this.canvasHandler.getCanvas("hudDynamicLeft").width;
-    this.#dynamicContextLeft.height = this.canvasHandler.getCanvas("hudDynamicLeft").height;
-    this.#dynamicContextLeft.setTransform(1, (-0.08), 0, 1, 0, 0);
+        this.dynamicContextMiddle = CanvasHandler.instance.getCanvas("hudDynamicMiddle").context;
+        this.dynamicContextMiddle.width = CanvasHandler.instance.getCanvas("hudDynamicMiddle").width;
+        this.dynamicContextMiddle.height = CanvasHandler.instance.getCanvas("hudDynamicMiddle").height;
 
-    //dynamic right
-    this.#dynamicContextRight = this.canvasHandler.getCanvas("hudDynamicRight").context;
-    this.#dynamicContextRight.width = this.canvasHandler.getCanvas("hudDynamicRight").width;
-    this.#dynamicContextRight.height = this.canvasHandler.getCanvas("hudDynamicRight").height;
-    this.#dynamicContextRight.setTransform(1, 0.07, 0, 1, 0, 0);
 
-    //dynamic far right
-    this.#dynamicContextFarRight = this.canvasHandler.getCanvas("hudDynamicFarRight").context;
-    this.#dynamicContextFarRight.width = this.canvasHandler.getCanvas("hudDynamicFarRight").width;
-    this.#dynamicContextFarRight.height = this.canvasHandler.getCanvas("hudDynamicFarRight").height;
-    this.#dynamicContextFarRight.setTransform(1, 0.10, 0, 1, 0, 0);
+        //dynamic left
+        this.#dynamicContextLeft = CanvasHandler.instance.getCanvas("hudDynamicLeft").context;
+        this.#dynamicContextLeft.width = CanvasHandler.instance.getCanvas("hudDynamicLeft").width;
+        this.#dynamicContextLeft.height = CanvasHandler.instance.getCanvas("hudDynamicLeft").height;
+        this.#dynamicContextLeft.transform(0.1, 1, 1, 0, 0, 0)
+        this.#dynamicContextLeft.font = "12px myFont";
 
-    //dynamic far left
-    this.#dynamicContextFarLeft = this.canvasHandler.getCanvas("hudDynamicFarLeft").context;
-    this.#dynamicContextFarLeft.width = this.canvasHandler.getCanvas("hudDynamicFarLeft").width;
-    this.#dynamicContextFarLeft.height = this.canvasHandler.getCanvas("hudDynamicFarLeft").height;
-    this.#dynamicContextFarLeft.setTransform(1, -0.10, 0, 1, 0, 0);
+        //dynamic right
+        this.#dynamicContextRight = CanvasHandler.instance.getCanvas("hudDynamicRight").context;
+        this.#dynamicContextRight.width = CanvasHandler.instance.getCanvas("hudDynamicRight").width;
+        this.#dynamicContextRight.height = CanvasHandler.instance.getCanvas("hudDynamicRight").height;
+        this.#dynamicContextRight.transform(-0.1, 1, 1, 0, 15, 0);
+        this.#dynamicContextRight.font = "8px myFont";
+
+        //dynamic far right
+        this.#dynamicContextFarRight = CanvasHandler.instance.getCanvas("hudDynamicFarRight").context;
+        this.#dynamicContextFarRight.width = CanvasHandler.instance.getCanvas("hudDynamicFarRight").width;
+        this.#dynamicContextFarRight.height = CanvasHandler.instance.getCanvas("hudDynamicFarRight").height;
+        this.#dynamicContextFarRight.setTransform(1, 0.10, 0, 1, 0, 0);
+
+        //dynamic far left
+        this.#dynamicContextFarLeft = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").context;
+        this.#dynamicContextFarLeft.width = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").width;
+        this.#dynamicContextFarLeft.height = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").height;
+        this.#dynamicContextFarLeft.setTransform(1, -0.10, 0, 1, 0, 0);
 
   }
-  constructor(canvasHandler){
-    this.canvasHandler = canvasHandler;
-   /*
-    this.hudImage = document.querySelector("#hud");
+  init(){
 
+    this.#initContexts();
+
+    this.hudImage = document.querySelector("#hud");
     this.naviImage = document.querySelector("#navi");
     this.naviOrbImage = document.querySelector("#navi-orb");
     this.naviImagePosX = (window.global.screenWidth/6-this.naviImage.width)/2
     this.naviOrbImagePosX = (window.global.screenWidth/6-this.naviImage.width)/2;
-
-
     this.shieldInfoBarColor = "green";
     this.propulsionInfoBarColor = "green";
     this.laserInfoBarColor = "#829399";
@@ -74,36 +77,53 @@ class HudHandler {
     this.fillRectNavi = this.dynamicContextMiddle.fillRect.bind(this.dynamicContextMiddle);
     this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
-    */
+
+    this.#renderStatic();
+    this.#renderNavi();
+    this.renderDisplayLeft();
+    this.renderDisplayRight();
+
+
 
   }
 
+  updateShield = (percentage)=>{
+   this.#renderShield(percentage)
+  }
+/*
   render = (dt) =>{
     this.toggleRender = !this.toggleRender;
     if (this.toggleRender) {
       this.toggle2Render = !this.toggle2Render;
       if (this.toggle2Render){
         this.renderDisplayLeft();
-        this.renderNavi();
+
         this.renderDisplayRight();
         this.renderDisplayFarRight();
         this.renderDisplayFarLeft(dt);
       }
-
     }
   }
-
-  renderStatic = () =>{
+*/
+  #renderStatic = () =>{
     //this.#staticContext.clearRect(0,0,this.#staticContext.width, this.#staticContext.length);
     this.#staticContext.drawImage(this.hudImage,0,0, this.#staticContext.width,this.#staticContext.height);
   }
 
   renderDisplayLeft = (dt)=>{
     this.#dynamicContextLeft.clearRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.fillStyle =  "#222e50"
-    this.#dynamicContextLeft.fillRect(0,45,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height-55)
-    this.renderShield();
-    this.renderProp();
+
+    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height)
+    this.#renderShield();
+    //this.renderProp();
+  }
+
+  renderDisplayRight = (dt)=>{
+    this.#dynamicContextRight.fillStyle = "white"
+    this.#dynamicContextRight.clearRect(0,0, this.#dynamicContextRight.width,  this.#dynamicContextRight.height);
+    this.#dynamicContextRight.fillRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
+    this.#renderLaser();
+    //this.#renderPhotonTorpedos();
   }
 
   renderDisplayFarLeft = (dt)=>{
@@ -114,13 +134,7 @@ class HudHandler {
     this.#dynamicContextFarLeft.fillText(dt, 5,28);
   }
 
-  renderDisplayRight = (dt)=>{
-    this.#dynamicContextRight.clearRect(0,0, this.#dynamicContextRight.width,  this.#dynamicContextRight.height);
-    this.#dynamicContextRight.fillStyle =  "#222e50"
-    this.#dynamicContextRight.fillRect(0,30,this.#dynamicContextRight.width, this.#dynamicContextRight.height-57);
-    this.renderLaser();
-    this.renderPhotonTorpedos();
-  }
+
 
   renderDisplayFarRight = ()=>{
     this.#dynamicContextFarRight.clearRect(0,0, this.#dynamicContextFarRight.width,  this.#dynamicContextFarRight.height);
@@ -133,11 +147,11 @@ class HudHandler {
 
   }
 
-  renderNavi = ()=>{
+  #renderNavi = ()=>{
     this.dynamicContextMiddle.clearRect(0,0,this.dynamicContextMiddle.width, this.dynamicContextMiddle.height);
-    this.dynamicContextMiddle.drawImage(this.naviImage, this.naviImagePosX ,25);
-    this.dynamicContextMiddle.drawImage(this.naviOrbImage, this.naviOrbImagePosX ,-10);
-
+    this.dynamicContextMiddle.drawImage(this.naviImage, this.naviImagePosX ,40);
+    this.dynamicContextMiddle.drawImage(this.naviOrbImage, this.naviOrbImagePosX ,20);
+/*
     for (let i = 0, len = SpriteHandler.enemies.length; i < len; i++) {
       const enemy =  SpriteHandler.enemies[i];
       const xPercentage = 100 / (window.global.screenWidth / enemy.x);
@@ -147,39 +161,42 @@ class HudHandler {
 
       this.dynamicContextMiddle.fillStyle ="red";
       this.fillRectNavi(xPosition, yPosition, 5, 5);
-    }
+    }*/
   }
 
-  renderLaser =()=>{
-    this.#dynamicContextRight.fillStyle =  this.laserInfoBarColor;
-    this.#dynamicContextRight.fillText("LASER", 20,45);
-    this.fillRectRight(70,37,100,8);
-    this.#dynamicContextRight.fillStyle = this.laserEnergyColor;
-    this.fillRectRight(70,37,Spaceship_01.laserPercentage,8);
+  #renderLaser =()=>{
+    this.#dynamicContextRight.fillStyle = "white";
+    this.#dynamicContextRight.fillText("LASER", 5,12);
+   // this.fillRectRight(70,37,100,8);
+   // this.#dynamicContextRight.fillStyle = this.laserEnergyColor;
+   // this.fillRectRight(70,37,Spaceship_01_old.laserPercentage,8);
   }
 
-  renderPhotonTorpedos =()=>{
+  #renderPhotonTorpedos =()=>{
     this.#dynamicContextRight.fillStyle = "white";
     this.#dynamicContextRight.fillText("PT", 20,55);
     this.fillRectRight(70,50,100,8);
   }
 
-  renderShield = ()=>{
-    const shieldPercentage = Spaceship_01.shieldPercentage;
-
+  #renderShield = (percentage)=>{
+    this.#dynamicContextLeft.clearRect(-5,-5,this.#dynamicContextLeft.width+10, this.#dynamicContextLeft.height+10);
 
 
     this.shieldInfoBarColor =
-      shieldPercentage < 30 ? "red" :
-        shieldPercentage < 50 ? "orange" :
+      percentage < 30 ? "red" :
+        percentage < 60 ? "yellow":
           "lightgreen";
 
-    this.#dynamicContextLeft.fillStyle = "aquamarine";
-    this.#dynamicContextLeft.fillText("SHIELDS", this.#dynamicContextLeft.width - 190, 65);
-    this.fillRectLeft(this.#dynamicContextLeft.width - 120, 55,  100, 10);
+    this.#dynamicContextLeft.fillStyle = percentage;
+    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height)
+
+    this.#dynamicContextLeft.fillStyle = "white"
+    this.#dynamicContextLeft.fillText("Shields", this.#dynamicContextLeft.width - 130, 14);
+    this.#dynamicContextLeft.fillStyle = "black"
+    this.fillRectLeft(this.#dynamicContextLeft.width - 70,5,  50, 10);
 
     this.#dynamicContextLeft.fillStyle = this.shieldInfoBarColor;
-    this.fillRectLeft( this.#dynamicContextLeft.width - 120, 55, shieldPercentage, 10);}
+    this.fillRectLeft( this.#dynamicContextLeft.width - 68, 7, percentage/2-4, 6);}
 
   renderProp = () => {
 
@@ -187,15 +204,15 @@ class HudHandler {
 
 
     this.propulsionInfoBarColor =
-      Spaceship_01.propulsionPercentage < 30 ? "red" :
-        Spaceship_01.propulsionPercentage < 50 ? "orange" :
+      Spaceship_01_old.propulsionPercentage < 30 ? "red" :
+        Spaceship_01_old.propulsionPercentage < 50 ? "yellow" :
           "lightgreen";
 
     this.#dynamicContextLeft.fillStyle = "aquamarine";
     this.#dynamicContextLeft.fillText("PROP", this.#dynamicContextLeft.width - 190, 80);
-    this.fillRectLeft(this.#dynamicContextLeft.width - 120, 70, 100, 10);
+    this.fillRectLeft(this.#dynamicContextLeft.width - 120, 70, 80, 10);
 
     this.#dynamicContextLeft.fillStyle = this.propulsionInfoBarColor;
-    this.fillRectLeft(this.#dynamicContextLeft.width - 120, 70, Spaceship_01.propulsionPercentage, 10);
+    this.fillRectLeft(this.#dynamicContextLeft.width - 120, 70, Spaceship_01_old.propulsionPercentage, 10);
   }
 }

@@ -13,29 +13,73 @@ class GameLoop {
   #perfDif = 0;
   #performanceCumul = 0
   #stage = null;
-
+  #coordinate = 20000;
+  #subscribers = [];
+  #toggleUpdate = true;
 
   invoke(){
+  }
 
+  subscribe=(subscriber)=>{
+    this.#subscribers.push(subscriber);
+  }
+
+  unsubscribe = (subscriber)=>{
+    const index = this.#subscribers.indexOf(subscriber);
+    this.#subscribers.splice(index, 1);
   }
 
   /**
    *
-   * @param dt
+   * @param deltaTime
    */
-  #render=(dt)=>{
+  #update=(deltaTime)=> {
+    //increment current coordinate
+    this.#coordinate+=20;
+
+    //remove gameObjects
+    for (const gameObjectToRemove in GameObjectsHandler.gameObjectsToRemove) {
+      GameObjectsHandler.instance.removeGameObject(gameObjectToRemove);
+    }
+
+    // update game objects
+    for (let i=0, len = GameObjectsHandler.gameObjects.length; i < len; i++){
+      GameObjectsHandler.gameObjects[i].update(deltaTime);
+    }
+  }
+
+  /**
+   *
+   */
+  #render=()=>{
     this.#performanceCount++;
+
     //start measuring render time
     this.#start = window.performance.now();
 
-    //render
+    //clear canvas(es)
+    for (let context in GameObjectsHandler.contexts){
+      GameObjectsHandler.contexts[context].clearRect(0,0,window.global.screenWidth, window.global.screenHeight);
+    }
 
 
+
+    //perform collision checks
+    CollisionDetector.instance.performCollisionCheck();
+
+    //render game objects
+    for (let i=0, len = GameObjectsHandler.gameObjects.length; i < len; i++){
+      GameObjectsHandler.gameObjects[i].render();
+    }
+
+    this.#toggleUpdate = !this.#toggleUpdate;
     //end measuring render time
     this.#end = window.performance.now();
     this.#perfDif = this.#end-this.#start;
     this.#performanceCumul = this.#performanceCumul+this.#perfDif;
   }
+
+
 
   /**
    *
@@ -43,17 +87,19 @@ class GameLoop {
    */
   #animate = (newTime)=>{
     requestAnimationFrame(this.#animate);
-    this.#elapsed = newTime - this.#then;
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
+    this.delta = newTime - this.oldTime;
+    this.oldTime = newTime;
+    this.#update(this.delta/10);
 
     // if enough time has elapsed, draw the next frame
-    if ( this.#elapsed > this.#fpsInterval) {
-      this.#render(this.#elapsed);
+    if ( this.elapsed > this.#fpsInterval) {
       // adjust for fpsInterval not being multiple of fps
-      this.#then = newTime - (this.#elapsed % this.#fpsInterval);
+      this.then = this.now - (this.elapsed % this.#fpsInterval);
+      this.#render(this.#elapsed);
     }
   }
-
-
 
 
   /**
@@ -63,16 +109,19 @@ class GameLoop {
     this.#fpsInterval = 1000 / this.#fps;
     this.#stage = stage;
     this.#then = window.performance.now();
+    this.now = Date.now();
+    this.then = Date.now();
+    this.startTime = this.then;
+    this.delta = 0;
+    this.oldTime = 0;
+    this.#animate(0);
 
-    this.#animate();
-    /*
    setInterval(()=>{
-      InfoHandler.render((this.#performanceCumul/this.#performanceCount).toFixed(4),this.#performanceCount);
+      InfoHandler.render((this.#performanceCumul/this.#performanceCount).toFixed(4),this.#performanceCount, this.#coordinate);
       this.#performanceCumul = this.#performanceCount = 0;
-
+      for (const subscriber of this.#subscribers) {
+        subscriber.update(this.#coordinate);
+      }
     },1000)
-
-     */
   }
-
 }

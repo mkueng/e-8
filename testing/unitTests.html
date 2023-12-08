@@ -6,7 +6,7 @@
   <title>Test Runner</title>
   <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
 
-  <link href="/testing/unitTesting.css" rel="stylesheet"/>
+  <link href="/testing/unitTesting.css" rel="stylesheet" type="text/css"/>
 </head>
 <body style="font-family:'Courier New', Courier, monospace">
   <script>
@@ -21,17 +21,16 @@
     window.global.gameWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
   </script>
   <div id="game" style="display:none"></div>
-  <h4 class="titel">YMNYK  Unit Tests</h4>
+  <h4 class="titel">PAS JS Unit Tests</h4>
   <div id="testResults"></div>
   <div id="selector"></div>
   <div id="spinner" >
-    <image src="/testing/loading-spinner.jpeg" class="spinner"></image>
+    <img src="./loading-spinner.jpeg" class="spinner"></img>
   </div>
   <div id="testResultsBar"></div>
-  <script src="/js/logHandler.js"></script>
-  <script src="/js/resource/resourceLoader.js"></script>
-  <script src="/js/proceduralShapes/ships/proceduralShipImage.js"></script>
-  <script src="unitTesting.js"></script>
-  <script src="UT.js"></script>
+  <script src="/js/logHandler.js" type="/text/ecmascript"></script>
+  <script src="/js/resource/resourceLoader.js" type="text/ecmascript"></script>
+  <script src="unitTesting.js" type="text/ecmascript"></script>
+  <script src="UT.js" type="text/ecmascript"></script>
 </body>
 </html>

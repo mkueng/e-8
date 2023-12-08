@@ -1,8 +1,17 @@
+'use strict'
 class ResourceLoader {
 
+  #resourceWorker;
+
   constructor(){
+    this.#resourceWorker = new Worker('js/workers/fetchResourcesWorker.js');
   }
 
+  /**
+   *
+   * @param resourceObject ResourceObject
+   * @returns {Promise<unknown>}
+   */
   #loadImage = (resourceObject) => {
     return new Promise((resolve, reject) => {
       resourceObject.image = new Image();
@@ -14,32 +23,46 @@ class ResourceLoader {
     });
   };
 
-  #loadSound = (id,path)=>{
-  }
 
-
-  loadResourceBatch = async ({category, filename, fileType, filePath, lowerLimit, upperLimit})=>{
+  /**
+   *
+   * @param category string (feature, gadget, pattern etc...)
+   * @param filename string (feature, gadget, pattern etc...)
+   * @param fileType string (png, jpeg etc..)
+   * @param filePath string (relative path to file)
+   * @param lowerLimit integer
+   * @param upperLimit integer
+   * @returns {Promise<Awaited<*>[]>}
+   */
+  fetchResourceBatch = async ({category, filename, fileType, filePath, lowerLimit, upperLimit})=>{
     let resourceObjects = [];
 
     for (let i = lowerLimit; i < upperLimit; i++){
       resourceObjects.push(new ResourceObject({
         id : filename+i,
         category : category,
-        filename : filename+i,
-        type : ResourceObject.types[fileType],
-        resourcePath : filePath+filename+i+ResourceObject.types[fileType],
+        filename : filename+"_"+i,
+        fileType : ResourceObject.TYPES[fileType],
+        resourcePath : filePath+filename+"_"+i+"."+ResourceObject.TYPES[fileType],
         image : null
       }))
     }
     return await this.loadResources(resourceObjects);
   }
 
+
+  loadResource = async (resourceObject)=> {
+    return await this.#loadImage(resourceObject)
+  }
+
+
   /**
    *
-   * @param resourceObjects
+   * @param resourceObjects []
    * @returns {Promise<Awaited<unknown>[]>}
    */
   loadResources = async (resourceObjects)=>{
+    //console.log("resourceObjects:", resourceObjects);
     try {
       const resourcePromises = resourceObjects.map((resourceObject) => this.#loadImage(resourceObject));
       const resultsArray = await Promise.all(resourcePromises);

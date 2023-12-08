@@ -1,39 +1,49 @@
+'use strict'
+
 class GameController {
 
   //static music = new Audio("../resources/music/backgroundmusic.mp3");
 
   constructor() {
-    ShipHandler.instance.invoke();
-    StateHandler.instance.invoke();
-    ResourceHandler.instance.invoke();
-    FontHandler.instance.invoke();
 
-    CanvasHandler.instance.invoke();
-
-    InfoHandler.instance.invoke();
-    //BackgroundHandler.instance.invoke();
-
-    StateHandler.instance.currentState = new State(ShipHandler.instance.activeShip, new Stage_01());
-    let proceduralPlanet = new ProceduralPlanet();
-    //proceduralPlanet.init();
-
-    
-
-    ProceduralShipFactory.instance.invoke();
-    let ship = ProceduralShipFactory.instance.createShip("enemy");
-
-
-
-    /*
-    Promise.all([FontHandler.instance.loadFont(), StateHandler.instance.currentState.stage.init()]).then(results => {
-      StateHandler.instance.currentState.stage.activate();
-      this.subscribeForGlobalEvents();
+    this.startGame().then((r)=>{
+      console.log("game started");
     })
+  }
 
-     */
+  startGame = async ()=>{
+    FontHandler.instance.invoke();
+    ResourceHandler.instance.invoke();
+    CanvasHandler.instance.invoke();
+    InfoHandler.instance.invoke();
+    InputHandler.instance.invoke();
+
+    await FontHandler.instance.loadFont();
+    new Backdrop();
+    const galaxy = new Galaxy({
+      scale : 200
+    });
+    HudHandler.instance.init();
+    const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
+    await HazeHandler.instance.invoke(resizeImageWorker).create();
+
+    PlayerShipHandler.instance.invoke();
+    await PlayerShipHandler.instance.create();
+    await EnemyShipHandler.instance.invoke();
+
+
+
+
+
+    GameLoop.instance.invoke();
+    setTimeout(()=>{
+      GameLoop.instance.start();
+      EnemyShipHandler.instance.startCreation();
+    },100)
   }
 
 
+  // global
   subscribeForGlobalEvents = ()=>{
     ns.init.subscribeForGlobalEvents((event)=>{
 
@@ -41,6 +51,7 @@ class GameController {
 
         case "tab deactivated" : {
           StateHandler.instance.currentState.stage.pause();
+          break;
         }
 
         case  "tab inactive" : {

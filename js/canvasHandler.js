@@ -2,6 +2,9 @@ class CanvasHandler {
 
   //singleton
   static instance = new this();
+  static CANVASTYPES = {
+    playerShip : "playerShip"
+  }
 
   #backgroundCanvases = {
     "backgroundFar": {
@@ -27,8 +30,8 @@ class CanvasHandler {
     },
     "backgroundFront": {
       "id": "backgroundFront",
-      "width": 900,
-      "height": 900,
+      "width": window.global.screenWidth,
+      "height": window.global.screenHeight,
       "class" : "fullscreenCanvas",
       "opacity": 1
     },
@@ -42,7 +45,39 @@ class CanvasHandler {
   }
 
   #canvases = {
-
+    "haze": {
+      "id": "haze",
+      "class" : "hazeCanvas",
+      "context" : null,
+      "contextStyles" : null,
+      "canvas" : null,
+      "canvasStyles" : null,
+      "width": window.global.screenWidth,
+      "height": window.global.screenHeight,
+      "opacity": 1
+    },
+    "backdrop": {
+      "id": "backdrop",
+      "class" : "backdropCanvas",
+      "context" : null,
+      "contextStyles" : null,
+      "canvas" : null,
+      "canvasStyles" : null,
+      "width": window.global.screenWidth,
+      "height": window.global.screenHeight,
+      "opacity": 1
+    },
+    "galaxy": {
+      "id": "galaxy",
+      "class" : "fullscreenCanvas",
+      "context" : null,
+      "contextStyles" : null,
+      "canvas" : null,
+      "canvasStyles" : null,
+      "width": window.global.screenWidth,
+      "height": window.global.screenHeight,
+      "opacity": 1
+    },
     "info": {
       "id": "info",
       "class" : "fullscreenCanvas",
@@ -61,32 +96,31 @@ class CanvasHandler {
       "contextStyles" : null,
       "canvas" : null,
       "canvasStyles" : {
-        "bottom" : (window.innerHeight-window.global.screenHeight)/2+"px",
-        "left" : (window.innerWidth-window.global.screenWidth)/2+"px"
+        "top" : 0+"px",
+        "left" : window.global.screenWidth/6+"px"
       },
-      "width": window.global.screenWidth,
-      "height": 100,
-      "opacity": 0.5
+      "width": window.global.screenWidth/1.5,
+      "height": 80,
+      "opacity": 0.8
     },
     "hudDynamicLeft" :{
       "id" : "hudDynamicLeft",
       "class" : "sectionCanvasLeft",
       "context" : null,
       "contextStyles" : {
-        "font" : "12px myFont",
-        "fillStyle" : "white"
+        "font" : "12px myFont"
       },
       "canvas" : null,
       "canvasStyles" : {
-        "bottom" : (window.innerHeight-window.global.screenHeight)/2+"px",
-        "left" : (window.innerWidth/1.8-window.global.screenWidth/3)+"px",
+        "top" : 5+"px",
+        "left" : (window.innerWidth/1.8-window.global.screenWidth/5)+"px",
         "color" : "white",
-        "border-radius" : "30px"
+        "border-radius" : "20px"
 
       },
-      "width": 200,
-      "height" : 100,
-      "opacity": 0.5
+      "width": 140,
+      "height" : 30,
+      "opacity": 0.4
     },
     "hudDynamicFarLeft" : {
       "id": "hudDynamicFarLeft",
@@ -113,21 +147,18 @@ class CanvasHandler {
       "class" : "sectionCanvasRight",
       "context" : null,
       "contextStyles" : {
-        "font" : "10px myFont",
-        "fillStyle" : "white",
+        "font" : "12px myFont"
       },
       "canvas" : null,
       "canvasStyles" : {
-        "bottom" : (window.innerHeight-window.global.screenHeight)/2+"px",
-        "right" : (window.innerWidth/1.8-window.global.screenWidth/3)+"px",
+        "top" : 5+"px",
+        "right" : (window.innerWidth/1.8-window.global.screenWidth/5)+"px",
         "color" : "white",
-        "border-radius" : "30px"
-
-
+        "border-radius" : "20px"
       },
-      "width": 200,
-      "height" : 100,
-      "opacity": 0.5
+      "width": 140,
+      "height" : 30,
+      "opacity": 0.4
     },
 
     "hudDynamicFarRight" :{
@@ -161,7 +192,7 @@ class CanvasHandler {
       },
       "canvas" : null,
       "canvasStyles" : {
-        "bottom" : (window.innerHeight-window.global.screenHeight)/2+"px",
+        "top" : 0+"px",
         "left" : (window.innerWidth/2-window.global.screenWidth/12)+"px",
         "color" : "white",
 
@@ -170,9 +201,9 @@ class CanvasHandler {
       "height" : 100,
       "opacity": 0.5
     },
-    "spaceship" : {
-      "id" : "spaceship",
-      "class" : "fullscreenCanvas",
+    "playerShip" : {
+      "id" : "playerShip",
+      "class" : "shipCanvas",
       "context" : null,
       "contextStyles" : null,
       "canvas" : null,
@@ -184,7 +215,7 @@ class CanvasHandler {
     },
     "weapons" : {
       "id" : "weapons",
-      "class" : "fullscreenCanvas",
+      "class" : "weaponCanvas",
       "context" : null,
       "contextStyles" : null,
       "canvas" : null,
@@ -230,8 +261,9 @@ class CanvasHandler {
   }
 
   invoke(){
-    this.createCanvasNodes();
     this.createBackgroundCanvases();
+    this.createCanvasNodes();
+
   }
 
 
@@ -269,7 +301,7 @@ class CanvasHandler {
       newCanvas.className = this.#backgroundCanvases[canvas].class;
 
       this.#backgroundCanvases[canvas].canvas = newCanvas;
-      this.#backgroundCanvases[canvas].canvas = newCanvas.transferControlToOffscreen();
+      //this.#backgroundCanvases[canvas].canvas = newCanvas.transferControlToOffscreen();
       document.querySelector("#game").appendChild(newCanvas);
 
     }
