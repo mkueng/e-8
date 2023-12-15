@@ -1,13 +1,8 @@
 'use strict'
 
-/**
- * singleton
- */
 class FontHandler {
 
-  static instance = new this();
-
-  invoke(){
+  constructor(){
     this.myFont = new FontFace('myFont', 'url(resources/fonts/BrunoAceSC-Regular.ttf)');
   }
 

@@ -1,8 +1,5 @@
 class HudHandler {
 
-
-   static instance = new this();
-
   static props = {
     shotsFired : 0
   }
@@ -21,45 +18,45 @@ class HudHandler {
   #initContexts = ()=>{
     // static
 
-    this.#staticContext = CanvasHandler.instance.getCanvas("hudStatic").context;
-    this.#staticContext.width = CanvasHandler.instance.getCanvas("hudStatic").width;
-    this.#staticContext.height = CanvasHandler.instance.getCanvas("hudStatic").height;
+    this.#staticContext = this.canvasHandler.getCanvas("hudStatic").context;
+    this.#staticContext.width = this.canvasHandler.getCanvas("hudStatic").width;
+    this.#staticContext.height = this.canvasHandler.getCanvas("hudStatic").height;
 
 
-        this.dynamicContextMiddle = CanvasHandler.instance.getCanvas("hudDynamicMiddle").context;
-        this.dynamicContextMiddle.width = CanvasHandler.instance.getCanvas("hudDynamicMiddle").width;
-        this.dynamicContextMiddle.height = CanvasHandler.instance.getCanvas("hudDynamicMiddle").height;
+        this.dynamicContextMiddle = this.canvasHandler.getCanvas("hudDynamicMiddle").context;
+        this.dynamicContextMiddle.width = this.canvasHandler.getCanvas("hudDynamicMiddle").width;
+        this.dynamicContextMiddle.height = this.canvasHandler.getCanvas("hudDynamicMiddle").height;
 
 
         //dynamic left
-        this.#dynamicContextLeft = CanvasHandler.instance.getCanvas("hudDynamicLeft").context;
-        this.#dynamicContextLeft.width = CanvasHandler.instance.getCanvas("hudDynamicLeft").width;
-        this.#dynamicContextLeft.height = CanvasHandler.instance.getCanvas("hudDynamicLeft").height;
+        this.#dynamicContextLeft = this.canvasHandler.getCanvas("hudDynamicLeft").context;
+        this.#dynamicContextLeft.width = this.canvasHandler.getCanvas("hudDynamicLeft").width;
+        this.#dynamicContextLeft.height = this.canvasHandler.getCanvas("hudDynamicLeft").height;
         this.#dynamicContextLeft.transform(0.1, 1, 1, 0, 0, 0)
         this.#dynamicContextLeft.font = "12px myFont";
 
         //dynamic right
-        this.#dynamicContextRight = CanvasHandler.instance.getCanvas("hudDynamicRight").context;
-        this.#dynamicContextRight.width = CanvasHandler.instance.getCanvas("hudDynamicRight").width;
-        this.#dynamicContextRight.height = CanvasHandler.instance.getCanvas("hudDynamicRight").height;
+        this.#dynamicContextRight = this.canvasHandler.getCanvas("hudDynamicRight").context;
+        this.#dynamicContextRight.width = this.canvasHandler.getCanvas("hudDynamicRight").width;
+        this.#dynamicContextRight.height = this.canvasHandler.getCanvas("hudDynamicRight").height;
         this.#dynamicContextRight.transform(-0.1, 1, 1, 0, 15, 0);
         this.#dynamicContextRight.font = "8px myFont";
 
         //dynamic far right
-        this.#dynamicContextFarRight = CanvasHandler.instance.getCanvas("hudDynamicFarRight").context;
-        this.#dynamicContextFarRight.width = CanvasHandler.instance.getCanvas("hudDynamicFarRight").width;
-        this.#dynamicContextFarRight.height = CanvasHandler.instance.getCanvas("hudDynamicFarRight").height;
+        this.#dynamicContextFarRight = this.canvasHandler.getCanvas("hudDynamicFarRight").context;
+        this.#dynamicContextFarRight.width = this.canvasHandler.getCanvas("hudDynamicFarRight").width;
+        this.#dynamicContextFarRight.height = this.canvasHandler.getCanvas("hudDynamicFarRight").height;
         this.#dynamicContextFarRight.setTransform(1, 0.10, 0, 1, 0, 0);
 
         //dynamic far left
-        this.#dynamicContextFarLeft = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").context;
-        this.#dynamicContextFarLeft.width = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").width;
-        this.#dynamicContextFarLeft.height = CanvasHandler.instance.getCanvas("hudDynamicFarLeft").height;
+        this.#dynamicContextFarLeft = this.canvasHandler.getCanvas("hudDynamicFarLeft").context;
+        this.#dynamicContextFarLeft.width = this.canvasHandler.getCanvas("hudDynamicFarLeft").width;
+        this.#dynamicContextFarLeft.height = this.canvasHandler.getCanvas("hudDynamicFarLeft").height;
         this.#dynamicContextFarLeft.setTransform(1, -0.10, 0, 1, 0, 0);
 
   }
-  init(){
-
+  constructor({canvasHandler}){
+    this.canvasHandler = canvasHandler;
     this.#initContexts();
 
     this.hudImage = document.querySelector("#hud");

@@ -1,11 +1,6 @@
 'use strict'
 
-/**
- * singleton
- */
 class ResourceHandler {
-
-  static instance = new this();
 
   #resourcePool = {};
 
@@ -13,7 +8,7 @@ class ResourceHandler {
    *
    * @returns {ResourceHandler}
    */
-  invoke() {
+  constructor() {
     this.resourceLoader = new ResourceLoader();
   }
 
@@ -55,7 +50,7 @@ class ResourceHandler {
     if (this.#resourcePool.hasOwnProperty(resourceObject.id)){
       requestedResource = this.#resourcePool[resourceObject.id];
     } else {
-      requestedResource = await this.resourceLoader.loadResource(resourceObject);
+      requestedResource = await this.resourceLoader.fetchResource(resourceObject);
       this.#resourcePool[requestedResource.id] = requestedResource;
     }
 

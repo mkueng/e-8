@@ -5,11 +5,16 @@
  */
 class ShieldFactory {
 
-  static instance = new this();
-
   static SHIELD_TYPES = {
     classAShield : ClassAShield
   }
+
+  constructor({
+    resourceHandler
+              }){
+
+    this.resourceHandler = resourceHandler;
+  };
 
   /**
    *
@@ -33,7 +38,7 @@ class ShieldFactory {
      * @returns {Promise<*>}
      */
     const invokeShield = async (type) => {
-      await type.invoke();
+      await type.invoke(this.resourceHandler);
       return new type({
         relatedShip,
         canvas,

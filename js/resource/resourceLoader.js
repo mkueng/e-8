@@ -47,11 +47,16 @@ class ResourceLoader {
         image : null
       }))
     }
-    return await this.loadResources(resourceObjects);
+    return await this.fetchResources(resourceObjects);
   }
 
 
-  loadResource = async (resourceObject)=> {
+  /**
+   *
+   * @param resourceObject
+   * @returns {Promise<*>}
+   */
+  fetchResource = async (resourceObject)=> {
     return await this.#loadImage(resourceObject)
   }
 
@@ -61,7 +66,7 @@ class ResourceLoader {
    * @param resourceObjects []
    * @returns {Promise<Awaited<unknown>[]>}
    */
-  loadResources = async (resourceObjects)=>{
+  fetchResources = async (resourceObjects)=>{
     //console.log("resourceObjects:", resourceObjects);
     try {
       const resourcePromises = resourceObjects.map((resourceObject) => this.#loadImage(resourceObject));

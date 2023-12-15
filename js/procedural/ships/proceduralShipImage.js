@@ -1,8 +1,13 @@
 'use strict'
 class ProceduralShipImage {
 
-  constructor(){
+  constructor({
+    resourceHandler,
+    canvasHandler
+              }){
     this.resourceLoader = new ResourceLoader();
+    this.canvasHandler = canvasHandler;
+    this.resourceHandler = resourceHandler;
     this.maxShipSize = 6;
   }
 
@@ -14,7 +19,7 @@ class ProceduralShipImage {
    * @param tileSize
    */
   setupCanvas = ({ shipSize, offset, scale, tileSize })=>{
-    this.canvas = CanvasHandler.instance.createOffscreenCanvas({
+    this.canvas = this.canvasHandler.createOffscreenCanvas({
       id: "spaceShip",
       width : (shipSize+2)*offset,
       height : offset+2,
@@ -47,7 +52,7 @@ class ProceduralShipImage {
     tiles.forEach((amount, type)=>{
       this.promises = [];
 
-      this.promises.push(ResourceHandler.instance.fetchResourceBatch({
+      this.promises.push(this.resourceHandler.fetchResourceBatch({
         category : type,
         filename : filePrefix +"_"+type,
         fileType : "png",

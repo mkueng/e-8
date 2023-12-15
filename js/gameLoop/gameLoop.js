@@ -1,8 +1,6 @@
 'use strict'
 class GameLoop {
 
-  static instance = new this();
-
   #elapsed = 0;
   #then = 0;
   #fps = 60;
@@ -17,7 +15,8 @@ class GameLoop {
   #subscribers = [];
   #toggleUpdate = true;
 
-  invoke(){
+  constructor({infoHandler}){
+    this.infoHandler = infoHandler;
   }
 
   subscribe=(subscriber)=>{
@@ -117,7 +116,7 @@ class GameLoop {
     this.#animate(0);
 
    setInterval(()=>{
-      InfoHandler.render((this.#performanceCumul/this.#performanceCount).toFixed(4),this.#performanceCount, this.#coordinate);
+     this.infoHandler.render((this.#performanceCumul/this.#performanceCount).toFixed(4),this.#performanceCount, this.#coordinate);
       this.#performanceCumul = this.#performanceCount = 0;
       for (const subscriber of this.#subscribers) {
         subscriber.update(this.#coordinate);

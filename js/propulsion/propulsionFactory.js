@@ -1,15 +1,16 @@
 'use strict'
 
-/**
- * singleton
- */
 class PropulsionFactory {
-
-  static instance = new this();
 
   static PROPULSION_TYPES = {
     ionA : PropulsionIonA,
     ionB : PropulsionIonB
+  }
+
+  constructor({
+    resourceHandler
+              }){
+    this.resourceHandler = resourceHandler;
   }
 
   /**
@@ -34,7 +35,7 @@ class PropulsionFactory {
      * @returns {Promise<*>}
      */
     const invokePropulsion = async (type) =>{
-      await type.invoke();
+      await type.invoke(this.resourceHandler);
       return new type({
         canvas,
         posDX,

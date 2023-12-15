@@ -42,7 +42,10 @@ class PlayerShip extends GameObject {
                 weapons,
                 shield,
                 terminationSequence,
-                engineTrailFactory
+                engineTrailFactory,
+                playerShipHandler,
+                inputHandler,
+                hudHandler
               }) {
     super({
       identification: "playerShip",
@@ -75,7 +78,10 @@ class PlayerShip extends GameObject {
       weapons,
       shield,
       terminationSequence,
-      engineTrailFactory
+      engineTrailFactory,
+      hudHandler,
+      inputHandler,
+      playerShipHandler
     });
 
     // Initialize properties
@@ -92,13 +98,13 @@ class PlayerShip extends GameObject {
     }
 
     // Subscribe to input handler
-    InputHandler.subscribe(this);
+    this.inputHandler.subscribe(this);
 
     // Initialize weapons and add to GameObjectsHandler
     this.initializeWeapons();
 
     // Update shield in the HUD
-    HudHandler.instance.updateShield(this.shield.strength);
+    this.hudHandler.updateShield(this.shield.strength);
 
     // Add player ship to GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -108,8 +114,13 @@ class PlayerShip extends GameObject {
 
   }
 
-  addKeyEvent = ({key,execute})=>{
-    this.keyEvents[key]= execute;
+  /**
+   *
+   * @param key
+   * @param execute
+   */
+  addKeyEvent = ({key, execute})=>{
+    this.keyEvents[key] = execute;
   }
 
 
@@ -131,6 +142,11 @@ class PlayerShip extends GameObject {
     }
   };
 
+  /**
+   *
+   * @param message
+   * @param obj
+   */
   subscriptionsUpdate(message,obj){
     this.weapons[obj.uniqueIdentifier].units.unshift(obj);
   }
@@ -146,7 +162,7 @@ class PlayerShip extends GameObject {
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
     this.shield.strength -= 10;
-    HudHandler.instance.updateShield(this.shield.strength);
+    this.hudHandler.updateShield(this.shield.strength);
 
     // Termination sequence
     if (this.shield.strength < 0) {
@@ -160,11 +176,8 @@ class PlayerShip extends GameObject {
       for (const dependency of this.dependencies) {
         dependency.destroy();
       }
-
-      InputHandler.unsubscribe(this);
-      PlayerShipHandler.instance.create().then(() => {
-        this.shield.strength = 100;
-      });
+      this.inputHandler.unsubscribe(this);
+      this.playerShipHandler.shipDestroyed(this.is);
     }
 
     // Destroy hit object
@@ -235,7 +248,7 @@ class PlayerShip extends GameObject {
     // shield
     if (this.shield.strength < 100) {
       this.shield.strength+= 0.02;
-      HudHandler.instance.updateShield(this.shield.strength);
+      this.hudHandler.updateShield(this.shield.strength);
     }
   }
 

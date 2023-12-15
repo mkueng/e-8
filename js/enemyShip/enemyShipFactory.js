@@ -1,7 +1,7 @@
 'use strict';
 
 class EnemyShipFactory {
-  static instance = new this();
+
 
   static SHIP_TYPE = {
     classA: { shipSize: 1, scale: 0.5, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
@@ -9,8 +9,25 @@ class EnemyShipFactory {
     classC: { shipSize: 3, scale: 0.8,weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
   };
 
+
+  constructor({
+    enemyShipHandler,
+    resourceHandler,
+    canvasHandler
+  }){
+    this.enemyShipHandler = enemyShipHandler;
+    this.proceduralEnemyShipImageType1 = new ProceduralEnemyShipImageType1({resourceHandler, canvasHandler});
+    this.explosionFactory = new ExplosionFactory({resourceHandler});
+    this.weaponFactory = new WeaponFactory({resourceHandler})
+  }
+
+  /**
+   *
+   * @param canvas
+   * @returns {Promise<void>}
+   */
   invoke = async(canvas)=>{
-    await ProceduralEnemyShipImageType1.instance.invoke();
+    await this.proceduralEnemyShipImageType1.invoke();
     this.canvas = canvas
   }
 
@@ -23,7 +40,7 @@ class EnemyShipFactory {
     const { shipSize, scale } = type;
 
     return new Promise(async (resolve) => {
-      let terminationSequence = await ExplosionFactory.instance.createExplosion({
+      let terminationSequence = await  this.explosionFactory.createExplosion({
         type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
         canvas: this.canvas,
         posDX: -10,
@@ -31,7 +48,7 @@ class EnemyShipFactory {
       });
 
       let weapons = {
-        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: await WeaponFactory.instance.createWeapon({
+        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: await  this.weaponFactory.createWeapon({
           type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
           amount: 1,
           canvas: this.canvas,
@@ -40,7 +57,7 @@ class EnemyShipFactory {
         }),
       };
 
-      const shipImageBlob = await ProceduralEnemyShipImageType1.instance.create({ shipSize, scale });
+      const shipImageBlob = await this.proceduralEnemyShipImageType1.create({ shipSize, scale });
       const img = new Image();
 
       img.onload = () => {
@@ -57,6 +74,7 @@ class EnemyShipFactory {
           weapons: weapons,
           canvas: this.canvas,
           terminationSequence: terminationSequence,
+          enemyShipHandler: this.enemyShipHandler
         });
 
 

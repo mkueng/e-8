@@ -12,8 +12,8 @@ class PhotonTorpedoFireAndForget extends Weapon {
 
   static imageResource;
 
-  static async invoke(){
-    PhotonTorpedoFireAndForget.imageResource = await ResourceHandler.instance.fetchResource(PhotonTorpedoFireAndForget.resourceObject);
+  static async invoke(resourceHandler){
+    PhotonTorpedoFireAndForget.imageResource = await resourceHandler.fetchResource(PhotonTorpedoFireAndForget.resourceObject);
   }
 
   constructor ({

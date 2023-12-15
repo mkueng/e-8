@@ -1,40 +1,44 @@
 'use strict'
 
-/**
- * singleton
- */
 class EnemyShipHandler {
 
-  static instance = new this();
-  static enemyShips = {};
+  #enemyShips = {};
+
+  constructor({canvasHandler, resourceHandler}){
+    this.canvasHandler = canvasHandler;
+    this.resourceHandler = resourceHandler;
+
+    this.enemyShipFactory = new EnemyShipFactory({
+      enemyShipHandler: this,
+      resourceHandler,
+      canvasHandler
+    });
+  }
 
   invoke = async ()=> {
-    const canvas = CanvasHandler.instance.getCanvas(CanvasHandler.CANVASTYPES.playerShip).canvas;
-    await EnemyShipFactory.instance.invoke(canvas);
+    const canvas = this.canvasHandler.getCanvas("backgroundFront").canvas;
+    await this.enemyShipFactory.invoke(canvas);
   }
 
   startCreation = ()=>{
-    let interval = Math.floor(Math.random()*3000);
+    let interval = Math.floor(Math.random()*10000);
 
     setTimeout(()=>{
-      this.create(). then(()=>{
+      this.#create().then(()=>{
         this.startCreation()
       });
 
     },interval)
-
   }
 
-  delete = (id)=>{
-    delete EnemyShipHandler.enemyShips[id];
-    //console.log(  EnemyShipHandler.enemyShips);
+  shipDestroyed = (id)=>{
+    delete this.#enemyShips[id];
   }
 
-  create = async ()=>{
-    const shipObject = await EnemyShipFactory.instance.createShip(EnemyShipFactory.SHIP_TYPE.classB);
+  #create = async ()=>{
+    const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE.classB);
     GameObjectsHandler.instance.addGameObject(shipObject);
-
-    EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
-    //console.log(  EnemyShipHandler.enemyShips);
+    this.#enemyShips[shipObject.id] = shipObject;
+    //console.log("enemyShips: ", this.#enemyShips);
   }
 }

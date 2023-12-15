@@ -1,19 +1,25 @@
 class EngineTrailFactory {
-  static instance = new this();
 
   static imageResource
 
+  constructor({
+    canvasHandler,
+    resourceHandler
+              }){
+    this.canvasHandler = canvasHandler;
+    this.resourceHandler = resourceHandler;
+  }
+
   invoke = async({posDX, posDY})=>{
-    EngineTrailFactory.imageResource = await ResourceHandler.instance.fetchResource(EngineTrailA.resourceObject);
+    EngineTrailFactory.imageResource = await this.resourceHandler.fetchResource(EngineTrailA.resourceObject);
     this.posDX = posDX;
     this.posDY = posDY
-    return this;
   }
 
   create = (posX, posY)=>{
     let engineTrail = new EngineTrailA({
       image : EngineTrailFactory.imageResource.image,
-      canvas :  CanvasHandler.instance.getCanvas("weapons").canvas,
+      canvas :  this.canvasHandler.getCanvas("weapons").canvas,
       width : 5,
       height : 7,
       posX : posX,

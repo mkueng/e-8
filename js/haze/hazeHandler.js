@@ -1,13 +1,12 @@
 'use strict'
 class HazeHandler {
 
-  static instance = new this();
   #ticker = 0;
   #upcoming = Math.floor(Math.random()*30+30);
   #canvas
 
-  invoke = (resizeImageWorker)=>{
-    this.#canvas = CanvasHandler.instance.getCanvas("haze").canvas;
+  constructor({gameLoop, canvasHandler, resizeImageWorker}){
+    this.#canvas = canvasHandler.getCanvas("backgroundMiddle").canvas;
     this.resizeImageWorker = resizeImageWorker;
 
     resizeImageWorker.onmessage = ({data}) =>{
@@ -21,7 +20,7 @@ class HazeHandler {
           width : img.width,
           height : img.height,
           posX  : 1500,
-          posY : Math.floor(Math.random()*200),
+          posY : Math.floor(Math.random()*100),
           posDX : 0,
           posDY : 0,
           velX : -1.7,
@@ -35,15 +34,15 @@ class HazeHandler {
       img.src = URL.createObjectURL(data.imageBlob)
     }
 
-    GameLoop.instance.subscribe(this);
+    gameLoop.subscribe(this);
 
     return this;
   }
 
 
   create = ()=>{
-    let width = Math.floor(Math.random()*1700+3700)
-    let height = Math.floor(Math.random()*1200+1300)
+    let width = Math.floor(Math.random()*1700+1700)
+    let height = Math.floor(Math.random()*1000+800)
     this.resizeImageWorker.postMessage({
       payload: {
         url : "/resources/hazes/haze_01.png",
@@ -57,7 +56,7 @@ class HazeHandler {
     this.#ticker++;
     if (this.#ticker > this.#upcoming){
       this.#ticker = 0;
-      this.#upcoming = Math.floor(Math.random()*100+100);
+      this.#upcoming = Math.floor(Math.random()*200+200);
       this.create();
     }
   }

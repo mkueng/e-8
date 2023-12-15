@@ -1,35 +1,35 @@
 'use strict'
 
-/**
- * singleton
- */
 class PlayerShipHandler {
 
-  static instance = new this();
-
-  #inventory = {};
   #canvas = {};
   static activeShip = null;
 
-  invoke = ()=>{
-    this.#canvas = CanvasHandler.instance.getCanvas(CanvasHandler.CANVASTYPES.playerShip).canvas;
+  constructor({
+                canvasHandler,
+                resourceHandler,
+                inputHandler,
+                hudHandler
+  }){
+    this.#canvas = canvasHandler.getCanvas("backgroundFront").canvas;
+
+    this.playerShipFactory = new PlayerShipFactory({
+      playerShipHandler: this,
+      resourceHandler,
+      canvasHandler,
+      inputHandler,
+      hudHandler
+    });
+  }
+
+  shipDestroyed =(id)=>{
 
   }
 
   create = async ()=>{
-    PlayerShipHandler.activeShip = await PlayerShipFactory.instance.createShip({
-      type: PlayerShipFactory.SHIP_TYPES.classB,
+    PlayerShipHandler.activeShip = await this.playerShipFactory.createShip({
+      shipType: PlayerShipFactory.SHIP_TYPES.classA,
       canvas : this.#canvas
     })
   }
-
-  get inventory() {
-    return this.#inventory;
-  }
-
-  set inventory(value) {
-    this.#inventory = value;
-  }
-
-
 }

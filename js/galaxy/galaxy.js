@@ -15,19 +15,21 @@ class Galaxy {
   }
 
   constructor({
+                gameLoop,
+                canvasHandler,
                 scale
               }){
     this.#distribution = this.#createPseudoRandomDistribution(scale).reverse();
     this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.distribution[this.#galaxyIndex];
-    GameLoop.instance.subscribe(this);
+    gameLoop.subscribe(this);
 
     this.#galaxyWorker.postMessage({
       type : "init"
     })
 
-    let canvas = CanvasHandler.instance.getCanvas("galaxy").canvas;
+    let canvas = canvasHandler.getCanvas("backgroundFarthest").canvas;
 
     this.#galaxyWorker.onmessage = function(event) {
       const dataFromWorker = event.data;
@@ -43,7 +45,7 @@ class Galaxy {
           posY : Math.floor(Math.random()*window.global.screenHeight)-(planetData.radius*2),
           posDX: 0,
           posDY : 0,
-          velX : -0.3* (planetData.radius/100),
+          velX : -0.3* (planetData.radius/200),
           velY : 0,
           canvas : canvas
         })

@@ -11,8 +11,8 @@ class ClassAShield extends Shield {
 
   static imageResource;
 
-  static async invoke(){
-    ClassAShield.imageResource = await ResourceHandler.instance.fetchResource(ClassAShield.resourceObject);
+  static async invoke(resourceHandler){
+    ClassAShield.imageResource = await resourceHandler.fetchResource(ClassAShield.resourceObject);
   }
 
   constructor({

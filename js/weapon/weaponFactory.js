@@ -1,17 +1,16 @@
 'use strict';
 
-/**
- * singleton
- */
 class WeaponFactory {
-
-  static instance = new this();
 
   static WEAPON_TYPES = {
     photonTorpedo: PhotonTorpedo,
     photonTorpedoEnemy: PhotonTorpedoEnemy,
     photonTorpedoFireAndForget: PhotonTorpedoFireAndForget
   }
+
+  constructor({resourceHandler}){
+    this.resourceHandler = resourceHandler;
+  };
 
   async createWeapon({
                        type,
@@ -27,7 +26,7 @@ class WeaponFactory {
      * @returns {Promise<*[]>}
      */
     const invokeWeapon = async (instance) => {
-      await instance.invoke();
+      await instance.invoke(this.resourceHandler);
       return Array.from({ length: amount }, () => new instance({
         controlAssignment,
         posDX,

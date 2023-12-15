@@ -7,22 +7,21 @@ class ClassAPlayerShipExplosion extends Explosion {
     resourcePath : "/resources/explosions/explosion_02/images/explosion_02.png"
   })
 
-  static imageResource
-
-  static async invoke(){
-    ClassAPlayerShipExplosion.imageResource = await ResourceHandler.instance.fetchResource(ClassAPlayerShipExplosion.resourceObject);
+  static async fetchSpriteSheet(resourceHandler){
+    return await resourceHandler.fetchResource(ClassAPlayerShipExplosion.resourceObject);
   }
 
     constructor({
-                canvas,
-                posX,
-                posY,
-                posDX,
-                posDY
-              }){
+                  canvas,
+                  spriteSheetResource,
+                  posX,
+                  posY,
+                  posDX,
+                  posDY
+    }){
 
     super({
-      spriteSheet : ClassAPlayerShipExplosion.imageResource.image,
+      spriteSheet : spriteSheetResource.image,
       spriteSheetRows : 4,
       spriteSheetColumns : 8,
       width : 256,
@@ -31,8 +30,8 @@ class ClassAPlayerShipExplosion extends Explosion {
       currentFrame : 0,
       step : 50,
       stride : 0,
-      strideX : ClassAPlayerShipExplosion.imageResource.image.width / 8,
-      strideY : ClassAPlayerShipExplosion.imageResource.image.height / 4,
+      strideX : spriteSheetResource.image.width / 8,
+      strideY : spriteSheetResource.image.height / 4,
       canvas : canvas,
       posX : posX,
       posY : posY,

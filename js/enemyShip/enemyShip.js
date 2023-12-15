@@ -19,7 +19,8 @@ class EnemyShip extends GameObject {
                 canvas,
                 dependencies,
                 weapons,
-                terminationSequence
+                terminationSequence,
+                enemyShipHandler
               }) {
     super({
       identification : "enemyShip",
@@ -48,7 +49,8 @@ class EnemyShip extends GameObject {
     Object.assign(this, {
       dependencies,
       weapons,
-      terminationSequence
+      terminationSequence,
+      enemyShipHandler
     });
 
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
@@ -73,7 +75,7 @@ class EnemyShip extends GameObject {
       this.terminationSequence.velY = this.velY;
       GameObjectsHandler.instance.addGameObject(this.terminationSequence)
       this.destroy();
-      EnemyShipHandler.instance.delete(this.id);
+      this.enemyShipHandler.shipDestroyed(this.id);
 
       //hitBy.object.destroy();
     /*  for (const dependency of this.dependencies){

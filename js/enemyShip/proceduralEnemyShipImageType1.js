@@ -1,8 +1,6 @@
 'use strict'
 class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
 
-  static instance = new this();
-
   #tiles = new Map([
     ["feature", 3],
     ["pattern", 3],
@@ -17,6 +15,14 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
   #tileSize = 64;
   #orientation = false;
   #tilesResourceObjects;
+
+
+  constructor({
+    resourceHandler,
+    canvasHandler
+              }){
+    super({resourceHandler, canvasHandler});
+  }
 
   invoke = async()=>{
     this.#tilesResourceObjects = await this.fetchResources({

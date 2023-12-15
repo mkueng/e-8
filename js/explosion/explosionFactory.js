@@ -1,15 +1,16 @@
 'use strict'
 
-/**
- * singleton
- */
 class ExplosionFactory {
-
-  static instance = new this();
 
   static EXPLOSION_TYPES = {
     classAPlayerShipExplosion : ClassAPlayerShipExplosion,
     classAEnemyShipExplosion : ClassAEnemyShipExplosion
+  }
+
+  constructor({
+                resourceHandler
+  }){
+    this.resourceHandler = resourceHandler;
   }
 
   createExplosion = async({
@@ -26,9 +27,10 @@ class ExplosionFactory {
      * @param type
      * @returns {Promise<*>}
      */
-    const invokeExplosion = async (type)=>{
-      await type.invoke();
+    const instantiateExplosion = async (type)=>{
+      const spriteSheetResource = await type.fetchSpriteSheet(this.resourceHandler);
       return new type({
+        spriteSheetResource,
         canvas,
         posX,
         posY,
@@ -36,7 +38,6 @@ class ExplosionFactory {
         posDY,
       })
     }
-
-    return invokeExplosion(type);
+    return instantiateExplosion(type);
   }
 }
