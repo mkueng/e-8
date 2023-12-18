@@ -65,7 +65,7 @@ class EnemyShipFactory {
           image: img,
           width: img.width,
           height: img.height,
-          posX: Math.floor(Math.random() * 700 + 600),
+          posX: Math.floor(Math.random() * 1700 + 2000),
           posY: Math.floor(Math.random() * 1000 + 50),
           posDX: 0,
           posDY: 0,

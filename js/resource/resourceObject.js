@@ -13,7 +13,9 @@ class ResourceObject {
     weapon : "weapon",
     propulsion : "propulsion",
     backdrop : "backdrop",
-    shield : "shield"
+    shield : "shield",
+    asteroid : "asteroid",
+    asteroidField : "asteroidField"
   }
 
   id

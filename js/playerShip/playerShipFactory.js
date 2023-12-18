@@ -52,7 +52,6 @@ class PlayerShipFactory {
 
     //engine trail
     await this.engineTrailFactory.invoke(engineTrail);
-    console.log("EngineTrailFactory.imageResource",  EngineTrailFactory.imageResource);
     //propulsion
     const propulsionInstance = await this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
     //shield

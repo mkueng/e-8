@@ -104,7 +104,9 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
 
     // Update shield in the HUD
-    this.hudHandler.updateShield(this.shield.strength);
+    this.hudHandler.updateHudInfo({
+      shield : this.shield.strength
+    });
 
     // Add player ship to GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -122,6 +124,8 @@ class PlayerShip extends GameObject {
   addKeyEvent = ({key, execute})=>{
     this.keyEvents[key] = execute;
   }
+
+
 
 
   initializeWeapons = () => {
@@ -162,7 +166,9 @@ class PlayerShip extends GameObject {
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
     this.shield.strength -= 10;
-    this.hudHandler.updateShield(this.shield.strength);
+    this.hudHandler.updateHudInfo({
+      shield: this.shield.strength
+    });
 
     // Termination sequence
     if (this.shield.strength < 0) {
@@ -248,7 +254,9 @@ class PlayerShip extends GameObject {
     // shield
     if (this.shield.strength < 100) {
       this.shield.strength+= 0.02;
-      this.hudHandler.updateShield(this.shield.strength);
+      this.hudHandler.updateHudInfo({
+        shield : this.shield.strength
+      });
     }
   }
 

@@ -35,6 +35,7 @@ class GameObject {
    * @param hitWidth
    * @param isDestroyable
    * @param canDestroy
+   * @param subscriber
    */
   constructor({
                 identification,
@@ -68,6 +69,7 @@ class GameObject {
                 hitWidth,
                 isDestroyable,
                 canDestroy,
+                subscriber
 
               }){
     this.id = crypto.randomUUID();
@@ -107,14 +109,14 @@ class GameObject {
     this.animationLoop = animationLoop || null;
     this.alpha = alpha || null;
     this.hitWidth = hitWidth || width;
+    this.subscriber = subscriber;
 
 
 
     if (canvas){
       this.context = canvas.getContext("2d");
     }
-    this.subscribers= [];
-    this.subscriber = null;
+
 
   }
 
@@ -231,5 +233,13 @@ class GameObject {
   };
 */
 
-  update (dt){};
+  update (dt){
+    if (this.posX > - this.width) {
+      this.posX = this.posX + (this.velX*dt)
+    } else {;
+     this.destroy();
+    }
+    this.posY = this.posY +(this.velY*dt);
+
+  };
 }

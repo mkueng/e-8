@@ -14,31 +14,44 @@ class GameController {
     const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
 
     const resourceHandler = new ResourceHandler();
+    const fontHandler = new FontHandler();
+    await fontHandler.loadFont();
     const canvasHandler = new CanvasHandler();
     const infoHandler = new InfoHandler(canvasHandler)
     const inputHandler = new InputHandler();
-    const fontHandler = new FontHandler();
+
     const backdrop = new Backdrop({
       resourceHandler,
       canvasHandler
     });
+
+
+    const hudHandler = new HudHandler({
+      canvasHandler
+    });
+
     const gameLoop = new GameLoop({
-      infoHandler
+      infoHandler,
+      hudHandler
     });
     const galaxy = new Galaxy({
       gameLoop: gameLoop,
       canvasHandler: canvasHandler,
       scale : 200
     });
-    const hudHandler = new HudHandler({
-      canvasHandler
-    });
-
     const hazeHandler = new HazeHandler({
       gameLoop,
       canvasHandler,
       resizeImageWorker
     });
+
+    const asteroidHandler = new AsteroidHandler({
+      gameLoop,
+      canvasHandler,
+      resourceHandler,
+      resizeImageWorker
+    })
+
     const playerShipHandler = new PlayerShipHandler({
       resourceHandler,
       canvasHandler,
@@ -50,12 +63,11 @@ class GameController {
       canvasHandler
     });
 
-
-
-    await fontHandler.loadFont();
     await playerShipHandler.create();
     await enemyShipHandler.invoke();
+    await asteroidHandler.invoke();
     hazeHandler.create();
+    asteroidHandler.createAsteroid(10000,10);
 
 
 

@@ -32,14 +32,14 @@ class HudHandler {
         this.#dynamicContextLeft = this.canvasHandler.getCanvas("hudDynamicLeft").context;
         this.#dynamicContextLeft.width = this.canvasHandler.getCanvas("hudDynamicLeft").width;
         this.#dynamicContextLeft.height = this.canvasHandler.getCanvas("hudDynamicLeft").height;
-        this.#dynamicContextLeft.transform(0.1, 1, 1, 0, 0, 0)
+        this.#dynamicContextLeft.transform(0.08, 1, 1, 0, 0, 0)
         this.#dynamicContextLeft.font = "12px myFont";
 
         //dynamic right
         this.#dynamicContextRight = this.canvasHandler.getCanvas("hudDynamicRight").context;
         this.#dynamicContextRight.width = this.canvasHandler.getCanvas("hudDynamicRight").width;
         this.#dynamicContextRight.height = this.canvasHandler.getCanvas("hudDynamicRight").height;
-        this.#dynamicContextRight.transform(-0.1, 1, 1, 0, 15, 0);
+        this.#dynamicContextRight.transform(-0.1, 1.2, 1, 0, 30, 0);
         this.#dynamicContextRight.font = "8px myFont";
 
         //dynamic far right
@@ -75,52 +75,107 @@ class HudHandler {
     this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
 
-    this.#renderStatic();
-    this.#renderNavi();
+    //this.#renderStatic();
+    //this.#renderNavi();
     this.renderDisplayLeft();
     this.renderDisplayRight();
 
+    setInterval(()=>{
+      this.#updateDisplayRight();
+      this.#updateDisplayLeft();
+    }, 1000);
 
 
   }
 
-  updateShield = (percentage)=>{
-   this.#renderShield(percentage)
-  }
-/*
-  render = (dt) =>{
-    this.toggleRender = !this.toggleRender;
-    if (this.toggleRender) {
-      this.toggle2Render = !this.toggle2Render;
-      if (this.toggle2Render){
-        this.renderDisplayLeft();
+  #time;
+  #coordinates;
+  #fuel;
+  #shield;
+  #systemsStatus;
 
-        this.renderDisplayRight();
-        this.renderDisplayFarRight();
-        this.renderDisplayFarLeft(dt);
-      }
-    }
+
+  updateHudInfo = ({
+                     time,
+                     coordinates,
+                     fuel,
+                     shield,
+                     systemsStatus
+                   }) => {
+    this.#time = time || this.#time;
+    this.#fuel = fuel || this.#fuel;
+    this.#shield = shield || this.#shield;
+    this.#coordinates = coordinates || this.#coordinates;
+    this.#systemsStatus = systemsStatus || this.#systemsStatus;
+
+
   }
-*/
+
+
   #renderStatic = () =>{
     //this.#staticContext.clearRect(0,0,this.#staticContext.width, this.#staticContext.length);
     this.#staticContext.drawImage(this.hudImage,0,0, this.#staticContext.width,this.#staticContext.height);
   }
 
-  renderDisplayLeft = (dt)=>{
+  renderDisplayLeft = ()=>{
     this.#dynamicContextLeft.clearRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.font = '13px myFont';
+    this.#dynamicContextLeft.lineWidth = 2;
+    this.#dynamicContextLeft.strokeStyle = "white";
+    this.#dynamicContextLeft.strokeRect(-20,5,this.#dynamicContextLeft.width-20, this.#dynamicContextLeft.height);
 
-    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height)
-    this.#renderShield();
-    //this.renderProp();
   }
 
-  renderDisplayRight = (dt)=>{
-    this.#dynamicContextRight.fillStyle = "white"
-    this.#dynamicContextRight.clearRect(0,0, this.#dynamicContextRight.width,  this.#dynamicContextRight.height);
-    this.#dynamicContextRight.fillRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
-    this.#renderLaser();
-    //this.#renderPhotonTorpedos();
+  #updateDisplayLeft = ()=>{
+    this.#dynamicContextLeft.clearRect(-20,-10,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.strokeRect(-20,5,this.#dynamicContextLeft.width-20, this.#dynamicContextLeft.height);
+
+    this.#dynamicContextLeft.fillStyle = "white";
+    this.#dynamicContextLeft.fillText("TIME - "+this.#time, 5,20);
+    this.#dynamicContextLeft.fillText("COORDINATES - "+this.#coordinates, 5,35);
+    this.#dynamicContextLeft.fillText("SYSTEMS STATUS - "+this.#systemsStatus, 5,50);
+
+  }
+
+  renderDisplayRight = ()=>{
+
+    this.#dynamicContextRight.clearRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextRight.font = '10px myFont';
+    this.#dynamicContextRight.lineWidth = 2;
+    this.#dynamicContextRight.strokeStyle = "white";
+    this.#dynamicContextRight.clearRect(-10,-10,this.#dynamicContextRight.width+10, this.#dynamicContextRight.height+10);
+    this.#dynamicContextRight.strokeRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
+
+  }
+
+
+
+  #updateDisplayRight =()=>{
+    this.#dynamicContextRight.clearRect(-10,-10,this.#dynamicContextRight.width+10, this.#dynamicContextRight.height+10);
+    this.#dynamicContextRight.strokeRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
+
+    this.#dynamicContextRight.fillStyle = "white";
+    this.#dynamicContextRight.fillText("TIME - "+this.#time, 5,15);
+    this.#dynamicContextRight.fillText("COORDINATES - "+this.#coordinates, 5,30);
+    this.#dynamicContextRight.fillText("SYSTEMS STATUS - "+this.#systemsStatus, 5,45);
+    this.#dynamicContextRight.fillText("FUEL", 5,70);
+    this.fillRectRight(45,62,100,8);
+    this.#dynamicContextRight.fillText("SHIELD", 5,85);
+
+    let shieldInfoBarColor;
+    if (this.#shield) {
+
+      shieldInfoBarColor =
+        this.#shield < 30 ? "red" :
+          this.#shield < 60 ? "yellow" :
+            "lightgreen";
+    } else shieldInfoBarColor = "grey";
+
+    this.#dynamicContextRight.strokeRect(60,77,100,8);
+
+    this.#dynamicContextRight.fillStyle = shieldInfoBarColor;
+    this.fillRectRight(60,78,this.#shield,6);
+
   }
 
   renderDisplayFarLeft = (dt)=>{
@@ -128,6 +183,7 @@ class HudHandler {
     this.#dynamicContextFarLeft.fillStyle =  "#222e50"
     this.#dynamicContextFarLeft.fillRect(0,15,this.#dynamicContextFarLeft.width, this.#dynamicContextFarLeft.height-20);
     this.#dynamicContextFarLeft.fillStyle =  "white";
+
     this.#dynamicContextFarLeft.fillText(dt, 5,28);
   }
 
@@ -161,13 +217,7 @@ class HudHandler {
     }*/
   }
 
-  #renderLaser =()=>{
-    this.#dynamicContextRight.fillStyle = "white";
-    this.#dynamicContextRight.fillText("LASER", 5,12);
-   // this.fillRectRight(70,37,100,8);
-   // this.#dynamicContextRight.fillStyle = this.laserEnergyColor;
-   // this.fillRectRight(70,37,Spaceship_01_old.laserPercentage,8);
-  }
+
 
   #renderPhotonTorpedos =()=>{
     this.#dynamicContextRight.fillStyle = "white";
@@ -176,6 +226,9 @@ class HudHandler {
   }
 
   #renderShield = (percentage)=>{
+
+    /*
+
     this.#dynamicContextLeft.clearRect(-5,-5,this.#dynamicContextLeft.width+10, this.#dynamicContextLeft.height+10);
 
 
@@ -190,10 +243,32 @@ class HudHandler {
     this.#dynamicContextLeft.fillStyle = "white"
     this.#dynamicContextLeft.fillText("Shields", this.#dynamicContextLeft.width - 130, 14);
     this.#dynamicContextLeft.fillStyle = "black"
+
+
+
+
     this.fillRectLeft(this.#dynamicContextLeft.width - 70,5,  50, 10);
 
     this.#dynamicContextLeft.fillStyle = this.shieldInfoBarColor;
-    this.fillRectLeft( this.#dynamicContextLeft.width - 68, 7, percentage/2-4, 6);}
+    this.#dynamicContextLeft.strokeStyle = "white";
+    this.fillRectLeft( this.#dynamicContextLeft.width - 68, 7, percentage/2-4, 6);
+
+    const gradient = this.#dynamicContextLeft.createLinearGradient(0, 0, 220, 0);
+
+// Add three color stops
+    gradient.addColorStop(0, "green");
+    gradient.addColorStop(0.5, "cyan");
+    gradient.addColorStop(1, "green");
+
+// Set the fill style and draw a rectangle
+    this.#dynamicContextLeft.fillStyle = gradient;
+    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+
+    //this.#dynamicContextLeft.strokeRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+
+*/
+  }
+
 
   renderProp = () => {
 

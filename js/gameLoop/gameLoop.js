@@ -15,7 +15,8 @@ class GameLoop {
   #subscribers = [];
   #toggleUpdate = true;
 
-  constructor({infoHandler}){
+  constructor({infoHandler, hudHandler}){
+    this.hudHandler = hudHandler;
     this.infoHandler = infoHandler;
   }
 
@@ -116,11 +117,17 @@ class GameLoop {
     this.#animate(0);
 
    setInterval(()=>{
-     this.infoHandler.render((this.#performanceCumul/this.#performanceCount).toFixed(4),this.#performanceCount, this.#coordinate);
+
+     this.hudHandler.updateHudInfo({
+       coordinates : this.#coordinate,
+       time : (this.#performanceCumul/this.#performanceCount).toFixed(4),
+       systemsStatus : this.#performanceCount / 2
+     });
+
       this.#performanceCumul = this.#performanceCount = 0;
       for (const subscriber of this.#subscribers) {
         subscriber.update(this.#coordinate);
       }
-    },1000)
+    },2000)
   }
 }

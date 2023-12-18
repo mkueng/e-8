@@ -41,7 +41,7 @@ class HazeHandler {
 
 
   create = ()=>{
-    let width = Math.floor(Math.random()*1700+1700)
+    let width = Math.floor(Math.random()*1700+2700)
     let height = Math.floor(Math.random()*1000+800)
     this.resizeImageWorker.postMessage({
       payload: {

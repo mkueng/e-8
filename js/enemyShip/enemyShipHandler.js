@@ -21,7 +21,7 @@ class EnemyShipHandler {
   }
 
   startCreation = ()=>{
-    let interval = Math.floor(Math.random()*10000);
+    let interval = Math.floor(Math.random()*3000);
 
     setTimeout(()=>{
       this.#create().then(()=>{

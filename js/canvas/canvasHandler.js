@@ -1,6 +1,5 @@
 class CanvasHandler {
 
-
   #newCanvases = {
     "backdrop": {
       "id": "backdrop",
@@ -104,15 +103,15 @@ class CanvasHandler {
       },
       "canvas": null,
       "canvasStyles": {
-        "top": 5 + "px",
-        "left": (window.innerWidth / 1.8 - window.global.screenWidth / 5) + "px",
-        "color": "white",
-        "border-radius": "20px"
+        "top": 20 + "px",
+        "left": (window.innerWidth / 4 - window.global.screenWidth / 5) + "px",
+        "color": "grey",
+        "border-radius": "0px"
 
       },
-      "width": 140,
-      "height": 30,
-      "opacity": 0.4
+      "width": 340,
+      "height": 150,
+      "opacity": 0.7
     },
     "hudDynamicFarLeft": {
       "id": "hudDynamicFarLeft",
@@ -121,14 +120,14 @@ class CanvasHandler {
       "contextStyles": {
         "font": "10px myFont",
         "fillStyle": "white",
-        "border-radius": "30px"
+        "border-radius": "0px"
 
       },
       "canvas": null,
       "canvasStyles": {
         "bottom": (window.innerHeight - window.global.screenHeight) / 2 + 10 + "px",
-        "left": (window.innerWidth / 2.2 - window.global.screenWidth / 3) + "px",
-        "color": "white"
+        "left": (window.innerWidth / 2 - window.global.screenWidth) + "px",
+        "color": "grey"
       },
       "width": 100,
       "height": 40,
@@ -143,14 +142,15 @@ class CanvasHandler {
       },
       "canvas": null,
       "canvasStyles": {
-        "top": 5 + "px",
-        "right": (window.innerWidth / 1.8 - window.global.screenWidth / 5) + "px",
-        "color": "white",
-        "border-radius": "20px"
+        "top": 20 + "px",
+        "right": (window.innerWidth / 4 - window.global.screenWidth / 5) + "px",
+        "color": "red",
+        "border-radius": "0px",
+
       },
-      "width": 140,
-      "height": 30,
-      "opacity": 0.4
+      "width": 340,
+      "height": 150,
+      "opacity": 0.7
     },
 
     "hudDynamicFarRight": {
@@ -160,7 +160,7 @@ class CanvasHandler {
       "contextStyles": {
         "font": "10px myFont",
         "fillStyle": "white",
-        "border-radius": "30px"
+        "border-radius": "10px"
 
       },
       "canvas": null,
@@ -255,6 +255,9 @@ class CanvasHandler {
   }
 
 
+  /**
+   *
+   */
   createCanvasNodes =()=>{
     for (const canvas in this.#newCanvases) {
 
@@ -283,7 +286,11 @@ class CanvasHandler {
     }
   }
 
-
+  /**
+   *
+   * @param id
+   * @returns {*}
+   */
   getCanvas =(id) =>{
     return this.#newCanvases[id];
   }
