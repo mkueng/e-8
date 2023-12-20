@@ -213,8 +213,8 @@ class PlayerShip extends GameObject {
       this.velY = 0;
     } else
 
-    if (this.posY < -10 ) {
-      this.posY = -10 ;
+    if (this.posY < 0 ) {
+      this.posY = 0 ;
       this.velY = 0;
     } else
 
@@ -223,8 +223,8 @@ class PlayerShip extends GameObject {
       this.velX=0;
     } else
 
-    if (this.posX < this.width) {
-      this.posX = this.width;
+    if (this.posX < 1) {
+      this.posX = 1;
       this.velX = 0;
     }
 
@@ -276,7 +276,7 @@ class PlayerShip extends GameObject {
   /**
    *
    * @param event
-   * @param isKeyDown   asdwsd s d  w
+   * @param isKeyDown
    */
   keyEvent = (event, isKeyDown) => {
 

@@ -103,8 +103,8 @@ class CanvasHandler {
       },
       "canvas": null,
       "canvasStyles": {
-        "top": 20 + "px",
-        "left": (window.innerWidth / 4 - window.global.screenWidth / 5) + "px",
+        "top": ((window.global.currentHeight-window.global.screenHeight)/2) + 10 + "px",
+        "left": ((window.global.currentWidth-window.global.screenWidth)/2)+ 30 +"px",
         "color": "grey",
         "border-radius": "0px"
 
@@ -126,7 +126,7 @@ class CanvasHandler {
       "canvas": null,
       "canvasStyles": {
         "bottom": (window.innerHeight - window.global.screenHeight) / 2 + 10 + "px",
-        "left": (window.innerWidth / 2 - window.global.screenWidth) + "px",
+        "left": ((window.global.currentWidth-window.global.screenWidth)/2) + "px",
         "color": "grey"
       },
       "width": 100,
@@ -142,8 +142,8 @@ class CanvasHandler {
       },
       "canvas": null,
       "canvasStyles": {
-        "top": 20 + "px",
-        "right": (window.innerWidth / 4 - window.global.screenWidth / 5) + "px",
+        "top": ((window.global.currentHeight-window.global.screenHeight)/2) + 10+ "px",
+        "right": ((window.global.currentWidth-window.global.screenWidth)/2) + 30+ "px",
         "color": "red",
         "border-radius": "0px",
 

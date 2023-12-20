@@ -33,7 +33,7 @@ class PhotonTorpedoEnemy extends Weapon{
         posY : 0,
         posDX : posDX,
         posDY : posDY,
-        velX : -3,
+        velX : -7,
         velY : 0,
         isHittable : false,
         isDestroyable : false

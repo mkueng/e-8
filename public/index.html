@@ -27,11 +27,15 @@
     <script>
         var ns = ns || {}
         window.global = window.global || {};
-        const maxWidth = 4000
-        const maxHeight = 1250;
+        const maxWidth = 1920
+        const maxHeight = 1080;
         const currentWidth = window.innerWidth;
         const currentHeight = window.innerHeight;
 
+        window.global.currentWidth = window.innerWidth;
+        window.global.currentHeight = window.innerHeight;
+
+        console.log("height",window.global.currentHeight);
         window.global.screenHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
         window.global.screenWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
         window.global.centerHorizontal = window.global.screenWidth / 2;
@@ -159,5 +163,6 @@
     <script src="js/gameController.js?v=1.0"></script>
     <script src="js/init.js?v=1.0"></script>
     <script src="js/index.js?v=1.0"></script>
+
 </body>
 </html>
