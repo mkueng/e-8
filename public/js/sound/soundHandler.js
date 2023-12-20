@@ -4,38 +4,46 @@ class SoundHandler {
   static soundTemplates = {
     "spaceship" : {
       "photonShoot": {
-        "copies" : 10,
-        "resource" : "../resources/spaceships/spaceship_02/sounds/photonShoot.wav",
-        "volume" : 0.5
-      },
-      "laser" : {
-        "copies" : 5,
-        "resource" : "../resources/spaceships/spaceship_02/sounds/laser.wav",
-        "volume" : 0.2
-      }
-    },
-    "enemy_01" : {
-      "explosion" : {
-        "copies": 15,
-        "resource" : "../resources/enemies/enemy_01/sounds/explosion.wav",
-        "volume" : 0.3
+        "copies" : 9,
+        "resource" : "./resources/sounds/photonShoot_01.wav",
+        "volume" : 1
       }
     }
   }
 
   static sounds = {}
+  static audioCtx;
+  static audioBuffer;
 
+  static preloadSounds() {
+    for (const entity in SoundHandler.soundTemplates) {
+      for (const sounds in SoundHandler.soundTemplates[entity]) {
+        const audio = new Audio(SoundHandler.soundTemplates[entity][sounds].resource);
+        audio.load(); // Load the audio
+      }
+    }
+  }
+
+  static playSample(audioContext, audioBuffer){
+    const sampleSource = SoundHandler.audioCtx.createBufferSource();
+    sampleSource.buffer = SoundHandler.audioBuffer;
+    sampleSource.connect(SoundHandler.audioCtx.destination)
+    sampleSource.start(0);
+  }
+  /*
   static playSound(entity, sound){
+    console.log("playSound");
    const counter = SoundHandler.sounds[entity][sound].counter;
+   console.log("counter:", counter);
     SoundHandler.sounds[entity][sound].audio[counter].play();
     if (SoundHandler.sounds[entity][sound].counter < SoundHandler.sounds[entity][sound]["audio"].length-1){
       SoundHandler.sounds[entity][sound].counter ++
     } else {
       SoundHandler.sounds[entity][sound].counter = 0;
     }
-    return SoundHandler.sounds[entity][sound].audio[counter];
-  }
 
+  }
+*/
   static stopSound(entity, sound) {
     for (let i = 0; i < SoundHandler.sounds[entity][sound].audio.length; i++){
       SoundHandler.sounds[entity][sound].audio[i].pause();
@@ -47,7 +55,16 @@ class SoundHandler {
   }
 
 
+  static async invokeAudio  (){
+    SoundHandler.audioCtx = new AudioContext()
+    const response = await fetch("./resources/sounds/photonShoot_01.wav")
+    const arrayBuffer = await response.arrayBuffer();
+    SoundHandler.audioBuffer = await SoundHandler.audioCtx.decodeAudioData(arrayBuffer);
+  }
+
   constructor(){
+
+
 
     for (const entity in SoundHandler.soundTemplates){
       SoundHandler.sounds[entity]= {};
@@ -58,6 +75,7 @@ class SoundHandler {
         for (let i = 0; i < SoundHandler.soundTemplates[entity][sounds].copies; i++) {
           const newAudio = new Audio(SoundHandler.soundTemplates[entity][sounds].resource);
           newAudio.volume = SoundHandler.soundTemplates[entity][sounds].volume;
+          newAudio.cloneNode(true);
           SoundHandler.sounds[entity][sounds]["audio"].push(newAudio);
         }
       }

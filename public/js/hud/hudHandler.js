@@ -121,7 +121,7 @@ class HudHandler {
     this.#dynamicContextLeft.clearRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
     this.#dynamicContextLeft.font = '13px myFont';
     this.#dynamicContextLeft.lineWidth = 2;
-    this.#dynamicContextLeft.strokeStyle = "white";
+    this.#dynamicContextLeft.strokeStyle = "cyan";
     this.#dynamicContextLeft.strokeRect(-20,5,this.#dynamicContextLeft.width-20, this.#dynamicContextLeft.height);
 
   }
@@ -142,7 +142,7 @@ class HudHandler {
     this.#dynamicContextRight.clearRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
     this.#dynamicContextRight.font = '10px myFont';
     this.#dynamicContextRight.lineWidth = 2;
-    this.#dynamicContextRight.strokeStyle = "white";
+    this.#dynamicContextRight.strokeStyle = "cyan";
     this.#dynamicContextRight.clearRect(-10,-10,this.#dynamicContextRight.width+10, this.#dynamicContextRight.height+10);
     this.#dynamicContextRight.strokeRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
 

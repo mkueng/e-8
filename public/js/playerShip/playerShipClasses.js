@@ -7,7 +7,7 @@ class ClassAShip {
     id : "ship01ClassA",
     filename : "ship_01",
     type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/ships/ship_01/images/ship_01.png"
+    resourcePath : "/resources/ships/ship_05/images/ship_05.png"
   })
 
   static properties = {

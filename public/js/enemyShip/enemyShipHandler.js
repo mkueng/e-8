@@ -24,7 +24,7 @@ class EnemyShipHandler {
     let interval = Math.floor(Math.random()*3000);
 
     setTimeout(()=>{
-      this.#create().then(()=>{
+      this.#create(Math.floor(Math.random()*3)).then(()=>{
         this.startCreation()
       });
 
@@ -35,8 +35,9 @@ class EnemyShipHandler {
     delete this.#enemyShips[id];
   }
 
-  #create = async ()=>{
-    const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE.classB);
+  #create = async (type)=>{
+    console.log(type);
+    const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE[""+type]);
     GameObjectsHandler.instance.addGameObject(shipObject);
     this.#enemyShips[shipObject.id] = shipObject;
     //console.log("enemyShips: ", this.#enemyShips);

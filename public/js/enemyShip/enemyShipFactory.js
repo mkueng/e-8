@@ -4,9 +4,9 @@ class EnemyShipFactory {
 
 
   static SHIP_TYPE = {
-    classA: { shipSize: 1, scale: 0.5, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
-    classB: { shipSize: 2, scale: 0.6, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
-    classC: { shipSize: 3, scale: 0.8,weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
+    0: { shipSize: 1, scale: 0.5, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
+    1: { shipSize: 2, scale: 0.6, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
+    2: { shipSize: 5, scale: 0.8,weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
   };
 
 

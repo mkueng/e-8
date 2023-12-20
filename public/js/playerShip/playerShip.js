@@ -139,6 +139,8 @@ class PlayerShip extends GameObject {
             const activeWeapon =  units.pop();
             activeWeapon.activate(this.posX, this.posY);
             GameObjectsHandler.instance.addGameObject(activeWeapon);
+            //SoundHandler.playSound("spaceship", "photonShoot");
+            SoundHandler.playSample()
           }
         }
       });

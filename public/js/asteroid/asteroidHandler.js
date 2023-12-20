@@ -22,7 +22,7 @@ class AsteroidHandler {
 
   constructor({gameLoop, canvasHandler, resourceHandler, resizeImageWorker}){
     this.#gameLoop = gameLoop;
-    this.#canvasMiddle = canvasHandler.getCanvas("backgroundMiddle").canvas;
+    this.#canvasMiddle = canvasHandler.getCanvas("backgroundMiddleFar").canvas;
     this.#canvasFace = canvasHandler.getCanvas("backgroundFace").canvas;
     this.#resourceHandler = resourceHandler;
     this.#resizeImageWorker = resizeImageWorker;
@@ -51,7 +51,7 @@ class AsteroidHandler {
         posY : Math.random()*window.global.screenHeight,
         posDX : 0,
         posDY : 0,
-        velX : (-1)*(Math.random()*4+4),
+        velX : 0,
         velY : 0,
         canvas : this.#canvasFace,
         subscriber : this
@@ -80,7 +80,7 @@ class AsteroidHandler {
 
           asteroid.posX = window.global.screenWidth;
           asteroid.posY = Math.random() * (window.global.screenHeight - 200);
-          asteroid.velX = -1 * (Math.random() * 4 + 2);
+          asteroid.velX = -1 * (Math.random() * 6 + 1);
 
           GameObjectsHandler.instance.addGameObject(asteroid);
           clearInterval(currentInterval);
@@ -88,7 +88,7 @@ class AsteroidHandler {
           if (ticker < amount) {
             createBatch(Math.floor(Math.random()*1000 + 1000))
           } else {
-            this.createAsteroid(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*10)+5)
+            this.createAsteroid(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
           }
 
         }

@@ -2,12 +2,27 @@
 
 class GameController {
 
-  //static music = new Audio("../resources/music/backgroundmusic.mp3");
+  static music = new Audio("../resources/music/Debutante.mp3");
+
+
 
   constructor() {
+
+
     this.startGame().then((r)=>{
       console.log("game started");
+      document.addEventListener("keydown", this.startMusic, true);
     })
+  }
+
+  startMusic = ()=>{
+    console.log("start music");
+
+    if (GameController.music.paused) {
+      GameController.music.play().then(()=>{
+        document.removeEventListener("keydown", this.startMusic, true);
+      });
+    }
   }
 
   startGame = async ()=>{
@@ -19,6 +34,9 @@ class GameController {
     const canvasHandler = new CanvasHandler();
     const infoHandler = new InfoHandler(canvasHandler)
     const inputHandler = new InputHandler();
+    const soundHandler =  new SoundHandler();
+    SoundHandler.invokeAudio();
+    //SoundHandler.preloadSounds();
 
     const backdrop = new Backdrop({
       resourceHandler,
