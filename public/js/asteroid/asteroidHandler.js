@@ -5,20 +5,9 @@ class AsteroidHandler {
   #resourceHandler;
   #resizeImageWorker;
   #gameLoop;
-  #ticker;
-  #upcoming = Math.floor(Math.random()*30+30);
   #asteroidObjects = [];
-  #asteroidObjectsPool;
-  #asteroidObjectsInUse = {}
 
 
-
-  #resourceObject = new ResourceObject({
-    category : ResourceObject.CATEGORIES.asteroidField,
-    filename : "asteroidField_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/asteroids/asteroidField_01/images/asteroidField_01.png"
-  })
 
   constructor({gameLoop, canvasHandler, resourceHandler, resizeImageWorker}){
     this.#gameLoop = gameLoop;
@@ -39,7 +28,6 @@ class AsteroidHandler {
       upperLimit : 13
     })
 
-    //console.log("asteroids:", asteroidResourceObjects);
 
     for (const asteroidResourceObject of asteroidResourceObjects) {
       const asteroidObject = new GameObject({

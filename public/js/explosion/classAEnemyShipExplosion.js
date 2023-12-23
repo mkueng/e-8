@@ -7,12 +7,19 @@ class ClassAEnemyShipExplosion extends Explosion {
     resourcePath : "/resources/explosions/explosion_03/images/explosion_03.png"
   })
 
+  static soundResourceObject = "/resources/sounds/explosion.wav"
+
   static async fetchSpriteSheet(resourceHandler){
     return await resourceHandler.fetchResource(ClassAEnemyShipExplosion.resourceObject);
   }
 
+  static async fetchSound(){
+    return await SoundHandler.fetchAudioAndReturnAudioBuffer(ClassAEnemyShipExplosion.soundResourceObject);
+  }
+
   constructor({
                 spriteSheetResource,
+                soundResource,
                 canvas,
                 posX,
                 posY,
@@ -22,6 +29,7 @@ class ClassAEnemyShipExplosion extends Explosion {
 
     super({
       spriteSheet : spriteSheetResource.image,
+      sound: soundResource,
       spriteSheetRows : 6,
       spriteSheetColumns : 6,
       width : 159,

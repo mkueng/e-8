@@ -36,7 +36,6 @@ class EnemyShipHandler {
   }
 
   #create = async (type)=>{
-    console.log(type);
     const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE[""+type]);
     GameObjectsHandler.instance.addGameObject(shipObject);
     this.#enemyShips[shipObject.id] = shipObject;

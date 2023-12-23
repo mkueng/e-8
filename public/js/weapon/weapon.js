@@ -12,13 +12,15 @@ class Weapon extends GameObject {
                 posDX,
                 posDY,
                 velX,
-                velY
+                velY,
+                sound
               })
   {
     super({
       identification,
       canvas,
       image,
+      sound,
       spriteSheet,
       width,
       height,

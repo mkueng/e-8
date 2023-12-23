@@ -2,6 +2,7 @@ class Explosion extends GameObject {
 
   constructor({
     spriteSheet,
+    sound,
     spriteSheetRows,
     spriteSheetColumns,
     frames,
@@ -22,6 +23,7 @@ class Explosion extends GameObject {
               }){
     super({
       spriteSheet,
+      sound,
       spriteSheetRows,
       spriteSheetColumns,
       frames,

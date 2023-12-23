@@ -73,7 +73,8 @@ class EnemyShip extends GameObject {
       this.terminationSequence.posY = this.posY;
       this.terminationSequence.velX = this.velX;
       this.terminationSequence.velY = this.velY;
-      GameObjectsHandler.instance.addGameObject(this.terminationSequence)
+      GameObjectsHandler.instance.addGameObject(this.terminationSequence);
+      SoundHandler.playSound(this.terminationSequence.sound);
       this.destroy();
       this.enemyShipHandler.shipDestroyed(this.id);
 

@@ -2,96 +2,115 @@
 
 class GameController {
 
+  resourceHandler;
+  proceduralMusic;
+  asteroidHandler;
+  enemyShipHandler;
+  fontHandler;
+  canvasHandler;
+  infoHandler;
+  inputHandler;
+  backdrop;
+  hudHandler;
+  hazeHandler;
+  playerShipHandler;
+  galaxy;
+  gameLoop;
+
   static music = new Audio("../resources/music/Debutante.mp3");
-
-
 
   constructor() {
 
 
     this.startGame().then((r)=>{
       console.log("game started");
-      document.addEventListener("keydown", this.startMusic, true);
+     // document.addEventListener("keydown", this.startMusic, true);
     })
   }
 
   startMusic = ()=>{
     console.log("start music");
+    document.removeEventListener("keydown", this.startMusic, true);
+    this.proceduralMusic.testplay();
+    /*
 
     if (GameController.music.paused) {
       GameController.music.play().then(()=>{
         document.removeEventListener("keydown", this.startMusic, true);
       });
-    }
+    }*/
   }
+
 
   startGame = async ()=>{
     const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
 
-    const resourceHandler = new ResourceHandler();
-    const fontHandler = new FontHandler();
-    await fontHandler.loadFont();
-    const canvasHandler = new CanvasHandler();
-    const infoHandler = new InfoHandler(canvasHandler)
-    const inputHandler = new InputHandler();
-    const soundHandler =  new SoundHandler();
-    SoundHandler.invokeAudio();
-    //SoundHandler.preloadSounds();
+    this.resourceHandler = new ResourceHandler();
+    this.proceduralMusic = new ProceduralMusic();
+    this.fontHandler = new FontHandler();
+    await this.fontHandler.loadFont();
+    this.canvasHandler = new CanvasHandler();
+    this.infoHandler = new InfoHandler(this.canvasHandler)
+    this.inputHandler = new InputHandler();
 
-    const backdrop = new Backdrop({
-      resourceHandler,
-      canvasHandler
+
+    this.backdrop = new Backdrop({
+      resourceHandler: this.resourceHandler ,
+      canvasHandler: this.canvasHandler
     });
 
 
-    const hudHandler = new HudHandler({
-      canvasHandler
+    this.hudHandler = new HudHandler({
+      canvasHandler: this.canvasHandler
     });
 
-    const gameLoop = new GameLoop({
-      infoHandler,
-      hudHandler
+    this.gameLoop = new GameLoop({
+      infoHandler: this.infoHandler,
+      hudHandler: this.hudHandler
     });
-    const galaxy = new Galaxy({
-      gameLoop: gameLoop,
-      canvasHandler: canvasHandler,
+    this.galaxy = new Galaxy({
+      gameLoop: this.gameLoop,
+      canvasHandler: this.canvasHandler,
       scale : 200
     });
-    const hazeHandler = new HazeHandler({
-      gameLoop,
-      canvasHandler,
+    this.hazeHandler = new HazeHandler({
+      gameLoop: this.gameLoop,
+      canvasHandler: this.canvasHandler,
       resizeImageWorker
     });
 
-    const asteroidHandler = new AsteroidHandler({
-      gameLoop,
-      canvasHandler,
-      resourceHandler,
+    this.asteroidHandler = new AsteroidHandler({
+      gameLoop: this.gameLoop,
+      canvasHandler: this.canvasHandler,
+      resourceHandler: this.resourceHandler,
       resizeImageWorker
     })
 
-    const playerShipHandler = new PlayerShipHandler({
-      resourceHandler,
-      canvasHandler,
-      inputHandler,
-      hudHandler
+    this.playerShipHandler = new PlayerShipHandler({
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler,
+      inputHandler: this.inputHandler,
+      hudHandler: this.hudHandler
     });
-    const enemyShipHandler = new EnemyShipHandler({
-      resourceHandler,
-      canvasHandler
+    this.enemyShipHandler = new EnemyShipHandler({
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler
     });
 
-    await playerShipHandler.create();
-    await enemyShipHandler.invoke();
-    await asteroidHandler.invoke();
-    hazeHandler.create();
-    asteroidHandler.createAsteroid(10000,10);
 
+    await this.proceduralMusic.fetchAudioAssets();
+    await this.playerShipHandler.create();
+    await this.enemyShipHandler.invoke();
+    await this.asteroidHandler.invoke();
+   this.hazeHandler.create();
+    this.asteroidHandler.createAsteroid(10000,10);
+    document.addEventListener("keydown", this.startMusic, true);
 
 
     setTimeout(()=>{
-      gameLoop.start();
-      enemyShipHandler.startCreation();
+
+      this.gameLoop.start();
+      this.enemyShipHandler.startCreation();
     },100)
   }
 

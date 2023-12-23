@@ -40,6 +40,7 @@ class GameObject {
   constructor({
                 identification,
                 image,
+                sound,
                 imageData,
                 spriteSheet,
                 animationLoop,
@@ -76,6 +77,7 @@ class GameObject {
     this.identification = identification;
     this.active = false;
     this.image = image;
+    this.sound = sound;
     this.imageData = imageData;
     this.currentFrame = currentFrame;
     this.stride = stride;
