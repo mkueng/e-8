@@ -2,7 +2,7 @@
 
 class EnemyShipHandler {
 
-  #enemyShips = {};
+  static enemyShips = {};
 
   constructor({canvasHandler, resourceHandler}){
     this.canvasHandler = canvasHandler;
@@ -15,30 +15,30 @@ class EnemyShipHandler {
     });
   }
 
+
   invoke = async ()=> {
     const canvas = this.canvasHandler.getCanvas("backgroundFront").canvas;
     await this.enemyShipFactory.invoke(canvas);
   }
 
-  startCreation = ()=>{
-    let interval = Math.floor(Math.random()*3000);
+  startCreation = (interval)=>{
+
 
     setTimeout(()=>{
       this.#create(Math.floor(Math.random()*3)).then(()=>{
-        this.startCreation()
+        this.startCreation(Math.floor(Math.random()*1000+1000))
       });
 
     },interval)
   }
 
   shipDestroyed = (id)=>{
-    delete this.#enemyShips[id];
+    delete EnemyShipHandler.enemyShips[id];
   }
 
   #create = async (type)=>{
     const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE[""+type]);
     GameObjectsHandler.instance.addGameObject(shipObject);
-    this.#enemyShips[shipObject.id] = shipObject;
-    //console.log("enemyShips: ", this.#enemyShips);
+    EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
   }
 }

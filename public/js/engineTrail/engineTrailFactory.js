@@ -19,7 +19,7 @@ class EngineTrailFactory {
   create = (posX, posY)=>{
     let engineTrail = new EngineTrailA({
       image : EngineTrailFactory.imageResource.image,
-      canvas :  this.canvasHandler.getCanvas("weapons").canvas,
+      canvas :  this.canvasHandler.getCanvas("backgroundFront").canvas,
       width : 5,
       height : 7,
       posX : posX,

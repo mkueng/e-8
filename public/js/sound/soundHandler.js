@@ -4,10 +4,20 @@ class SoundHandler {
 
   static audioCtx = new AudioContext();
 
+  static gainNode;
   /*
   static stopSound(entity, sound) {
   }
   */
+
+  static setGain(){
+    SoundHandler.gainNode = SoundHandler.audioCtx.createGain()
+    SoundHandler.gainNode.gain.value = 0.3 // 10 %
+    SoundHandler.gainNode.connect(SoundHandler.audioCtx.destination)
+
+// now instead of connecting to aCtx.destination, connect to the gainNode
+
+  }
 
   static playMusic(){
 
@@ -16,7 +26,8 @@ class SoundHandler {
   static playSound (audioBuffer){
     const sampleSource = SoundHandler.audioCtx.createBufferSource();
     sampleSource.buffer = audioBuffer;
-    sampleSource.connect(SoundHandler.audioCtx.destination)
+    sampleSource.v
+    sampleSource.connect(SoundHandler.gainNode)
     sampleSource.start(0);
   }
 

@@ -10,7 +10,7 @@ class PhotonTorpedo extends Weapon{
   })
 
 
-  static soundResourceObject = "/resources/sounds/photonShoot_01.wav";
+  static soundResourceObject = "/resources/sounds/photonShoot.wav";
   static soundResource;
   static imageResource;
 
@@ -38,7 +38,7 @@ class PhotonTorpedo extends Weapon{
       posY : 0,
       posDX : posDX,
       posDY : posDY,
-      velX : 10,
+      velX : 15,
       velY : 0,
       isHittable : false,
       isDestroyable : false

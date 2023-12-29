@@ -67,16 +67,38 @@ class EnemyShip extends GameObject {
     }
   }
 
+  invokeTerminationSequence = ()=>{
+    let i = 0;
+    console.log("terminationSequence: ", this.terminationSequence);
+    SoundHandler.playSound(this.terminationSequence[0].sound);
+    for (const explosion of this.terminationSequence){
+      i++;
+      explosion.posX = this.posX;
+      explosion.posY = this.posY;
+      explosion.velX = this.velX;
+      explosion.velY = this.velY;
+      setTimeout(()=>{
+
+        GameObjectsHandler.instance.addGameObject(explosion);
+      }, Math.random()*100*i)
+    }
+    this.destroy();
+    this.enemyShipHandler.shipDestroyed(this.id);
+  }
+
   hit(hitBy){
     if (hitBy.identification !== "enemyWeapon") {
+      /*
       this.terminationSequence.posX = this.posX;
       this.terminationSequence.posY = this.posY;
       this.terminationSequence.velX = this.velX;
       this.terminationSequence.velY = this.velY;
-      GameObjectsHandler.instance.addGameObject(this.terminationSequence);
-      SoundHandler.playSound(this.terminationSequence.sound);
-      this.destroy();
-      this.enemyShipHandler.shipDestroyed(this.id);
+      */
+
+      //GameObjectsHandler.instance.addGameObject(this.terminationSequence);
+      this.invokeTerminationSequence();
+      //SoundHandler.playSound(this.terminationSequence.sound);
+
 
       //hitBy.object.destroy();
     /*  for (const dependency of this.dependencies){
@@ -97,10 +119,11 @@ class EnemyShip extends GameObject {
     ) {
       this.fireWeapon();
     }
-    if (this.posX > - 300) {
+    if (this.posX > - this.width) {
       this.posX = this.posX + (this.velX*dt)
     } else {
-      this.posX = window.global.screenWidth+50;
+      this.destroy();
+         this.enemyShipHandler.shipDestroyed(this.id);
     }
     this.posY = this.posY +(this.velY*dt);
 

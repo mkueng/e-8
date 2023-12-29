@@ -11,7 +11,7 @@ class GameLoop {
   #perfDif = 0;
   #performanceCumul = 0
   #stage = null;
-  #coordinate = 20000;
+  #coordinate = 0;
   #subscribers = [];
   #toggleUpdate = true;
 
@@ -35,7 +35,7 @@ class GameLoop {
    */
   #update=(deltaTime)=> {
     //increment current coordinate
-    this.#coordinate+=20;
+    this.#coordinate+=10;
 
     //remove gameObjects
     for (const gameObjectToRemove in GameObjectsHandler.gameObjectsToRemove) {

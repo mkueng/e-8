@@ -135,7 +135,7 @@ class PlayerShip extends GameObject {
         execute: () => {
           if (units.length > 0) {
             const activeWeapon =  units.pop();
-            activeWeapon.activate(this.posX, this.posY);
+            activeWeapon.activate(this.posX, this.posY, this);
             GameObjectsHandler.instance.addGameObject(activeWeapon);
             SoundHandler.playSound(activeWeapon.sound);
           }
@@ -164,6 +164,7 @@ class PlayerShip extends GameObject {
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
+    SoundHandler.playSound(this.shield.sound);
     this.shield.strength -= 10;
     this.hudHandler.updateHudInfo({
       shield: this.shield.strength

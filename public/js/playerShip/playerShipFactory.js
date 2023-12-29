@@ -63,16 +63,16 @@ class PlayerShipFactory {
     //weapon(s)
     const weaponsInstances = {};
     for (const weapon in weapons) {
-      const weaponConfig = weapons[weapon];
+      const weaponProperties = weapons[weapon];
       weaponsInstances[weapon] = {
-        controlAssignment: weaponConfig.controlAssignment,
+        controlAssignment: weaponProperties.controlAssignment,
         units: await this.weaponFactory.createWeapon({
           canvas,
-          type: weaponConfig.type,
-          controlAssignment: weaponConfig.controlAssignment,
-          amount: weaponConfig.amount,
-          posDX: weaponConfig.posDX,
-          posDY: weaponConfig.posDY,
+          type: weaponProperties.type,
+          controlAssignment: weaponProperties.controlAssignment,
+          amount: weaponProperties.amount,
+          posDX: weaponProperties.posDX,
+          posDY: weaponProperties.posDY,
         }),
       };
     }

@@ -30,7 +30,7 @@ class Sequencer {
 
     const interval = setInterval(()=>{
       this.currentStep++;
-      if (this.currentStep % 4 === 0 ) {
+      if (this.currentStep % 8 === 0 ) {
 
         beat++;
         if (sequence["order"][beat]) {
@@ -39,16 +39,14 @@ class Sequencer {
             this.playSample(sound)
           }
         }
-
       }
-
     }, this.step);
   }
 
   playSample = (audioBuffer)=>{
     const sampleSource = SoundHandler.audioCtx.createBufferSource();
     sampleSource.buffer = audioBuffer;
-    sampleSource.connect(SoundHandler.audioCtx.destination)
+    sampleSource.connect(SoundHandler.gainNode)
     sampleSource.loop = true;
 
     const crossFadeDuration = 0.5

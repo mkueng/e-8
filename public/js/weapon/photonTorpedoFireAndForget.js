@@ -17,6 +17,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
   }
 
   constructor ({
+                 enemyShipHandler,
                  canvas,
                  posDX,
                  posDY,
@@ -34,26 +35,31 @@ class PhotonTorpedoFireAndForget extends Weapon {
       posY : 0,
       posDX : posDX,
       posDY : posDY,
-      velX : 5,
+      velX : 8,
       velY : 0,
       isHittable : false,
       isDestroyable : false
     })
 
     this.target = null;
+  }
 
+  hit(hitBy){
+    if (hitBy.identification !== "playerShip") {
+      this.destroy();
+    }
   }
 
   activate(posX, posY){
     if (Object.keys(EnemyShipHandler.enemyShips).length > 0){
       const key = Object.keys(EnemyShipHandler.enemyShips)[0];
       this.target = EnemyShipHandler.enemyShips[key];
+      super.activate(posX+3, posY+3);
     }
-    super.activate(posX, posY);
   }
 
   update(){
-    if (this.posX < window.global.screenWidth && this.posX > 0 && this.posY < window.global.screenHeight && this.posY >0) {
+    if (this.posX < window.global.screenWidth && this.posX > 1 && this.posY < window.global.screenHeight && this.posY > 1) {
       let quotient = (this.target.posX - this.posX) / (this.target.posY - this.posY);
       this.posX = this.posX+this.velX;
       this.posY = (this.posY + (this.posX / quotient)*0.01);

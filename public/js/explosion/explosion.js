@@ -50,4 +50,5 @@ class Explosion extends GameObject {
     this.posX = this.posX  + this.velX;
     this.posY = this.posY + this.velY;
   }
+
 }

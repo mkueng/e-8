@@ -16,7 +16,6 @@ class InputHandler {
 
   subscribe(subscriber) {
     this.subscribers.push(subscriber);
-    console.log(this.subscribers);
   }
 
   unsubscribe(subscriber) {

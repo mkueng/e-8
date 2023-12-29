@@ -5,8 +5,8 @@ class EnemyShipFactory {
 
   static SHIP_TYPE = {
     0: { shipSize: 1, scale: 0.5, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
-    1: { shipSize: 2, scale: 0.6, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
-    2: { shipSize: 5, scale: 0.8,weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
+    1: { shipSize: 3, scale: 0.6, weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
+    2: { shipSize: 7, scale: 0.8,weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy] },
   };
 
 
@@ -40,13 +40,27 @@ class EnemyShipFactory {
     const { shipSize, scale } = type;
 
     return new Promise(async (resolve) => {
+
+      let terminationSequence = [];
+      for (let i=0; i < shipSize; i++){
+        const explosion = await  this.explosionFactory.createExplosion({
+          type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
+          canvas: this.canvas,
+          posDX: (i*(Math.random()*50+20))-50,
+          posDY: (Math.random()*30-50),
+        });
+        terminationSequence.push(explosion)
+      }
+
+      //console.log("terminationSequence: ", terminationSequence);
+      /*
       let terminationSequence = await  this.explosionFactory.createExplosion({
         type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
         canvas: this.canvas,
         posDX: -10,
         posDY: -45,
       });
-
+*/
       let weapons = {
         [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: await  this.weaponFactory.createWeapon({
           type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
@@ -65,11 +79,11 @@ class EnemyShipFactory {
           image: img,
           width: img.width,
           height: img.height,
-          posX: Math.floor(Math.random() * 1700 + 2000),
-          posY: Math.floor(Math.random() * 1000 + 50),
+          posX: window.global.screenWidth,
+          posY: Math.floor(Math.random() * window.global.screenHeight),
           posDX: 0,
           posDY: 0,
-          velX: -3 * Math.random(),
+          velX: -1 * Math.random()*5,
           velY: 0,
           weapons: weapons,
           canvas: this.canvas,

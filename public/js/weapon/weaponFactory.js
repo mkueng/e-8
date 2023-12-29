@@ -5,7 +5,8 @@ class WeaponFactory {
   static WEAPON_TYPES = {
     photonTorpedo: PhotonTorpedo,
     photonTorpedoEnemy: PhotonTorpedoEnemy,
-    photonTorpedoFireAndForget: PhotonTorpedoFireAndForget
+    photonTorpedoFireAndForget: PhotonTorpedoFireAndForget,
+    laser: Laser
   }
 
   constructor({resourceHandler}){

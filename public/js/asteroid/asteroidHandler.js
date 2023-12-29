@@ -48,8 +48,6 @@ class AsteroidHandler {
 
       this.#asteroidObjects.push(asteroidObject);
     }
-
-    console.log("asteroidObjects:", this.#asteroidObjects);
   }
 
   subscriptionsUpdate = (message, asteroid)=>{

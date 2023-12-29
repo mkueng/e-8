@@ -137,6 +137,7 @@ class GameObject {
   deactivate(){};
 
   hit({hitBy}){
+
   }
 
   initiateDestroySequence(){

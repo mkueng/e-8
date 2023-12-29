@@ -17,6 +17,7 @@ class GameObjectsHandler {
   addGameObject = (gameObject)=>{
     GameObjectsHandler.contexts[gameObject.canvas. id] = gameObject.context;
     GameObjectsHandler.gameObjects.push(gameObject);
+   // console.log("gameObjects: ", GameObjectsHandler.gameObjects);
 
   }
 

@@ -1,29 +1,29 @@
 class ProceduralMusic {
 
   audioAssets = {
-    ARP : {
-      G : {
-        120: ["120_G_ARP_AllProcessors"]
+    BASS : {
+      C : {
+        120: ["/silentStar/120_C_BAS_SilentStar_Diva"]
       }
     },
     PAD : {
-      G : {
-        120 : ["120_G_PAD_ChoirInTheClouds"]
+      C : {
+        120 : ["/silentStar/120_C_PAD_SilentStar_AmpPiano","/silentStar/120_C_PAD_SilentStar_SynthWave"]
       }
     },
-    PIANO : {
-      G : {
-        120 : ["120_G_Piano_GrandeurEcho"]
+    TEX : {
+      C : {
+        120 : ["/silentStar/120_C_TEX_SilentStar_Organic","/silentStar/120_C_TEX_SilentStar_Wind"]
       }
     },
     BEAT : {
       G : {
-        120 : ["120_X_BEAT_AlmostElectroBeat", "120_X_BEAT_AmberBeat","120_X_Beat_BendedKnee" ]
+        120 : []
       }
     },
     FX : {
-      G : {
-        120 : []
+      C : {
+        120 : ["/silentStar/120_C_EFX_SilentStar_4444Radio"]
       }
     }
   }
@@ -35,14 +35,15 @@ class ProceduralMusic {
   sequencer;
 
   audioAssetsEnum = {
-    0 : "ARP",
+    0 : "BASS",
     1 : "PAD",
-    2 : "PIANO",
-    3 : "BEAT"
+    2 : "TEX",
+    3 : "FX"
   }
 
   constructor(){
     this.sequencer = new Sequencer(this.audioContext, 120, 4);
+
    // document.addEventListener("keydown", this.testplay, true);
 
     //this.startSequencer();
@@ -52,15 +53,16 @@ class ProceduralMusic {
 
   createSequence = ()=>{
 
-    const lengthIntro = Math.floor(Math.random()*2+2)*2;
-    const lengthVerse = Math.floor(Math.random()*2+2)*2;
-    const lengthChorus = Math.floor(Math.random()*2+2)*2
+    const lengthIntro = Math.floor(Math.random()*4+4)*4;
+    const lengthVerse = Math.floor(Math.random()*4+4)*4;
+    const lengthChorus = Math.floor(Math.random()*4+4)*8;
 
     let sequence = {
       order : {
         1 : "intro",
-        [4+lengthIntro] : "verse",
-        [4+lengthIntro+lengthVerse] : "chorus"
+        [8+lengthIntro] : "verse",
+        [8+lengthIntro+lengthVerse] : "chorus",
+        [16+lengthIntro+lengthVerse] : "verse2"
       },
 
 
@@ -75,6 +77,10 @@ class ProceduralMusic {
       chorus : {
         length : lengthChorus,
         sounds : []
+      },
+      verse2 : {
+        length : lengthChorus,
+        sounds : []
       }
     }
 
@@ -82,37 +88,42 @@ class ProceduralMusic {
 
     }
 
-    for (let i= 0; i < 3; i++){
+    let key = "C"
+
+    for (let i= 0; i < 1; i++){
       const soundTypeIntro = Math.floor(Math.random()*4);
       console.log("soundTyeIntro:", soundTypeIntro);
-      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeIntro]]["G"][120];
+      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeIntro]][key][120];
       console.log("availableSounds:", availableSounds);
-      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeIntro]]["G"][120][Math.floor(Math.random()*availableSounds.length)];
+      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeIntro]][key][120][Math.floor(Math.random()*availableSounds.length)];
       console.log("selectedSound:", selectedSound);
       //soundsIntro.push(this.audio[this.audioAssetsEnum[soundTypeIntro]][availableSounds[Math.floor(Math.random()*availableSounds.length)]]);
       sequence["intro"]["sounds"].push(selectedSound);
     }
 
-    for (let i= 0; i < 3; i++){
+    for (let i= 0; i < 2; i++){
       const soundTypeVerse = Math.floor(Math.random()*4);
       console.log("soundTyeIntro:", soundTypeVerse);
-      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeVerse]]["G"][120];
+      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeVerse]][key][120];
       console.log("availableSounds:", availableSounds);
-      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeVerse]]["G"][120][Math.floor(Math.random()*availableSounds.length)];
+      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeVerse]][key][120][Math.floor(Math.random()*availableSounds.length)];
       console.log("selectedSound:", selectedSound);
       //soundsIntro.push(this.audio[this.audioAssetsEnum[soundTypeIntro]][availableSounds[Math.floor(Math.random()*availableSounds.length)]]);
       sequence["verse"]["sounds"].push(selectedSound);
+      sequence["verse2"]["sounds"].push(selectedSound);
     }
 
     for (let i= 0; i < 3; i++){
-      const soundTypeChorus = Math.floor(Math.random()*2+2);
+      const soundTypeChorus = Math.floor(Math.random()*4);
       console.log("soundTyeIntro:", soundTypeChorus);
-      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeChorus]]["G"][120];
+      const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeChorus]][key][120];
       console.log("availableSounds:", availableSounds);
-      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeChorus]]["G"][120][Math.floor(Math.random()*availableSounds.length)];
+      const selectedSound = this.audio[this.audioAssetsEnum[soundTypeChorus]][key][120][Math.floor(Math.random()*availableSounds.length)];
       console.log("selectedSound:", selectedSound);
       //soundsIntro.push(this.audio[this.audioAssetsEnum[soundTypeIntro]][availableSounds[Math.floor(Math.random()*availableSounds.length)]]);
       sequence["chorus"]["sounds"].push(selectedSound);
+      const selectedSound2 = this.audio[this.audioAssetsEnum[soundTypeChorus]][key][120][Math.floor(Math.random()*availableSounds.length)];
+      sequence["chorus"]["sounds"].push(selectedSound2);
     }
 
     console.log("sequence:", sequence);

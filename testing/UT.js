@@ -1,6 +1,6 @@
 const tests = [
 
-  "proceduralShipUT"
+"speechHandlerUT"
 
 ]
 

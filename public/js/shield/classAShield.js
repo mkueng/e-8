@@ -9,10 +9,14 @@ class ClassAShield extends Shield {
     resourcePath : "/resources/shields/shield_sheet_02.png"
   })
 
+  static soundResourceObject = "/resources/sounds/shield.wav";
+  static soundResource;
   static imageResource;
 
   static async invoke(resourceHandler){
     ClassAShield.imageResource = await resourceHandler.fetchResource(ClassAShield.resourceObject);
+    ClassAShield.soundResource = await SoundHandler.fetchAudioAndReturnAudioBuffer(ClassAShield.soundResourceObject);
+
   }
 
   constructor({
@@ -34,6 +38,7 @@ class ClassAShield extends Shield {
       strideX : ClassAShield.imageResource.image.width / 8,
       strideY : ClassAShield.imageResource.image.height /4,
       stride : ClassAShield.imageResource.image.height / 32,
+      sound : ClassAShield.soundResource,
       canvas : canvas,
       posDX : posDX,
       posDY : posDY,

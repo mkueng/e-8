@@ -60,6 +60,14 @@ class ClassAShip {
       amount: 10,
       posDX : 60,
       posDY : 27
+    },
+
+    Laser : {
+      controlAssignment : "KeyL",
+      type : WeaponFactory.WEAPON_TYPES.laser,
+      amount: 1,
+      posDX : 155,
+      posDY : 26
     }
   }
 }
