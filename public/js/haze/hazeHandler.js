@@ -14,7 +14,6 @@ class HazeHandler {
       let img = new Image();
       img.onload =()=>{
         let size =-1* (img.width *img.height) *0.000001;
-        console.log("size:", size);
         let hazeObject = new Haze({
           canvas : this.#canvas,
           image : img,

@@ -1,10 +1,11 @@
 class ResourceObject {
 
   static TYPES = {
-    png : "png",
-    jpg : "jpg",
-    jpeg : "jpeg",
-    mp3 : "mp3"
+    png: "png",
+    jpg: "jpg",
+    jpeg: "jpeg",
+    mp3: "mp3",
+    wav: "wav"
   }
 
   static CATEGORIES = {
@@ -15,7 +16,8 @@ class ResourceObject {
     backdrop : "backdrop",
     shield : "shield",
     asteroid : "asteroid",
-    asteroidField : "asteroidField"
+    asteroidField : "asteroidField",
+    spaceStation : "spaceStation"
   }
 
   id

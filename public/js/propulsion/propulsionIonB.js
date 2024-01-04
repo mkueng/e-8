@@ -11,8 +11,8 @@ class PropulsionIonB extends Propulsion{
 
   static imageResource;
 
-  static async invoke(){
-    PropulsionIonB.imageResource = await ResourceHandler.instance.fetchResource(PropulsionIonB.resourceObject);
+  static async invoke(resourceHandler){
+    PropulsionIonB.imageResource = await resourceHandler.fetchImageResource(PropulsionIonB.resourceObject);
   }
 
   constructor({

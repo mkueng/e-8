@@ -46,7 +46,7 @@ class Sequencer {
   playSample = (audioBuffer)=>{
     const sampleSource = SoundHandler.audioCtx.createBufferSource();
     sampleSource.buffer = audioBuffer;
-    sampleSource.connect(SoundHandler.gainNode)
+    sampleSource.connect(SoundHandler.fxGainNode)
     sampleSource.loop = true;
 
     const crossFadeDuration = 0.5

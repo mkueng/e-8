@@ -89,6 +89,8 @@ class PlayerShip extends GameObject {
     this.upperBoundY = window.global.screenHeight - this.height;
     this.upperBoundX = window.global.screenWidth - this.width;
     this.shield.relatedShip = this;
+    this.shieldInfoCritical = false;
+    this.shieldInfoRecharged = true;
 
     this.controls = {
       down: false,
@@ -112,7 +114,7 @@ class PlayerShip extends GameObject {
     GameObjectsHandler.instance.addGameObject(this);
 
     // Add dependencies to GameObjectsHandler
-    this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
+    this.addDependencies();
 
   }
 
@@ -126,7 +128,11 @@ class PlayerShip extends GameObject {
   }
 
 
-  initializeWeapons = () => {
+  addDependencies = ()=>{
+    this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
+  }
+
+  initializeWeapons = ()=>{
     for (const weapon in this.weapons) {
       const { controlAssignment, units } = this.weapons[weapon];
 
@@ -134,56 +140,72 @@ class PlayerShip extends GameObject {
         key: controlAssignment,
         execute: () => {
           if (units.length > 0) {
-            const activeWeapon =  units.pop();
-            activeWeapon.activate(this.posX, this.posY, this);
-            GameObjectsHandler.instance.addGameObject(activeWeapon);
-            SoundHandler.playSound(activeWeapon.sound);
+            const activeWeapon = units.pop();
+            if (activeWeapon.ready === true) {
+              activeWeapon.activate(this.posX, this.posY, this);
+            } else {
+              units.unshift(activeWeapon);
+            }
           }
         }
       });
       units.forEach(unit => unit.subscribe(this));
     }
+    console.log("keyEvents: ", this.keyEvents);
   };
+
 
   /**
    *
    * @param message
    * @param obj
    */
-  subscriptionsUpdate(message,obj){
+  subscriptionsUpdate = (message,obj)=>{
     this.weapons[obj.uniqueIdentifier].units.unshift(obj);
   }
 
-
-  hit(hitBy) {
-    if (hitBy.identification === "weaponPlayer") {
-      return; // Ignore hits from player's own weapon
-    }
-
-    // Show shield
+  invokeShield = ()=>{
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
-    SoundHandler.playSound(this.shield.sound);
-    this.shield.strength -= 10;
-    this.hudHandler.updateHudInfo({
-      shield: this.shield.strength
-    });
+    SoundHandler.playFX(this.shield.sound);
+    this.shield.strength < 0 ?  this.shield.strength = 1: this.shield.strength -=10;
+  }
 
-    // Termination sequence
-    if (this.shield.strength < 0) {
-      this.terminationSequence.posX = this.posX;
-      this.terminationSequence.posY = this.posY;
-      this.terminationSequence.velX = this.velX;
-      this.terminationSequence.velY = this.velY;
-      GameObjectsHandler.instance.addGameObject(this.terminationSequence);
+  invokeTerminationSequence = ()=>{
+    this.terminationSequence.posX = this.posX;
+    this.terminationSequence.posY = this.posY;
+    this.terminationSequence.velX = this.velX;
+    this.terminationSequence.velY = this.velY;
+    GameObjectsHandler.instance.addGameObject(this.terminationSequence);
 
-      this.destroy();
-      for (const dependency of this.dependencies) {
-        dependency.destroy();
-      }
-      this.inputHandler.unsubscribe(this);
-      this.playerShipHandler.shipDestroyed(this.is);
+    this.destroy();
+    this.destroyDependencies();
+    this.inputHandler.unsubscribe(this);
+    this.playerShipHandler.shipDestroyed(this);
+  }
+
+
+  destroyDependencies = ()=>{
+    for (const dependency of this.dependencies) {
+      dependency.destroy();
+    }
+  }
+
+  hit = (hitBy)=> {
+    if (hitBy.identification === "weaponPlayer") {
+      return; // Ignore hits from player's own weapon
+    }
+    this.invokeShield();
+
+    if (this.shield.strength < 30 && this.shieldInfoCritical === false) {
+      SpeechHandler.playStatement(SpeechHandler.statements.shieldCritical)
+      this.shieldInfoCritical = true;
+      this.shieldInfoRecharged = false;
+    }
+
+    if (this.shield.strength <= 1){
+      this.invokeTerminationSequence();
     }
 
     // Destroy hit object
@@ -192,9 +214,9 @@ class PlayerShip extends GameObject {
 
   /**
    *
-   * @param dt
+   * @param deltaTime
    */
-  update(dt) {
+  update = (deltaTime)=>{
 
     // directional controls
     if (this.controls.down === true && this.velY < this.maxVelY) {
@@ -229,8 +251,8 @@ class PlayerShip extends GameObject {
     }
 
     // position
-    this.posY = this.posY + (this.velY*dt);
-    this.posX = this.posX + (this.velX*dt);
+    this.posY = this.posY + (this.velY*deltaTime);
+    this.posX = this.posX + (this.velX*deltaTime);
 
     // engineTrail
     if (this.velX>1){
@@ -253,11 +275,18 @@ class PlayerShip extends GameObject {
 
     // shield
     if (this.shield.strength < 100) {
-      this.shield.strength+= 0.02;
+      this.shield.strength+= 0.04;
       this.hudHandler.updateHudInfo({
         shield : this.shield.strength
       });
+
+      if (this.shield.strength > 60 && this.shieldInfoRecharged === false){
+        this.shieldInfoRecharged = true;
+        this.shieldInfoCritical = false;
+        SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged)
+      }
     }
+
   }
 
   /**
@@ -266,8 +295,12 @@ class PlayerShip extends GameObject {
    */
   mouseEvent = (event)=>{
     switch (event) {
-      case "click" : {
-        this.firePrimaryWeapon();
+      case "left" : {
+        this.keyEvents["Space"]();
+        break;
+      }
+      case "right": {
+        this.keyEvents["KeyL"]();
         break;
       }
     }

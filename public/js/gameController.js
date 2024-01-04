@@ -17,10 +17,8 @@ class GameController {
   galaxy;
   gameLoop;
 
-  //static music = new Audio("../resources/music/E-8.space_RUSH.mp3");
 
   constructor() {
-
 
     this.startGame().then((r)=>{
       console.log("game started");
@@ -29,46 +27,21 @@ class GameController {
   }
 
   startMusic = ()=>{
-    console.log("start music");
-    var synth = window.speechSynthesis;
-    var utterance = new SpeechSynthesisUtterance('Hello, I am a robotic female voice.');
-
-    // Set the language to English (United States)
-    utterance.lang = 'en-US';
-
-    // Specify a female voice
-    var voices = synth.getVoices();
-    var femaleVoice = voices.find(voice => voice.name === 'Google US English Female');
-
-    if (femaleVoice) {
-      utterance.voice = femaleVoice;
-    } else {
-      console.error('Female voice not found.');
-    }
-
-    // Customize the speech synthesis parameters
-    utterance.pitch = 0.5; // Adjust pitch (0.1 to 2)
-    utterance.rate = 0.8; // Adjust rate (0.1 to 10)
-    utterance.volume = 1.0; // Adjust volume (0 to 1)
-
-    // Speak the text
-    synth.speak(utterance);
+    SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
-    //this.proceduralMusic.testplay();
-
-/*
-    if (GameController.music.paused) {
-      GameController.music.play().then(()=>{
-        document.removeEventListener("keydown", this.startMusic, true);
-      });
-    }*/
   }
 
 
   startGame = async ()=>{
+
+
+
     const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
 
-    SoundHandler.setGain();
+    //this.playerShip3D = new PlayerShip3D();
+
+    SoundHandler.setFXGain({percentage: 1})
+    SoundHandler.setMusicGain({percentage: 0.3})
     this.speechHandler = new SpeechHandler()
     this.resourceHandler = new ResourceHandler();
     this.proceduralMusic = new ProceduralMusic();
@@ -122,6 +95,13 @@ class GameController {
       canvasHandler: this.canvasHandler
     });
 
+    this.spaceStationHandler = new SpaceStationHandler({
+      galaxy: this.galaxy,
+      resourceHandler : this.resourceHandler,
+      canvasHandler : this.canvasHandler
+    })
+
+    await this.spaceStationHandler.invoke();
     await this.speechHandler.invoke();
     await this.proceduralMusic.fetchAudioAssets();
     await this.playerShipHandler.create();

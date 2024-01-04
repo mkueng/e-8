@@ -37,6 +37,7 @@ class EnemyShipFactory {
    * @returns {Promise<void>}
    */
   createShip = async (type) => {
+
     const { shipSize, scale } = type;
 
     return new Promise(async (resolve) => {
@@ -52,15 +53,6 @@ class EnemyShipFactory {
         terminationSequence.push(explosion)
       }
 
-      //console.log("terminationSequence: ", terminationSequence);
-      /*
-      let terminationSequence = await  this.explosionFactory.createExplosion({
-        type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
-        canvas: this.canvas,
-        posDX: -10,
-        posDY: -45,
-      });
-*/
       let weapons = {
         [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: await  this.weaponFactory.createWeapon({
           type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
@@ -90,7 +82,6 @@ class EnemyShipFactory {
           terminationSequence: terminationSequence,
           enemyShipHandler: this.enemyShipHandler
         });
-
 
         resolve(shipObject);
       };

@@ -7,7 +7,7 @@ class ClassAShip {
     id : "ship01ClassA",
     filename : "ship_01",
     type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/ships/ship_05/images/ship_05.png"
+    resourcePath : "/resources/ships/ship_01/images/SpaceShip3D-2D.png"
   })
 
   static properties = {
@@ -24,13 +24,13 @@ class ClassAShip {
   }
 
   static engineTrail = {
-    posDX : 20,
-    posDY :16
+    posDX : -20,
+    posDY :27
   };
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
-    posDX: 20,
-    posDY: 16
+    posDX: -15,
+    posDY: 25
   }
   static shield = {
     type: ShieldFactory.SHIELD_TYPES.classAShield,
@@ -44,13 +44,14 @@ class ClassAShip {
     posDY: -50
   }
 
+
   static weapons = {
 
     PhotonTorpedo : {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
       amount: 10,
-      posDX: 60,
+      posDX: 90,
       posDY: 27
     },
 
@@ -66,8 +67,8 @@ class ClassAShip {
       controlAssignment : "KeyL",
       type : WeaponFactory.WEAPON_TYPES.laser,
       amount: 1,
-      posDX : 155,
-      posDY : 26
+      posDX : 145,
+      posDY : 25
     }
   }
 }
@@ -111,6 +112,7 @@ class ClassBShip {
     posDX: -70,
     posDY: -115
   }
+
 
   static terminationSequence = {
     type: ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion,

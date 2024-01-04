@@ -15,7 +15,12 @@ class GameObjectsHandler {
    * @param gameObject
    */
   addGameObject = (gameObject)=>{
-    GameObjectsHandler.contexts[gameObject.canvas. id] = gameObject.context;
+    try {
+      GameObjectsHandler.contexts[gameObject.canvas. id] = gameObject.context;
+    } catch(e){
+
+    }
+
     GameObjectsHandler.gameObjects.push(gameObject);
    // console.log("gameObjects: ", GameObjectsHandler.gameObjects);
 

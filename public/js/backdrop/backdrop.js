@@ -16,7 +16,9 @@ class Backdrop {
   constructor({resourceHandler, canvasHandler}){
     this.#canvas = canvasHandler.getCanvas("backdrop").canvas;
     this.#context = this.#canvas.getContext("2d");
-    resourceHandler.fetchResource(this.#resourceObject).then((resource)=>{
+    resourceHandler.fetchImageResource({
+      resourceObject: this.#resourceObject
+    }).then((resource)=>{
       this.#context.drawImage(resource.image,0,0,window.global.screenWidth,window.global.screenHeight);
     })
   }

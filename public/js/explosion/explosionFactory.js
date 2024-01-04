@@ -29,8 +29,9 @@ class ExplosionFactory {
      */
     const instantiateExplosion = async (type)=>{
       const spriteSheetResource = await type.fetchSpriteSheet(this.resourceHandler);
-      const soundResource = await type.fetchSound();
+      const soundResource = await type.fetchSound(this.resourceHandler);
       return new type({
+        resourceHandler: this.resourceHandler,
         spriteSheetResource,
         soundResource,
         canvas,

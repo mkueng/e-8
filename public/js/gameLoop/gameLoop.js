@@ -11,7 +11,7 @@ class GameLoop {
   #perfDif = 0;
   #performanceCumul = 0
   #stage = null;
-  #coordinate = 0;
+  #coordinate = 100000;
   #subscribers = [];
   #toggleUpdate = true;
 

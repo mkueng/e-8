@@ -9,14 +9,24 @@ class PhotonTorpedo extends Weapon{
     resourcePath : "/resources/weapon/photonTorpedo_01/images/photonTorpedo_01.png"
   })
 
+  static soundResourceObject = new ResourceObject({
+    category : ResourceObject.CATEGORIES.weapon,
+    id : "photonShoot",
+    filename : "photonShoot",
+    type : ResourceObject.TYPES.wav,
+    resourcePath : "/resources/sounds/photonShoot.wav"
+  })
 
-  static soundResourceObject = "/resources/sounds/photonShoot.wav";
   static soundResource;
   static imageResource;
 
   static async invoke(resourceHandler){
-    PhotonTorpedo.imageResource = await resourceHandler.fetchResource(PhotonTorpedo.imageResourceObject);
-    PhotonTorpedo.soundResource = await SoundHandler.fetchAudioAndReturnAudioBuffer(PhotonTorpedo.soundResourceObject);
+    PhotonTorpedo.imageResource = await resourceHandler.fetchImageResource({
+      resourceObject: PhotonTorpedo.imageResourceObject
+    });
+    PhotonTorpedo.soundResource = await resourceHandler.fetchSoundResource({
+      resourceObject: PhotonTorpedo.soundResourceObject
+    });
   }
 
   constructor ({
@@ -43,6 +53,8 @@ class PhotonTorpedo extends Weapon{
       isHittable : false,
       isDestroyable : false
     })
+
+    this.ready = true;
   }
 
 

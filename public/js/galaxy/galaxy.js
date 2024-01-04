@@ -5,6 +5,7 @@ class Galaxy {
   #galaxyMap = {};
   #galaxyWorker = null;
   #galaxyIndex = 0;
+  #subscribers = [];
 
   get galaxyMap() {
     return this.#galaxyMap;
@@ -31,7 +32,7 @@ class Galaxy {
 
     let canvas = canvasHandler.getCanvas("backgroundFarthest").canvas;
 
-    this.#galaxyWorker.onmessage = function(event) {
+    this.#galaxyWorker.onmessage = (event)=> {
       const dataFromWorker = event.data;
       let img = new Image();
       let planetData = dataFromWorker.planetData;
@@ -51,10 +52,17 @@ class Galaxy {
         })
 
         GameObjectsHandler.instance.addGameObject(planetObject);
+        for(const subscriber of this.#subscribers) {
+          subscriber.update({planetObject});
+        }
         URL.revokeObjectURL(img.src);
       }
       img.src = URL.createObjectURL(dataFromWorker.imageBlob)
     };
+  }
+
+  subscribe =(subscriber)=>{
+    this.#subscribers.push(subscriber);
   }
 
   /**

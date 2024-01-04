@@ -11,6 +11,8 @@ class Propulsion extends GameObject {
    * @param currentFrame
    * @param step
    * @param stride
+   * @param strideX
+   * @param strideY
    * @param posX
    * @param posY
    * @param posDX

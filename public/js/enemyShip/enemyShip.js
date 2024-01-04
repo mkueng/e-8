@@ -52,11 +52,10 @@ class EnemyShip extends GameObject {
       terminationSequence,
       enemyShipHandler
     });
-
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
   }
 
-  fireWeapon(){
+  fireWeapon = ()=>{
     if (this.activeWeapon.length > 0) {
       let weapon = this.activeWeapon.pop();
       weapon.active = true;
@@ -69,8 +68,7 @@ class EnemyShip extends GameObject {
 
   invokeTerminationSequence = ()=>{
     let i = 0;
-    console.log("terminationSequence: ", this.terminationSequence);
-    SoundHandler.playSound(this.terminationSequence[0].sound);
+    SoundHandler.playFX(this.terminationSequence[0].sound);
     for (const explosion of this.terminationSequence){
       i++;
       explosion.posX = this.posX;
@@ -78,7 +76,6 @@ class EnemyShip extends GameObject {
       explosion.velX = this.velX;
       explosion.velY = this.velY;
       setTimeout(()=>{
-
         GameObjectsHandler.instance.addGameObject(explosion);
       }, Math.random()*100*i)
     }
@@ -86,32 +83,18 @@ class EnemyShip extends GameObject {
     this.enemyShipHandler.shipDestroyed(this.id);
   }
 
-  hit(hitBy){
+  hit = (hitBy)=> {
+    //we're not hit by ourselves?
     if (hitBy.identification !== "enemyWeapon") {
-      /*
-      this.terminationSequence.posX = this.posX;
-      this.terminationSequence.posY = this.posY;
-      this.terminationSequence.velX = this.velX;
-      this.terminationSequence.velY = this.velY;
-      */
-
-      //GameObjectsHandler.instance.addGameObject(this.terminationSequence);
       this.invokeTerminationSequence();
-      //SoundHandler.playSound(this.terminationSequence.sound);
-
-
-      //hitBy.object.destroy();
-    /*  for (const dependency of this.dependencies){
-        dependency.destroy();
-      }*/
     }
   }
 
-  subscriptionsUpdate(message, obj){
+  subscriptionsUpdate = (message, obj)=>{
     this.weapons[PhotonTorpedoEnemy].unshift(obj);
   }
 
-  update(dt){
+  update = (dt)=>{
     if (
       this.posY > PlayerShipHandler.activeShip.posY &&
       this.posY < PlayerShipHandler.activeShip.posY+20 &&
@@ -123,9 +106,8 @@ class EnemyShip extends GameObject {
       this.posX = this.posX + (this.velX*dt)
     } else {
       this.destroy();
-         this.enemyShipHandler.shipDestroyed(this.id);
+      this.enemyShipHandler.shipDestroyed(this.id);
     }
     this.posY = this.posY +(this.velY*dt);
-
   }
 }

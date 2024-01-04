@@ -3,19 +3,27 @@
 class ClassAShield extends Shield {
 
   static resourceObject = new ResourceObject({
-    category : ResourceObject.CATEGORIES.shield,
-    filename : "shield_sheet",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/shields/shield_sheet_02.png"
+    category: ResourceObject.CATEGORIES.shield,
+    filename: "shield_sheet",
+    type: ResourceObject.TYPES.png,
+    resourcePath: "/resources/shields/shield_sheet_02.png"
   })
 
-  static soundResourceObject = "/resources/sounds/shield.wav";
+  static soundResourceObject = new ResourceObject({
+    category: ResourceObject.CATEGORIES.shield,
+    filename: "shield",
+    type: ResourceObject.TYPES.wav,
+    resourcePath: "/resources/sounds/shield.wav"
+  })
+
   static soundResource;
   static imageResource;
 
   static async invoke(resourceHandler){
-    ClassAShield.imageResource = await resourceHandler.fetchResource(ClassAShield.resourceObject);
-    ClassAShield.soundResource = await SoundHandler.fetchAudioAndReturnAudioBuffer(ClassAShield.soundResourceObject);
+    ClassAShield.imageResource = await resourceHandler.fetchImageResource({
+      resourceObject: ClassAShield.resourceObject
+    });
+    ClassAShield.soundResource = await resourceHandler.fetchSoundResource({resourceObject:ClassAShield.soundResourceObject});
 
   }
 

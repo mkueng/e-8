@@ -3,6 +3,7 @@
 class ResourceHandler {
 
   #resourcePool = {};
+  #soundResourcePool = {};
 
   /**
    *
@@ -43,9 +44,25 @@ class ResourceHandler {
   /**
    *
    * @param resourceObject
+   * @returns {Promise<AudioBuffer>}
+   */
+  fetchSoundResource = async ({resourceObject})=>{
+    let requestedResource;
+    if (this.#soundResourcePool.hasOwnProperty(resourceObject.id)){
+      requestedResource = this.#soundResourcePool[resourceObject.id];
+    } else {
+      requestedResource = await SoundHandler.fetchAudioAndReturnAudioBuffer(resourceObject.resourcePath)
+      this.#soundResourcePool[resourceObject.id] = requestedResource;
+    }
+    return requestedResource;
+  }
+
+  /**
+   *
+   * @param resourceObject
    * @returns {Promise<*>}
    */
-  fetchResource = async (resourceObject)=>{
+  fetchImageResource = async ({resourceObject})=>{
     let requestedResource;
     if (this.#resourcePool.hasOwnProperty(resourceObject.id)){
       requestedResource = this.#resourcePool[resourceObject.id];

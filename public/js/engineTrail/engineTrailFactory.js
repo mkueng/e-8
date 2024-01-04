@@ -11,7 +11,9 @@ class EngineTrailFactory {
   }
 
   invoke = async({posDX, posDY})=>{
-    EngineTrailFactory.imageResource = await this.resourceHandler.fetchResource(EngineTrailA.resourceObject);
+    EngineTrailFactory.imageResource = await this.resourceHandler.fetchImageResource({
+      resourceObject: EngineTrailA.resourceObject
+    });
     this.posDX = posDX;
     this.posDY = posDY
   }

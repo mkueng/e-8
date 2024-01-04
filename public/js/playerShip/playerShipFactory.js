@@ -31,13 +31,19 @@ class PlayerShipFactory {
     this.propulsionFactory = new PropulsionFactory({resourceHandler})
     this.shieldFactory = new ShieldFactory({resourceHandler})
     this.explosionFactory = new ExplosionFactory({resourceHandler});
+    this.poiFactory = new PoiFactory({resourceHandler});
+  }
+
+  create3DShip = ()=>{
+
+    return new PlayerShip3D()
   }
 
   /**
    *
    * @param type
    * @param canvas
-   * @returns {Promise<PlayerShip>}
+   * @returns {Promise<PlayerShip3D_01>}
    */
   createShip = async ({ shipType, canvas }) => {
     const {
@@ -46,6 +52,7 @@ class PlayerShipFactory {
       shield,
       terminationSequence,
       weapons,
+      poi,
       resourceObject,
       properties,
     } = shipType;
@@ -54,12 +61,14 @@ class PlayerShipFactory {
     await this.engineTrailFactory.invoke(engineTrail);
     //propulsion
     const propulsionInstance = await this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+    //poi
+    const poiInstance = await this.poiFactory.createPOI({...poi, canvas})
     //shield
     const shieldInstance = await this.shieldFactory.createShield({ ...shield, canvas });
     //termination
     const terminationSequenceInstance = await this.explosionFactory.createExplosion({ ...terminationSequence, canvas });
     //imageResource
-    const imageResource = await this.resourceHandler.fetchResource(resourceObject);
+    const imageResource = await this.resourceHandler.fetchImageResource({resourceObject});
     //weapon(s)
     const weaponsInstances = {};
     for (const weapon in weapons) {

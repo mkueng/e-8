@@ -9,19 +9,20 @@ class Weapon extends GameObject {
                 canvas,
                 spriteSheetRows,
                 spriteSheetColumns,
-    frames,
-    currentFrame,
-    step,
-    stride,
-    strideX,
-    strideY,
+                frames,
+                currentFrame,
+                step,
+                stride,
+                strideX,
+                strideY,
                 width,
                 height,
                 posDX,
                 posDY,
                 velX,
                 velY,
-                sound
+                sound,
+                rechargeTime
               })
   {
     super({
@@ -51,14 +52,27 @@ class Weapon extends GameObject {
 
     this.controlAssignment = controlAssignment;
     this.uniqueIdentifier = uniqueIdentifier;
+    this.rechargeTime = rechargeTime;
   }
 
-  activate(posX, posY){
+  activate(posX, posY) {
     this.posX = posX;
     this.posY = posY;
+
+    GameObjectsHandler.instance.addGameObject(this);
+    SoundHandler.playFX(this.sound);
+  };
+
+
+  recharge = () =>{
+    setTimeout(()=>{;
+      SpeechHandler.playStatement(SpeechHandler.statements.weaponRecharged);
+      this.currentLoad = 0;
+      this.ready = true;
+    },this.rechargeTime)
   }
 
-  update(dt) {
+  update = (dt) =>{
     this.posX = (this.posX < window.global.screenWidth && this.posX > 0) ? this.posX + (this.velX * dt) : this.destroy();
     this.posY = this.posY + (this.velY);
   }

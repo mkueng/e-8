@@ -36,16 +36,25 @@ class InputHandler {
   }
 
   constructor() {
+
+    const mouseClickTypes = {
+      0: "left",
+      1: "middle",
+      2: "right"
+    }
+
+    //prevent contextmenu
     document.addEventListener('contextmenu', (event) => {
       event.preventDefault();
-      this.publishMouseClick('rightClick');
     });
 
+    //check for mouse down
     document.addEventListener('mousedown', (event) => {
       event.preventDefault();
-      this.publishMouseClick('leftClick');
+      this.publishMouseClick(mouseClickTypes[event.button])
     });
 
+    //check for key down
     document.addEventListener('keydown', (event) => {
       if (!event.repeat && typeof this.keyEvents[event.code] === 'undefined') {
         this.keyEvents[event.code] = true;
@@ -53,6 +62,7 @@ class InputHandler {
       }
     });
 
+    //check fo key up
     document.addEventListener('keyup', (event) => {
       if (this.keyEvents[event.code] === true) {
         delete this.keyEvents[event.code];

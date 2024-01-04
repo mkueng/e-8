@@ -6,6 +6,7 @@ class GameObject {
    *
    * @param identification
    * @param image
+   * @param sound
    * @param imageData
    * @param spriteSheet
    * @param animationLoop
@@ -36,6 +37,7 @@ class GameObject {
    * @param isDestroyable
    * @param canDestroy
    * @param subscriber
+   * @param dependencies
    */
   constructor({
                 identification,
@@ -70,15 +72,14 @@ class GameObject {
                 hitWidth,
                 isDestroyable,
                 canDestroy,
-                subscriber
-
+                subscriber,
+                dependencies
               }){
     this.id = crypto.randomUUID();
     this.identification = identification;
     this.active = false;
     this.image = image;
     this.sound = sound;
-    this.imageData = imageData;
     this.currentFrame = currentFrame;
     this.stride = stride;
     this.strideX = strideX;
@@ -86,16 +87,12 @@ class GameObject {
     this.spriteSheet = spriteSheet;
     this.spriteSheetColumns = spriteSheetColumns;
     this.spriteSheetRows = spriteSheetRows;
-    this.spriteSheetRowCounter = 0;
-    this.spriteSheetColumnCounter = 0;
     this.step = step;
     this.frames = frames;
     this.width = width;
     this.height = height;
     this.posX = posX;
     this.posY = posY;
-    this.posSubX = posX;
-    this.posSubY = posY;
     this.posDX = posDX || 0;
     this.posDY = posDY || 0;
     this.velX = velX || 0;
@@ -112,14 +109,19 @@ class GameObject {
     this.alpha = alpha || null;
     this.hitWidth = hitWidth || width;
     this.subscriber = subscriber;
-
-
+    this.dependencies = dependencies;
 
     if (canvas){
       this.context = canvas.getContext("2d");
     }
 
+    if (this.dependencies){
+      this.addDependencies();
+    }
+  }
 
+  addDependencies(){
+    this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
   subscribe(subscriber){
@@ -127,26 +129,22 @@ class GameObject {
   }
 
   unsubscribe(subscriber){
-    //const index = this.subscribers.indexOf(subscriber);
-    //this.subscribers.splice(index, 1);
     this.subscriber = null;
   }
 
   activate(){};
-
   deactivate(){};
-
-  hit({hitBy}){
-
-  }
-
-  initiateDestroySequence(){
-
-  }
+  hit (hitBy){};
 
   destroy(){
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
   };
+
+  destroyDependencies(){
+    for (const dependency of this.dependencies) {
+      dependency.destroy();
+    }
+  }
 
   render() {
     if (this.alpha) {
@@ -155,7 +153,6 @@ class GameObject {
     if (this.spriteSheet) {
       if (this.animationLoop) {
         this.currentFrame = (this.currentFrame + 1) % this.frames;
-
       } else {
         this.currentFrame++;
         if (this.currentFrame >= this.frames) {
@@ -193,56 +190,29 @@ class GameObject {
     }
   }
 
-
-/*
-  render(){
-    if (this.spriteSheet){
-      if (this.spriteSheetColumnCounter < this.spriteSheetColumns) {
-        this.spriteSheetColumnCounter ++;
-      } else {
-        this.spriteSheetColumnCounter = 0;
-        if (this.spriteSheetRowCounter < this.spriteSheetRows) {
-          this.spriteSheetRowCounter++
-        } else {
-          this.spriteSheetRowCounter = 0;
+  /**
+   *
+   * @param deltaTime
+   */
+  update(deltaTime) {
+    if (this.posX > 0 - this.width) {
+      this.posX = this.posX + (this.velX*deltaTime)
+    } else {
+     this.destroy();
+      if (this.dependencies) {
+        for (const dependency of this.dependencies){
+          dependency.destroy();
         }
       }
-      this.context.drawImage(
-        this.spriteSheet,
-        this.spriteSheetColumnCounter * this.strideX,
-        this.spriteSheetRowCounter * this.strideY,
-        this.strideX,
-        this.strideY,
-        this.posX + this.posDX,
-        this.posY + this.posDY,
-        this.width,
-        this.height
-      );
-      if (this.animationLoop) {
-        this.currentFrame < this.frames ? this.currentFrame++ : this.currentFrame = 0
-      } else {
-        this.currentFrame < this.frames ? this.currentFrame++ : this.destroy();
+    }
+    this.posY = this.posY +(this.velY*deltaTime);
+
+    // position dependencies
+    if (this.dependencies) {
+      for (const dependency of this.dependencies){
+        dependency.posX = this.posX;
+        dependency.posY = this.posY;
       }
     }
-    else if (this.image) {
-      this.context.drawImage(
-        this.image,
-        this.posX + this.posDX,
-        this.posY + this.posDY,
-        this.width,
-        this.height
-      )
-    }
-  };
-*/
-
-  update (dt){
-    if (this.posX > - this.width) {
-      this.posX = this.posX + (this.velX*dt)
-    } else {;
-     this.destroy();
-    }
-    this.posY = this.posY +(this.velY*dt);
-
   };
 }

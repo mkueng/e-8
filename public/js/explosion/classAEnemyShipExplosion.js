@@ -1,20 +1,27 @@
 class ClassAEnemyShipExplosion extends Explosion {
 
-  static resourceObject = new ResourceObject({
+  static imageResourceObject = new ResourceObject({
     id : "classAEnemyShipExplosion",
     filename : "explosion_03",
     type : ResourceObject.TYPES.png,
     resourcePath : "/resources/explosions/explosion_03/images/explosion_03.png"
   })
 
-  static soundResourceObject = "/resources/sounds/explosion.wav"
+  static soundResourceObject = new ResourceObject({
+    id: "classAPlayerShipExplosionSound",
+    filename: "explosion.wav",
+    type: ResourceObject.TYPES.wav,
+    resourcePath: "/resources/sounds/explosion.wav"
+  })
 
   static async fetchSpriteSheet(resourceHandler){
-    return await resourceHandler.fetchResource(ClassAEnemyShipExplosion.resourceObject);
+    return await resourceHandler.fetchImageResource({
+      resourceObject: ClassAEnemyShipExplosion.imageResourceObject
+    });
   }
 
-  static async fetchSound(){
-    return await SoundHandler.fetchAudioAndReturnAudioBuffer(ClassAEnemyShipExplosion.soundResourceObject);
+  static async fetchSound(resourceHandler){
+    return await resourceHandler.fetchSoundResource({resourceObject:ClassAEnemyShipExplosion.soundResourceObject});
   }
 
   constructor({

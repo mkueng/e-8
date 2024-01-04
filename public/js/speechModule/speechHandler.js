@@ -1,27 +1,46 @@
 class SpeechHandler {
-
-
   static statements = {
-    shieldCritical : "shield_critical",
-    shieldRecharged: "shield_recharged",
-    weaponRecharged: "weapon_recharged"
-  }
+    shieldCritical: {
+      fileName: "shield_critical",
+      audio: null,
+    },
+    shieldRecharged: {
+      fileName: "shield_recharged",
+      audio: null,
+    },
+    weaponRecharged: {
+      fileName: "weapon_recharged",
+      audio: null,
+    },
+    weaponDischarged: {
+      fileName: "weapon_discharged",
+      audio: null,
+    },
+  };
 
-  #basePath =  "../js/speechModule/statements";
+  #basePath = "../js/speechModule/statements";
   #fileType = "m4a";
 
-  constructor(basePath){
+  constructor(basePath) {
     this.basePath = basePath || this.#basePath;
   }
 
-  invoke = async()=>{
+  invoke = async () => {
+    await this.#fetchStatements();
+    console.log("statements:", SpeechHandler.statements);
+  };
 
-    let promises = [];
-    for (const statement in SpeechHandler.statements) {
-      const resource = this.basePath+"/"+SpeechHandler.statements[statement]+"."+this.#fileType;
-      console.log("resource:", resource);
-      promises.push(SoundHandler.fetchAudioAndReturnAudioBuffer(resource));
-    }
-    return await Promise.all(promises);
+  static playStatement = (statement)=>{
+    console.log("statement:", statement);
+    SoundHandler.playFX(statement.audio);
   }
+
+  #fetchStatements = async () => {
+    await Promise.all(
+      Object.entries(SpeechHandler.statements).map(async ([key, value]) => {
+        const resource = `${this.basePath}/${value.fileName}.${this.#fileType}`;
+        value.audio = await SoundHandler.fetchAudioAndReturnAudioBuffer(resource);
+      })
+    );
+  };
 }

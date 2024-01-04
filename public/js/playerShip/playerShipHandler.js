@@ -31,5 +31,6 @@ class PlayerShipHandler {
       shipType: PlayerShipFactory.SHIP_TYPES.classA,
       canvas : this.#canvas
     })
+    //this.playerShipFactory.create3DShip();
   }
 }
