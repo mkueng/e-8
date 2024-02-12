@@ -7,6 +7,6 @@ async function testFetchingResources(){
   console.log("fetching");
   await UnitTest.invokeTestAsync("invoke speechHandler and fetching resources",
     UnitTest.testClass("SpeechHandler").invoke,null,function(returnValue){
-    console.log("returnValue:", returnValue)
+
     })
 }

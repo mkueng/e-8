@@ -1,71 +1,99 @@
+'use strict'
 class AsteroidHandler {
 
-  #canvasMiddle;
-  #canvasFace;
   #resourceHandler;
   #resizeImageWorker;
-  #gameLoop;
-  #asteroidObjects = [];
+  #asteroids = [];
+  #canvases = {};
 
+  constructor({
+                canvasHandler,
+                resourceHandler,
+                resizeImageWorker
+  }){
+    this.#canvases['far'] = canvasHandler.getCanvas("backgroundFar").canvas;
+    this.#canvases['middle'] = canvasHandler.getCanvas("backgroundMiddleFar").canvas;
+    this.#canvases['front'] = canvasHandler.getCanvas("backgroundFace").canvas;
 
-
-  constructor({gameLoop, canvasHandler, resourceHandler, resizeImageWorker}){
-    this.#gameLoop = gameLoop;
-    this.#canvasMiddle = canvasHandler.getCanvas("backgroundMiddleFar").canvas;
-    this.#canvasFace = canvasHandler.getCanvas("backgroundFace").canvas;
     this.#resourceHandler = resourceHandler;
     this.#resizeImageWorker = resizeImageWorker;
   }
 
-
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   invoke = async ()=>{
     const asteroidResourceObjects = await this.#resourceHandler.fetchResourceBatch({
       category: "asteroid",
-      filename : "A",
+      fileName : "A",
       fileType : "png",
       filePath :  "/resources/asteroids/",
       lowerLimit : 1,
       upperLimit : 13
     })
 
-
     for (const asteroidResourceObject of asteroidResourceObjects) {
-      const asteroidObject = new GameObject({
-        identification : "asteroid",
-        image : asteroidResourceObject.image,
-        width : asteroidResourceObject.image.width,
-        height : asteroidResourceObject.image.height,
-        posX : window.global.screenWidth,
-        posY : Math.random()*window.global.screenHeight,
-        posDX : 0,
-        posDY : 0,
-        velX : 0,
-        velY : 0,
-        canvas : this.#canvasFace,
-        subscriber : this
+      const width = asteroidResourceObject.image.width;
+      const height = asteroidResourceObject.image.height;
+      const velX = -1 * (Math.random() * 6);
+      let canvas = null;
+
+      switch (true) {
+        case (velX > -2) : {
+          canvas = this. #canvases["far"]; break
+        }
+        case (velX >= -4 && velX < -2) : {
+         canvas = this.#canvases['middle']; break
+        }
+        case (velX <= -4) : {
+          canvas = this.#canvases['front']; break
+        }
+      }
+
+      const asteroid = new GameObject({
+        canvas: canvas,
+        height: height,
+        identification: "asteroid",
+        image: asteroidResourceObject.image,
+        posDX: 0,
+        posDY: 0,
+        posX: e8.global.screenWidth,
+        posY: Math.random()*e8.global.screenHeight,
+        subscriber: this,
+        velX: 0,
+        velY: 0,
+        width: width,
+        isActive: true,
       })
-
-
-      this.#asteroidObjects.push(asteroidObject);
+      this.#asteroids.push(asteroid);
     }
   }
 
-  subscriptionsUpdate = (message, asteroid)=>{
-    this.#asteroidObjects.push(asteroid);
+  /**
+   *
+   * @param message
+   * @param asteroid
+   */
+  subscriptionsUpdate = (message, asteroid) => {
+    this.#asteroids.push(asteroid);
   }
 
+  /**
+   *
+   * @param interval
+   * @param amount
+   */
   createAsteroid = (interval,amount) => {
-    let ticker =0;
+    let ticker = 0;
 
-    const createBatch = (interval)=>{
+    const createBatch = (interval) => {
       let currentInterval = setInterval(() => {
-        if (this.#asteroidObjects.length > 0) {
-          const asteroid = this.#asteroidObjects.splice(Math.floor(Math.random() * this.#asteroidObjects.length), 1)[0];
+        if (this.#asteroids.length > 0) {
+          const asteroid = this.#asteroids.splice(Math.floor(Math.random() * this.#asteroids.length), 1)[0];
 
-          //console.log("asteroidObjects:", this.#asteroidObjects);
-
-          asteroid.posX = window.global.screenWidth;
-          asteroid.posY = Math.random() * (window.global.screenHeight - 200);
+          asteroid.posX = e8.global.screenWidth;
+          asteroid.posY = Math.random() * (e8.global.screenHeight - 200);
           asteroid.velX = -1 * (Math.random() * 6 + 1);
 
           GameObjectsHandler.instance.addGameObject(asteroid);
@@ -82,11 +110,4 @@ class AsteroidHandler {
     }
    createBatch(interval);
   }
-
-  createAsteroidField = ()=>{
-
-  }
-
-
-
 }

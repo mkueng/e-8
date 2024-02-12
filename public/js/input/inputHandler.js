@@ -28,9 +28,15 @@ class InputHandler {
   publishEvent(type, event, isKeyDown = false) {
     for (const subscriber of this.subscribers) {
       if (type === 'keyEvent') {
-        subscriber.keyEvent(event, isKeyDown);
+        try {
+          subscriber.keyEvent(event, isKeyDown);
+        } catch(e){}
+
       } else if (type === 'mouseEvent') {
-        subscriber.mouseEvent(event);
+        try {
+          subscriber.mouseEvent(event);
+        } catch(e){}
+
       }
     }
   }
@@ -43,16 +49,25 @@ class InputHandler {
       2: "right"
     }
 
+
+
+
     //prevent contextmenu
     document.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
+      //event.preventDefault();
     });
 
     //check for mouse down
     document.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-      this.publishMouseClick(mouseClickTypes[event.button])
+      //event.preventDefault();
+      this.publishMouseClick(event)
     });
+
+    document.addEventListener('mouseup', (event) => {
+      event.preventDefault();
+      this.publishMouseClick(event)
+    });
+
 
     //check for key down
     document.addEventListener('keydown', (event) => {

@@ -4,10 +4,10 @@
 class ClassAShip {
 
   static resourceObject = new ResourceObject({
-    id : "ship01ClassA",
-    filename : "ship_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/ships/ship_01/images/SpaceShip3D-2D.png"
+    name : "ship01ClassA",
+    fileName : "ship_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/ships/ship_01/images/"
   })
 
   static properties = {
@@ -79,10 +79,10 @@ class ClassAShip {
 class ClassBShip {
 
   static #resourceObject = new ResourceObject({
-    id : "ship01ClassA",
-    filename : "ship_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/ships/ship_02/images/ship_02.png"
+    name : "ship01ClassA",
+    fileName : "ship_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/ships/ship_02/images/"
   })
 
   static properties = {

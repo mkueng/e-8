@@ -1,228 +1,184 @@
 class CanvasHandler {
 
-  #newCanvases = {
+
+  static canvasTypes = {
+    backdrop: "backdrop",
+    planets: "planets",
+    backgroundFarthest: "backgroundFarthest",
+    backgroundFar: "backgroundFar",
+    backgroundMiddleFar: "backgroundMiddleFar",
+    backgroundMiddle: "backgroundMiddle",
+    backgroundFront: "backgroundFront",
+    backgroundFace: "backgroundFace",
+    weapons: "weapons",
+    performanceInfo: "performanceInfo",
+    haze: "haze",
+    dust: "dust",
+    explosion: "explosion"
+  }
+
+  #canvases = {
+    "explosion": {
+      "id": "explosion",
+      "class": "fullscreenCanvas backgroundFaceCanvas"
+    },
     "backdrop": {
       "id": "backdrop",
-      "class" : "backdropCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
+      "class": "fullscreenCanvas backdropCanvas"
+    },
+    "planets": {
+      "id": "planets",
+      "class": "fullscreenCanvas planetsCanvas"
+    },
+    "dust": {
+      "id": "dust",
+      "class": "fullscreenCanvas dustCanvas"
     },
     "backgroundFarthest": {
       "id": "backgroundFarthest",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 1
+      "class": "fullscreenCanvas backgroundFarthestCanvas"
     },
     "backgroundFar": {
       "id": "backgroundFar",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 1
+      "class": "fullscreenCanvas backgroundFarCanvas"
     },
     "backgroundMiddleFar": {
       "id": "backgroundMiddleFar",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 1
+      "class": "fullscreenCanvas backgroundMiddleFarCanvas"
     },
     "backgroundMiddle": {
       "id": "backgroundMiddle",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 0.3,
-
+      "class": "fullscreenCanvas backgroundMiddleCanvas"
     },
     "backgroundFront": {
       "id": "backgroundFront",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 1
+      "class": "fullscreenCanvas backgroundFrontCanvas"
     },
     "backgroundFace": {
       "id": "backgroundFace",
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "class": "fullscreenCanvas",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": null,
-      "opacity": 1
+      "class": "fullscreenCanvas backgroundFaceCanvas"
     },
+    "weapons" : {
+      "id" : "weapons",
+      "class" : "fullscreenCanvas weaponsCanvas"
+    },
+    "performanceInfo" : {
+      "id": "performanceInfo",
+      "class" : "fullscreenCanvas performanceInfoCanvas",
+    },
+    "haze" : {
+      "id": "haze",
+      "class" : "fullscreenCanvas",
+      "opacity": 0.1
+    }
+  }
 
-    "hudStatic": {
-      "id": "hudStatic",
-      "class": "sectionCanvasBottom",
-      "context": null,
-      "contextStyles": null,
-      "canvas": null,
-      "canvasStyles": {
-        "top": 0 + "px",
-        "left": window.global.screenWidth / 6 + "px"
-      },
-      "width": window.global.screenWidth / 1.5,
-      "height": 80,
-      "opacity": 0.8
-    },
+  #staticCanvases = {
+
     "hudDynamicLeft": {
       "id": "hudDynamicLeft",
       "class": "sectionCanvasLeft",
-      "context": null,
       "contextStyles": {
-        "font": "12px myFont"
+        "font": "15px myFont"
       },
-      "canvas": null,
       "canvasStyles": {
-        "top": ((window.global.currentHeight-window.global.screenHeight)/2) + 10 + "px",
-        "left": ((window.global.currentWidth-window.global.screenWidth)/2)+ 50 +"px",
+        "top": ((e8.global.currentHeight-e8.global.screenHeight)/2) + 20 + "px",
+        "left": ((e8.global.currentWidth-e8.global.screenWidth)/2)+ 100 +"px",
         "color": "grey",
         "border-radius": "10px"
 
       },
       "width": 340,
-      "height": 150,
+      "height": 200,
       "opacity": 0.7
-    },
-    "hudDynamicFarLeft": {
-      "id": "hudDynamicFarLeft",
-      "class": "sectionCanvasRight",
-      "context": null,
-      "contextStyles": {
-        "font": "10px myFont",
-        "fillStyle": "white",
-        "border-radius": "0px"
-
-      },
-      "canvas": null,
-      "canvasStyles": {
-        "bottom": (window.innerHeight - window.global.screenHeight) / 2 + 10 + "px",
-        "left": ((window.global.currentWidth-window.global.screenWidth)/2) + "px",
-        "color": "grey"
-      },
-      "width": 100,
-      "height": 40,
-      "opacity": 0.5
     },
     "hudDynamicRight": {
       "id": "hudDynamicRight",
       "class": "sectionCanvasRight",
-      "context": null,
       "contextStyles": {
-        "font": "12px myFont"
+        "font": "15px myFont"
       },
-      "canvas": null,
       "canvasStyles": {
-        "top": ((window.global.currentHeight-window.global.screenHeight)/2) + 10+ "px",
-        "right": ((window.global.currentWidth-window.global.screenWidth)/2) + 50+ "px",
+        "top": ((e8.global.currentHeight-e8.global.screenHeight)/2) + 20+ "px",
+        "right": ((e8.global.currentWidth-e8.global.screenWidth)/2) + 100+ "px",
         "color": "red",
         "border-radius": "10px",
 
       },
       "width": 340,
-      "height": 150,
+      "height": 200,
       "opacity": 0.7
     },
 
-    "hudDynamicFarRight": {
-      "id": "hudDynamicFarRight",
-      "class": "sectionCanvasRight",
-      "context": null,
-      "contextStyles": {
-        "font": "10px myFont",
-        "fillStyle": "white",
-        "border-radius": "10px"
-
-      },
-      "canvas": null,
-      "canvasStyles": {
-        "bottom": (window.innerHeight - window.global.screenHeight) / 2 + 10 + "px",
-        "right": (window.innerWidth / 2.2 - window.global.screenWidth / 3) + "px",
-        "color": "white"
-      },
-      "width": 100,
-      "height": 40,
-      "opacity": 0.5
-    },
     "hudDynamicMiddle": {
       "id": "hudDynamicMiddle",
       "class": "sectionCanvasMiddle",
-      "context": null,
       "contextStyles": {
         "font": "12px myFont",
         "fillStyle": "white"
-
       },
-      "canvas": null,
       "canvasStyles": {
         "top": 0 + "px",
-        "left": (window.innerWidth / 2 - window.global.screenWidth / 12) + "px",
+        "left": (window.innerWidth / 2 - e8.global.screenWidth / 12) + "px",
         "color": "white",
 
       },
-      "width": window.global.screenWidth / 6,
+      "width": e8.global.screenWidth / 6,
       "height": 100,
       "opacity": 0.5
-    },
-
-    "performanceInfo" : {
-      "id": "performanceInfo",
-      "class" : "fullscreenCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height": window.global.screenHeight,
-      "opacity": 1
-    },
-    "weapons" : {
-      "id" : "weapons",
-      "class" : "weaponCanvas",
-      "context" : null,
-      "contextStyles" : null,
-      "canvas" : null,
-      "canvasStyles" : null,
-      "width": window.global.screenWidth,
-      "height" : window.global.screenHeight,
-      "opacity" : 1
     }
-
   }
 
   constructor(){
-    this.createCanvasNodes();
+    e8.init.subscribeForGlobalEvents(this);
+    this.createCanvasElements(this.#canvases);
+    this.createCanvasElements(this.#staticCanvases);
   }
 
+  /**
+   *
+   */
+  createCanvasElements = (canvasTemplates) => {
+    for (const canvas in canvasTemplates) {
+
+      const newCanvas  = document.createElement("canvas");
+      newCanvas.id = canvasTemplates[canvas].id;
+      newCanvas.width = canvasTemplates[canvas].width || e8.global.screenWidth;
+      newCanvas.height = canvasTemplates[canvas].height || e8.global.screenHeight;
+      newCanvas.className = canvasTemplates[canvas].class;
+      canvasTemplates[canvas].canvas = newCanvas;
+      canvasTemplates[canvas].context = newCanvas.getContext("2d");
+      canvasTemplates[canvas].context.imageSmoothingEnabled = false;
+      canvasTemplates[canvas].context.imageSmoothingQuality = 'high';
+      canvasTemplates[canvas].context.globalAlpha = canvasTemplates[canvas].opacity || 1;
+
+      const canvasStyles = canvasTemplates[canvas]?.canvasStyles;
+      if (canvasStyles) {
+        Object.assign(newCanvas.style, canvasStyles);
+      }
+
+      const contextStyles = canvasTemplates[canvas]?.contextStyles;
+      if (contextStyles) {
+        Object.assign(canvasTemplates[canvas].context, contextStyles);
+      }
+      document.querySelector("#game").appendChild(newCanvas);
+    }
+  }
+
+
+  updateFromGlobalEvent = ({message, payload}) =>{
+    if (message === e8.globalEvents.screenResized) {
+      for (const canvas in this.#canvases){
+        const canvass = document.getElementById(this.#canvases[canvas].id);
+        canvass.width = payload.width;
+        canvass.height = payload.height;
+      }
+      const settings = document.getElementById("settings");
+      settings.style.width = payload.width;
+      settings.style.height = payload.height;
+    }
+
+  }
 
   /**
    *
@@ -232,7 +188,12 @@ class CanvasHandler {
    * @param container
    * @returns {HTMLCanvasElement}
    */
-  createAdHocCanvas= ({ id, width, height, container}) => {
+  createAdHocCanvas = ({
+                         id,
+                         width,
+                         height,
+                         container
+  }) => {
     const canvas = document.createElement("canvas");
     canvas.id = id;
     canvas.width = width;
@@ -248,7 +209,11 @@ class CanvasHandler {
    * @param height
    * @returns {OffscreenCanvas}
    */
-  createOffscreenCanvas = ({id, width, height})=>{
+  createOffscreenCanvas = ({
+                             id,
+                             width,
+                             height
+  })=>{
     const canvas = new OffscreenCanvas(width, height);
     canvas.id = id;
     return canvas
@@ -256,36 +221,19 @@ class CanvasHandler {
 
 
 
-
-  /**
-   *
-   */
-  createCanvasNodes =()=>{
-    for (const canvas in this.#newCanvases) {
-
-      const newCanvas  = document.createElement("canvas");
-      newCanvas.id = this.#newCanvases[canvas].id;
-      newCanvas.width = this.#newCanvases[canvas].width;
-      newCanvas.height = this.#newCanvases[canvas].height;
-      newCanvas.className = this.#newCanvases[canvas].class;
-      this.#newCanvases[canvas].canvas = newCanvas;
-      this.#newCanvases[canvas].context = newCanvas.getContext("2d");
-      this.#newCanvases[canvas].context.imageSmoothingEnabled = true;
-      this.#newCanvases[canvas].context.imageSmoothingQuality = 'high';
-      this.#newCanvases[canvas].context.globalAlpha = this.#newCanvases[canvas].opacity || 0;
-
-      const canvasStyles = this.#newCanvases[canvas]?.canvasStyles;
-      if (canvasStyles) {
-        Object.assign(newCanvas.style, canvasStyles);
-      }
-
-      const contextStyles = this.#newCanvases[canvas]?.contextStyles;
-      if (contextStyles) {
-        Object.assign(this.#newCanvases[canvas].context, contextStyles);
-      }
-
-      document.querySelector("#game").appendChild(newCanvas);
+  unblurCanvases = () =>{
+    for (const canvas in this.#canvases) {
+      this.#canvases[canvas].context.filter = ("none");
     }
+  }
+
+  blurCanvases = () =>{
+    for (const canvas in this.#canvases) {
+      if (canvas !== "settings") {
+        this.#canvases[canvas].context.filter = ("blur(20px)");
+      }
+    }
+    //this.#canvases["settings"].context.filter = ("none");
   }
 
   /**
@@ -293,8 +241,8 @@ class CanvasHandler {
    * @param id
    * @returns {*}
    */
-  getCanvas =(id) =>{
-    return this.#newCanvases[id];
+  getCanvas = (id) => {
+    return this.#canvases[id] ? this.#canvases[id] : this.#staticCanvases[id];
   }
 
 }

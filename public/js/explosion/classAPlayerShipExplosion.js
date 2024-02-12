@@ -1,34 +1,36 @@
+'use strict'
 class ClassAPlayerShipExplosion extends Explosion {
 
+  static imageResource;
+  static soundResource;
+
   static imageResourceObject = new ResourceObject({
-    id : "classAPlayerShipExplosion",
-    filename : "explosion_02",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/explosions/explosion_02/images/explosion_02.png"
+    category: ResourceObject.CATEGORIES.explosion,
+    name : "classAPlayerShipExplosionImage",
+    fileName : "explosion_02",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/explosions/explosion_02/images/"
   })
 
   static soundResourceObject = new ResourceObject({
-    id: "classAPlayerShipExplosionSound",
-    filename: "explosion.wav",
+    category: ResourceObject.CATEGORIES.explosion,
+    name: "classAPlayerShipExplosionSound",
+    filename: "explosion",
     type: ResourceObject.TYPES.wav,
     resourcePath: "/resources/sounds/explosion.wav"
   })
 
-
-
-  static async fetchSpriteSheet(resourceHandler){
-    return await resourceHandler.fetchImageResource({
+  static async invoke(resourceHandler){
+    ClassAPlayerShipExplosion.imageResource = await resourceHandler.fetchImageResource({
       resourceObject: ClassAPlayerShipExplosion.imageResourceObject
     });
+    ClassAPlayerShipExplosion.soundResource = await resourceHandler.fetchSoundResource({
+      resourceObject: ClassAPlayerShipExplosion.soundResourceObject});
+
   }
 
-  static async fetchSound(resourceHandler){
-    return await resourceHandler.fetchSoundResource({resourceObject: ClassAPlayerShipExplosion.soundResourceObject})
-  }
     constructor({
                   canvas,
-                  spriteSheetResource,
-                  soundResource,
                   posX,
                   posY,
                   posDX,
@@ -36,8 +38,8 @@ class ClassAPlayerShipExplosion extends Explosion {
     }){
 
     super({
-      spriteSheet : spriteSheetResource.image,
-      sound : soundResource,
+      spriteSheet : ClassAPlayerShipExplosion.imageResource.image,
+      sound : ClassAPlayerShipExplosion.soundResource,
       spriteSheetRows : 4,
       spriteSheetColumns : 8,
       width : 256,
@@ -46,8 +48,8 @@ class ClassAPlayerShipExplosion extends Explosion {
       currentFrame : 0,
       step : 50,
       stride : 0,
-      strideX : spriteSheetResource.image.width / 8,
-      strideY : spriteSheetResource.image.height / 4,
+      strideX : ClassAPlayerShipExplosion.imageResource.image.width / 8,
+      strideY : ClassAPlayerShipExplosion.imageResource.image.height / 4,
       canvas : canvas,
       posX : posX,
       posY : posY,

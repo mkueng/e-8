@@ -3,10 +3,10 @@ class PhotonTorpedo extends Weapon{
 
   static imageResourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.weapon,
-    id : "photonTorpedo_01",
-    filename : "photonTorpedo_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/weapon/photonTorpedo_01/images/photonTorpedo_01.png"
+    name : "photonTorpedo_01",
+    fileName : "photonTorpedo_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/weapon/photonTorpedo_01/images/"
   })
 
   static soundResourceObject = new ResourceObject({
@@ -37,7 +37,6 @@ class PhotonTorpedo extends Weapon{
   }) {
     super({
       identification : "weaponPlayer",
-      uniqueIdentifier : "PhotonTorpedo",
       controlAssignment,
       canvas : canvas,
       image : PhotonTorpedo.imageResource.image,
@@ -54,8 +53,18 @@ class PhotonTorpedo extends Weapon{
       isDestroyable : false
     })
 
+    this.uniqueIdentifier = this.constructor.name;
     this.ready = true;
   }
 
+  /**
+   *
+   * @param hitBy
+   */
+  hit = (hitBy) => {
+    if (hitBy.identification !== "playerShip") {
+      this.destroy();
+    }
+  }
 
 }

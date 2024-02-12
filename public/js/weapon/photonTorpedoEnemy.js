@@ -3,10 +3,10 @@ class PhotonTorpedoEnemy extends Weapon{
 
   static resourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.weapon,
-    id : "photonTorpedo_02",
-    filename : "photonTorpedo_02",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/weapon/photonTorpedo_02/images/photonTorpedo_02.png"
+    name : "photonTorpedo_02",
+    fileName : "photonTorpedo_02",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/weapon/photonTorpedo_02/images/"
   })
 
   static imageResource;

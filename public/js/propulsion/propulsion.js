@@ -38,6 +38,7 @@ class Propulsion extends GameObject {
                 canvas
               }) {
     super({
+      isActive: true,
       spriteSheet,
       spriteSheetRows,
       spriteSheetColumns,

@@ -2,7 +2,7 @@ body {
   background-color:black;
 }
 
-.titel {
+.title {
   font-size:22px;
   margin:0;
   margin-bottom:20px;
@@ -25,7 +25,7 @@ body {
 
 .results.error {
   color:#ff9090;
-  font-size:12px;
+  font-size:14px;
   margin-bottom:10px;
 }
 

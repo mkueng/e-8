@@ -25,30 +25,31 @@
 
 <body>
     <script>
-        var ns = ns || {}
-        window.global = window.global || {};
-        const maxWidth = 3300;
-        const maxHeight = 1300;
-        const currentWidth = window.innerWidth;
-        const currentHeight = window.innerHeight;
+        var e8 = e8 || {}
+        e8.global = e8.global || {};
+        e8.global.maxWidth = 4300;
+        e8.global.maxHeight = 1800;
 
-        window.global.currentWidth = window.innerWidth;
-        window.global.currentHeight = window.innerHeight;
 
-        console.log("height",window.global.currentHeight);
-        window.global.screenHeight = currentHeight > maxHeight ? maxHeight : currentHeight;
-        window.global.screenWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
-        window.global.centerHorizontal = window.global.screenWidth / 2;
-        window.global.centerVertical = window.global.screenHeight / 2;
-        window.global.centerLeft = window.global.screenWidth / 3;
-        window.global.centerRight = window.global.screenWidth - window.global.screenWidth / 3
+        e8.global.currentWidth = window.innerWidth;
+        e8.global.currentHeight = window.innerHeight;
+
+        console.log("height",e8.global.currentHeight);
+        console.log("width",e8.global.currentWidth);
+        e8.global.screenHeight = e8.global.currentHeight >  e8.global.maxHeight ?  e8.global.maxHeight : e8.global.currentHeight;
+        e8.global.screenWidth = e8.global.currentWidth  > e8.global.maxWidth ? e8.global.maxWidth : e8.global.currentWidth;
+        e8.global.centerHorizontal = e8.global.screenWidth / 2;
+        e8.global.centerVertical = e8.global.screenHeight / 2;
+        e8.global.centerLeft = e8.global.screenWidth / 3;
+        e8.global.centerRight = e8.global.screenWidth - e8.global.screenWidth / 3
 
 
     </script>
     <div id="wrapper">
-        <button id="fullscreen"  value="fullscreen" style="display:none">FULLSCREEN</button>
         <div id="game">
-            <div id="screenTooSmall" style="display:none">PLEASE ENLARGE BROWSERWINDOW</div>
+            <div id="overlay" style="display:none">
+
+            </div>
         </div>
 
     </div>
@@ -73,9 +74,14 @@
     <script src="js/gameObjects/gameObject.js?v=0.9"></script>
     <script src="js/resource/resourceObject.js?v=0.9"></script>
 
-    <!-- state -->
-    <script src="js/state/state.js?v=0.9"></script>
-    <script src="js/state/stateHandler.js?v=0.9"></script>
+    <!-- localStorage -->
+    <script src="/js/localStorage/localStorageHandler.js"></script>
+
+    <!-- fsm -->
+    <script src="/js/state/state.js"></script>
+    <script src="/js/state/states.js"></script>
+    <script src="/js/state/finiteStateMachine.js"></script>
+    <script src="/js/state/stateHandler.js"></script>
 
     <!-- weapon -->
     <script src="js/weapon/weapon.js?v=0.9"></script>
@@ -90,12 +96,6 @@
     <script src="js/sound/proceduralMusic.js?v=0.9"></script>
     <script src="js/sound/sequencer.js?v=0.9"></script>
 
-    <!-- enemyShip -->
-    <script src="js/procedural/ships/proceduralShipImage.js?v=0.9"></script>
-    <script src="js/enemyShip/proceduralEnemyShipImageType1.js?v=0.9"></script>
-    <script src="js/enemyShip/enemyShipHandler.js?v=0.9"></script>
-    <script src="js/enemyShip/enemyShipFactory.js?v=0.9"></script>
-    <script src="js/enemyShip/enemyShip.js?v=0.9"></script>
 
     <!-- trail -->
     <script src="js/engineTrail/engineTrail.js?v=0.9"></script>
@@ -111,6 +111,7 @@
     <!-- shield -->
     <script src="js/shield/shield.js?v=0.9"></script>
     <script src="js/shield/classAShield.js?v=0.9"></script>
+    <script src="js/shield/classBShield.js?v=0.9"></script>
     <script src="js/shield/shieldFactory.js?v=0.9"></script>
 
 
@@ -132,6 +133,14 @@
     <script src="/js/playerShip/playerShip3D_01.js"></script>
     <script src="js/playerShip/playerShipFactory.js?v=0.9"></script>
 
+    <!-- enemyShip -->
+    <script src="js/procedural/ships/proceduralShipImage.js?v=0.9"></script>
+    <script src="js/enemyShip/proceduralEnemyShipImageType1.js?v=0.9"></script>
+    <script src="js/enemyShip/enemyShipType1.js?v=0.9"></script>
+    <script src="js/enemyShip/enemyShipHandler.js?v=0.9"></script>
+    <script src="js/enemyShip/enemyShipFactory.js?v=0.9"></script>
+    <script src="js/enemyShip/enemyShip.js?v=0.9"></script>
+
     <!-- spaceStation -->
     <script src="js/spaceStation/spaceStationHandler.js?v=0.9"></script>
 
@@ -146,6 +155,14 @@
     <script src="js/haze/haze.js?v=0.9"></script>
     <script src="js/haze/hazeHandler.js?v=0.9"></script>
 
+    <!-- dust -->
+    <script src="js/dust/dustHandler.js?v=0.9"></script>
+    <script src="js/dust/dustParticles.js?v=0.9"></script>
+
+    <!-- particles -->
+    <script src="js/particles/particleGenerator.js?v=0.9"></script>
+    <script src="js/particles/particlesObject.js?v=0.9"></script>
+
     <!-- asteroid -->
     <script src="js/asteroid/asteroidHandler.js?v=0.9"></script>
 
@@ -159,6 +176,11 @@
     <script src="js/collisionDetection/collisionDetector.js?v=0.9"></script>
 
 
+    <!-- settings -->
+    <script src="js/settings/settingsHandler.js?v=0.9"></script>
+
+    <!-- utility -->
+    <script src="/js/workers/utility/utilityWorker.js"></script>
 
     <!-- galaxy -->
     <script src="js/galaxy/galaxy.js?v=0.9"></script>
@@ -195,7 +217,7 @@
     <script src="/js/playerShip3D/playerShip3D.js"></script>
 
 
-    <script src="js/gameController.js?v=0.9"></script>
+    <script src="js/gameInit.js?v=0.9"></script>
     <script src="js/init.js?v=0.9"></script>
     <script src="js/index.js?v=0.9"></script>
 

@@ -1,8 +1,8 @@
+'use strict'
 class Weapon extends GameObject {
 
   constructor({
                 identification,
-                uniqueIdentifier,
                 controlAssignment,
                 image,
                 spriteSheet,
@@ -11,7 +11,6 @@ class Weapon extends GameObject {
                 spriteSheetColumns,
                 frames,
                 currentFrame,
-                step,
                 stride,
                 strideX,
                 strideY,
@@ -22,10 +21,15 @@ class Weapon extends GameObject {
                 velX,
                 velY,
                 sound,
-                rechargeTime
+                activeOnKeyHold,
+                animationLoop,
+                rechargeTime,
+                isDestroyable,
+                isHittable
               })
   {
     super({
+      isActive: true,
       identification,
       canvas,
       spriteSheet,
@@ -37,7 +41,6 @@ class Weapon extends GameObject {
       height,
       frames,
       currentFrame,
-      step,
       strideX,
       strideY,
       stride,
@@ -45,24 +48,23 @@ class Weapon extends GameObject {
       posDY,
       velX,
       velY,
-      isHittable : false,
-      isDestroyable : false,
-      canDestroy : true
+      animationLoop,
+      isHittable,
+      isDestroyable,
+      canDestroy: true
     });
 
     this.controlAssignment = controlAssignment;
-    this.uniqueIdentifier = uniqueIdentifier;
     this.rechargeTime = rechargeTime;
+    this.activeOnKeyHold = activeOnKeyHold;
   }
 
-  activate(posX, posY) {
+  activate ({posX, posY}) {
     this.posX = posX;
     this.posY = posY;
-
     GameObjectsHandler.instance.addGameObject(this);
     SoundHandler.playFX(this.sound);
   };
-
 
   recharge = () =>{
     setTimeout(()=>{;
@@ -73,7 +75,7 @@ class Weapon extends GameObject {
   }
 
   update = (dt) =>{
-    this.posX = (this.posX < window.global.screenWidth && this.posX > 0) ? this.posX + (this.velX * dt) : this.destroy();
+    this.posX = (this.posX < e8.global.screenWidth && this.posX > 0) ? this.posX + (this.velX * dt) : this.destroy();
     this.posY = this.posY + (this.velY);
   }
 

@@ -20,10 +20,24 @@ class PlayerShipHandler {
       inputHandler,
       hudHandler
     });
+
+
+    inputHandler.subscribe(this);
+  }
+
+  invoke = async ()=>{
+    await this.playerShipFactory.invoke();
   }
 
   shipDestroyed =(id)=>{
+  }
 
+  keyEvent = (event)=>{
+
+    if (event === "KeyE") {
+      this.playerShip3D = new PlayerShip3D(PlayerShipHandler.activeShip.posX,PlayerShipHandler.activeShip.posY );
+      PlayerShipHandler.activeShip.destroy();
+    }
   }
 
   create = async ()=>{

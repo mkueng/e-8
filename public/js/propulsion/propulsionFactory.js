@@ -1,5 +1,4 @@
 'use strict'
-
 class PropulsionFactory {
 
   static PROPULSION_TYPES = {

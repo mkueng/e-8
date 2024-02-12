@@ -17,7 +17,6 @@ onmessage = (evt)=>{
 
     case "create" : {
       const planetData = evt.data.payload;
-      //let planet = galaxyMap[distribution[Math.floor(Math.random()*99)]];
       proceduralPlanet.createPlanet({
         radius: planetData.radius,
         noiseRange : planetData.noiseRange,

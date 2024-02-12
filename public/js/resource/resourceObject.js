@@ -17,11 +17,12 @@ class ResourceObject {
     shield : "shield",
     asteroid : "asteroid",
     asteroidField : "asteroidField",
-    spaceStation : "spaceStation"
+    spaceStation : "spaceStation",
+    explosion: "explosion"
   }
 
   id
-  filename
+  fileName
   fileType
   resourcePath
   resource
@@ -30,12 +31,13 @@ class ResourceObject {
   /**
    *
    * @param category
+   * @param name
    * @param filename
    * @param fileType
    * @param resourcePath
    */
-  constructor({category, filename, fileType, resourcePath}) {
-    Object.assign(this,{category,filename,fileType,resourcePath})
+  constructor({category, name,  fileName, fileType, resourcePath}) {
+    Object.assign(this,{category, name, fileName,fileType,resourcePath})
     this.id = crypto.randomUUID();
   }
 
@@ -60,7 +62,7 @@ class ResourceObject {
   }
 
   get filename() {
-    return this.filename;
+    return this.fileName;
   }
 
   get type() {

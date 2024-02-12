@@ -1,52 +1,42 @@
 'use strict'
 
-/**
- * singleton
- */
 class ShieldFactory {
 
   static SHIELD_TYPES = {
-    classAShield : ClassAShield
+    classAShield : ClassAShield,
+    classBShield : ClassBShield
   }
 
-  constructor({
-    resourceHandler
-              }){
-
+  constructor({resourceHandler}){
     this.resourceHandler = resourceHandler;
   };
 
+  invoke = async ()=>{
+    await ShieldFactory.SHIELD_TYPES.classAShield.invoke(this.resourceHandler);
+    await ShieldFactory.SHIELD_TYPES.classBShield.invoke(this.resourceHandler);
+  }
+
   /**
    *
-   * @param shieldType
    * @param canvas
    * @param posDX
    * @param posDY
-   * @returns {Promise<*>}
+   * @param SHIELD_TYPES
+   * @param relatedShip
+   * @returns {SHIELD_TYPES.type}
    */
-  createShield = async ({
-                          relatedShip,
-                          type,
-                          canvas,
-                          posDX,
-                          posDY
+  createShield = ({
+                    canvas,
+                    posDX,
+                    posDY,
+                    type,
+                    relatedShip,
   })=>{
-
-    /**
-     *
-     * @param type
-     * @returns {Promise<*>}
-     */
-    const invokeShield = async (type) => {
-      await type.invoke(this.resourceHandler);
-      return new type({
-        relatedShip,
-        canvas,
-        posDX,
-        posDY
-      });
-    };
-
-    return invokeShield(type);
-  }
+    return new type({
+      canvas,
+      posDX,
+      posDY,
+      relatedShip
+    });
+  };
 }

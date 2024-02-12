@@ -1,43 +1,63 @@
 'use strict'
-
 class EnemyShipHandler {
 
   static enemyShips = {};
+  #canvas;
 
-  constructor({canvasHandler, resourceHandler}){
+  constructor({canvasHandler, resourceHandler, particleGenerator, utilityWorker}){
     this.canvasHandler = canvasHandler;
     this.resourceHandler = resourceHandler;
+    this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
     this.enemyShipFactory = new EnemyShipFactory({
       enemyShipHandler: this,
       resourceHandler,
-      canvasHandler
+      canvasHandler,
+      particleGenerator,
+      enemyShipWorker: this.enemyShipWorker
     });
   }
 
-
-  invoke = async ()=> {
-    const canvas = this.canvasHandler.getCanvas("backgroundFront").canvas;
-    await this.enemyShipFactory.invoke(canvas);
+  invoke = async () => {
+    this.#canvas = this.canvasHandler.getCanvas("backgroundFront").canvas;
+    await this.enemyShipFactory.invoke();
   }
 
-  startCreation = (interval)=>{
-
+  /**
+   *
+   * @param interval
+   */
+  startCreation = (interval) => {
 
     setTimeout(()=>{
-      this.#create(Math.floor(Math.random()*3)).then(()=>{
-        this.startCreation(Math.floor(Math.random()*1000+1000))
+      const variation = Math.floor(Math.random()*Object.entries(EnemyShipType1.shipTypeVariations).length);
+      this.#create(EnemyShipFactory.shipTypes.EnemyShipType1, EnemyShipType1.shipTypeVariations[""+variation]).then(()=>{
+        this.startCreation(Math.floor(Math.random()*2000+2000))
       });
-
     },interval)
   }
 
-  shipDestroyed = (id)=>{
+  /**
+   *
+   * @param id
+   */
+  shipDestroyed = (id) => {
     delete EnemyShipHandler.enemyShips[id];
   }
 
-  #create = async (type)=>{
-    const shipObject = await this.enemyShipFactory.createShip(EnemyShipFactory.SHIP_TYPE[""+type]);
+  /**
+   *
+   * @param type
+   * @param variation
+   * @returns {Promise<void>}
+   */
+  #create = async (type, variation) => {
+    const shipObject = await this.enemyShipFactory.createShip({
+      type: type,
+      typeVariation: variation,
+      canvas: this.#canvas
+    });
+
     GameObjectsHandler.instance.addGameObject(shipObject);
     EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
   }

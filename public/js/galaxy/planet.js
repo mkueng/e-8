@@ -1,3 +1,4 @@
+'use strict'
 class Planet extends GameObject {
 
   constructor({
@@ -13,6 +14,7 @@ class Planet extends GameObject {
                 canvas
               }) {
     super({
+      isActive: true,
       image,
       width,
       height,
@@ -23,15 +25,13 @@ class Planet extends GameObject {
       velX,
       velY,
       canvas,
-      isDestroyable: false,
-      isHitable : false
+      isDestroyable: false
     })
-    this.subCounter = 0;
   }
 
-  update=()=>{
+  update=(deltaTime)=>{
     if (this.posX > (-this.width)) {
-      this.posX = this.posX + this.velX;
+      this.posX = this.posX + this.velX * deltaTime;
     } else {
       this.destroy();
     }

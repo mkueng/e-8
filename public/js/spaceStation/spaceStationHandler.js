@@ -2,10 +2,10 @@ class SpaceStationHandler {
 
   static imageResourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.spaceStation,
-    id : "spaceStation_01",
-    filename : "spaceStation_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/spaceStation/spaceStation_02.png"
+    name : "spaceStation_01",
+    fileName : "spaceStation_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/spaceStation/"
   })
 
   static poi = {
@@ -19,13 +19,18 @@ class SpaceStationHandler {
   #galaxy;
   #resourceHandler;
 
-  constructor({galaxy, resourceHandler, canvasHandler}){
+  constructor({galaxy, resourceHandler, canvasHandler, inputHandler}){
     this.#galaxy = galaxy;
     this.#resourceHandler = resourceHandler;
     this.canvas = canvasHandler.getCanvas("backgroundFarthest").canvas;
     this.poiFactory = new PoiFactory({resourceHandler});
     this.poiInstance = null;
     galaxy.subscribe(this)
+    inputHandler.subscribe(this)
+
+  }
+
+  keyEvent= (event)=>{
 
   }
 
@@ -39,14 +44,15 @@ class SpaceStationHandler {
   update =({planetObject})=>{
     this.poiInstance = this.poiFactory.createPOI({...SpaceStationHandler.poi, canvas:this.canvas})
     let spaceStationObject = new GameObject({
+      isActive: true,
       identification : "spaceStation",
       image: SpaceStationHandler.imageResource.image,
       canvas: this.canvas,
-      width : SpaceStationHandler.imageResource.image.width*(planetObject.height/3000),
-      height: SpaceStationHandler.imageResource.image.height*(planetObject.height/3000),
-      posX: planetObject.posX+(planetObject.height*2),
+      width : SpaceStationHandler.imageResource.image.width*(planetObject.height/5000),
+      height: SpaceStationHandler.imageResource.image.height*(planetObject.height/5000),
+      posX: planetObject.posX+(planetObject.height),
       posY: planetObject.posY+planetObject.height/2,
-      velX: planetObject.velX,
+      velX: planetObject.velX-0.04,
       velY: planetObject.velY,
       dependencies : [this.poiInstance],
       isHittable : false,

@@ -2,10 +2,10 @@
 class ProceduralShipImage {
 
   constructor({
-    resourceHandler,
-    canvasHandler
+                resourceHandler,
+                canvasHandler
               }){
-    this.resourceLoader = new ResourceLoader();
+
     this.canvasHandler = canvasHandler;
     this.resourceHandler = resourceHandler;
     this.maxShipSize = 6;
@@ -15,10 +15,11 @@ class ProceduralShipImage {
    *
    * @param shipSize
    * @param offset
-   * @param scale
-   * @param tileSize
    */
-  setupCanvas = ({ shipSize, offset, scale, tileSize })=>{
+  setupCanvas = ({
+                   shipSize,
+                   offset
+  })=>{
     this.canvas = this.canvasHandler.createOffscreenCanvas({
       id: "spaceShip",
       width : (shipSize+2)*offset,
@@ -40,7 +41,7 @@ class ProceduralShipImage {
                             tiles,
                             filePrefix,
                             resourcePath
-  }) =>{
+  }) => {
 
     let allPromisesResolved;
     let resourceObjects = {};
@@ -54,7 +55,7 @@ class ProceduralShipImage {
 
       this.promises.push(this.resourceHandler.fetchResourceBatch({
         category : type,
-        filename : filePrefix +"_"+type,
+        fileName : filePrefix +"_"+type,
         fileType : "png",
         filePath : resourcePath,
         lowerLimit: 0,
@@ -79,7 +80,10 @@ class ProceduralShipImage {
    * @returns {Promise<*>}
    */
   getImageData = async ()=>{
-    return await this.canvas.convertToBlob();
+    const blob = await this.canvas.convertToBlob();
+    const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+    return ({blob, imageData})
+    //return await this.canvas.convertToBlob();
   }
 
 

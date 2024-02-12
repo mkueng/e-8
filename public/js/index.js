@@ -1,4 +1,4 @@
 window.addEventListener("load", function() {
-  ns.init.start();
+  e8.init.start();
 })
 

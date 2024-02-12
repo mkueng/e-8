@@ -16,15 +16,21 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
   #orientation = false;
   #tilesResourceObjects;
 
-
   constructor({
-    resourceHandler,
-    canvasHandler
+                resourceHandler,
+                canvasHandler
               }){
-    super({resourceHandler, canvasHandler});
+    super({
+      resourceHandler,
+      canvasHandler
+    });
   }
 
-  invoke = async()=>{
+  /**
+   *
+   * @returns {Promise<void>}
+   */
+  invoke = async () => {
     this.#tilesResourceObjects = await this.fetchResources({
       tiles : this.#tiles,
       filePrefix : this.#filePrefix,
@@ -47,9 +53,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
 
     this.setupCanvas({
       shipSize : shipSize,
-      offset : offset,
-      scale : scale,
-      tileSize : this.#tileSize
+      offset : offset
     })
 
     this.createShape({

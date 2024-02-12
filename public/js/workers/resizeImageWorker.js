@@ -8,7 +8,6 @@ onmessage = async (evt)=>{
   let imageBitmap = null;
 
   if (bitmaps[url]) {
-    console.log("blob exists");
     imageBitmap = bitmaps[url];
   }
   else {

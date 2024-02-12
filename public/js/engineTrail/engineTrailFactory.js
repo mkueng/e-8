@@ -1,16 +1,26 @@
+'use strict'
 class EngineTrailFactory {
 
   static imageResource
 
   constructor({
-    canvasHandler,
-    resourceHandler
+                canvasHandler,
+                resourceHandler
               }){
     this.canvasHandler = canvasHandler;
     this.resourceHandler = resourceHandler;
   }
 
-  invoke = async({posDX, posDY})=>{
+  /**
+   *
+   * @param posDX
+   * @param posDY
+   * @returns {Promise<void>}
+   */
+  invoke = async({
+                   posDX,
+                   posDY
+  })=>{
     EngineTrailFactory.imageResource = await this.resourceHandler.fetchImageResource({
       resourceObject: EngineTrailA.resourceObject
     });
@@ -18,16 +28,16 @@ class EngineTrailFactory {
     this.posDY = posDY
   }
 
-  create = (posX, posY)=>{
+  create = ({posX, posY}) => {
     let engineTrail = new EngineTrailA({
-      image : EngineTrailFactory.imageResource.image,
-      canvas :  this.canvasHandler.getCanvas("backgroundFront").canvas,
-      width : 5,
-      height : 7,
-      posX : posX,
-      posY : posY,
-      posDX : this.posDX,
-      posDY : this.posDY
+      image: EngineTrailFactory.imageResource.image,
+      canvas:  this.canvasHandler.getCanvas("backgroundFront").canvas,
+      width: 5,
+      height: 7,
+      posX: posX,
+      posY: posY,
+      posDX: this.posDX,
+      posDY: this.posDY
     })
 
     GameObjectsHandler.instance.addGameObject(engineTrail);

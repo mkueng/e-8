@@ -1,10 +1,9 @@
 'use strict'
-
 class ExplosionFactory {
 
   static EXPLOSION_TYPES = {
-    classAPlayerShipExplosion : ClassAPlayerShipExplosion,
-    classAEnemyShipExplosion : ClassAEnemyShipExplosion
+    classAPlayerShipExplosion: ClassAPlayerShipExplosion,
+    classAEnemyShipExplosion: ClassAEnemyShipExplosion
   }
 
   constructor({
@@ -13,34 +12,26 @@ class ExplosionFactory {
     this.resourceHandler = resourceHandler;
   }
 
-  createExplosion = async({
-                            type,
-                            canvas,
-                            posX,
-                            posY,
-                            posDX,
-                            posDY
-  })=>{
+  invoke = async ()=>{
 
-    /**
-     *
-     * @param type
-     * @returns {Promise<*>}
-     */
-    const instantiateExplosion = async (type)=>{
-      const spriteSheetResource = await type.fetchSpriteSheet(this.resourceHandler);
-      const soundResource = await type.fetchSound(this.resourceHandler);
-      return new type({
-        resourceHandler: this.resourceHandler,
-        spriteSheetResource,
-        soundResource,
-        canvas,
-        posX,
-        posY,
-        posDX,
-        posDY,
-      })
-    }
-    return instantiateExplosion(type);
+    await ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion.invoke(this.resourceHandler);
+    await ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion.invoke(this.resourceHandler);
+  }
+
+  createExplosion = ({
+                       type,
+                       canvas,
+                       posX,
+                       posY,
+                       posDX,
+                       posDY
+  })=>{
+    return new type({
+      canvas,
+      posX,
+      posY,
+      posDX,
+      posDY
+    })
   }
 }

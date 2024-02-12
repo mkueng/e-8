@@ -1,3 +1,4 @@
+'use strict'
 class Explosion extends GameObject {
 
   constructor({
@@ -22,6 +23,7 @@ class Explosion extends GameObject {
     canvas
               }){
     super({
+      isActive: true,
       spriteSheet,
       sound,
       spriteSheetRows,

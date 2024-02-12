@@ -1,3 +1,4 @@
+'use strict'
 class CollisionDetector {
 
   static instance = new this();
@@ -5,7 +6,7 @@ class CollisionDetector {
   /**
    *
    */
-  performCollisionCheck() {
+  performCollisionCheck = () => {
     const gameObjects = GameObjectsHandler.gameObjects;
     const len = gameObjects.length;
 
@@ -27,7 +28,7 @@ class CollisionDetector {
    * @param objB
    * @returns {boolean|*|boolean}
    */
-  checkCollision(objA, objB) {
+  checkCollision = (objA, objB) => {
     return (
         objA.isDestroyable && objB.canDestroy ||
         objB.isDestroyable && objA.canDestroy
@@ -43,14 +44,14 @@ class CollisionDetector {
    * @param objA
    * @param objB
    */
-  handleCollision(objA, objB) {
+  handleCollision = (objA, objB) => {
     objA.hit({
-      identification : objB.identification,
-      object : objB
+      identification: objB.identification,
+      object: objB
     });
     objB.hit({
-      identification : objA.identification,
-      object : objA
+      identification: objA.identification,
+      object: objA
     });
   }
 }

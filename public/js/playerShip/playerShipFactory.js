@@ -28,8 +28,8 @@ class PlayerShipFactory {
     this.hudHandler = hudHandler;
     this.engineTrailFactory = new EngineTrailFactory({canvasHandler,resourceHandler})
     this.weaponFactory = new WeaponFactory({resourceHandler});
-    this.propulsionFactory = new PropulsionFactory({resourceHandler})
-    this.shieldFactory = new ShieldFactory({resourceHandler})
+    this.propulsionFactory = new PropulsionFactory({resourceHandler});
+    this.shieldFactory = new ShieldFactory({resourceHandler});
     this.explosionFactory = new ExplosionFactory({resourceHandler});
     this.poiFactory = new PoiFactory({resourceHandler});
   }
@@ -37,6 +37,13 @@ class PlayerShipFactory {
   create3DShip = ()=>{
 
     return new PlayerShip3D()
+  }
+
+  invoke = async ()=>{
+    await this.shieldFactory.invoke();
+    await this.weaponFactory.invoke();
+    await this.explosionFactory.invoke();
+
   }
 
   /**
@@ -75,7 +82,7 @@ class PlayerShipFactory {
       const weaponProperties = weapons[weapon];
       weaponsInstances[weapon] = {
         controlAssignment: weaponProperties.controlAssignment,
-        units: await this.weaponFactory.createWeapon({
+        units: this.weaponFactory.createWeapon({
           canvas,
           type: weaponProperties.type,
           controlAssignment: weaponProperties.controlAssignment,

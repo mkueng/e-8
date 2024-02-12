@@ -1,22 +1,44 @@
 'use strict'
-
-/**
- * singleton
- */
 class StateHandler{
 
-  static instance = new this();
+  #fsm;
+  #gameController;
+  #states
 
-  #currentState = null;
+  static actions ={
+    startGame: "startGame",
+    pauseGame: "pauseGame",
+    restartGame: "restartGame",
+    endGame: "endGame",
+    endApp: "endApp"
 
-  invoke(){
   }
 
-  get currentState() {
-    return this.#currentState;
+  constructor(gameController){
+    this.#gameController = gameController;
+    this.#fsm = new FiniteStateMachine();
+    this.#states = [
+      { name: 'AppStarted', instance: new AppStarted('AppStarted', gameController) },
+      { name: 'GameStarted', instance: new GameStarted('GameStarted', gameController) },
+      { name: 'GamePaused', instance: new GamePaused('GamePaused', gameController) },
+      { name: 'GameRestarted', instance: new GameRestarted('GameRestarted', gameController) },
+    ];
+
+    this.#fsm.registerStates(this.#states);
+    this.#fsm.setState('AppStarted');
+
+
   }
 
-  set currentState(state) {
-    this.#currentState = state;
+  getState = () =>{
+    return this.#fsm.getState();
+  }
+
+  setState = (name) =>{
+   return this.#fsm.setState(name)
+  }
+
+  trigger = (action) =>{
+    return this.#fsm.trigger(action);
   }
 }

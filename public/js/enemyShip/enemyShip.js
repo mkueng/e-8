@@ -1,6 +1,8 @@
+'use strict'
 class EnemyShip extends GameObject {
   constructor({
                 image,
+                imageData,
                 spriteSheet,
                 currentFrame,
                 stride,
@@ -19,12 +21,16 @@ class EnemyShip extends GameObject {
                 canvas,
                 dependencies,
                 weapons,
+                shield,
                 terminationSequence,
+                particles,
                 enemyShipHandler
               }) {
     super({
-      identification : "enemyShip",
+      isActive: true,
+      identification: "enemyShip",
       image,
+      imageData,
       currentFrame,
       stride,
       spriteSheet,
@@ -41,21 +47,33 @@ class EnemyShip extends GameObject {
       posY,
       posDX,
       posDY,
-      isHitable: true,
-      isDestroyable : true,
+      isDestroyable: true,
       terminationSequence
-
     })
+
     Object.assign(this, {
       dependencies,
       weapons,
+      shield,
       terminationSequence,
-      enemyShipHandler
+      enemyShipHandler,
+      imageData,
+      particles
     });
+
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
+    this.shield.relatedShip = this
+
+    //this.particleCanvas = new CanvasHandler().getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
+    //this.particleCanvasContext = this.particleCanvas.getContext("2d");
+    //this.setupParticleTermination();
+    this.treminationAnimationSequenceId = null;
   }
 
-  fireWeapon = ()=>{
+  /**
+   *
+   */
+  fireWeapon = () => {
     if (this.activeWeapon.length > 0) {
       let weapon = this.activeWeapon.pop();
       weapon.active = true;
@@ -66,48 +84,94 @@ class EnemyShip extends GameObject {
     }
   }
 
-  invokeTerminationSequence = ()=>{
+  /**
+   *
+   */
+  invokeShield = () => {
+    this.shield.posX = this.posX;
+    this.shield.posY = this.posY;
+    GameObjectsHandler.instance.addGameObject(this.shield);
+    SoundHandler.playFX(this.shield.sound);
+    this.shield.strength < 0 ? this.shield.strength = 1 : this.shield.strength -= 50;
+  }
+
+  invokeTerminationSequence = () => {
+
     let i = 0;
-    SoundHandler.playFX(this.terminationSequence[0].sound);
-    for (const explosion of this.terminationSequence){
+    for (const explosion of this.terminationSequence) {
       i++;
       explosion.posX = this.posX;
       explosion.posY = this.posY;
       explosion.velX = this.velX;
       explosion.velY = this.velY;
-      setTimeout(()=>{
+      setTimeout(() => {
         GameObjectsHandler.instance.addGameObject(explosion);
-      }, Math.random()*100*i)
+      }, Math.random() * 100 * i)
     }
+
+    this.particles.posX=this.posX;
+    this.particles.posY = this.posY;
+    this.particles.velX = this.velX;
+    this.particles.velY = this.velY;
+    GameObjectsHandler.instance.addGameObject(this.particles);
+
     this.destroy();
     this.enemyShipHandler.shipDestroyed(this.id);
   }
 
-  hit = (hitBy)=> {
-    //we're not hit by ourselves?
-    if (hitBy.identification !== "enemyWeapon") {
+
+
+
+  /**
+   *
+   * @param hitBy
+   */
+  hit = (hitBy) => {
+    //hit by ourselves?
+    if (hitBy.identification === "enemyWeapon") {
+      return;
+    }
+
+    this.invokeShield();
+    if (this.shield.strength <= 1){
       this.invokeTerminationSequence();
+    }
+    // destroy hitBy object
+    if (hitBy.identification !== "playerShip" && hitBy.isDestroyable === true) {
+      hitBy.object.destroy();
     }
   }
 
-  subscriptionsUpdate = (message, obj)=>{
+  /**
+   *
+   * @param message
+   * @param obj
+   */
+  subscriptionsUpdate = (message, obj) => {
     this.weapons[PhotonTorpedoEnemy].unshift(obj);
   }
 
-  update = (dt)=>{
+  /**
+   *
+   * @param dt
+   */
+  update = (dt) => {
     if (
       this.posY > PlayerShipHandler.activeShip.posY &&
       this.posY < PlayerShipHandler.activeShip.posY+20 &&
       this.posX > PlayerShipHandler.activeShip.posX
     ) {
       this.fireWeapon();
-    }
-    if (this.posX > - this.width) {
+    }1
+    if (this.posX >- this.width) {
       this.posX = this.posX + (this.velX*dt)
     } else {
       this.destroy();
       this.enemyShipHandler.shipDestroyed(this.id);
     }
-    this.posY = this.posY +(this.velY*dt);
+    this.posY = this.posY + (this.velY*dt);
+
+
+
   }
 }

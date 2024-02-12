@@ -2,11 +2,15 @@
 
 class ClassAShield extends Shield {
 
+  static soundResource;
+  static imageResource;
+
   static resourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.shield,
-    filename: "shield_sheet",
-    type: ResourceObject.TYPES.png,
-    resourcePath: "/resources/shields/shield_sheet_02.png"
+    name:  "shield_sheet_02",
+    fileName: "shield_sheet_02",
+    fileType: ResourceObject.TYPES.png,
+    resourcePath: "/resources/shields/"
   })
 
   static soundResourceObject = new ResourceObject({
@@ -16,42 +20,40 @@ class ClassAShield extends Shield {
     resourcePath: "/resources/sounds/shield.wav"
   })
 
-  static soundResource;
-  static imageResource;
-
   static async invoke(resourceHandler){
     ClassAShield.imageResource = await resourceHandler.fetchImageResource({
       resourceObject: ClassAShield.resourceObject
     });
-    ClassAShield.soundResource = await resourceHandler.fetchSoundResource({resourceObject:ClassAShield.soundResourceObject});
-
+    ClassAShield.soundResource = await resourceHandler.fetchSoundResource({
+      resourceObject:ClassAShield.soundResourceObject
+    });
   }
 
   constructor({
-    relatedShip,
-    canvas,
-    posDX,
-    posDY
+                canvas,
+                posDX,
+                posDY,
+                relatedShip
   }){
     super({
-      relatedShip : relatedShip,
-      spriteSheet : ClassAShield.imageResource.image,
-      spriteSheetRows : 4,
-      spriteSheetColumns : 8,
-      width : ClassAShield.imageResource.image.width / 8+50,
-      height : ClassAShield.imageResource.image.height /4+50,
-      frames : 32,
-      currentFrame : 0,
-      step : 50,
-      strideX : ClassAShield.imageResource.image.width / 8,
-      strideY : ClassAShield.imageResource.image.height /4,
-      stride : ClassAShield.imageResource.image.height / 32,
-      sound : ClassAShield.soundResource,
-      canvas : canvas,
-      posDX : posDX,
-      posDY : posDY,
-      isHittable : false,
-      strength : 100
+      canvas: canvas,
+      currentFrame: 0,
+      frames: 32,
+      height: ClassAShield.imageResource.image.height /4+50,
+      isHittable: false,
+      posDX: posDX,
+      posDY: posDY,
+      sound: ClassAShield.soundResource,
+      spriteSheet: ClassAShield.imageResource.image,
+      spriteSheetColumns: 8,
+      spriteSheetRows: 4,
+      step: 50,
+      strength: 100,
+      stride: ClassAShield.imageResource.image.height / 32,
+      strideX: ClassAShield.imageResource.image.width / 8,
+      strideY: ClassAShield.imageResource.image.height /4,
+      width: ClassAShield.imageResource.image.width / 8+50,
+      relatedShip: relatedShip,
     });
   }
 }

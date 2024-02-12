@@ -1,27 +1,39 @@
 class State {
 
-  #ship = null;
-  #stage = null;
+  #transitions;
+  #name;
+  #gameController;
 
-  constructor(ship, stage){
-    this.#ship = ship;
-    this.#stage = stage;
+
+  get name() {
+    return this.#name;
   }
 
-  get ship() {
-    return this.#ship;
+  get transitions(){
+    return this.#transitions;
   }
 
-  set ship(value) {
-    this.#ship = value;
+  get gameController(){
+    return this.#gameController;
   }
 
-  get stage() {
-    return this.#stage;
+  constructor(name, gameController){
+    this.#name = name;
+    this.#gameController = gameController;
+    this.#transitions = {};
   }
 
-  set stage(value) {
-    this.#stage = value;
+
+  addTransition(action, nextState){
+    this.#transitions[action] = nextState;
+  }
+
+  enter() {
+    console.log(`Entering state: ${this.#name}`);
+  }
+
+  exit() {
+    console.log(`Exiting state: ${this.#name}`);
   }
 }
 

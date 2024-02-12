@@ -1,4 +1,4 @@
-window.global.colors = {
+e8.global.colors = {
    richBlack: "#461D2D",
    midnightGreen: "#005F73",
    darkCyan: "#0A9396",

@@ -25,9 +25,8 @@ const UnitTest = (function () {
   }
 
   function handleError(description, error) {
-    console.error(error);
     document.getElementById("testResults").innerHTML += `<p class='results error'>${description}</p>`;
-    document.getElementById("testResults").innerHTML += `<p class='results error'>${error.stack}</p>`;
+    document.getElementById("testResults").innerHTML += `<p class='results error'>${error}</p>`;
     hasTestFailed = true;
   }
 
@@ -74,7 +73,10 @@ const UnitTest = (function () {
 
     assertEqual: function (evaluated, expected) {
       if (evaluated !== expected) {
-        throw new Error();
+       // document.getElementById("testResults").innerHTML += `<p class='results error'>expected: ${expected}</p>`;
+        // document.getElementById("testResults").innerHTML += `<p class='results error'>evaluated: ${evaluated}</p>`;
+        throw new Error(`expected: ${expected} | `+ `evaluated: ${evaluated}`);
+
       }
     },
 

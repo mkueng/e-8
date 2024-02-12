@@ -11,6 +11,7 @@ class Poi extends GameObject {
     canvas
               }){
     super({
+      isActive:true,
       image,
       width,
       height,

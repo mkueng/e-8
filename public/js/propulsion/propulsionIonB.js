@@ -1,5 +1,4 @@
 'use strict'
-
 class PropulsionIonB extends Propulsion{
 
   static resourceObject = new ResourceObject({
@@ -21,21 +20,21 @@ class PropulsionIonB extends Propulsion{
                 posDY
               }){
     super({
-      spriteSheet :  PropulsionIonB.imageResource.image,
-      spriteSheetRows : 7,
-      spriteSheetColumns : 1,
-      width : PropulsionIonB.imageResource.image.width,
-      height : PropulsionIonB.imageResource.image.height / 12,
-      frames : 7,
-      currentFrame : 0,
-      step : 50,
-      strideX : PropulsionIonB.imageResource.image.width / 1,
-      strideY : PropulsionIonB.imageResource.image.height / 8,
-      stride : PropulsionIonB.imageResource.image.height / 8,
-      canvas : canvas,
-      posDX : posDX,
-      posDY : posDY,
-      isHittable : false
+      spriteSheet: PropulsionIonB.imageResource.image,
+      spriteSheetRows: 7,
+      spriteSheetColumns: 1,
+      width: PropulsionIonB.imageResource.image.width,
+      height: PropulsionIonB.imageResource.image.height / 12,
+      frames: 7,
+      currentFrame: 0,
+      step: 50,
+      strideX: PropulsionIonB.imageResource.image.width / 1,
+      strideY: PropulsionIonB.imageResource.image.height / 8,
+      stride: PropulsionIonB.imageResource.image.height / 8,
+      canvas: canvas,
+      posDX: posDX,
+      posDY: posDY,
+      isHittable: false
     });
   }
 }

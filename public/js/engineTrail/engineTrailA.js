@@ -1,10 +1,12 @@
+'use strict'
 class EngineTrailA extends EngineTrail {
 
   static resourceObject = new ResourceObject({
-    id: "engineTrailA",
-    filename : "trail_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/trail/trail_01/images/trail_01.png"
+    category: ResourceObject.CATEGORIES.propulsion,
+    name: "engineTrailA",
+    fileName : "trail_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/trail/trail_01/images/"
   })
 
 

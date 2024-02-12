@@ -1,3 +1,4 @@
+'use strict'
 class PlayerShip extends GameObject {
 
   /**
@@ -48,6 +49,7 @@ class PlayerShip extends GameObject {
                 hudHandler
               }) {
     super({
+      isActive: true,
       identification: "playerShip",
       image,
       currentFrame,
@@ -66,13 +68,11 @@ class PlayerShip extends GameObject {
       posY,
       posDX,
       posDY,
-      isHittable: true,
       isDestroyable: true,
       canDestroy: true,
       hitWidth: width+ 70
     })
 
-    // Use object destructuring for assignment
     Object.assign(this, {
       dependencies,
       weapons,
@@ -86,8 +86,8 @@ class PlayerShip extends GameObject {
 
     // Initialize properties
     this.keyEvents = {};
-    this.upperBoundY = window.global.screenHeight - this.height;
-    this.upperBoundX = window.global.screenWidth - this.width;
+    this.upperBoundY = e8.global.screenHeight - this.height;
+    this.upperBoundX = e8.global.screenWidth - this.width;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
@@ -106,6 +106,7 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
 
     // Update shield in the HUD
+
     this.hudHandler.updateHudInfo({
       shield : this.shield.strength
     });
@@ -127,22 +128,26 @@ class PlayerShip extends GameObject {
     this.keyEvents[key] = execute;
   }
 
-
+  /**
+   *
+   */
   addDependencies = ()=>{
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
+  /**
+   *
+   */
   initializeWeapons = ()=>{
     for (const weapon in this.weapons) {
       const { controlAssignment, units } = this.weapons[weapon];
-
       this.addKeyEvent({
         key: controlAssignment,
         execute: () => {
           if (units.length > 0) {
             const activeWeapon = units.pop();
             if (activeWeapon.ready === true) {
-              activeWeapon.activate(this.posX, this.posY, this);
+              activeWeapon.activate({posX: this.posX, posY: this.posY, dependency: this});
             } else {
               units.unshift(activeWeapon);
             }
@@ -151,7 +156,6 @@ class PlayerShip extends GameObject {
       });
       units.forEach(unit => unit.subscribe(this));
     }
-    console.log("keyEvents: ", this.keyEvents);
   };
 
 
@@ -164,7 +168,10 @@ class PlayerShip extends GameObject {
     this.weapons[obj.uniqueIdentifier].units.unshift(obj);
   }
 
-  invokeShield = ()=>{
+  /**
+   *
+   */
+  invokeShield = () => {
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
@@ -172,7 +179,10 @@ class PlayerShip extends GameObject {
     this.shield.strength < 0 ?  this.shield.strength = 1: this.shield.strength -=10;
   }
 
-  invokeTerminationSequence = ()=>{
+  /**
+   *
+   */
+  invokeTerminationSequence = () => {
     this.terminationSequence.posX = this.posX;
     this.terminationSequence.posY = this.posY;
     this.terminationSequence.velX = this.velX;
@@ -185,13 +195,19 @@ class PlayerShip extends GameObject {
     this.playerShipHandler.shipDestroyed(this);
   }
 
-
+  /**
+   *
+   */
   destroyDependencies = ()=>{
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
   }
 
+  /**
+   *
+   * @param hitBy
+   */
   hit = (hitBy)=> {
     if (hitBy.identification === "weaponPlayer") {
       return; // Ignore hits from player's own weapon
@@ -255,15 +271,17 @@ class PlayerShip extends GameObject {
     this.posX = this.posX + (this.velX*deltaTime);
 
     // engineTrail
+
+
     if (this.velX>1){
       if (this.velY>1){
-        this.engineTrailFactory.create(this.posX, this.posY-4);
+        this.engineTrailFactory.create({posX: this.posX, posY: this.posY-4});
       } else
       if (this.velY < -1){
-        this.engineTrailFactory.create(this.posX, this.posY+4);
+        this.engineTrailFactory.create({posX:this.posX, posY:this.posY+4});
       } else
       {
-        this.engineTrailFactory.create(this.posX, this.posY);
+        this.engineTrailFactory.create({posX:this.posX, posY: this.posY});
       }
     }
 

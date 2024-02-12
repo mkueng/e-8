@@ -1,115 +1,114 @@
 'use strict'
-
 class GameObject {
 
   /**
    *
+   * @param accX
+   * @param accY
+   * @param alpha
+   * @param animationLoop
+   * @param canDestroy
+   * @param canvas
+   * @param currentFrame
+   * @param dependencies
+   * @param frames
+   * @param height
+   * @param hitWidth
    * @param identification
    * @param image
-   * @param sound
    * @param imageData
+   * @param isHittable
+   * @param isDestroyable
+   * @param maxVelX
+   * @param maxVelY
+   * @param posDX
+   * @param posDY
+   * @param posX
+   * @param posY
+   * @param sound
    * @param spriteSheet
-   * @param animationLoop
-   * @param alpha
    * @param spriteSheetColumns
    * @param spriteSheetRows
-   * @param currentFrame
    * @param stride
    * @param strideX
    * @param strideY
-   * @param step
-   * @param frames
-   * @param width
-   * @param height
-   * @param posX
-   * @param posY
-   * @param posDX
-   * @param posDY
+   * @param subscriber
    * @param velX
    * @param velY
-   * @param maxVelX
-   * @param maxVelY
-   * @param accX
-   * @param accY
-   * @param canvas
-   * @param isHittable
-   * @param hitWidth
-   * @param isDestroyable
-   * @param canDestroy
-   * @param subscriber
-   * @param dependencies
+   * @param width
+   * @param isActive
    */
   constructor({
+                accX,
+                accY,
+                alpha,
+                animationLoop,
+                canDestroy,
+                canvas,
+                currentFrame,
+                dependencies,
+                frames,
+                height,
+                hitWidth,
                 identification,
                 image,
-                sound,
                 imageData,
+                isActive,
+                isHittable,
+                isDestroyable,
+                maxVelX,
+                maxVelY,
+                posDX,
+                posDY,
+                posX,
+                posY,
+                sound,
                 spriteSheet,
-                animationLoop,
-                alpha,
                 spriteSheetColumns,
                 spriteSheetRows,
-                currentFrame,
                 stride,
                 strideX,
                 strideY,
-                step,
-                frames,
-                width,
-                height,
-                posX,
-                posY,
-                posDX,
-                posDY,
+                subscriber,
                 velX,
                 velY,
-                maxVelX,
-                maxVelY,
-                accX,
-                accY,
-                canvas,
-                isHittable,
-                hitWidth,
-                isDestroyable,
-                canDestroy,
-                subscriber,
-                dependencies
+                width
               }){
-    this.id = crypto.randomUUID();
-    this.identification = identification;
-    this.active = false;
-    this.image = image;
-    this.sound = sound;
+    this.accX = accX;
+    this.accY = accY;
+    this.alpha = alpha || null;
+    this.animationLoop = animationLoop || null;
+    this.canDestroy = canDestroy || false;
+    this.canvas = canvas;
     this.currentFrame = currentFrame;
-    this.stride = stride;
-    this.strideX = strideX;
-    this.strideY = strideY;
+    this.dependencies = dependencies;
+    this.frames = frames;
+    this.height = height;
+    this.hitWidth = hitWidth || width;
+    this.identification = identification;
+    this.image = image;
+    this.isActive = isActive || false;
+    this.isDestroyable = isDestroyable || false;
+    this.isHittable = isHittable || false;
+    this.maxVelX = maxVelX;
+    this.maxVelY = maxVelY;
+    this.posDX = posDX || 0;
+    this.posDY = posDY || 0;
+    this.posX = posX;
+    this.posY = posY;
+    this.sound = sound;
     this.spriteSheet = spriteSheet;
     this.spriteSheetColumns = spriteSheetColumns;
     this.spriteSheetRows = spriteSheetRows;
-    this.step = step;
-    this.frames = frames;
-    this.width = width;
-    this.height = height;
-    this.posX = posX;
-    this.posY = posY;
-    this.posDX = posDX || 0;
-    this.posDY = posDY || 0;
+    this.stride = stride;
+    this.strideX = strideX;
+    this.strideY = strideY;
+    this.subscriber = subscriber;
     this.velX = velX || 0;
     this.velY = velY || 0;
-    this.maxVelX = maxVelX;
-    this.maxVelY = maxVelY;
-    this.accX = accX;
-    this.accY = accY;
-    this.canvas = canvas;
-    this.isHitable = isHittable || false;
-    this.isDestroyable = isDestroyable || false;
-    this.canDestroy = canDestroy || false;
-    this.animationLoop = animationLoop || null;
-    this.alpha = alpha || null;
-    this.hitWidth = hitWidth || width;
-    this.subscriber = subscriber;
-    this.dependencies = dependencies;
+    this.width = width;
+    this.id = crypto.randomUUID();
+    this.context = null;
 
     if (canvas){
       this.context = canvas.getContext("2d");
@@ -120,33 +119,65 @@ class GameObject {
     }
   }
 
+  /**
+   *
+   */
   addDependencies(){
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
+  /**
+   *
+   * @param subscriber
+   */
   subscribe(subscriber){
     this.subscriber = subscriber;
   }
 
-  unsubscribe(subscriber){
+  /**
+   *
+   */
+  unsubscribe(){
     this.subscriber = null;
   }
 
+  /**
+   *
+   */
   activate(){};
+
+  /**
+   *
+   */
   deactivate(){};
+
+  /**
+   *
+   * @param hitBy
+   */
   hit (hitBy){};
 
+  /**
+   *
+   */
   destroy(){
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
   };
 
+  /**
+   *
+   */
   destroyDependencies(){
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
   }
 
+  /**
+   *
+   */
   render() {
+    if (!this.isActive) return;
     if (this.alpha) {
       this.context.globalAlpha = this.alpha;
     }
@@ -188,6 +219,7 @@ class GameObject {
     if (this.alpha) {
       this.context.globalAlpha = 1;
     }
+
   }
 
   /**
@@ -195,24 +227,26 @@ class GameObject {
    * @param deltaTime
    */
   update(deltaTime) {
-    if (this.posX > 0 - this.width) {
-      this.posX = this.posX + (this.velX*deltaTime)
-    } else {
-     this.destroy();
+    if (this.isActive) {
+      if (this.posX > 0 - this.width) {
+        this.posX = this.posX + (this.velX*deltaTime)
+      } else {
+        this.destroy();
+        if (this.dependencies) {
+          for (const dependency of this.dependencies){
+            dependency.destroy();
+          }
+        }
+      }
+      this.posY = this.posY +(this.velY*deltaTime);
+
+      // position dependencies
       if (this.dependencies) {
         for (const dependency of this.dependencies){
-          dependency.destroy();
+          dependency.posX = this.posX;
+          dependency.posY = this.posY;
         }
       }
     }
-    this.posY = this.posY +(this.velY*deltaTime);
-
-    // position dependencies
-    if (this.dependencies) {
-      for (const dependency of this.dependencies){
-        dependency.posX = this.posX;
-        dependency.posY = this.posY;
-      }
-    }
-  };
+  }
 }

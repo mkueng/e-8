@@ -7,30 +7,26 @@ class GameObjectsHandler {
   static contexts = {};
   static gameObjectsToRemove = {};
 
-  invoke(){
-  }
 
   /**
    *
    * @param gameObject
    */
-  addGameObject = (gameObject)=>{
+  addGameObject = (gameObject) => {
     try {
-      GameObjectsHandler.contexts[gameObject.canvas. id] = gameObject.context;
+      GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
     } catch(e){
-
+       console.error(e);
     }
-
     GameObjectsHandler.gameObjects.push(gameObject);
-   // console.log("gameObjects: ", GameObjectsHandler.gameObjects);
-
+    //console.log(GameObjectsHandler.gameObjects);
   }
 
   /**
    *
    * @param id
    */
-  addGameObjectToRemoveQueue = (id)=>{
+  addGameObjectToRemoveQueue = (id) => {
     GameObjectsHandler.gameObjectsToRemove[id]= id;
   }
 
@@ -38,7 +34,7 @@ class GameObjectsHandler {
    *
    * @param id
    */
-  removeGameObject(id) {
+  removeGameObject = (id) => {
     const removedObject = GameObjectsHandler.gameObjects.find(obj => obj.id === id);
 
     if (removedObject) {
@@ -47,7 +43,7 @@ class GameObjectsHandler {
       }
       GameObjectsHandler.gameObjects = GameObjectsHandler.gameObjects.filter(obj => obj.id !== id);
       delete GameObjectsHandler.gameObjectsToRemove[id];
+      //console.log(GameObjectsHandler.gameObjects);
     }
-
   }
 }

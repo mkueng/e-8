@@ -5,107 +5,160 @@ body {
     background: black;
     font-family: 'Bruno Ace SC', cursive;
     font-family: 'Exo 2', sans-serif;
+}
 
+
+input[type="range"] {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    cursor: pointer;
+    outline: none;
+    height: 18px;
+    background: #666;
 
 }
 
-.overlay {
+input[type="range"]::-webkit-slider-thumb {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    height: 14px;
+    width: 14px;
+    background-color: #52BBB7;
+
+}
+
+@font-face {
+    font-family: brunoAce;
+    src: url(../resources/fonts/BrunoAceSC-Regular.ttf)
+}
+
+.hidden{
+    display: none;
+}
+
+.settings {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(48,25,52,0.75);
+    top:50px;
+    height: 80vh;
+    width:80vw;
+    z-index: 1000;
+    color: #005F73;
+    font-family: brunoAce;
 }
 
+.title {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    width: 100vw;
+}
+
+.properties {
+    position: absolute;
+    margin-top:100px;
+    margin-left:50px;
+    width:300px;
+    font-size:27px;
+
+}
+.property {
+    height:30px;
+    border:solid;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+}
+.label {
+    position: absolute;
+    left: 10px;
+
+}
+.control {
+    position: absolute;
+    right: 10px;
+}
 
 .fullscreenCanvas{
     padding: 0;
     margin: auto;
     display: block;
-
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
 }
-
-.shipCanvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 200;
-}
-
-.weaponCanvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 300;
-}
-
 .backdropCanvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     z-index: -1;
 }
-.hazeCanvas {
-    padding: 0;
-    margin: auto;
-    display: block;
-
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
+.backgroundFarthestCanvas {
+    z-index: 0;
 }
+.planetsCanvas {
+    z-index: 5;
+}
+
+.backgroundFarCanvas {
+    z-index: 10;
+}
+.dustCanvas {
+    z-index: 15;
+}
+.backgroundMiddleFarCanvas {
+    z-index: 20;
+}
+
+.backgroundMiddleCanvas {
+    z-index: 30;
+}
+.backgroundFrontCanvas {
+    z-index: 40;
+}
+
+.backgroundFaceCanvas {
+    z-index: 50;
+}
+.shipCanvas {
+    z-index: 35;
+}
+.weaponCanvas {
+    z-index: 35;
+}
+
+.settingsCanvas {
+    z-index: 999;
+}
+
 
 .sectionCanvasBottom {
     position: absolute;
     display: block;
-    z-index: 999;
+    z-index: 500;
 
 }
 .sectionCanvasLeft {
     position: absolute;
     display: block;
-    z-index: 999;
+    overflow: hidden;
+    z-index: 500;
 
 }
 
 .sectionCanvasMiddle {
     position: absolute;
     display: block;
-    z-index: 999;
+    z-index: 500;
 
 }
 
 .sectionCanvasRight {
     position: absolute;
     display: block;
-    z-index: 999;
+    z-index: 500;
+    overflow: hidden;
 }
 
 

@@ -4,7 +4,7 @@ class ResourceLoader {
   #resourceWorker;
 
   constructor(){
-    this.#resourceWorker = new Worker('js/workers/fetchResourcesWorker.js');
+    //this.#resourceWorker = new Worker('js/workers/fetchResourcesWorker.js');
   }
 
   /**
@@ -13,9 +13,12 @@ class ResourceLoader {
    * @returns {Promise<unknown>}
    */
   #loadImage = (resourceObject) => {
+    console.log("resourceObject: ", resourceObject);
     return new Promise((resolve, reject) => {
+      const resourcePath = resourceObject.resourcePath+resourceObject.filename+"."+resourceObject.type;
+      console.log("resourcePath: ", resourcePath);
       resourceObject.image = new Image();
-      resourceObject.image.src = resourceObject.resourcePath;
+      resourceObject.image.src = resourcePath;
       resourceObject.image.onload = () => resolve(resourceObject);
       resourceObject.image.onerror = () => reject(new Error('failed to load:'+resourceObject.resourcePath));
       resourceObject.image.onabort = () => reject(new Error('resource loading aborted'));
@@ -34,16 +37,16 @@ class ResourceLoader {
    * @param upperLimit integer
    * @returns {Promise<Awaited<*>[]>}
    */
-  fetchResourceBatch = async ({category, filename, fileType, filePath, lowerLimit, upperLimit})=>{
+  fetchResourceBatch = async ({category, fileName, fileType, filePath, lowerLimit, upperLimit})=>{
     let resourceObjects = [];
 
     for (let i = lowerLimit; i < upperLimit; i++){
       resourceObjects.push(new ResourceObject({
-        id : filename+i,
+        id : fileName+i,
         category : category,
-        filename : filename+"_"+i,
+        fileName : fileName+"_"+i,
         fileType : ResourceObject.TYPES[fileType],
-        resourcePath : filePath+filename+"_"+i+"."+ResourceObject.TYPES[fileType],
+        resourcePath : filePath,
         image : null
       }))
     }
@@ -56,7 +59,7 @@ class ResourceLoader {
    * @param resourceObject
    * @returns {Promise<*>}
    */
-  fetchResource = async (resourceObject)=> {
+  fetchResource = async (resourceObject) => {
     return await this.#loadImage(resourceObject)
   }
 
@@ -74,7 +77,7 @@ class ResourceLoader {
       return  [].concat(...resultsArray)
 
     }catch(e){
-      Log.error(e);
+      console.error(e)
     }
   }
 }

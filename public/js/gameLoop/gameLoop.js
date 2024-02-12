@@ -1,30 +1,39 @@
 'use strict'
 class GameLoop {
 
-  #elapsed = 0;
-  #then = 0;
-  #fps = 60;
-  #fpsInterval = 0;
-  #performanceCount = 0;
-  #start = 0;
-  #end  = 0;
-  #perfDif = 0;
-  #performanceCumul = 0
-  #stage = null;
-  #coordinate = 100000;
+  #elapsedTime = 0;
+  #fpsTarget = 60;
+  #renderTargetInterval = 0;
+  #galaxyCoordinatesIncrement = 10;
+  #gameSpeedFactor = 0.1;
+  #hudHandler;
+  #isRunning = false;
   #subscribers = [];
-  #toggleUpdate = true;
+  #coordinate = 0;
+  #animationId = null;
+  #frameCounter;
+  #deltaTime;
+  #oldTime;
+  #now;
+  #then;
 
-  constructor({infoHandler, hudHandler}){
-    this.hudHandler = hudHandler;
-    this.infoHandler = infoHandler;
+  constructor({hudHandler}){
+    this.#hudHandler = hudHandler;
   }
 
-  subscribe=(subscriber)=>{
+  /**
+   *
+   * @param subscriber
+   */
+  subscribe = (subscriber) => {
     this.#subscribers.push(subscriber);
   }
 
-  unsubscribe = (subscriber)=>{
+  /**
+   *
+   * @param subscriber
+   */
+  unsubscribe = (subscriber) => {
     const index = this.#subscribers.indexOf(subscriber);
     this.#subscribers.splice(index, 1);
   }
@@ -33,11 +42,15 @@ class GameLoop {
    *
    * @param deltaTime
    */
-  #update=(deltaTime)=> {
-    //increment current coordinate
-    this.#coordinate+=10;
+  #update = (deltaTime) => {
 
-    //remove gameObjects
+    //increment current coordinate
+    this.#coordinate+=this.#galaxyCoordinatesIncrement;
+
+    //collision checks
+    CollisionDetector.instance.performCollisionCheck();
+
+    //remove obsolete gameObjects
     for (const gameObjectToRemove in GameObjectsHandler.gameObjectsToRemove) {
       GameObjectsHandler.instance.removeGameObject(gameObjectToRemove);
     }
@@ -51,83 +64,90 @@ class GameLoop {
   /**
    *
    */
-  #render=()=>{
-    this.#performanceCount++;
-
-    //start measuring render time
-    this.#start = window.performance.now();
-
+  #render = () => {
     //clear canvas(es)
     for (let context in GameObjectsHandler.contexts){
-      GameObjectsHandler.contexts[context].clearRect(0,0,window.global.screenWidth, window.global.screenHeight);
+      GameObjectsHandler.contexts[context].clearRect(0,0,e8.global.screenWidth, e8.global.screenHeight);
     }
-
-
-
-    //perform collision checks
-    CollisionDetector.instance.performCollisionCheck();
 
     //render game objects
     for (let i=0, len = GameObjectsHandler.gameObjects.length; i < len; i++){
       GameObjectsHandler.gameObjects[i].render();
     }
-
-    this.#toggleUpdate = !this.#toggleUpdate;
-    //end measuring render time
-    this.#end = window.performance.now();
-    this.#perfDif = this.#end-this.#start;
-    this.#performanceCumul = this.#performanceCumul+this.#perfDif;
   }
-
-
 
   /**
    *
    * @param newTime
    */
-  #animate = (newTime)=>{
-    requestAnimationFrame(this.#animate);
-    this.now = Date.now();
-    this.elapsed = this.now - this.then;
-    this.delta = newTime - this.oldTime;
-    this.oldTime = newTime;
-    this.#update(this.delta/10);
 
-    // if enough time has elapsed, draw the next frame
-    if ( this.elapsed > this.#fpsInterval) {
-      // adjust for fpsInterval not being multiple of fps
-      this.then = this.now - (this.elapsed % this.#fpsInterval);
-      this.#render(this.#elapsed);
+
+  #animate = (newTime) => {
+
+      this.#animationId = requestAnimationFrame(this.#animate);
+
+      //using Date.now() since it's still faster than performance.now() in most browsers
+      this.#now = Date.now();
+      //calculating elapsed time for render
+      this.#elapsedTime =  this.#now - this.#then;
+      //calculating delta time for update
+      this.#deltaTime = newTime - this.#oldTime;
+      this.#oldTime = newTime;
+      //calling update with delta time factored with game speed
+      this.#update(this.#deltaTime * this.#gameSpeedFactor);
+
+      // if enough time has elapsed, draw the next frame
+      if (this.#elapsedTime > this.#renderTargetInterval) {
+       // adjust for fpsInterval not being multiple of fps
+        this.#then = this.#now  - (this.#elapsedTime % this.#renderTargetInterval);
+        this.#render();
+        this.#frameCounter++;
+
     }
   }
-
 
   /**
    *
    */
-  start = (stage)=>{
-    this.#fpsInterval = 1000 / this.#fps;
-    this.#stage = stage;
-    this.#then = window.performance.now();
-    this.now = Date.now();
-    this.then = Date.now();
-    this.startTime = this.then;
-    this.delta = 0;
-    this.oldTime = 0;
-    this.#animate(0);
+  start = () => {
+    this.#renderTargetInterval = 1000 / this.#fpsTarget; // 16.667ms at 60 frames per second
+    this.#now = Date.now();
+    this.#then = Date.now();
+    this.#deltaTime = 0;
+    this.#oldTime = performance.now();
+    this.#animate(performance.now());
 
    setInterval(()=>{
 
-     this.hudHandler.updateHudInfo({
-       coordinates : this.#coordinate,
-       time : (this.#performanceCumul/this.#performanceCount).toFixed(4),
-       systemsStatus : this.#performanceCount / 2
-     });
+       this.#hudHandler.updateHudInfo({
+         coordinates: this.#coordinate,
+         time: this.#deltaTime.toFixed(2),
+         systemsStatus: this.#frameCounter
+       });
 
-      this.#performanceCumul = this.#performanceCount = 0;
-      for (const subscriber of this.#subscribers) {
-        subscriber.update(this.#coordinate);
-      }
-    },2000)
+        this.#frameCounter = 0;
+        for (const subscriber of this.#subscribers) {
+          subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#coordinate}});
+        }
+      },1000)
+    }
+
+  /**
+   *
+   */
+  pause = () => {
+    cancelAnimationFrame(this.#animationId);
+  }
+
+  /**
+   *
+   */
+  restart = () => {
+    this.#then = Date.now();
+    this.#now = Date.now();
+    this.#frameCounter = 0;
+    this.#oldTime = performance.now();
+    this.#animate(performance.now());
+
   }
 }

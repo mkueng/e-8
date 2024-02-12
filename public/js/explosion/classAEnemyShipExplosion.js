@@ -1,10 +1,15 @@
+'use strict'
 class ClassAEnemyShipExplosion extends Explosion {
 
+  static imageResource;
+  static soundResource;
+
   static imageResourceObject = new ResourceObject({
-    id : "classAEnemyShipExplosion",
-    filename : "explosion_03",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/explosions/explosion_03/images/explosion_03.png"
+    category: ResourceObject.CATEGORIES.explosion,
+    name : "classAEnemyShipExplosion",
+    fileName : "explosion_03",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/explosions/explosion_03/images/"
   })
 
   static soundResourceObject = new ResourceObject({
@@ -20,13 +25,15 @@ class ClassAEnemyShipExplosion extends Explosion {
     });
   }
 
-  static async fetchSound(resourceHandler){
-    return await resourceHandler.fetchSoundResource({resourceObject:ClassAEnemyShipExplosion.soundResourceObject});
+  static async invoke(resourceHandler){
+    ClassAEnemyShipExplosion.imageResource = await resourceHandler.fetchImageResource({
+      resourceObject: ClassAEnemyShipExplosion.imageResourceObject
+    });
+    ClassAEnemyShipExplosion.soundResource = await resourceHandler.fetchSoundResource({
+      resourceObject: ClassAEnemyShipExplosion.soundResourceObject});
   }
 
   constructor({
-                spriteSheetResource,
-                soundResource,
                 canvas,
                 posX,
                 posY,
@@ -35,8 +42,8 @@ class ClassAEnemyShipExplosion extends Explosion {
               }){
 
     super({
-      spriteSheet : spriteSheetResource.image,
-      sound: soundResource,
+      spriteSheet : ClassAEnemyShipExplosion.imageResource.image,
+      sound: ClassAEnemyShipExplosion.soundResource,
       spriteSheetRows : 6,
       spriteSheetColumns : 6,
       width : 159,
@@ -45,13 +52,17 @@ class ClassAEnemyShipExplosion extends Explosion {
       currentFrame : 0,
       step : 50,
       stride : 0,
-      strideX :  spriteSheetResource.image.width / 6,
-      strideY : spriteSheetResource.image.height / 6,
+      strideX :  ClassAEnemyShipExplosion.imageResource.image.width / 6,
+      strideY : ClassAEnemyShipExplosion.imageResource.image.height / 6,
       canvas : canvas,
       posX : posX,
       posY : posY,
       posDX : posDX,
       posDY : posDY
     });
+  }
+
+  invoke = ()=>{
+
   }
 }

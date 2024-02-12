@@ -21,7 +21,7 @@
     window.global.gameWidth  = currentWidth > maxWidth ? maxWidth : currentWidth;
   </script>
   <div id="game" style="display:none"></div>
-  <h4 class="titel">PAS JS Unit Tests</h4>
+  <h4 class="title">E-8.space JS Unit Tests</h4>
   <div id="testResults"></div>
   <div id="selector"></div>
   <div id="spinner" >
@@ -29,8 +29,18 @@
   </div>
   <div id="testResultsBar"></div>
 
-  <script src="../public/js/sound/soundHandler.js"></script>
+  <!-- speech -->
   <script src="../public/js/speechModule/speechHandler.js"></script>
+
+  <!-- particle generator -->
+  <script src="../public/js/particles/particleGenerator.js"></script>
+
+  <!-- fsm -->
+  <script src="../public/js/state/state.js"></script>
+  <script src="../public/js/state/states.js"></script>
+  <script src="../public/js/state/finiteStateMachine.js"></script>
+  <script src="../public/js/state/stateHandler.js"></script>
+
   <script src="unitTesting.js" type="text/ecmascript"></script>
   <script src="UT.js" type="text/ecmascript"></script>
 </body>

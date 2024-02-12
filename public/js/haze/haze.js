@@ -11,6 +11,7 @@ class Haze extends GameObject{
     velY
               }){
     super({
+      isActive: true,
       canvas,
       image,
       width,
@@ -26,8 +27,12 @@ class Haze extends GameObject{
     this.boundX = 0-this.width;
   }
 
+  /**
+   *
+   * @param dt
+   */
   update(dt) {
-    this.posX = this.posX+this.velX;
+    this.posX = this.posX+(this.velX*dt);
     if (this.posX < this.boundX) {
       this.destroy();
     }

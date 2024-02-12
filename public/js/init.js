@@ -1,15 +1,25 @@
 'use strict'
-ns.init = (function(){
+e8.init = (function(){
 
+  e8.globalEvents = {
+    screenResized: "screenResized"
+  }
   let subscribers = [];
-  let gameWrapper = null;
 
   return {
     start : ()=>{
 
-      if (window.worker) ns.worker = true;
+      e8.global.tabIsActive = true;
+      e8.global.gameIsPaused = false;
+
+      if (window.worker) e8.worker = true;
 
       window.addEventListener('resize', (evt) => {
+        e8.global.screenWidth = window.innerWidth;
+        e8.global.screenHeight = window.innerHeight;
+        for (const subscriber of subscribers){
+          subscriber.updateFromGlobalEvent({message:e8.globalEvents.screenResized, payload: {width:window.innerWidth, height:window.innerHeight}})
+        }
         if (window.innerHeight === screen.height) {
           console.log('FULL SCREEN');
         } else {
@@ -17,45 +27,8 @@ ns.init = (function(){
         }
       });
 
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          console.log("tab inactive");
-          subscribers.forEach(
-            (subscriber) =>{
-              subscriber({
-                message: "tab deactivated",
-                content: ""
-              })
-            }
-          )
-        } else {
-          console.log("tab active");
-          subscribers.forEach(
-            (subscriber) =>{
-              subscriber({
-                message: "tab active",
-                content: ""
-              })
-            }
-          )
-        }
-      });
-
-      gameWrapper = document.querySelector("#wrapper");
-      document.querySelector("#fullscreen").addEventListener("click", function () {
-        gameWrapper.requestFullscreen()
-          .then(function () {
-            // element has entered fullscreen mode successfully
-          })
-          .catch(function (error) {
-            // element could not enter fullscreen mode
-            // error message
-            console.log(error.message);
-          });
-      })
-
-      if (window.global.screenWidth > 0 && window.global.screenHeight > 0) {
-        new GameController();
+      if (e8.global.screenWidth > 0 && e8.global.screenHeight > 0) {
+        new GameInit();
       }
     },
 
