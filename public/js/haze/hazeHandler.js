@@ -6,9 +6,9 @@ class HazeHandler {
   #canvases = {};
 
   constructor({gameLoop, canvasHandler, resizeImageWorker}){
-    this.#canvases[0] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.haze).canvas;
-    this.#canvases[1] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.haze).canvas;
-    this.#canvases[2] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.haze).canvas;
+    this.#canvases[0] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFront).canvas;
+    this.#canvases[1] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddle).canvas;
+    this.#canvases[2] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
     this.resizeImageWorker = resizeImageWorker;
     this.#upcoming = Math.floor(Math.random()*5+10);
 
@@ -20,11 +20,14 @@ class HazeHandler {
 
       img.onload =()=>{
         const size = img.width * img.height;
-        const velocity = size * 0.000001;
+        const velocity = size * 0.0000007;
+        console.log("velocity: ", velocity);
 
-        if (velocity >= 5 ) canvas = this.#canvases[0];
-        if (velocity > 2 && velocity < 5) canvas = this.#canvases[1];
-        if (velocity <= 2) canvas = this.#canvases[2];
+        if (velocity >= 1 ) canvas = this.#canvases[0];
+        if (velocity > 0.5 && velocity < 1) canvas = this.#canvases[1];
+        if (velocity <= 0.5) canvas = this.#canvases[2];
+
+        console.log("canvas:", canvas);
 
         let haze = new Haze({
           canvas: canvas,
@@ -32,7 +35,7 @@ class HazeHandler {
           width: img.width,
           height: img.height,
           posX: e8.global.screenWidth,
-          posY: Math.floor(Math.random()* e8.global.screenHeight-100),
+          posY: Math.floor(Math.random()* e8.global.screenHeight-300),
           posDX: 0,
           posDY: 0,
           velX: -1 * velocity,
@@ -54,14 +57,13 @@ class HazeHandler {
     return this;
   }
 
-
   create = () => {
-    let width = Math.floor(Math.random()*500+2859)
-    let height = Math.floor(Math.random()*300+250)
+    let width = Math.floor(Math.random()*1700+2559)
+    let height = Math.floor(Math.random()*1200+750)
 
     this.resizeImageWorker.postMessage({
       payload: {
-        url : "/resources/hazes/haze_01.png",
+        url : "/resources/hazes/haze_04.png",
         requiredWidth: width,
         requiredHeight : height
       }

@@ -94,10 +94,12 @@ input[type="range"]::-webkit-slider-thumb {
 .backdropCanvas {
     z-index: -1;
 }
-.backgroundFarthestCanvas {
+
+.planetsCanvas {
     z-index: 0;
 }
-.planetsCanvas {
+
+.backgroundFarthestCanvas {
     z-index: 5;
 }
 
@@ -114,18 +116,21 @@ input[type="range"]::-webkit-slider-thumb {
 .backgroundMiddleCanvas {
     z-index: 30;
 }
+
+.playerShipCanvas {
+    z-index: 35;
+}
+.weaponCanvas {
+    z-index: 35;
+}
+
+
 .backgroundFrontCanvas {
     z-index: 40;
 }
 
 .backgroundFaceCanvas {
     z-index: 50;
-}
-.shipCanvas {
-    z-index: 35;
-}
-.weaponCanvas {
-    z-index: 35;
 }
 
 .settingsCanvas {

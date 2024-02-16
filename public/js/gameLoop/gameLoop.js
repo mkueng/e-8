@@ -7,9 +7,8 @@ class GameLoop {
   #galaxyCoordinatesIncrement = 10;
   #gameSpeedFactor = 0.1;
   #hudHandler;
-  #isRunning = false;
   #subscribers = [];
-  #coordinate = 0;
+  #coordinate = 20000;
   #animationId = null;
   #frameCounter;
   #deltaTime;

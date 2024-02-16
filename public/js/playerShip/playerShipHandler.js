@@ -11,7 +11,7 @@ class PlayerShipHandler {
                 inputHandler,
                 hudHandler
   }){
-    this.#canvas = canvasHandler.getCanvas("backgroundFront").canvas;
+    this.#canvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
 
     this.playerShipFactory = new PlayerShipFactory({
       playerShipHandler: this,

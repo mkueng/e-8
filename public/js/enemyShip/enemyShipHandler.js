@@ -19,7 +19,7 @@ class EnemyShipHandler {
   }
 
   invoke = async () => {
-    this.#canvas = this.canvasHandler.getCanvas("backgroundFront").canvas;
+    this.#canvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
     await this.enemyShipFactory.invoke();
   }
 
@@ -32,7 +32,7 @@ class EnemyShipHandler {
     setTimeout(()=>{
       const variation = Math.floor(Math.random()*Object.entries(EnemyShipType1.shipTypeVariations).length);
       this.#create(EnemyShipFactory.shipTypes.EnemyShipType1, EnemyShipType1.shipTypeVariations[""+variation]).then(()=>{
-        this.startCreation(Math.floor(Math.random()*2000+2000))
+        this.startCreation(Math.floor(Math.random()*1000+1000))
       });
     },interval)
   }

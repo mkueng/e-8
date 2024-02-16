@@ -5,7 +5,7 @@ class ClassAShip {
 
   static resourceObject = new ResourceObject({
     name : "ship01ClassA",
-    fileName : "ship_01",
+    fileName : "SpaceShip3D-2D",
     fileType : ResourceObject.TYPES.png,
     resourcePath : "/resources/ships/ship_01/images/"
   })

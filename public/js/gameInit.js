@@ -79,7 +79,7 @@ class GameInit {
   }
 
   startMusic = ()=>{
-    //SoundHandler.playMusic();
+    SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
   }
 

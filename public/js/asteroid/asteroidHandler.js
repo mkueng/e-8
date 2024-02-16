@@ -12,7 +12,7 @@ class AsteroidHandler {
                 resizeImageWorker
   }){
     this.#canvases['far'] = canvasHandler.getCanvas("backgroundFar").canvas;
-    this.#canvases['middle'] = canvasHandler.getCanvas("backgroundMiddleFar").canvas;
+    this.#canvases['middle'] = canvasHandler.getCanvas("backgroundMiddle").canvas;
     this.#canvases['front'] = canvasHandler.getCanvas("backgroundFace").canvas;
 
     this.#resourceHandler = resourceHandler;

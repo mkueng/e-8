@@ -14,7 +14,8 @@ class CanvasHandler {
     performanceInfo: "performanceInfo",
     haze: "haze",
     dust: "dust",
-    explosion: "explosion"
+    explosion: "explosion",
+    playerShip: "playerShip"
   }
 
   #canvases = {
@@ -68,8 +69,11 @@ class CanvasHandler {
     },
     "haze" : {
       "id": "haze",
-      "class" : "fullscreenCanvas",
-      "opacity": 0.1
+      "class" : "fullscreenCanvas"
+    },
+    "playerShip" : {
+      "id": "playerShip",
+      "class": "fullscreenCanvas playerShipCanvas"
     }
   }
 
@@ -149,8 +153,8 @@ class CanvasHandler {
       canvasTemplates[canvas].canvas = newCanvas;
       canvasTemplates[canvas].context = newCanvas.getContext("2d");
       canvasTemplates[canvas].context.imageSmoothingEnabled = false;
-      canvasTemplates[canvas].context.imageSmoothingQuality = 'high';
-      canvasTemplates[canvas].context.globalAlpha = canvasTemplates[canvas].opacity || 1;
+      //canvasTemplates[canvas].context.imageSmoothingQuality = 'high';
+      canvasTemplates[canvas].context.globalAlpha =  1;
 
       const canvasStyles = canvasTemplates[canvas]?.canvasStyles;
       if (canvasStyles) {
