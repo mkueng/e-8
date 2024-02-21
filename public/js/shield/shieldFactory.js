@@ -1,5 +1,4 @@
 'use strict'
-
 class ShieldFactory {
 
   static SHIELD_TYPES = {

@@ -34,7 +34,6 @@ class Sequencer {
 
         beat++;
         if (sequence["order"][beat]) {
-          console.log("part:", sequence[sequence["order"][beat]])
           for (const sound of sequence[sequence["order"][beat]].sounds) {
             this.playSample(sound)
           }

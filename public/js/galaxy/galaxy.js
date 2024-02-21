@@ -53,7 +53,6 @@ class Galaxy {
         })
 
         GameObjectsHandler.instance.addGameObject(planetObject);
-        console.log("planet created:", planetObject);
         for(const subscriber of this.#subscribers) {
           subscriber.update({planetObject});
         }

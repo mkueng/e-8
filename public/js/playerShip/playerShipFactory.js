@@ -31,26 +31,24 @@ class PlayerShipFactory {
     this.propulsionFactory = new PropulsionFactory({resourceHandler});
     this.shieldFactory = new ShieldFactory({resourceHandler});
     this.explosionFactory = new ExplosionFactory({resourceHandler});
-    this.poiFactory = new PoiFactory({resourceHandler});
   }
 
   create3DShip = ()=>{
-
     return new PlayerShip3D()
   }
 
   invoke = async ()=>{
     await this.shieldFactory.invoke();
     await this.weaponFactory.invoke();
+    await this.propulsionFactory.invoke();
     await this.explosionFactory.invoke();
-
   }
 
   /**
    *
-   * @param type
+   * @param shipType {PlayerShipFactory.SHIP_TYPES}
    * @param canvas
-   * @returns {Promise<PlayerShip3D_01>}
+   * @returns {Promise<PlayerShip>}
    */
   createShip = async ({ shipType, canvas }) => {
     const {
@@ -59,25 +57,113 @@ class PlayerShipFactory {
       shield,
       terminationSequence,
       weapons,
-      poi,
+      features,
       resourceObject,
       properties,
     } = shipType;
 
-    //engine trail
-    await this.engineTrailFactory.invoke(engineTrail);
-    //propulsion
-    const propulsionInstance = await this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
-    //poi
-    const poiInstance = await this.poiFactory.createPOI({...poi, canvas})
-    //shield
-    const shieldInstance = await this.shieldFactory.createShield({ ...shield, canvas });
-    //termination
-    const terminationSequenceInstance = await this.explosionFactory.createExplosion({ ...terminationSequence, canvas });
-    //imageResource
     const imageResource = await this.resourceHandler.fetchImageResource({resourceObject});
-    //weapon(s)
-    const weaponsInstances = {};
+    const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
+    const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
+    const shieldInstance = await this.#createShield({shield, canvas});
+    const terminationSequenceInstance = await this.#createTerminationSequence({terminationSequence, canvas})
+    const featureInstances = this.#createFeatures({features});
+    const weaponsInstances = this.#createWeapons({weapons, canvas})
+
+
+    return new PlayerShip({
+      accX: properties.accX,
+      accY: properties.accY,
+      canvas,
+      dependencies: [propulsionInstance],
+      engineTrail : engineTrailInstance,
+      features: featureInstances,
+      height: imageResource.image.height,
+      hudHandler: this.hudHandler,
+      inputHandler: this.inputHandler,
+      maxVelX: properties.maxVelX,
+      maxVelY: properties.maxVelY,
+      playerShipHandler: this.playerShipHandler,
+      posDX: properties.posDX,
+      posDY: properties.posDY,
+      posX: properties.posX,
+      posY: properties.posY,
+      shield: shieldInstance,
+      terminationSequence: terminationSequenceInstance,
+      velX: properties.velX,
+      velY: properties.velY,
+      weapons: weaponsInstances,
+      width: imageResource.image.width,
+      image: imageResource.image,
+    });
+  };
+
+  /**
+   *
+   * @param shield
+   * @param canvas
+   * @returns {Promise<SHIELD_TYPES.type>}
+   */
+  #createShield = async ({shield, canvas})=>{
+    return this.shieldFactory.createShield({...shield, canvas});
+  }
+
+  /**
+   *
+   * @param propulsion
+   * @param canvas
+   * @returns {Promise<*>}
+   */
+  #createPropulsion = async ({propulsion, canvas}) => {
+    return this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+  }
+
+  /**
+   *
+   * @param engineTrail
+   * @param canvas
+   * @returns {Promise<*>}
+   */
+  #createEngineTrail = async({engineTrail, canvas}) => {
+    return this.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
+  }
+
+  /**
+   *
+   * @param terminationSequence
+   * @param canvas
+   * @returns {Promise<*>}
+   */
+  #createTerminationSequence = async({terminationSequence, canvas}) =>{
+    return this.explosionFactory.createExplosion({ ...terminationSequence, canvas });
+  }
+
+  /**
+   *
+   * @param features
+   * @returns {{}}
+   */
+  #createFeatures = ({features}) => {
+    let featureInstances = {};
+
+    for (const feature of features) {
+      const [featureName, featureProps] = Object.entries(feature)[0];
+      featureInstances[featureName] = {
+        controlAssignment: featureProps.controlAssignment,
+        type: new featureProps.type()
+      };
+    }
+    return featureInstances;
+  }
+
+  /**
+   *
+   * @param weapons
+   * @param canvas
+   * @returns {{}}
+   */
+  #createWeapons = ({weapons, canvas})=>{
+    let weaponsInstances = {};
     for (const weapon in weapons) {
       const weaponProperties = weapons[weapon];
       weaponsInstances[weapon] = {
@@ -92,30 +178,6 @@ class PlayerShipFactory {
         }),
       };
     }
-
-    return new PlayerShip({
-      image: imageResource.image,
-      width: imageResource.image.width,
-      height: imageResource.image.height,
-      posX: properties.posX,
-      posY: properties.posY,
-      posDX: properties.posDX,
-      posDY: properties.posDY,
-      velX: properties.velX,
-      velY: properties.velY,
-      maxVelX: properties.maxVelX,
-      maxVelY: properties.maxVelY,
-      accX: properties.accX,
-      accY: properties.accY,
-      canvas,
-      dependencies: [propulsionInstance],
-      weapons: weaponsInstances,
-      shield: shieldInstance,
-      terminationSequence: terminationSequenceInstance,
-      engineTrailFactory : this.engineTrailFactory,
-      hudHandler: this.hudHandler,
-      inputHandler: this.inputHandler,
-      playerShipHandler: this.playerShipHandler,
-    });
-  };
+    return weaponsInstances;
+  }
 }

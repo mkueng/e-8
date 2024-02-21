@@ -13,21 +13,16 @@ class HazeHandler {
     this.#upcoming = Math.floor(Math.random()*5+10);
 
     resizeImageWorker.onmessage = ({data}) =>{
-
-      //const canvasNumber = Math.floor(Math.random()*3);
       let canvas;
       let img = new Image();
 
       img.onload =()=>{
         const size = img.width * img.height;
         const velocity = size * 0.0000007;
-        console.log("velocity: ", velocity);
 
         if (velocity >= 1 ) canvas = this.#canvases[0];
         if (velocity > 0.5 && velocity < 1) canvas = this.#canvases[1];
         if (velocity <= 0.5) canvas = this.#canvases[2];
-
-        console.log("canvas:", canvas);
 
         let haze = new Haze({
           canvas: canvas,
@@ -43,6 +38,7 @@ class HazeHandler {
         })
 
         GameObjectsHandler.instance.addGameObject(haze);
+        console.log("haze added");
 
         //releasing object URL
         URL.revokeObjectURL(img.src);
@@ -63,7 +59,7 @@ class HazeHandler {
 
     this.resizeImageWorker.postMessage({
       payload: {
-        url : "/resources/hazes/haze_04.png",
+        url : "/resources/hazes/haze_05.png",
         requiredWidth: width,
         requiredHeight : height
       }
@@ -79,7 +75,7 @@ class HazeHandler {
     this.#ticker++;
     if (this.#ticker > this.#upcoming){
       this.#ticker = 0;
-      this.#upcoming = Math.floor(Math.random()*20+20);
+      this.#upcoming = Math.floor(Math.random()*15+10);
       this.create();
     }
   }

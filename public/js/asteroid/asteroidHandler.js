@@ -84,7 +84,7 @@ class AsteroidHandler {
    * @param interval
    * @param amount
    */
-  createAsteroid = (interval,amount) => {
+  createAsteroids = (interval, amount) => {
     let ticker = 0;
 
     const createBatch = (interval) => {
@@ -102,7 +102,7 @@ class AsteroidHandler {
           if (ticker < amount) {
             createBatch(Math.floor(Math.random()*1000 + 1000))
           } else {
-            this.createAsteroid(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
+            this.createAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
           }
 
         }

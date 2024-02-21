@@ -1,3 +1,8 @@
+html {
+
+}
+
+
 body {
     margin: 0;
     height: 100vh;
@@ -5,8 +10,28 @@ body {
     background: black;
     font-family: 'Bruno Ace SC', cursive;
     font-family: 'Exo 2', sans-serif;
+    min-width: 400px;
+    min-height: 300px;
+
 }
 
+
+#game
+    {
+
+    background: url('../resources/backdrops/backdrop_03.jpg');
+    padding: 0;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: 400px;
+    min-height: 300px;
+
+}
 
 input[type="range"] {
     /* removing default appearance */
@@ -91,6 +116,8 @@ input[type="range"]::-webkit-slider-thumb {
     left: 0;
     right: 0;
 }
+
+
 .backdropCanvas {
     z-index: -1;
 }

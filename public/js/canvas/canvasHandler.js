@@ -21,59 +21,68 @@ class CanvasHandler {
   #canvases = {
     "explosion": {
       "id": "explosion",
-      "class": "fullscreenCanvas backgroundFaceCanvas"
-    },
-    "backdrop": {
-      "id": "backdrop",
-      "class": "fullscreenCanvas backdropCanvas"
+      "class": "fullscreenCanvas backgroundFaceCanvas",
+      "alpha": true
     },
     "planets": {
       "id": "planets",
-      "class": "fullscreenCanvas planetsCanvas"
+      "class": "fullscreenCanvas planetsCanvas",
+      "alpha": true
     },
     "dust": {
       "id": "dust",
-      "class": "fullscreenCanvas dustCanvas"
+      "class": "fullscreenCanvas dustCanvas",
+      "alpha": true
     },
     "backgroundFarthest": {
       "id": "backgroundFarthest",
-      "class": "fullscreenCanvas backgroundFarthestCanvas"
+      "class": "fullscreenCanvas backgroundFarthestCanvas",
+      "alpha": true
     },
     "backgroundFar": {
       "id": "backgroundFar",
-      "class": "fullscreenCanvas backgroundFarCanvas"
+      "class": "fullscreenCanvas backgroundFarCanvas",
+      "alpha": true
     },
     "backgroundMiddleFar": {
       "id": "backgroundMiddleFar",
-      "class": "fullscreenCanvas backgroundMiddleFarCanvas"
+      "class": "fullscreenCanvas backgroundMiddleFarCanvas",
+      "alpha": true
     },
     "backgroundMiddle": {
       "id": "backgroundMiddle",
-      "class": "fullscreenCanvas backgroundMiddleCanvas"
+      "class": "fullscreenCanvas backgroundMiddleCanvas",
+      "alpha": true
     },
     "backgroundFront": {
       "id": "backgroundFront",
-      "class": "fullscreenCanvas backgroundFrontCanvas"
+      "class": "fullscreenCanvas backgroundFrontCanvas",
+      "alpha": true
     },
     "backgroundFace": {
       "id": "backgroundFace",
-      "class": "fullscreenCanvas backgroundFaceCanvas"
+      "class": "fullscreenCanvas backgroundFaceCanvas",
+      "alpha": true
     },
     "weapons" : {
       "id" : "weapons",
-      "class" : "fullscreenCanvas weaponsCanvas"
+      "class" : "fullscreenCanvas weaponsCanvas",
+      "alpha": true
     },
     "performanceInfo" : {
       "id": "performanceInfo",
       "class" : "fullscreenCanvas performanceInfoCanvas",
+      "alpha": true
     },
     "haze" : {
       "id": "haze",
-      "class" : "fullscreenCanvas"
+      "class" : "fullscreenCanvas",
+      "alpha": true
     },
     "playerShip" : {
       "id": "playerShip",
-      "class": "fullscreenCanvas playerShipCanvas"
+      "class": "fullscreenCanvas playerShipCanvas",
+      "alpha": true
     }
   }
 
@@ -86,13 +95,13 @@ class CanvasHandler {
         "font": "15px myFont"
       },
       "canvasStyles": {
-        "top": ((e8.global.currentHeight-e8.global.screenHeight)/2) + 20 + "px",
-        "left": ((e8.global.currentWidth-e8.global.screenWidth)/2)+ 100 +"px",
+        "top": 20 + "px",
+        "left": 100+"px",
         "color": "grey",
         "border-radius": "10px"
 
       },
-      "width": 340,
+      "width": 440,
       "height": 200,
       "opacity": 0.7
     },
@@ -103,13 +112,13 @@ class CanvasHandler {
         "font": "15px myFont"
       },
       "canvasStyles": {
-        "top": ((e8.global.currentHeight-e8.global.screenHeight)/2) + 20+ "px",
-        "right": ((e8.global.currentWidth-e8.global.screenWidth)/2) + 100+ "px",
+        "top": 20+ "px",
+        "right": 100+ "px",
         "color": "red",
         "border-radius": "10px",
 
       },
-      "width": 340,
+      "width": 440,
       "height": 200,
       "opacity": 0.7
     },
@@ -151,7 +160,7 @@ class CanvasHandler {
       newCanvas.height = canvasTemplates[canvas].height || e8.global.screenHeight;
       newCanvas.className = canvasTemplates[canvas].class;
       canvasTemplates[canvas].canvas = newCanvas;
-      canvasTemplates[canvas].context = newCanvas.getContext("2d");
+      canvasTemplates[canvas].context = newCanvas.getContext("2d", {alpha:canvasTemplates[canvas].alpha});
       canvasTemplates[canvas].context.imageSmoothingEnabled = false;
       //canvasTemplates[canvas].context.imageSmoothingQuality = 'high';
       canvasTemplates[canvas].context.globalAlpha =  1;

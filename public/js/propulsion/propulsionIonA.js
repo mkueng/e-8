@@ -1,6 +1,8 @@
 'use strict'
 class PropulsionIonA extends Propulsion{
 
+  static imageResource;
+
   static resourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.propulsion,
     name: "propulsionSpriteSheet_01",
@@ -9,7 +11,7 @@ class PropulsionIonA extends Propulsion{
     resourcePath : "/resources/propulsion/propulsion_01/images/"
   })
 
-  static imageResource;
+
 
   static async invoke(resourceHandler){
     PropulsionIonA.imageResource = await resourceHandler.fetchImageResource({

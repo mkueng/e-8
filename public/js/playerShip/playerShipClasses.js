@@ -24,6 +24,7 @@ class ClassAShip {
   }
 
   static engineTrail = {
+    type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
     posDX : -20,
     posDY :27
   };
@@ -44,6 +45,21 @@ class ClassAShip {
     posDY: -50
   }
 
+  static features = [
+    {
+      Tractor: {
+        controlAssignment: "KeyT",
+        type: Tractor
+
+      }
+    },
+    {
+      Probe: {
+        controlAssignment: "KeyP",
+        type: Probe
+      }
+    }
+  ]
 
   static weapons = {
 

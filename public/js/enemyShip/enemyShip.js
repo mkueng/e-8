@@ -24,7 +24,8 @@ class EnemyShip extends GameObject {
                 shield,
                 terminationSequence,
                 particles,
-                enemyShipHandler
+                enemyShipHandler,
+                playerShipTracking
               }) {
     super({
       isActive: true,
@@ -53,21 +54,17 @@ class EnemyShip extends GameObject {
 
     Object.assign(this, {
       dependencies,
+      enemyShipHandler,
       weapons,
       shield,
       terminationSequence,
-      enemyShipHandler,
       imageData,
-      particles
+      particles,
+      playerShipTracking
     });
 
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
     this.shield.relatedShip = this
-
-    //this.particleCanvas = new CanvasHandler().getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
-    //this.particleCanvasContext = this.particleCanvas.getContext("2d");
-    //this.setupParticleTermination();
-    this.treminationAnimationSequenceId = null;
   }
 
   /**
@@ -114,12 +111,10 @@ class EnemyShip extends GameObject {
     this.particles.velX = this.velX;
     this.particles.velY = this.velY;
     GameObjectsHandler.instance.addGameObject(this.particles);
-
+   
     this.destroy();
     this.enemyShipHandler.shipDestroyed(this.id);
   }
-
-
 
 
   /**
@@ -162,16 +157,18 @@ class EnemyShip extends GameObject {
       this.posX > PlayerShipHandler.activeShip.posX
     ) {
       this.fireWeapon();
-    }1
+    }
+    if (this.playerShipTracking) {
+      this.quotient = (PlayerShipHandler.activeShip.posY - this.posY ) / 300;
+      this.posY = this.posY + this.quotient +(this.velY*dt);
+    } else {
+      this.posY = this.posY + (this.velY*dt);
+    }
+
     if (this.posX >- this.width) {
       this.posX = this.posX + (this.velX*dt)
     } else {
       this.destroy();
-      this.enemyShipHandler.shipDestroyed(this.id);
     }
-    this.posY = this.posY + (this.velY*dt);
-
-
-
   }
 }

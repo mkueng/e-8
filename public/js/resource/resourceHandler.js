@@ -65,11 +65,9 @@ class ResourceHandler {
   fetchImageResource = async ({resourceObject})=>{
     let requestedResource;
     if (this.#resourcePool.hasOwnProperty(resourceObject.id)){
-      console.log("resource from pool: ",resourceObject.id);
       requestedResource = this.#resourcePool[resourceObject.id];
     } else {
       requestedResource = await this.resourceLoader.fetchResource(resourceObject);
-      console.log("resource fetched: ", resourceObject.id);
       this.#resourcePool[requestedResource.id] = requestedResource;
     }
 

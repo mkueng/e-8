@@ -98,7 +98,7 @@ class ProceduralPlanet {
    * @param noiseRange
    * @param octavesRange
    * @param lacunarityRange
-   * @param persistenceOffset
+   * @param persistenceOffsetas
    * @param baseFrequencyOffset
    */
   #generateNoise =({

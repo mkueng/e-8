@@ -4,12 +4,13 @@ class EnemyShipHandler {
   static enemyShips = {};
   #canvas;
 
-  constructor({canvasHandler, resourceHandler, particleGenerator, utilityWorker}){
+
+  constructor({canvasHandler, resourceHandler, particleGenerator}){
     this.canvasHandler = canvasHandler;
     this.resourceHandler = resourceHandler;
     this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
-    this.enemyShipFactory = new EnemyShipFactory({
+    this.enemyShipFactory = new ProceduralEnemyShipFactory({
       enemyShipHandler: this,
       resourceHandler,
       canvasHandler,
@@ -30,9 +31,13 @@ class EnemyShipHandler {
   startCreation = (interval) => {
 
     setTimeout(()=>{
-      const variation = Math.floor(Math.random()*Object.entries(EnemyShipType1.shipTypeVariations).length);
-      this.#create(EnemyShipFactory.shipTypes.EnemyShipType1, EnemyShipType1.shipTypeVariations[""+variation]).then(()=>{
-        this.startCreation(Math.floor(Math.random()*1000+1000))
+      const variationKeys = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
+      const variation = Math.floor(Math.random() * variationKeys.length);
+      this.#create({
+        shipType: ProceduralEnemyShipFactory.shipTypes.EnemyShipType1,
+        shipTypeVariation: ProceduralEnemyShipType1.shipTypeVariations[""+variation]
+      }).then(()=>{
+        this.startCreation(Math.floor(Math.random()*10000+1000))
       });
     },interval)
   }
@@ -51,14 +56,16 @@ class EnemyShipHandler {
    * @param variation
    * @returns {Promise<void>}
    */
-  #create = async (type, variation) => {
+  #create = async ({shipType, shipTypeVariation}) => {
     const shipObject = await this.enemyShipFactory.createShip({
-      type: type,
-      typeVariation: variation,
+      shipType,
+      shipTypeVariation,
       canvas: this.#canvas
     });
 
     GameObjectsHandler.instance.addGameObject(shipObject);
     EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
+
+
   }
 }

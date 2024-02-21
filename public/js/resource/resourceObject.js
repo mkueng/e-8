@@ -18,7 +18,8 @@ class ResourceObject {
     asteroid : "asteroid",
     asteroidField : "asteroidField",
     spaceStation : "spaceStation",
-    explosion: "explosion"
+    explosion: "explosion",
+    placeholder: "placeholder"
   }
 
   id

@@ -1,25 +1,25 @@
 'use strict';
 
-class EnemyShipFactory {
+class ProceduralEnemyShipFactory {
 
   static shipTypes = {
-    EnemyShipType1: EnemyShipType1
+    EnemyShipType1: ProceduralEnemyShipType1
   }
 
   constructor({
-    enemyShipHandler,
     resourceHandler,
     canvasHandler,
     particleGenerator,
+    enemyShipHandler
   }){
     this.particlesContext = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
     this.particlesCanvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
-    this.enemyShipHandler = enemyShipHandler;
+    this.enemyShipHandler = enemyShipHandler,
     this.explosionFactory = new ExplosionFactory({resourceHandler});
     this.weaponFactory = new WeaponFactory({resourceHandler});
     this.shieldFactory = new ShieldFactory({resourceHandler});
 
-    EnemyShipFactory.shipTypes.EnemyShipType1 = new EnemyShipType1({
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1({
       resourceHandler, canvasHandler, particleGenerator
     })
   }
@@ -32,18 +32,18 @@ class EnemyShipFactory {
     await this.shieldFactory.invoke();
     await this.weaponFactory.invoke();
     await this.explosionFactory.invoke();
-    await EnemyShipFactory.shipTypes.EnemyShipType1.invoke();
+    await ProceduralEnemyShipFactory.shipTypes.EnemyShipType1.invoke();
   }
 
   /**
    *
-   * @param type
-   * @param variation
+   * @param shipType
+   * @param shipTypeVariation
    * @param canvas
    * @returns {Promise<unknown>}
    */
-  createShip = async ({type, typeVariation, canvas}) => {
-    const {shipSize, shield} = typeVariation;
+  createShip = async ({shipType, shipTypeVariation, canvas}) => {
+    const {shipSize, shield, playerShipTracking} = shipTypeVariation;
 
     return new Promise(async (resolve) => {
 
@@ -73,24 +73,23 @@ class EnemyShipFactory {
       };
 
       let particlesObject = new ParticlesObject({
-        particles: typeVariation.particles.slice(),
+        particles: shipTypeVariation.particles.slice(),
         context: this.particlesContext,
         canvas: this.particlesCanvas
       })
 
       //wait for ship image to be created
-      const shipImageData = await type.createImage({typeVariation});
+      const shipImageData = await shipType.createImage({shipTypeVariation});
       const img = new Image();
       //create object URL from shipImage data
       img.src = URL.createObjectURL(shipImageData.blob);
 
       //create ship instance once ship image is loaded
       img.onload = () => {
-        const velX = -1 * (Math.random()*3+2-(shipSize/4));
+        const velX = -1 * (Math.random()*3+2-(shipSize/5));
      
         let shipObject = new EnemyShip({
           canvas: canvas,
-          enemyShipHandler: this.enemyShipHandler,
           height: img.height,
           imageData: shipImageData.imageData,
           particles: particlesObject,
@@ -105,6 +104,8 @@ class EnemyShipFactory {
           weapons: weapons,
           width: img.width,
           image: img,
+          enemyShipHandler: this.enemyShipHandler,
+          playerShipTracking : playerShipTracking
         });
         resolve(shipObject);
       };

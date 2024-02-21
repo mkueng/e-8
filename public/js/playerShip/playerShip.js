@@ -41,9 +41,10 @@ class PlayerShip extends GameObject {
                 canvas,
                 dependencies,
                 weapons,
+                features,
                 shield,
                 terminationSequence,
-                engineTrailFactory,
+                engineTrail,
                 playerShipHandler,
                 inputHandler,
                 hudHandler
@@ -76,9 +77,10 @@ class PlayerShip extends GameObject {
     Object.assign(this, {
       dependencies,
       weapons,
+      features,
       shield,
       terminationSequence,
-      engineTrailFactory,
+      engineTrail,
       hudHandler,
       inputHandler,
       playerShipHandler
@@ -105,8 +107,9 @@ class PlayerShip extends GameObject {
     // Initialize weapons and add to GameObjectsHandler
     this.initializeWeapons();
 
-    // Update shield in the HUD
+    this.initializeFeatures();
 
+    // Update shield in the HUD
     this.hudHandler.updateHudInfo({
       shield : this.shield.strength
     });
@@ -126,6 +129,7 @@ class PlayerShip extends GameObject {
    */
   addKeyEvent = ({key, execute})=>{
     this.keyEvents[key] = execute;
+    console.log("keyEvents:", this.keyEvents);
   }
 
   /**
@@ -133,6 +137,18 @@ class PlayerShip extends GameObject {
    */
   addDependencies = ()=>{
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
+  }
+
+  initializeFeatures = () => {
+    for (const feature in this.features){
+      const {controlAssignment, type} = this.features[feature];
+      console.log("controlAssignment: ", controlAssignment);
+      console.log("execute: ", type.execute);
+      this.addKeyEvent({
+        key: controlAssignment,
+        execute: type.execute
+      })
+    }
   }
 
   /**
@@ -271,17 +287,15 @@ class PlayerShip extends GameObject {
     this.posX = this.posX + (this.velX*deltaTime);
 
     // engineTrail
-
-
     if (this.velX>1){
       if (this.velY>1){
-        this.engineTrailFactory.create({posX: this.posX, posY: this.posY-4});
+        this.engineTrail.create({posX: this.posX, posY: this.posY-4});
       } else
       if (this.velY < -1){
-        this.engineTrailFactory.create({posX:this.posX, posY:this.posY+4});
+        this.engineTrail.create({posX:this.posX, posY:this.posY+4});
       } else
       {
-        this.engineTrailFactory.create({posX:this.posX, posY: this.posY});
+        this.engineTrail.create({posX:this.posX, posY: this.posY});
       }
     }
 

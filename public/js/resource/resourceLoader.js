@@ -13,10 +13,8 @@ class ResourceLoader {
    * @returns {Promise<unknown>}
    */
   #loadImage = (resourceObject) => {
-    console.log("resourceObject: ", resourceObject);
     return new Promise((resolve, reject) => {
       const resourcePath = resourceObject.resourcePath+resourceObject.filename+"."+resourceObject.type;
-      console.log("resourcePath: ", resourcePath);
       resourceObject.image = new Image();
       resourceObject.image.src = resourcePath;
       resourceObject.image.onload = () => resolve(resourceObject);

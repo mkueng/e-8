@@ -2,14 +2,16 @@
 class PropulsionFactory {
 
   static PROPULSION_TYPES = {
-    ionA : PropulsionIonA,
-    ionB : PropulsionIonB
+    ionA : PropulsionIonA
   }
 
-  constructor({
-    resourceHandler
-              }){
+  constructor({resourceHandler}){
     this.resourceHandler = resourceHandler;
+  }
+
+  invoke = async ()=>{
+    await PropulsionFactory.PROPULSION_TYPES.ionA.invoke(this.resourceHandler);
+
   }
 
   /**
@@ -27,21 +29,10 @@ class PropulsionFactory {
                               posDY
 
   })=>{
-
-    /**
-     *
-     * @param type
-     * @returns {Promise<*>}
-     */
-    const invokePropulsion = async (type) =>{
-      await type.invoke(this.resourceHandler);
-      return new type({
-        canvas,
-        posDX,
-        posDY
-      })
-    }
-
-    return invokePropulsion(type);
+    return new type({
+      canvas,
+      posDX,
+      posDY
+    })
   }
 }

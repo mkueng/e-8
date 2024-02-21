@@ -48,7 +48,7 @@ class ClassBShield extends Shield {
       spriteSheetColumns: 8,
       spriteSheetRows: 4,
       step: 50,
-      strength: 100,
+      strength: 400,
       stride: ClassBShield.imageResource.image.height / 32,
       strideX: ClassBShield.imageResource.image.width / 8,
       strideY: ClassBShield.imageResource.image.height /4,

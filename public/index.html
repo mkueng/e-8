@@ -27,31 +27,23 @@
     <script>
         var e8 = e8 || {}
         e8.global = e8.global || {};
-        e8.global.maxWidth = 3600;
-        e8.global.maxHeight = 2000;
-
-
+        e8.global.maxWidth = 2700;
+        e8.global.maxHeight = 1200;
+        e8.global.minWidth = 1100;
+        e8.global.minHeight = 620;
         e8.global.currentWidth = window.innerWidth;
         e8.global.currentHeight = window.innerHeight;
 
-        console.log("height",e8.global.currentHeight);
-        console.log("width",e8.global.currentWidth);
-        e8.global.screenHeight = e8.global.currentHeight >  e8.global.maxHeight ?  e8.global.maxHeight : e8.global.currentHeight;
-        e8.global.screenWidth = e8.global.currentWidth  > e8.global.maxWidth ? e8.global.maxWidth : e8.global.currentWidth;
-        e8.global.centerHorizontal = e8.global.screenWidth / 2;
-        e8.global.centerVertical = e8.global.screenHeight / 2;
-        e8.global.centerLeft = e8.global.screenWidth / 3;
-        e8.global.centerRight = e8.global.screenWidth - e8.global.screenWidth / 3
-
+        e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
+        e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
 
     </script>
+
     <div id="wrapper">
         <div id="game">
             <div id="overlay" style="display:none">
-
             </div>
         </div>
-
     </div>
 
     <!-- backgrounds -->
@@ -126,6 +118,10 @@
     <script src="js/poi/poi.js?v=0.9"></script>
     <script src="js/poi/poiFactory.js?v=0.9"></script>
 
+    <!-- features -->
+    <script src="js/tractor/tractor.js?v=0.9"></script>
+    <script src="js/probe/probe.js?v=0.9"></script>
+
     <!-- ship -->
     <script src="js/playerShip/playerShipClasses.js?v=0.9"></script>
     <script src="js/playerShip/playerShipHandler.js?v=0.9"></script>
@@ -136,9 +132,9 @@
     <!-- enemyShip -->
     <script src="js/procedural/ships/proceduralShipImage.js?v=0.9"></script>
     <script src="js/enemyShip/proceduralEnemyShipImageType1.js?v=0.9"></script>
-    <script src="js/enemyShip/enemyShipType1.js?v=0.9"></script>
+    <script src="js/enemyShip/proceduralEnemyShipType1.js?v=0.9"></script>
     <script src="js/enemyShip/enemyShipHandler.js?v=0.9"></script>
-    <script src="js/enemyShip/enemyShipFactory.js?v=0.9"></script>
+    <script src="js/enemyShip/proceduralEnemyShipFactory.js?v=0.9"></script>
     <script src="js/enemyShip/enemyShip.js?v=0.9"></script>
 
     <!-- spaceStation -->
@@ -175,7 +171,6 @@
     <!-- collision -->
     <script src="js/collisionDetection/collisionDetector.js?v=0.9"></script>
 
-
     <!-- settings -->
     <script src="js/settings/settingsHandler.js?v=0.9"></script>
 
@@ -198,25 +193,15 @@
 
 
     <!-- three.js -->
-
     <script src="three/three.js"></script>
     <script src="three/OBJLoader.js"></script>
     <script src="three/GLTFLoader.js"></script>
     <script src="three/MTLLoader.js"></script>
-
-    <!--
-
-    <script src="https://unpkg.com/three@0.112.0/build/three.js"></script>
-    <script src="https://unpkg.com/three@0.112.0/examples/js/loaders/OBJLoader.js"></script>
-    <script src="https://unpkg.com/three@0.112.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="https://unpkg.com/three@0.112.0/examples/js/loaders/MTLLoader.js"></script>
-<script type="module" src="/three/threeInit.js"></script>
--->
-
     <script src="/three/3DHandler.js"></script>
     <script src="/js/playerShip3D/playerShip3D.js"></script>
 
 
+    <!-- init -->
     <script src="js/gameInit.js?v=0.9"></script>
     <script src="js/init.js?v=0.9"></script>
     <script src="js/index.js?v=0.9"></script>

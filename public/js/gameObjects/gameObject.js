@@ -240,7 +240,7 @@ class GameObject {
       }
       this.posY = this.posY +(this.velY*deltaTime);
 
-      // position dependencies
+      // positioning dependencies
       if (this.dependencies) {
         for (const dependency of this.dependencies){
           dependency.posX = this.posX;

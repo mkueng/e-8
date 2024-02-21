@@ -1,3 +1,5 @@
+'use strict'
+
 class DustParticles  {
 
   constructor({particles, canvas, context}) {
@@ -16,6 +18,7 @@ class DustParticles  {
   }
 
   update = (deltaTime) => {
+
     for (const particle of this.particles) {
       if (particle.posX < 0 ) {
         particle.posX = e8.global.screenWidth;

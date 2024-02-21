@@ -1,4 +1,4 @@
-class EnemyShipType1 {
+class ProceduralEnemyShipType1 {
 
   #proceduralEnemyShipType1Image;
   #particleGenerator;
@@ -11,6 +11,7 @@ class EnemyShipType1 {
       scale: 0.4,
       weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       particles: [],
+      playerShipTracking : true,
       shield: {
         type: ShieldFactory.SHIELD_TYPES.classBShield,
         posDX:-105,
@@ -21,6 +22,7 @@ class EnemyShipType1 {
       shipSize: 3,
       scale: 0.6,
       particles: [],
+      playerShipTracking : true,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       shield: {
         type: ShieldFactory.SHIELD_TYPES.classBShield,
@@ -32,6 +34,7 @@ class EnemyShipType1 {
       shipSize: 7,
       scale: 1,
       particles: [],
+      playerShipTracking : false,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       shield: {
         type: ShieldFactory.SHIELD_TYPES.classBShield,
@@ -57,14 +60,14 @@ class EnemyShipType1 {
 
     await this.#createParticlesForAllShipTypeVariations({
       shipType: this.#proceduralEnemyShipType1Image,
-      shipTypeVariations: EnemyShipType1.shipTypeVariations
+      shipTypeVariations: ProceduralEnemyShipType1.shipTypeVariations
     })
   }
 
-  createImage = async ({typeVariation}) =>{
+  createImage = async ({shipTypeVariation}) =>{
     return await this.#proceduralEnemyShipType1Image.create({
-      shipSize: typeVariation.shipSize,
-      scale: typeVariation.scale
+      shipSize: shipTypeVariation.shipSize,
+      scale: shipTypeVariation.scale
     });
   }
 

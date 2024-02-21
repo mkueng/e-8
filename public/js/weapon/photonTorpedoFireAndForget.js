@@ -86,6 +86,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
    * @param posY
    */
   activate = ({posX, posY}) => {
+
     this.target = null;
     const enemyShips = Object.values(EnemyShipHandler.enemyShips);
     if (enemyShips.length > 0) {
@@ -115,7 +116,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
       this.quotient = (this.target.posX - this.posX) / (this.target.posY - this.posY);
     }
 
-      this.posY = (this.posY + (this.posX / this.quotient) * 0.01);
+    this.posY = (this.posY + (this.posX / this.quotient) * 0.03);
     this.posX = this.posX + (this.velX*deltaTime);
     const isOutsideScreen = this.posX > e8.global.screenWidth || this.posX < 0 || this.posY > e8.global.screenHeight || this.posY < 0;
 

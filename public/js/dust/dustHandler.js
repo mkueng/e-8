@@ -1,3 +1,5 @@
+'use strict'
+
 class DustHandler {
 
   #canvas;
@@ -15,6 +17,7 @@ class DustHandler {
     this.#canvas =  this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
     this.#context = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
     this.#createParticles({amount:150});
+
     this.dustParticles = new DustParticles({
       particles: this.#particles,
       canvas: this.#canvas,
@@ -22,8 +25,6 @@ class DustHandler {
     })
     GameObjectsHandler.instance.addGameObject(this.dustParticles);
   }
-
-
 
   /**
    *
@@ -36,7 +37,7 @@ class DustHandler {
         color: this.#getRandomGrayscaleColor(),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
-        velX: -1 * (Math.random()*3+1),
+        velX: -1 * (Math.random()*5+0.5),
         width: Math.floor(Math.random()*5+1),
         height: Math.floor(Math.random()*3+1)
       })
@@ -45,9 +46,9 @@ class DustHandler {
 
   #getRandomGrayscaleColor() {
     // Generate a random value between 0 and 255 for the grayscale component
-    const grayscaleValue = Math.floor(Math.random() * 100+30);
+    const grayscaleValue = Math.floor(Math.random() * 120+30);
 
-    // Create an RGB color with equal values for red, green, and blue
-    return  `rgb(${grayscaleValue}, ${grayscaleValue}, ${grayscaleValue})`;
+    // Create an RGB color with same values for red, green, and blue
+    return `rgb(${grayscaleValue}, ${grayscaleValue}, ${grayscaleValue})`;
   }
 }

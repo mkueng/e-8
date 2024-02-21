@@ -63,12 +63,11 @@ class GameInit {
   startGame = ()=>{
     this.gameState = this.stateHandler.getState().name;
     this.gameLoop.start();
-    this.asteroidHandler.createAsteroid(10000,10);
-    this.enemyShipHandler.startCreation(100);
+    this.asteroidHandler.createAsteroids(10000,10);
+    this.enemyShipHandler.startCreation(5000);
   }
 
   pauseGame = ()=>{
-    console.log("pauseGame");
     this.gameState = this.stateHandler.getState().name;
     this.gameLoop.pause();
   }
@@ -79,7 +78,7 @@ class GameInit {
   }
 
   startMusic = ()=>{
-    SoundHandler.playMusic();
+    //SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
   }
 
@@ -170,10 +169,11 @@ class GameInit {
     await this.proceduralMusic.fetchAudioAssets();
     await this.playerShipHandler.invoke();
     await this.playerShipHandler.create();
-    await this.enemyShipHandler.invoke();
+
     await this.asteroidHandler.invoke();
 
     this.stateHandler.trigger(StateHandler.actions.startGame);
+    await this.enemyShipHandler.invoke();
   }
 
 
