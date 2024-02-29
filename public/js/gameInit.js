@@ -157,6 +157,13 @@ class GameInit {
       particleGenerator: this.particleGenerator
     });
 
+    this.freighterHandler = new FreighterHandler({
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler,
+      particleGenerator: this.particleGenerator
+    });
+
+
     this.spaceStationHandler = new SpaceStationHandler({
       galaxy: this.galaxy,
       resourceHandler : this.resourceHandler,
@@ -168,7 +175,10 @@ class GameInit {
     await this.speechHandler.invoke();
     await this.proceduralMusic.fetchAudioAssets();
     await this.playerShipHandler.invoke();
+    await this.freighterHandler.invoke();
     await this.playerShipHandler.create();
+
+    await this.freighterHandler.create();
 
     await this.asteroidHandler.invoke();
 

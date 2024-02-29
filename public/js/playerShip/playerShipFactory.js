@@ -47,7 +47,7 @@ class PlayerShipFactory {
   /**
    *
    * @param shipType {PlayerShipFactory.SHIP_TYPES}
-   * @param canvas
+   * @param canvass  w
    * @returns {Promise<PlayerShip>}
    */
   createShip = async ({ shipType, canvas }) => {
@@ -67,7 +67,7 @@ class PlayerShipFactory {
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
     const shieldInstance = await this.#createShield({shield, canvas});
     const terminationSequenceInstance = await this.#createTerminationSequence({terminationSequence, canvas})
-    const featureInstances = this.#createFeatures({features});
+    const featureInstances = this.#createFeatures({features, canvas});
     const weaponsInstances = this.#createWeapons({weapons, canvas})
 
 
@@ -141,16 +141,17 @@ class PlayerShipFactory {
   /**
    *
    * @param features
+   * @param canvas
    * @returns {{}}
    */
-  #createFeatures = ({features}) => {
+  #createFeatures = ({features, canvas}) => {
     let featureInstances = {};
 
     for (const feature of features) {
       const [featureName, featureProps] = Object.entries(feature)[0];
       featureInstances[featureName] = {
         controlAssignment: featureProps.controlAssignment,
-        type: new featureProps.type()
+        type: new featureProps.type({canvas:canvas})
       };
     }
     return featureInstances;

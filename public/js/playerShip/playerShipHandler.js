@@ -21,7 +21,6 @@ class PlayerShipHandler {
       hudHandler
     });
 
-
     inputHandler.subscribe(this);
   }
 

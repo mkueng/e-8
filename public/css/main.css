@@ -12,7 +12,7 @@ body {
     font-family: 'Exo 2', sans-serif;
     min-width: 400px;
     min-height: 300px;
-
+    overflow:hidden;
 }
 
 
@@ -42,7 +42,6 @@ input[type="range"] {
     outline: none;
     height: 18px;
     background: #666;
-
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -63,6 +62,40 @@ input[type="range"]::-webkit-slider-thumb {
 
 .hidden{
     display: none;
+}
+
+.info {
+    font-family: brunoAce;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    z-index: 1000;
+    color: white;
+    position: absolute;
+    left:100px;
+    border: 2px solid;
+    border-radius:5px;
+    min-width:180px;
+    overflow:hidden;
+    background-color: #333;
+    opacity: 0.5;
+
+}
+
+.infoProperties {
+    font-size:15px;
+    padding-bottom:5px;
+    padding-right:10px;
+    margin-right:10px;
+    margin-bottom:0;
+}
+
+.infoTitle {
+    text-align: center;
+    font-size: 16px;
+    border-bottom:solid;
+    padding-bottom:5px;
+    margin-bottom:10px;
 }
 
 .settings {

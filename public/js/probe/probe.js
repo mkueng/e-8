@@ -34,6 +34,7 @@ class Probe{
 
   execute = () =>{
     console.log("Probe execute");
+    this.bla = "bla";
   }
 
 }

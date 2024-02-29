@@ -8,14 +8,13 @@ class EnemyShipHandler {
   constructor({canvasHandler, resourceHandler, particleGenerator}){
     this.canvasHandler = canvasHandler;
     this.resourceHandler = resourceHandler;
-    this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
+    //this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
     this.enemyShipFactory = new ProceduralEnemyShipFactory({
       enemyShipHandler: this,
       resourceHandler,
       canvasHandler,
-      particleGenerator,
-      enemyShipWorker: this.enemyShipWorker
+      particleGenerator
     });
   }
 
@@ -52,8 +51,8 @@ class EnemyShipHandler {
 
   /**
    *
-   * @param type
-   * @param variation
+   * @param shipType
+   * @param shipTypeVariation
    * @returns {Promise<void>}
    */
   #create = async ({shipType, shipTypeVariation}) => {

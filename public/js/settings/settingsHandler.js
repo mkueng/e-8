@@ -6,14 +6,12 @@ class SettingsHandler {
   #canvasHandler;''
   #settingsAreShown = false;
 
-
   #settingValues = {
     music_volume : 0,
     fx_volume: 0
   }
 
   #template;
-
 
   constructor({
                 localStorageHandler,
@@ -28,7 +26,6 @@ class SettingsHandler {
 
     this.initializeSettings();
     this.#inputHandler.subscribe(this);
-
   }
 
 
@@ -39,7 +36,6 @@ class SettingsHandler {
     this.#canvasHandler.blurCanvases();
     //delay pauseGame trigger to make sure all Canvases have been rendered
     setTimeout(()=>{
-
       this.#stateHandler.trigger(StateHandler.actions.pauseGame);
     },100)
   }

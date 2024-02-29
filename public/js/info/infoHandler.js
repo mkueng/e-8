@@ -1,16 +1,50 @@
 class InfoHandler {
 
-  constructor(canvasHandler){
-    this.context = canvasHandler.getCanvas("performanceInfo").context;
-    this.context.setTransform(1, 0, 0, 1, 0, 0);
-    this.context.font = "15px myFont";
-    this.context.fillStyle = "white";
+  static template
+  static infoElement;
+
+  constructor(){
+    this.initializeTemplate();
   }
 
-  render = function(renderTime, fps, coordinate){
-    this.context.clearRect(0,window.global.screenHeight-100,window.global.screenWidth, 100);
-    this.context.fillText("render time: "+renderTime+" ms", window.global.centerHorizontal-400, window.global.screenHeight-20);
-    this.context.fillText("/ fps: "+fps, window.global.centerHorizontal-100, window.global.screenHeight-20);
-    this.context.fillText("/ coordinate: "+coordinate, window.global.centerHorizontal+100, window.global.screenHeight-20);
+  initializeTemplate = () => {
+    InfoHandler.template =`
+  <div class="info" id="bla" >
+    <div class="infoTitle">CARGO</div>
+    <div class="infoProperties" id="infoProperties">
+        
+    </div>
+  </div>
+  `
   }
+
+  static updateInfo({properties}){
+    let propertyList = ``;
+    const infoProperty = document.getElementById("infoProperties");
+    Object.keys(properties).forEach(property =>{
+      propertyList=propertyList+`<div>${property}:`+" "+`${properties[property]}</div>`
+    })
+    infoProperty.innerHTML=propertyList
+  }
+
+  static hideInfo(){
+    InfoHandler.infoElement.style.display="none";
+  }
+
+  static showInfo(){
+    InfoHandler.infoElement = document.getElementById("info");
+    InfoHandler.infoElement.style.display="block";
+
+    InfoHandler.infoElement .innerHTML = InfoHandler.template;
+    InfoHandler.infoElement .style.position = 'absolute';
+
+
+  }
+
+  static updatePosition(posX, posY){
+    InfoHandler.infoElement .style.top = posY+ 'px';
+    InfoHandler.infoElement .style.left = posX+ 'px';
+
+  }
+
 }

@@ -129,7 +129,6 @@ class PlayerShip extends GameObject {
    */
   addKeyEvent = ({key, execute})=>{
     this.keyEvents[key] = execute;
-    console.log("keyEvents:", this.keyEvents);
   }
 
   /**
@@ -146,7 +145,9 @@ class PlayerShip extends GameObject {
       console.log("execute: ", type.execute);
       this.addKeyEvent({
         key: controlAssignment,
-        execute: type.execute
+        execute: () => {
+          type.activate({posX: this.posX, posY:this.posY, dependency:this})
+        }
       })
     }
   }

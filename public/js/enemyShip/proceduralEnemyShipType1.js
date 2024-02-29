@@ -8,7 +8,7 @@ class ProceduralEnemyShipType1 {
   static shipTypeVariations = {
     0: {
       shipSize: 1,
-      scale: 0.4,
+      scale: 0.5,
       weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       particles: [],
       playerShipTracking : true,
