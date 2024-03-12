@@ -1,4 +1,4 @@
-class ClassAFreighter extends Freighter{
+class ClassAFreighter {
 
   static resources = {};
 
@@ -19,10 +19,10 @@ class ClassAFreighter extends Freighter{
     maxVelX: 3,
     maxVelY: 3,
     cargo: {
-      units: 300,
-      crystals: 190,
-      fuel: 1000,
-      antimatter: 150
+      units: 300, //new Units({amount:300}),
+      crystals: 400, //new Crystals({amount: 500}),
+      fuel: 1000, //new Fuel({amount:1000}),
+      antimatter: 600//new Antimatter({amount: 200})
     }
   }
 

@@ -36,7 +36,6 @@ class InputHandler {
         try {
           subscriber.mouseEvent(event);
         } catch(e){}
-
       }
     }
   }
@@ -54,7 +53,7 @@ class InputHandler {
 
     //prevent contextmenu
     document.addEventListener('contextmenu', (event) => {
-      //event.preventDefault();
+      event.preventDefault();
     });
 
     //check for mouse down

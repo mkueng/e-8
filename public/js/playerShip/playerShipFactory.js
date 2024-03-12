@@ -3,8 +3,8 @@
 class PlayerShipFactory {
 
   static SHIP_TYPES = {
-    classA : ClassAShip,
-    classB : ClassBShip
+    classA : PlayerShipPropertiesClassA,
+    classB : PlayerShipPropertiesClassB
   }
 
   /**
@@ -29,6 +29,7 @@ class PlayerShipFactory {
     this.engineTrailFactory = new EngineTrailFactory({canvasHandler,resourceHandler})
     this.weaponFactory = new WeaponFactory({resourceHandler});
     this.propulsionFactory = new PropulsionFactory({resourceHandler});
+    this.fuelFactory = new FuelFactory();
     this.shieldFactory = new ShieldFactory({resourceHandler});
     this.explosionFactory = new ExplosionFactory({resourceHandler});
   }
@@ -50,48 +51,53 @@ class PlayerShipFactory {
    * @param canvass  w
    * @returns {Promise<PlayerShip>}
    */
-  createShip = async ({ shipType, canvas }) => {
+  createShip = async ({ shipType, shipImageIdentifier, canvas }) => {
     const {
       engineTrail,
       propulsion,
+      fuel,
       shield,
       terminationSequence,
       weapons,
       features,
-      resourceObject,
-      properties,
+      generic,
+      cargo
     } = shipType;
 
-    const imageResource = await this.resourceHandler.fetchImageResource({resourceObject});
+    const imageResource = await this.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
     const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
     const shieldInstance = await this.#createShield({shield, canvas});
     const terminationSequenceInstance = await this.#createTerminationSequence({terminationSequence, canvas})
     const featureInstances = this.#createFeatures({features, canvas});
-    const weaponsInstances = this.#createWeapons({weapons, canvas})
-
+    const weaponsInstances = this.#createWeapons({weapons, canvas});
+    const fuelInstance = this.#createFuel({fuel});
 
     return new PlayerShip({
-      accX: properties.accX,
-      accY: properties.accY,
+      accX: generic.accX,
+      accY: generic.accY,
       canvas,
+      propulsion: propulsionInstance,
+      fuel: fuelInstance,
+      fuelConsumption : 1 / (fuelInstance.energyDensity * propulsionInstance.efficiency),
       dependencies: [propulsionInstance],
       engineTrail : engineTrailInstance,
       features: featureInstances,
+      cargo: cargo,
       height: imageResource.image.height,
       hudHandler: this.hudHandler,
       inputHandler: this.inputHandler,
-      maxVelX: properties.maxVelX,
-      maxVelY: properties.maxVelY,
+      maxVelX: generic.maxVelX,
+      maxVelY: generic.maxVelY,
       playerShipHandler: this.playerShipHandler,
-      posDX: properties.posDX,
-      posDY: properties.posDY,
-      posX: properties.posX,
-      posY: properties.posY,
+      posDX: 0,
+      posDY: 0,
+      posX: 100,
+      posY: e8.global.screenHeight / 2,
       shield: shieldInstance,
       terminationSequence: terminationSequenceInstance,
-      velX: properties.velX,
-      velY: properties.velY,
+      velX: 0,
+      velY: 0,
       weapons: weaponsInstances,
       width: imageResource.image.width,
       image: imageResource.image,
@@ -180,5 +186,14 @@ class PlayerShipFactory {
       };
     }
     return weaponsInstances;
+  }
+
+  /**
+   *
+   * @param fuel
+   * @returns {*}
+   */
+  #createFuel = ({fuel}) => {
+    return this.fuelFactory.createFuel({fuelType: fuel.type, amount: fuel.amount, maximumAmount: fuel.max});
   }
 }

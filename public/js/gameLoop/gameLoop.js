@@ -128,7 +128,7 @@ class GameLoop {
         for (const subscriber of this.#subscribers) {
           subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#coordinate}});
         }
-      },1000)
+      },2000)
     }
 
   /**

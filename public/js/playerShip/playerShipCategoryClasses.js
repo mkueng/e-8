@@ -1,7 +1,9 @@
 /**
  * Class A
  */
-class ClassAShip {
+class ClassAShip extends PlayerShipProperties {
+
+
 
   static resourceObject = new ResourceObject({
     name : "ship01ClassA",
@@ -9,6 +11,10 @@ class ClassAShip {
     fileType : ResourceObject.TYPES.png,
     resourcePath : "/resources/ships/ship_01/images/"
   })
+
+  constructor() {
+    super({})
+  }
 
   static properties = {
     posX: 100,
@@ -23,16 +29,34 @@ class ClassAShip {
     accY: 0.3
   }
 
+  static cargo = {
+
+    maxTotal: 1000,
+
+    crystals: {
+      amount: 50,
+      max: 200
+    }
+  }
+
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
     posDX : -20,
     posDY :27
-  };
+  }
+
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
     posDX: -15,
     posDY: 25
   }
+
+  static fuel = {
+    type: FuelFactory.FUEL_TYPES.xenon,
+    amount: 100,
+    max: 200
+  }
+
   static shield = {
     type: ShieldFactory.SHIELD_TYPES.classAShield,
     posDX: -70,
@@ -50,7 +74,6 @@ class ClassAShip {
       Tractor: {
         controlAssignment: "KeyT",
         type: Tractor
-
       }
     },
     {

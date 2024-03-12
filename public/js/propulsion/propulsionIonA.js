@@ -39,6 +39,8 @@ class PropulsionIonA extends Propulsion{
       canvas: canvas,
       posDX: posDX,
       posDY: posDY,
+      efficiency: 0.5,
+      fuelType: FuelFactory.FUEL_TYPES.xenon,
       isHittable: false
     });
   }

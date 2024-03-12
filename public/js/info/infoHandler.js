@@ -1,23 +1,25 @@
 class InfoHandler {
 
-  static template
-  static infoElement;
+
+  static INFO_TYPES = {
+    freighterCargoInfo: FreighterCargoInfo
+  }
+
 
   constructor(){
-    this.initializeTemplate();
+
   }
 
-  initializeTemplate = () => {
-    InfoHandler.template =`
-  <div class="info" id="bla" >
-    <div class="infoTitle">CARGO</div>
-    <div class="infoProperties" id="infoProperties">
-        
-    </div>
-  </div>
-  `
+  /**
+   *
+   * @param infoType <InfoHandler.INFO_TYPES>
+   */
+  static initInfo = ({infoType}) => {
+    return new infoType();
   }
 
+
+/*
   static updateInfo({properties}){
     let propertyList = ``;
     const infoProperty = document.getElementById("infoProperties");
@@ -46,5 +48,5 @@ class InfoHandler {
     InfoHandler.infoElement .style.left = posX+ 'px';
 
   }
-
+*/
 }

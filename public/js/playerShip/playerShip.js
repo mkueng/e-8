@@ -11,6 +11,8 @@ class PlayerShip extends GameObject {
    * @param height
    * @param posX
    * @param posY
+   * @param posDX
+   * @param posDY
    * @param velX
    * @param velY
    * @param maxVelX
@@ -18,8 +20,17 @@ class PlayerShip extends GameObject {
    * @param accX
    * @param accY
    * @param canvas
+   * @param dependencies
    * @param propulsion
    * @param weapons
+   * @param features
+   * @param shield
+   * @param cargo
+   * @param terminationSequence
+   * @param engineTrail
+   * @param playerShipHandler
+   * @param inputHandler
+   * @param hudHandler
    */
   constructor({
                 image,
@@ -40,9 +51,13 @@ class PlayerShip extends GameObject {
                 accY,
                 canvas,
                 dependencies,
+                propulsion,
                 weapons,
                 features,
                 shield,
+                cargo,
+                fuel,
+                fuelConsumption,
                 terminationSequence,
                 engineTrail,
                 playerShipHandler,
@@ -71,7 +86,7 @@ class PlayerShip extends GameObject {
       posDY,
       isDestroyable: true,
       canDestroy: true,
-      hitWidth: width+ 70
+      hitWidth: width + 70
     })
 
     Object.assign(this, {
@@ -79,11 +94,15 @@ class PlayerShip extends GameObject {
       weapons,
       features,
       shield,
+      cargo,
       terminationSequence,
       engineTrail,
       hudHandler,
       inputHandler,
-      playerShipHandler
+      playerShipHandler,
+      propulsion,
+      fuel,
+      fuelConsumption
     });
 
     // Initialize properties
@@ -100,6 +119,8 @@ class PlayerShip extends GameObject {
       left: false,
       right: false
     }
+
+
 
     // Subscribe to input handler
     this.inputHandler.subscribe(this);
@@ -127,26 +148,24 @@ class PlayerShip extends GameObject {
    * @param key
    * @param execute
    */
-  addKeyEvent = ({key, execute})=>{
+  addKeyEvent = ({key, execute}) => {
     this.keyEvents[key] = execute;
   }
 
   /**
    *
    */
-  addDependencies = ()=>{
+  addDependencies = () => {
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
   initializeFeatures = () => {
     for (const feature in this.features){
       const {controlAssignment, type} = this.features[feature];
-      console.log("controlAssignment: ", controlAssignment);
-      console.log("execute: ", type.execute);
       this.addKeyEvent({
         key: controlAssignment,
         execute: () => {
-          type.activate({posX: this.posX, posY:this.posY, dependency:this})
+          type.activate({dependency: this})
         }
       })
     }
@@ -155,7 +174,7 @@ class PlayerShip extends GameObject {
   /**
    *
    */
-  initializeWeapons = ()=>{
+  initializeWeapons = () => {
     for (const weapon in this.weapons) {
       const { controlAssignment, units } = this.weapons[weapon];
       this.addKeyEvent({
@@ -181,8 +200,24 @@ class PlayerShip extends GameObject {
    * @param message
    * @param obj
    */
-  subscriptionsUpdate = (message,obj)=>{
+  subscriptionsUpdate = (message,obj) => {
     this.weapons[obj.uniqueIdentifier].units.unshift(obj);
+  }
+
+  /**
+   *
+   * @param key
+   */
+  loadCargo = (key) => {
+    //this.cargo[key] = (this.cargo[key] || {key: {amount:0, max:}});
+
+    if (this.cargo[key] >= 100) {
+      this.cargo[key] = 100;
+    }
+  }
+
+  unloadCargo = () => {
+
   }
 
   /**
@@ -193,7 +228,7 @@ class PlayerShip extends GameObject {
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
     SoundHandler.playFX(this.shield.sound);
-    this.shield.strength < 0 ?  this.shield.strength = 1: this.shield.strength -=10;
+    this.shield.strength < 0 ?  this.shield.strength = 0: this.shield.strength -=10;
   }
 
   /**
@@ -215,7 +250,7 @@ class PlayerShip extends GameObject {
   /**
    *
    */
-  destroyDependencies = ()=>{
+  destroyDependencies = () => {
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
@@ -225,7 +260,7 @@ class PlayerShip extends GameObject {
    *
    * @param hitBy
    */
-  hit = (hitBy)=> {
+  hit = (hitBy) => {
     if (hitBy.identification === "weaponPlayer") {
       return; // Ignore hits from player's own weapon
     }
@@ -249,17 +284,34 @@ class PlayerShip extends GameObject {
    *
    * @param deltaTime
    */
-  update = (deltaTime)=>{
+  update = (deltaTime) =>{
+    //spatial controls
+    if (this.fuel.amount > 0 ) {
 
-    // directional controls
-    if (this.controls.down === true && this.velY < this.maxVelY) {
-      this.velY = (this.velY + this.accY);
-    } else if (this.controls.up === true && this.velY > -this.maxVelY) {
-      this.velY = (this.velY - this.accY);
-    } else if (this.controls.right === true && this.velX < this.maxVelX) {
-      this.velX = (this.velX + this.accX);
-    } else if (this.controls.left === true && this.velX > -this.maxVelX) {
-      this.velX = (this.velX - this.accX);
+      if (this.controls.down && this.velY < this.maxVelY) {
+        this.velY += this.accY;
+        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+      } else
+      if (this.controls.up && this.velY > -this.maxVelY) {
+        this.velY -= this.accY;
+        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+      } else
+      if (this.controls.right && this.velX < this.maxVelX) {
+        this.velX += this.accX;
+        this.dependencies[0].isActive = true; // activate rear propulsion
+        this.engineTrail.create({posX: this.posX, posY: this.posY}); // show engine trail
+        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+      } else
+      if (this.controls.left && this.velX > -this.maxVelX) {
+        this.velX -= this.accX;
+        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+      } else {
+        this.dependencies[0].isActive = false
+      }
+
+
+    } else {
+      this.dependencies[0].isActive = false;
     }
 
     // bounds
@@ -287,19 +339,6 @@ class PlayerShip extends GameObject {
     this.posY = this.posY + (this.velY*deltaTime);
     this.posX = this.posX + (this.velX*deltaTime);
 
-    // engineTrail
-    if (this.velX>1){
-      if (this.velY>1){
-        this.engineTrail.create({posX: this.posX, posY: this.posY-4});
-      } else
-      if (this.velY < -1){
-        this.engineTrail.create({posX:this.posX, posY:this.posY+4});
-      } else
-      {
-        this.engineTrail.create({posX:this.posX, posY: this.posY});
-      }
-    }
-
     // position dependencies
     for (const dependency of this.dependencies){
       dependency.posX = this.posX;
@@ -309,9 +348,6 @@ class PlayerShip extends GameObject {
     // shield
     if (this.shield.strength < 100) {
       this.shield.strength+= 0.04;
-      this.hudHandler.updateHudInfo({
-        shield : this.shield.strength
-      });
 
       if (this.shield.strength > 60 && this.shieldInfoRecharged === false){
         this.shieldInfoRecharged = true;
@@ -320,6 +356,11 @@ class PlayerShip extends GameObject {
       }
     }
 
+    this.hudHandler.updateHudInfo({
+      shield : this.shield.strength,
+      fuel: this.fuel.amount
+    });
+
   }
 
   /**
@@ -327,8 +368,9 @@ class PlayerShip extends GameObject {
    * @param event
    */
   mouseEvent = (event)=>{
-    switch (event) {
-      case "left" : {
+
+    switch (event.type) {
+      case "mousedown" : {
         this.keyEvents["Space"]();
         break;
       }
@@ -349,18 +391,23 @@ class PlayerShip extends GameObject {
     if (this.keyEvents[event] && isKeyDown){
       this.keyEvents[event]();
     } else {
+
       switch (event) {
         case "KeyS":
           this.controls.down = isKeyDown;
+          this.controlsEvent = isKeyDown;
           break;
         case "KeyW":
           this.controls.up = isKeyDown;
+          this.controlsEvent = isKeyDown;
           break;
         case "KeyA":
           this.controls.left = isKeyDown;
+          this.controlsEvent = isKeyDown;
           break;
         case "KeyD":
           this.controls.right = isKeyDown;
+          this.controlsEvent = isKeyDown;
           break;
       }
     }

@@ -42,6 +42,7 @@ class PlayerShipHandler {
   create = async ()=>{
     PlayerShipHandler.activeShip = await this.playerShipFactory.createShip({
       shipType: PlayerShipFactory.SHIP_TYPES.classA,
+      shipImageIdentifier : "initial",
       canvas : this.#canvas
     })
     //this.playerShipFactory.create3DShip();

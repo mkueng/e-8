@@ -50,7 +50,7 @@ class HudHandler {
     setInterval(()=>{
       this.#updateDisplayRight();
       this.#updateDisplayLeft();
-    }, 1000);
+    }, 2000);
 
 
   }
@@ -118,7 +118,7 @@ class HudHandler {
     this.#dynamicContextRight.fillText("COORDINATES - "+this.#coordinates, 5,30);
     this.#dynamicContextRight.fillText("SYSTEMS STATUS - "+this.#systemsStatus, 5,45);
     this.#dynamicContextRight.fillText("FUEL", 5,70);
-    this.fillRectRight(60,62,100,8);
+    this.fillRectRight(60,62,this.#fuel,6);
     this.#dynamicContextRight.fillText("SHIELD", 5,85);
 
     let shieldInfoBarColor;

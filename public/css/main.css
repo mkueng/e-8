@@ -15,11 +15,11 @@ body {
     overflow:hidden;
 }
 
-
 #game
     {
 
     background: url('../resources/backdrops/backdrop_03.jpg');
+    background-size: cover;
     padding: 0;
     margin: auto;
     display: block;
@@ -30,7 +30,6 @@ body {
     right: 0;
     min-width: 400px;
     min-height: 300px;
-
 }
 
 input[type="range"] {

@@ -100,7 +100,7 @@ class GameInit {
     this.resourceHandler = new ResourceHandler();
     this.proceduralMusic = new ProceduralMusic();
     this.canvasHandler = new CanvasHandler();
-    this.infoHandler = new InfoHandler(this.canvasHandler)
+    this.infoHandler = new InfoHandler()
     this.inputHandler = new InputHandler();
     this.settingsHandler = new SettingsHandler({
       localStorageHandler: this.localStorageHandler,

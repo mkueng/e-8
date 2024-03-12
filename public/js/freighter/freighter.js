@@ -1,3 +1,4 @@
+'use strict'
 class Freighter extends GameObject{
 
   static fetchResources = async ({resourceHandler,imageResourceObject, soundResourceObject}) => {
@@ -15,7 +16,6 @@ class Freighter extends GameObject{
       fetchResource('Sound', soundResourceObject),
       fetchResource('Image', imageResourceObject)
     ]);
-
     return resources;
   }
 
@@ -66,7 +66,6 @@ class Freighter extends GameObject{
       velY
     });
 
-    console.log("cargo:", cargo);
     Object.assign(this,shield,terminationSequence)
     this.cargo = cargo;
   };

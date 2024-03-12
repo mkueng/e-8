@@ -45,27 +45,57 @@ class Tractor  {
     this.isActive = false;
     this.halfWidth = this.width / 2;
     this.halfHeight = this.height / 2;
-    this.cargo = {};
+    this.accX = 0;
+    this.accY = 0;
+    this.maxVelX = 0;
+    this.maxVelY = 0;
   }
 
-  activate = ({posX, posY, dependency}) =>{
+  activate = ({dependency}) =>{
     if (this.isActive === false) {
-
+      this.posX = dependency.posX;
+      this.posY = dependency.posY;
       this.isActive = true;
       this.dependency = dependency;
       this.id = crypto.randomUUID();
+      this.freighterCargoInfo = InfoHandler.initInfo({infoType:InfoHandler.INFO_TYPES.freighterCargoInfo})
       GameObjectsHandler.instance.addGameObject(this);
     } else {
       this.isActive = false;
+      this.freighterCargoInfo.destroy();
       GameObjectsHandler.instance.removeGameObject(this.id);
     }
+  }
+
+  lockFreighter = (freighter) =>{
+    this.isLocked = true;
+    this.lockedFreighter = freighter;
+    this.freighterCargoInfo.show({posX: this.posX, posY: this.posY, properties: this.lockedFreighter.cargo});
+    this.lockDiff = this.posX - this.lockedFreighter.posX;
+    this.accX = this.dependency.accX;
+    this.accY = this.dependency.accY;
+    this.maxVelX = this.dependency.maxVelX;
+    this.maxVelY = this.dependency.maxVelY;
+    this.dependency.accY = this.dependency.accY / 2;
+    this.dependency.accX = this.dependency.accX / 2;
+    this.dependency.maxVelX = this.dependency.maxVelX / 4;
+    this.dependency.maxVelY = this.dependency.maxVelY / 4;
+  }
+
+  releaseFreighter = () => {
+    this.freighterCargoInfo.hide();
+    this.dependency.accY = this.accY;
+    this.dependency.accX = this.accX;
+    this.dependency.maxVelX = this.maxVelX;
+    this.dependency.maxVelY = this.maxVelY;
+    this.isLocked = false;
+    this.lockedYDiff = 0;
+    this.lockedFreighter = null;
   }
 
   update = ()=>{
     this.posX = this.dependency.posX + this.posDX;
     this.posY = this.dependency.posY + this.posDY;
-
-
 
     const gradient = this.context.createLinearGradient(this.posX, this.posY, this.posX,this.posY + this.height);
     gradient.addColorStop(0.4, "#1AA396");
@@ -74,7 +104,7 @@ class Tractor  {
     this.context.strokeStyle = gradient;
     this.context.fillStyle = gradient;
 
-    // no freighter locked? scan for freighters within tractor beam range
+    // no freighter locked? scan for freighter within tractor beam range
     if (this.isLocked === false){
       Object.values(FreighterHandler.freighters).forEach(freighter => {
         if (
@@ -83,38 +113,35 @@ class Tractor  {
           && freighter.posY > this.posY
           && freighter.posY + freighter.height  < this.posY+this.height
         ){
-          this.isLocked = true;
-          this.lockedFreighter = freighter;
-          this.lockDiff = this.posX - this.lockedFreighter.posX;
-
-          InfoHandler.showInfo();
-          InfoHandler.updatePosition(this.posX, this.posY)
+        this.lockFreighter(freighter);
         }
       })
     }
-    // if we've established lock, fixate freighter position
+    // if we've established lock, fixate freighter position and withdraw cargo
     else {
-      InfoHandler.updatePosition(this.posX, this.posY)
+      this.freighterCargoInfo.update({posX: this.posX, posY:this.posY,properties: this.lockedFreighter.cargo})
 
-      for (const [key, value] of Object.entries(this.lockedFreighter.cargo)) {
+      for (const [key] of Object.entries(this.lockedFreighter.cargo)) {
         if (this.lockedFreighter.cargo[key] > 0) {
-          typeof this.cargo[key] !=="undefined" ? this.cargo[key] = this.cargo[key]+1 : this.cargo[key] = 0;
-          this.lockedFreighter.cargo[key]--
-          InfoHandler.updateInfo({properties:  this.lockedFreighter.cargo})
-        }
+          this.dependency.loadCargo(key)
 
+          /*
+          typeof this.dependency.cargo[key] !=="undefined" ?
+            this.dependency.cargo[key] = this.dependency.cargo[key]+1 :
+            this.dependency.cargo[key] = 0;*/
+          this.lockedFreighter.cargo[key]--
+          this.freighterCargoInfo.update({posX: this.posX, posY:this.posY, properties:this.lockedFreighter.cargo})
+        }
       }
 
       this.lockedFreighter.posX = this.posX - this.lockDiff
       this.lockedYDiff = this.lockedFreighter.posY - this.posY;
 
-      // release lock if we're not in vertical range of freighter anymore
+      // release lock if we're not in vertical range anymore
       if (this.posY > this.lockedFreighter.posY - this.posDY
         || this.posY < this.lockedFreighter.posY - this.height
       ){
-        InfoHandler.hideInfo();
-        this.isLocked = false;
-        this.lockedYDiff = 0;
+       this.releaseFreighter();
       }
     }
   }

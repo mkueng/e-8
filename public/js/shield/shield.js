@@ -69,7 +69,7 @@ class Shield extends GameObject {
     })
     this.strength = strength;
     this.relatedShip = relatedShip;
-    console.log("relatedShip: ", relatedShip);
+    //console.log("relatedShip: ", relatedShip);
   }
 
   /**
