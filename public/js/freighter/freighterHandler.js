@@ -29,7 +29,6 @@ class FreighterHandler {
       posY : Math.floor(Math.random()*(e8.global.screenHeight-100)+200)
     })
 
-    console.log("freighter: ", freighter);
     GameObjectsHandler.instance.addGameObject(freighter);
     FreighterHandler.freighters[freighter.id] = freighter;
   }

@@ -6,19 +6,20 @@ class HazeHandler {
   #canvases = {};
 
   constructor({gameLoop, canvasHandler, resizeImageWorker}){
-    this.#canvases[0] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFront).canvas;
+    this.#canvases[0] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
     this.#canvases[1] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddle).canvas;
     this.#canvases[2] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
     this.resizeImageWorker = resizeImageWorker;
-    this.#upcoming = Math.floor(Math.random()*5+10);
-
+    //this.#upcoming = Math.floor(Math.random()*5+10);
+    this.#upcoming =2;
     resizeImageWorker.onmessage = ({data}) =>{
       let canvas;
       let img = new Image();
 
+
       img.onload =()=>{
-        const size = img.width * img.height;
-        const velocity = size * 0.0000007;
+        const size = img.width;
+        const velocity = size * 0.0006;
 
         if (velocity >= 1 ) canvas = this.#canvases[0];
         if (velocity > 0.5 && velocity < 1) canvas = this.#canvases[1];
@@ -30,7 +31,7 @@ class HazeHandler {
           width: img.width,
           height: img.height,
           posX: e8.global.screenWidth,
-          posY: Math.floor(Math.random()* e8.global.screenHeight-300),
+          posY: Math.floor(Math.random()* e8.global.screenHeight-100),
           posDX: 0,
           posDY: 0,
           velX: -1 * velocity,
@@ -38,7 +39,7 @@ class HazeHandler {
         })
 
         GameObjectsHandler.instance.addGameObject(haze);
-        console.log("haze added");
+        console.log("created");
 
         //releasing object URL
         URL.revokeObjectURL(img.src);
@@ -54,8 +55,8 @@ class HazeHandler {
   }
 
   create = () => {
-    let width = Math.floor(Math.random()*1700+2559)
-    let height = Math.floor(Math.random()*1200+750)
+    let width = Math.floor(Math.random()*2570+855)
+    let height = Math.floor(Math.random()*1200+75)
 
     this.resizeImageWorker.postMessage({
       payload: {
@@ -76,6 +77,7 @@ class HazeHandler {
     if (this.#ticker > this.#upcoming){
       this.#ticker = 0;
       this.#upcoming = Math.floor(Math.random()*15+10);
+     //this.#upcoming = 2;
       this.create();
     }
   }

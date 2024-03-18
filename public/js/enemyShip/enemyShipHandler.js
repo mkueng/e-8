@@ -36,7 +36,7 @@ class EnemyShipHandler {
         shipType: ProceduralEnemyShipFactory.shipTypes.EnemyShipType1,
         shipTypeVariation: ProceduralEnemyShipType1.shipTypeVariations[""+variation]
       }).then(()=>{
-        this.startCreation(Math.floor(Math.random()*10000+1000))
+        this.startCreation(Math.floor(Math.random()*3000+1000))
       });
     },interval)
   }

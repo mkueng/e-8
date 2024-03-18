@@ -48,8 +48,6 @@ class ProceduralMusic {
     //this.startSequencer();
   }
 
-
-
   createSequence = ()=>{
 
     const lengthIntro = Math.floor(Math.random()*4+4)*4;
@@ -91,9 +89,7 @@ class ProceduralMusic {
 
     for (let i= 0; i < 1; i++){
       const soundTypeIntro = Math.floor(Math.random()*4);
-
       const availableSounds = this.audioAssets[this.audioAssetsEnum[soundTypeIntro]][key][120];
-
       const selectedSound = this.audio[this.audioAssetsEnum[soundTypeIntro]][key][120][Math.floor(Math.random()*availableSounds.length)];
 
       //soundsIntro.push(this.audio[this.audioAssetsEnum[soundTypeIntro]][availableSounds[Math.floor(Math.random()*availableSounds.length)]]);
@@ -177,7 +173,5 @@ class ProceduralMusic {
         }
       }
     }
-    console.log("audio:", this.audio);
-
   };
 }

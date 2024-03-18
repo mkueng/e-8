@@ -28,7 +28,7 @@ class ParticlesObject {
     // opacity =  this.particles[i-7];
     if (this.particles.length > 0) {
       for (let i = this.particles.length - 1; i >= 0; i -= 8) {
-        this.particles[i - 7] -= 2;
+        this.particles[i - 7] -= 1.5;
         if (this.particles[i - 7] / 100 >= 0) {
           this.particles[i - 1] += this.particles[i - 3] + this.velX;
           this.particles[i] += this.particles[i - 2] + this.velY;

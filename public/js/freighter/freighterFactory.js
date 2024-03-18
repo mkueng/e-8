@@ -25,7 +25,6 @@ class FreighterFactory {
    * @returns {Freighter}
    */
   createFreighter = ({freighterType, canvas, context,posX, posY }) => {
-    console.log("posY:", posY)
     const {
       properties,
       shield

@@ -4,7 +4,7 @@ class GameLoop {
   #elapsedTime = 0;
   #fpsTarget = 60;
   #renderTargetInterval = 0;
-  #galaxyCoordinatesIncrement = 10;
+  #galaxyCoordinatesIncrement = 5;
   #gameSpeedFactor = 0.1;
   #hudHandler;
   #subscribers = [];
@@ -50,10 +50,13 @@ class GameLoop {
     CollisionDetector.instance.performCollisionCheck();
 
     //remove obsolete gameObjects
+    GameObjectsHandler.instance.removeGameObjects();
+
+    /*
     for (const gameObjectToRemove in GameObjectsHandler.gameObjectsToRemove) {
       GameObjectsHandler.instance.removeGameObject(gameObjectToRemove);
     }
-
+*/
     // update game objects
     for (let i=0, len = GameObjectsHandler.gameObjects.length; i < len; i++){
       GameObjectsHandler.gameObjects[i].update(deltaTime);
@@ -65,6 +68,7 @@ class GameLoop {
    */
   #render = () => {
     //clear canvas(es)
+
     for (let context in GameObjectsHandler.contexts){
       GameObjectsHandler.contexts[context].clearRect(0,0,e8.global.screenWidth, e8.global.screenHeight);
     }
@@ -82,9 +86,7 @@ class GameLoop {
 
 
   #animate = (newTime) => {
-
       this.#animationId = requestAnimationFrame(this.#animate);
-
       //using Date.now() since it's still faster than performance.now() in most browsers
       this.#now = Date.now();
       //calculating elapsed time for render

@@ -106,7 +106,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
     this.addColor({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.5
+      alpha : 0.7
     })
 
     this.addDecoration({
@@ -116,7 +116,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       endTile : shipSize+1,
       offset : offset,
       filePrefix : this.#filePrefix,
-      alpha : 1,
+      alpha : 0.6,
       globalCompositionType : "source-over"
     })
 

@@ -95,6 +95,7 @@ class EnemyShip extends GameObject {
   invokeTerminationSequence = () => {
 
     let i = 0;
+
     for (const explosion of this.terminationSequence) {
       i++;
       explosion.posX = this.posX;

@@ -44,11 +44,11 @@ class ClassAEnemyShipExplosion extends Explosion {
     super({
       spriteSheet : ClassAEnemyShipExplosion.imageResource.image,
       sound: ClassAEnemyShipExplosion.soundResource,
-      spriteSheetRows : 6,
+      spriteSheetRows : 2,
       spriteSheetColumns : 6,
       width : 159,
       height : 100,
-      frames : 36,
+      frames : 18,
       currentFrame : 0,
       step : 50,
       stride : 0,

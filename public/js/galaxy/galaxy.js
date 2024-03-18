@@ -47,7 +47,7 @@ class Galaxy {
           posY: Math.floor(Math.random()*e8.global.screenHeight)-(planetData.radius*1.2),
           posDX: 0,
           posDY: 0,
-          velX: -0.25* (planetData.radius/200/2),
+          velX: -0.15* (planetData.radius/200/2),
           velY: 0,
           canvas: this.canvas
         })

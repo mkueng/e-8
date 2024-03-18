@@ -82,8 +82,7 @@ class ProceduralShipImage {
   getImageData = async ()=>{
     const blob = await this.canvas.convertToBlob();
     const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-    return ({blob, imageData})
-    //return await this.canvas.convertToBlob();
+    return ({blob, imageData});
   }
 
 
@@ -169,9 +168,9 @@ class ProceduralShipImage {
     this.ctx.fillStyle = gradient;
 
     this.ctx.beginPath();
-    gradient.addColorStop(0.4, `rgba(1, 1, 1, 1)`);
-    gradient.addColorStop(0.6, `rgba(${rgb.join()}, 0.9)`);
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.9)');
+    gradient.addColorStop(0.3, `rgba(1, 1, 1, 1)`);
+    gradient.addColorStop(0.6, `rgba(${rgb.join()}, 0.3)`);
+    gradient.addColorStop(1, 'rgba(100, 100, 100, 0.9)');
     this.ctx.fillRect(0,0,((shipSize+2)*offset),offset);
     this.ctx.closePath();
     this.ctx.globalAlpha = 1;

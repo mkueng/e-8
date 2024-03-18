@@ -27,11 +27,9 @@ class SpeechHandler {
 
   invoke = async () => {
     await this.#fetchStatements();
-    console.log("statements:", SpeechHandler.statements);
   };
 
   static playStatement = (statement)=>{
-    console.log("statement:", statement);
     SoundHandler.playFX(statement.audio);
   }
 

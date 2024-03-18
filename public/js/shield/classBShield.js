@@ -52,7 +52,7 @@ class ClassBShield extends Shield {
       stride: ClassBShield.imageResource.image.height / 32,
       strideX: ClassBShield.imageResource.image.width / 8,
       strideY: ClassBShield.imageResource.image.height /4,
-      width: ClassBShield.imageResource.image.width / 6,
+      width: ClassBShield.imageResource.image.width / 5,
       relatedShip: relatedShip,
     });
   }
