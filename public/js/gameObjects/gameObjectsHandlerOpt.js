@@ -1,0 +1,66 @@
+'use strict'
+
+class GameObjectsHandlerOpt {
+
+  static instance = new this();
+  static gameObjects = [];
+  static contexts = {};
+  static gameObjectsToRemove = new Set();
+
+
+  /**
+   *
+   * @param gameObject
+   */
+  addGameObject = (gameObject) => {
+    try {
+      GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
+    } catch(e){
+      console.error(e);
+    }
+    GameObjectsHandler.gameObjects.push(gameObject);
+  }
+
+  /**
+   *
+   * @param id
+   */
+  addGameObjectToRemoveQueue = (id) => {
+    GameObjectsHandler.gameObjectsToRemove.add(id)
+  }
+
+
+  removeGameObjects = () =>{
+    const start = performance.now();
+    for (let id of GameObjectsHandler.gameObjectsToRemove){
+      const index = GameObjectsHandler.gameObjects.findIndex(obj => obj.id === id);
+
+      if (index !== -1) {
+        const removedObject = GameObjectsHandler.gameObjects[index];
+        if (removedObject.subscriber) {
+          removedObject.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", removedObject);
+        }
+        GameObjectsHandler.gameObjects.splice(index, 1);
+      }
+    }
+    GameObjectsHandler.gameObjectsToRemove.clear();
+    const end = performance.now();
+    console.log(end-start);
+  }
+  /**
+   *
+   * @param id
+   */
+  removeGameObject = (id) => {
+    const index = GameObjectsHandler.gameObjects.findIndex(obj => obj.id === id);
+
+    if (index !== -1) {
+      const removedObject = GameObjectsHandler.gameObjects[index];
+      if (removedObject.subscriber) {
+        removedObject.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", removedObject);
+      }
+      GameObjectsHandler.gameObjects.splice(index, 1);
+      GameObjectsHandler.gameObjectsToRemove.delete(id);
+    }
+  }
+}
