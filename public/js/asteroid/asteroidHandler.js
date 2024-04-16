@@ -29,24 +29,28 @@ class AsteroidHandler {
       fileName : "A",
       fileType : "png",
       filePath :  "/resources/asteroids/",
-      lowerLimit : 1,
-      upperLimit : 13
+      lowerLimit : 0,
+      upperLimit : 14
     })
 
     for (const asteroidResourceObject of asteroidResourceObjects) {
       const width = asteroidResourceObject.image.width;
       const height = asteroidResourceObject.image.height;
-      const velX = -1 * (Math.random() * 6);
-      let canvas = null;
+      const size = width * height;
+      let velX = -1*size/30000;
+      if (velX < -6) {
+        velX = -6;
+      }
+      let canvas= null;
 
       switch (true) {
-        case (velX > -2) : {
+        case (velX > -2.5) : {
           canvas = this. #canvases["far"]; break
         }
-        case (velX >= -4 && velX < -2) : {
+        case (velX >= -3.5 && velX < -2.5) : {
          canvas = this.#canvases['middle']; break
         }
-        case (velX <= -4) : {
+        case (velX <= -3.5) : {
           canvas = this.#canvases['front']; break
         }
       }
@@ -61,7 +65,7 @@ class AsteroidHandler {
         posX: e8.global.screenWidth,
         posY: Math.random()*e8.global.screenHeight,
         subscriber: this,
-        velX: 0,
+        velX: velX,
         velY: 0,
         width: width,
         isActive: true,
@@ -94,13 +98,12 @@ class AsteroidHandler {
 
           asteroid.posX = e8.global.screenWidth;
           asteroid.posY = Math.random() * (e8.global.screenHeight - 200);
-          asteroid.velX = -1 * (Math.random() * 6 + 1);
 
           GameObjectsHandler.instance.addGameObject(asteroid);
           clearInterval(currentInterval);
           ticker++;
           if (ticker < amount) {
-            createBatch(Math.floor(Math.random()*1000 + 1000))
+            createBatch(Math.floor(Math.random()*3000 + 3000))
           } else {
             this.createAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
           }

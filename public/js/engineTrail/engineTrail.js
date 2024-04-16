@@ -1,35 +1,39 @@
-'use strict'
-class EngineTrail extends GameObject {
+class EngineTrail {
+  width;
+  height;
+  canvas;
+  posDX;
+  posDY;
+  imageResource;
 
   constructor({
-    image,
-    canvas,
-    posX,
-    posY,
-    posDX,
-    posDY,
-    width,
-    height
+                fadeTime
               }){
-    super({
-      isActive: true,
-      image,
-      canvas,
-      posX,
-      posY,
-      posDX,
-      posDY,
-      width,
-      height,
-      alpha: 1,
+    Object.assign(this, {
+      fadeTime
     });
   }
 
-  update = ()=>{
-    //trail decay
-    this.alpha -= 0.05;
-    if (this.alpha <= 0.1) {
-      this.destroy();
-    }
+
+  invoke = async (resourceHandler, resourceObject) => {
+    this.imageResource =  await resourceHandler.fetchImageResource({
+      resourceObject: resourceObject
+    });
+  }
+
+  createParticle = ({posX, posY}) => {
+    const engineTrailParticle = new EngineTrailParticle({
+      image: this.imageResource.image,
+      canvas: this.canvas,
+      width: this.imageResource.image.width,
+      height: this.imageResource.image.height,
+      posX: posX,
+      posY: posY,
+      posDX: this.posDX,
+      posDY: this.posDY,
+      fadeTime : this.fadeTime
+    })
+
+    GameObjectsHandler.instance.addGameObject(engineTrailParticle);
   }
 }

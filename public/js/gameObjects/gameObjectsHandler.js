@@ -5,7 +5,7 @@ class GameObjectsHandler {
   static instance = new this();
   static gameObjects = [];
   static contexts = {};
-  static gameObjectsToRemove = [];
+  static gameObjectsToRemove = new Set();
 
 
   /**
@@ -20,6 +20,7 @@ class GameObjectsHandler {
     }
     GameObjectsHandler.gameObjects.push(gameObject);
     //console.log(GameObjectsHandler.gameObjects);
+    //console.log("GameObjects:", GameObjectsHandler.gameObjects);
   }
 
   /**
@@ -27,40 +28,26 @@ class GameObjectsHandler {
    * @param id
    */
   addGameObjectToRemoveQueue = (id) => {
-    GameObjectsHandler.gameObjectsToRemove.push(id)
+    GameObjectsHandler.gameObjectsToRemove.add(id)
   }
 
-
+  /**
+   *
+   */
   removeGameObjects = () =>{
-    for (let i= 0, len = GameObjectsHandler.gameObjectsToRemove.length; i < len; i++){
-      const removedObject = GameObjectsHandler.gameObjects.find(obj => obj.id === GameObjectsHandler.gameObjectsToRemove[i]);
+    for (let id of GameObjectsHandler.gameObjectsToRemove){
+      const index = GameObjectsHandler.gameObjects.findIndex(obj => obj.id === id);
 
-      if (removedObject) {
+      if (index !== -1) {
+        const removedObject = GameObjectsHandler.gameObjects[index];
         if (removedObject.subscriber) {
           removedObject.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", removedObject);
         }
-        GameObjectsHandler.gameObjects = GameObjectsHandler.gameObjects.filter(obj => obj.id !== GameObjectsHandler.gameObjectsToRemove[i]);
-        //delete GameObjectsHandler.gameObjectsToRemove[id];
-        //console.log(GameObjectsHandler.gameObjects);
-       //console.log( GameObjectsHandler.gameObjects);
+        GameObjectsHandler.gameObjects.splice(index, 1);
       }
     }
-    GameObjectsHandler.gameObjectsToRemove = [];
-  }
-  /**
-   *
-   * @param id
-   */
-  removeGameObject = (id) => {
-    const removedObject = GameObjectsHandler.gameObjects.find(obj => obj.id === id);
+    GameObjectsHandler.gameObjectsToRemove.clear();
 
-    if (removedObject) {
-      if (removedObject.subscriber) {
-        removedObject.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", removedObject);
-      }
-      GameObjectsHandler.gameObjects = GameObjectsHandler.gameObjects.filter(obj => obj.id !== id);
-      delete GameObjectsHandler.gameObjectsToRemove[id];
-      //console.log(GameObjectsHandler.gameObjects);
-    }
   }
+
 }

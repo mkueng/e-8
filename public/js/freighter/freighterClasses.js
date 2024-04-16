@@ -4,7 +4,7 @@ class ClassAFreighter {
 
   static imageResourceObject = new ResourceObject({
     name : "classAFreighter4",
-    fileName : "classAFreighter4",
+    fileName : "classAFreighter_01",
     fileType : ResourceObject.TYPES.png,
     resourcePath : "/resources/freighters/"
   })
@@ -31,6 +31,20 @@ class ClassAFreighter {
     posDX: -70,
     posDY: -115
   }
+
+  static propulsion = {
+    type : PropulsionFactory.PROPULSION_TYPES.ionC,
+    posDX: +584,
+    posDY: +40,
+    isActive: true
+  }
+
+  static engineTrail = {
+    type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailB,
+    posDX : +594,
+    posDY : +44,
+  }
+
 
   static invoke = async ({resourceHandler}) => {
     ClassAFreighter.resources = await Freighter.fetchResources({

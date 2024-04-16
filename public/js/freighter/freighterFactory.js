@@ -7,8 +7,10 @@ class FreighterFactory {
 
   resourceHandler;
 
-  constructor({resourceHandler}){
-    this.resourceHandler = resourceHandler
+  constructor({resourceHandler,propulsionFactory, engineTrailFactory}){
+    this.resourceHandler = resourceHandler;
+    this.propulsionFactory = propulsionFactory;
+    this.engineTrailFactory = engineTrailFactory;
   }
 
   invoke = async ()=>{
@@ -24,11 +26,17 @@ class FreighterFactory {
    * @param posY
    * @returns {Freighter}
    */
-  createFreighter = ({freighterType, canvas, context,posX, posY }) => {
+  createFreighter =async ({freighterType, canvas, context,posX, posY }) => {
     const {
       properties,
-      shield
+      shield,
+      propulsion,
+      engineTrail
     } = freighterType
+
+    const propulsionInstance = await this.propulsionFactory.createPropulsion({...propulsion,canvas});
+    const engineTrailInstance = await this.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
+
 
     return new Freighter({
       isActive: true,
@@ -39,9 +47,13 @@ class FreighterFactory {
       height: freighterType["resources"]["Image"]["image"].height,
       posX: posX,
       posY: posY,
+      posDX: 0,
+      posDY: 0,
       velX: properties.velX,
       velY: properties.velY,
-      cargo: properties.cargo
+      cargo: properties.cargo,
+      dependencies: [propulsionInstance],
+      engineTrail: engineTrailInstance
     })
   }
 }

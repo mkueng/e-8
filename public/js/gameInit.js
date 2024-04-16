@@ -55,7 +55,8 @@ class GameInit {
 
 
     this.initGame().then((r)=>{
-      document.addEventListener("keydown", this.startMusic, true);
+      document.querySelector("#game").style.display = "block";
+      //document.addEventListener("keydown", this.startMusic, true);
        //this.settingsHandler.showSettings();
     })
   }
@@ -78,30 +79,49 @@ class GameInit {
   }
 
   startMusic = ()=>{
-    //SoundHandler.playMusic();
+    SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
   }
 
 
-  initGame = async ()=>{
+  initGame = async ()=> {
     this.localStorageHandler = new LocalStorageHandler();
 
     const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
     //this.utilityWorker = new Worker('js/workers/utility/utilityWorker.js');
-   // this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker');
-    SoundHandler.setFXGain({percentage: 0.5});
+    // this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker');
+    SoundHandler.setFXGain({percentage: 0.0});
     SoundHandler.setMusicGain({percentage: 0});
 
     this.fontHandler = new FontHandler();
     await this.fontHandler.loadFont();
 
+
+    await ScriptLoader.loadScript("js/propulsion/propulsion.js");
+    await ScriptLoader.loadScript("js/propulsion/propulsionIonA.js");
+
+    await ScriptLoader.loadScript("js/propulsion/propulsionIonC.js");
+    await ScriptLoader.loadScript("js/propulsion/propulsionFactory.js");
+    await ScriptLoader.loadScript("js/playerShip/playerShipPropertiesClassA.js");
+    await ScriptLoader.loadScript("js/playerShip/playerShipPropertiesClassB.js");
+    await ScriptLoader.loadScript("js/playerShip/playerShipFactory.js");
+    await ScriptLoader.loadScript("js/playerShip/playerShipHandler.js");
+    await ScriptLoader.loadScript("js/freighter/freighter.js");
+
+
+    await ScriptLoader.loadScript("js/freighter/freighterClasses.js");
+    await ScriptLoader.loadScript("js/freighter/freighterFactory.js");
+    await ScriptLoader.loadScript("js/freighter/freighterHandler.js");
+
     this.stateHandler = new StateHandler(this);
     this.speechHandler = new SpeechHandler()
     this.resourceHandler = new ResourceHandler();
+
     this.proceduralMusic = new ProceduralMusic();
     this.canvasHandler = new CanvasHandler();
     this.infoHandler = new InfoHandler()
     this.inputHandler = new InputHandler();
+
     this.settingsHandler = new SettingsHandler({
       localStorageHandler: this.localStorageHandler,
       inputHandler: this.inputHandler,
@@ -110,6 +130,17 @@ class GameInit {
     });
 
     this.particleGenerator = new ParticleGenerator();
+    this.propulsionFactory = new PropulsionFactory({resourceHandler:this.resourceHandler});
+    await this.propulsionFactory.invoke();
+    this.engineTrailFactory = new EngineTrailFactory({canvasHandler:this.canvasHandler,resourceHandler:this.resourceHandler});
+    this.weaponFactory = new WeaponFactory({resourceHandler:this.resourceHandler});
+    await this.weaponFactory.invoke();
+    this.fuelFactory = new FuelFactory();
+    this.shieldFactory = new ShieldFactory({resourceHandler:this.resourceHandler});
+    await this.shieldFactory.invoke();
+    this.explosionFactory = new ExplosionFactory({resourceHandler:this.resourceHandler});
+    await this.explosionFactory.invoke();
+
 
     this.backdrop = new Backdrop({
       resourceHandler: this.resourceHandler,
@@ -126,7 +157,7 @@ class GameInit {
     this.galaxy = new Galaxy({
       gameLoop: this.gameLoop,
       canvasHandler: this.canvasHandler,
-      scale : 200
+      scale: 200
     });
     this.hazeHandler = new HazeHandler({
       gameLoop: this.gameLoop,
@@ -149,7 +180,14 @@ class GameInit {
       resourceHandler: this.resourceHandler,
       canvasHandler: this.canvasHandler,
       inputHandler: this.inputHandler,
-      hudHandler: this.hudHandler
+      hudHandler: this.hudHandler,
+      propulsionFactory: this.propulsionFactory,
+      weaponFactory: this.weaponFactory,
+      shieldFactory: this.shieldFactory,
+      explosionFactory: this.explosionFactory,
+      fuelFactory: this.fuelFactory,
+      engineTrailFactory: this.engineTrailFactory
+
     });
     this.enemyShipHandler = new EnemyShipHandler({
       resourceHandler: this.resourceHandler,
@@ -160,21 +198,22 @@ class GameInit {
     this.freighterHandler = new FreighterHandler({
       resourceHandler: this.resourceHandler,
       canvasHandler: this.canvasHandler,
-      particleGenerator: this.particleGenerator
+      particleGenerator: this.particleGenerator,
+      propulsionFactory: this.propulsionFactory,
+      engineTrailFactory: this.engineTrailFactory
     });
 
 
     this.spaceStationHandler = new SpaceStationHandler({
       galaxy: this.galaxy,
-      resourceHandler : this.resourceHandler,
-      canvasHandler : this.canvasHandler,
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler,
       inputHandler: this.inputHandler
     })
 
     await this.spaceStationHandler.invoke();
     await this.speechHandler.invoke();
     await this.proceduralMusic.fetchAudioAssets();
-    await this.playerShipHandler.invoke();
     await this.freighterHandler.invoke();
     await this.playerShipHandler.create();
 
@@ -188,7 +227,7 @@ class GameInit {
 
 
   // global
-  subscribeForGlobalEvents = ()=>{
+  subscribeForGlobalEvents = () => {
     ns.init.subscribeForGlobalEvents((event)=>{
 
       switch(event.message){

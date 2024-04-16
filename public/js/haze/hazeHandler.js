@@ -1,6 +1,7 @@
 'use strict'
 class HazeHandler {
 
+  #resourcePaths =[ "/resources/hazes/haze_01.png", "/resources/hazes/haze_02.png"];
   #ticker = 0;
   #upcoming = 0;
   #canvases = {};
@@ -19,10 +20,10 @@ class HazeHandler {
 
       img.onload =()=>{
         const size = img.width;
-        const velocity = size * 0.0006;
+        const velocity = size * 0.0003;
 
-        if (velocity >= 1 ) canvas = this.#canvases[0];
-        if (velocity > 0.5 && velocity < 1) canvas = this.#canvases[1];
+        if (velocity >= 0.7 ) canvas = this.#canvases[0];
+        if (velocity > 0.5 && velocity < 0.7) canvas = this.#canvases[1];
         if (velocity <= 0.5) canvas = this.#canvases[2];
 
         let haze = new Haze({
@@ -31,7 +32,7 @@ class HazeHandler {
           width: img.width,
           height: img.height,
           posX: e8.global.screenWidth,
-          posY: Math.floor(Math.random()* e8.global.screenHeight-100),
+          posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/10),
           posDX: 0,
           posDY: 0,
           velX: -1 * velocity,
@@ -55,12 +56,15 @@ class HazeHandler {
   }
 
   create = () => {
-    let width = Math.floor(Math.random()*2570+855)
-    let height = Math.floor(Math.random()*1200+75)
+    let width = Math.floor(Math.random()*3570+1455)
+    let height = Math.floor(Math.random()*1200+275)
+
+    let randomIndex = Math.floor(Math.random() * this.#resourcePaths.length);
+    let randomResourcePath = this.#resourcePaths[randomIndex];
 
     this.resizeImageWorker.postMessage({
       payload: {
-        url : "/resources/hazes/haze_05.png",
+        url : randomResourcePath,
         requiredWidth: width,
         requiredHeight : height
       }

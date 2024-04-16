@@ -1,7 +1,5 @@
 'use strict'
-class EngineTrailA {
-
-  static imageResource;
+class EngineTrailA extends EngineTrail {
 
   static resourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.propulsion,
@@ -11,36 +9,9 @@ class EngineTrailA {
     resourcePath: "/resources/trail/trail_01/images/"
   })
 
-  static async invoke(resourceHandler) {
-    EngineTrailA.imageResource = await resourceHandler.fetchImageResource({
-      resourceObject: EngineTrailA.resourceObject
+  constructor() {
+    super({
+      fadeTime : 0.09
     });
-  }
-
-  constructor({
-                canvas,
-                posDX,
-                posDY,
-                width,
-                height
-              }){
-    Object.assign(this, {
-      canvas, posDX, posDY, width, height
-    })
-  }
-
-  create = ({posX, posY}) =>{
-    const engineTrail = new EngineTrail({
-      image: EngineTrailA.imageResource.image,
-      canvas: this.canvas,
-      width: 5,
-      height: 7,
-      posX: posX,
-      posY: posY,
-      posDX: this.posDX,
-      posDY: this.posDY
-    })
-
-    GameObjectsHandler.instance.addGameObject(engineTrail);
   }
 }

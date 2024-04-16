@@ -1,14 +1,16 @@
 'use strict'
 class PropulsionIonB extends Propulsion{
 
+  static imageResource;
+
   static resourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.propulsion,
-    filename : "propulsionSpriteSheet_01",
-    type : ResourceObject.TYPES.png,
-    resourcePath : "/resources/propulsion/propulsion_01/images/propulsionSpriteSheet_03.png"
+    name: "propulsionSpriteSheet_01",
+    fileName: "propulsionSpriteSheet_01",
+    fileType : ResourceObject.TYPES.png,
+    resourcePath : "/resources/propulsion/propulsion_01/images/"
   })
 
-  static imageResource;
 
   static async invoke(resourceHandler){
     PropulsionIonB.imageResource = await resourceHandler.fetchImageResource(PropulsionIonB.resourceObject);

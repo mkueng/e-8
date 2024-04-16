@@ -20,6 +20,7 @@ class Propulsion extends GameObject {
    * @param canvas
    * @param efficiency
    * @param fuelType
+   * @param isActive
    */
   constructor({
                 spriteSheet,
@@ -39,10 +40,11 @@ class Propulsion extends GameObject {
                 posDY,
                 canvas,
                 efficiency,
-                fuelType
+                fuelType,
+                isActive
               }) {
     super({
-      isActive: false,
+      isActive: isActive || false,
       spriteSheet,
       spriteSheetRows,
       spriteSheetColumns,

@@ -15,7 +15,6 @@ class WeaponFactory {
   invoke = async ()=>{
     await WeaponFactory.WEAPON_TYPES.photonTorpedo.invoke(this.resourceHandler);
     await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.invoke(this.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.invoke(this.resourceHandler);
     await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.invoke(this.resourceHandler);
     await WeaponFactory.WEAPON_TYPES.laser.invoke(this.resourceHandler);
   }

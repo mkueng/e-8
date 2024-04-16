@@ -58,19 +58,19 @@ class Tractor  {
       this.isActive = true;
       this.dependency = dependency;
       this.id = crypto.randomUUID();
-      this.freighterCargoInfo = InfoHandler.initInfo({infoType:InfoHandler.INFO_TYPES.freighterCargoInfo})
+      this.targetCargoInfo = InfoHandler.initInfo({infoType:InfoHandler.INFO_TYPES.freighterCargoInfo})
       GameObjectsHandler.instance.addGameObject(this);
     } else {
       this.isActive = false;
-      this.freighterCargoInfo.destroy();
-      GameObjectsHandler.instance.removeGameObject(this.id);
+      this.targetCargoInfo.destroy();
+      GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     }
   }
 
-  lockFreighter = (freighter) =>{
+  lockTarget = (freighter) =>{
     this.isLocked = true;
     this.lockedFreighter = freighter;
-    this.freighterCargoInfo.show({posX: this.posX, posY: this.posY, properties: this.lockedFreighter.cargo});
+    this.targetCargoInfo.show({posX: this.posX, posY: this.posY, properties: this.lockedFreighter.cargo});
     this.lockDiff = this.posX - this.lockedFreighter.posX;
     this.accX = this.dependency.accX;
     this.accY = this.dependency.accY;
@@ -82,8 +82,8 @@ class Tractor  {
     this.dependency.maxVelY = this.dependency.maxVelY / 4;
   }
 
-  releaseFreighter = () => {
-    this.freighterCargoInfo.hide();
+  releaseTarget = () => {
+    this.targetCargoInfo.hide();
     this.dependency.accY = this.accY;
     this.dependency.accX = this.accX;
     this.dependency.maxVelX = this.maxVelX;
@@ -113,13 +113,13 @@ class Tractor  {
           && freighter.posY > this.posY
           && freighter.posY + freighter.height  < this.posY+this.height
         ){
-        this.lockFreighter(freighter);
+        this.lockTarget(freighter);
         }
       })
     }
     // if we've established lock, fixate freighter position and withdraw cargo
     else {
-      this.freighterCargoInfo.update({posX: this.posX, posY:this.posY,properties: this.lockedFreighter.cargo})
+      this.targetCargoInfo.update({posX: this.posX, posY:this.posY,properties: this.lockedFreighter.cargo})
 
       for (const [key] of Object.entries(this.lockedFreighter.cargo)) {
         if (this.lockedFreighter.cargo[key] > 0) {
@@ -130,7 +130,7 @@ class Tractor  {
             this.dependency.cargo[key] = this.dependency.cargo[key]+1 :
             this.dependency.cargo[key] = 0;*/
           this.lockedFreighter.cargo[key]--
-          this.freighterCargoInfo.update({posX: this.posX, posY:this.posY, properties:this.lockedFreighter.cargo})
+          this.targetCargoInfo.update({posX: this.posX, posY:this.posY, properties:this.lockedFreighter.cargo})
         }
       }
 
@@ -141,7 +141,7 @@ class Tractor  {
       if (this.posY > this.lockedFreighter.posY - this.posDY
         || this.posY < this.lockedFreighter.posY - this.height
       ){
-       this.releaseFreighter();
+       this.releaseTarget();
       }
     }
   }

@@ -51,9 +51,11 @@ class Freighter extends GameObject{
                 shield,
                 terminationSequence,
                 cargo,
-                particleGenerator
+                dependencies,
+                engineTrail
               }){
     super({
+
       isActive,
       canvas,
       context,
@@ -66,8 +68,43 @@ class Freighter extends GameObject{
       velY
     });
 
-    Object.assign(this,shield,terminationSequence)
-    this.cargo = cargo;
+    Object.assign(this,{
+      shield,
+      terminationSequence,
+      cargo,
+      dependencies,
+      engineTrail
+    })
+
+    GameObjectsHandler.instance.addGameObject(this);
+    this.addDependencies();
+
+
   };
+
+  update(deltaTime) {
+    if (this.isActive) {
+      if (this.posX+this.posDX > 0 - this.width) {
+        this.posX = this.posX + (this.velX*deltaTime)
+      } else {
+        this.destroy();
+        if (this.dependencies) {
+          for (const dependency of this.dependencies){
+            dependency.destroy();
+          }
+        }
+      }
+      this.posY = this.posY +(this.velY*deltaTime);
+
+      // positioning dependencies
+      if (this.dependencies) {
+        for (const dependency of this.dependencies){
+          dependency.posX = this.posX;
+          dependency.posY = this.posY;
+        }
+      }
+      this.engineTrail.createParticle({posX: this.posX, posY: this.posY});
+    }
+  }
 
 }

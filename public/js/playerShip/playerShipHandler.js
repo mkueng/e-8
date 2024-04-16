@@ -9,7 +9,15 @@ class PlayerShipHandler {
                 canvasHandler,
                 resourceHandler,
                 inputHandler,
-                hudHandler
+                hudHandler,
+                propulsionFactory,
+                weaponsFactory,
+                shieldFactory,
+                explosionFactory,
+                fuelFactory,
+                engineTrailFactory,
+                weaponFactory
+
   }){
     this.#canvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
 
@@ -18,14 +26,18 @@ class PlayerShipHandler {
       resourceHandler,
       canvasHandler,
       inputHandler,
-      hudHandler
+      hudHandler,
+      propulsionFactory,
+      weaponsFactory,
+      shieldFactory,
+      explosionFactory,
+      fuelFactory,
+      engineTrailFactory,
+      weaponFactory
+
     });
 
     inputHandler.subscribe(this);
-  }
-
-  invoke = async ()=>{
-    await this.playerShipFactory.invoke();
   }
 
   shipDestroyed =(id)=>{

@@ -2,7 +2,8 @@
 class EngineTrailFactory {
 
   static ENGINE_TRAIL_TYPES = {
-    engineTrailA: EngineTrailA
+    engineTrailA: EngineTrailA,
+    engineTrailB: EngineTrailB
   }
 
   constructor({
@@ -11,19 +12,10 @@ class EngineTrailFactory {
     this.resourceHandler = resourceHandler;
   }
 
-  createEngineTrail = async({
-    type, canvas, posDX, posDY
-  })=> {
-    const invokeEngineTrail = async (type) => {
-      await type.invoke(this.resourceHandler);
-      return new type({
-        canvas,
-        posDX,
-        posDY
-      })
-    }
-
-    return invokeEngineTrail(type);
-
+  createEngineTrail = async ({type, canvas, posDX, posDY}) => {
+    const trailType = new type();
+    await trailType.invoke(this.resourceHandler, type.resourceObject);
+    Object.assign(trailType, {canvas, posDX, posDY});
+    return trailType;
   }
 }

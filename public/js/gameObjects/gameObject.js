@@ -113,10 +113,6 @@ class GameObject {
     if (canvas){
       this.context = canvas.getContext("2d");
     }
-
-    if (this.dependencies){
-      this.addDependencies();
-    }
   }
 
   /**
@@ -228,7 +224,7 @@ class GameObject {
    */
   update(deltaTime) {
     if (this.isActive) {
-      if (this.posX > 0 - this.width) {
+      if (this.posX+this.posDX > 0 - this.width) {
         this.posX = this.posX + (this.velX*deltaTime)
       } else {
         this.destroy();

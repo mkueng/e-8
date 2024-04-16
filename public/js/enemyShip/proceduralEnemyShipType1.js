@@ -32,7 +32,7 @@ class ProceduralEnemyShipType1 {
     },
     2: {
       shipSize: 7,
-      scale: 1,
+      scale: 0.8,
       particles: [],
       playerShipTracking : false,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],

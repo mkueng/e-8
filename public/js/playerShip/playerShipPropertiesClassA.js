@@ -20,8 +20,8 @@ class PlayerShipPropertiesClassA {
   static generic = {
     maxVelX: 4,
     maxVelY: 4,
-    accX: 0.3,
-    accY: 0.3
+    accX: 0.2,
+    accY: 0.2
   }
 
   static cargo = {
@@ -34,8 +34,8 @@ class PlayerShipPropertiesClassA {
 
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
-    posDX : -20,
-    posDY :27
+    posDX : -30,
+    posDY :25
   }
 
   static propulsion = {
@@ -46,8 +46,8 @@ class PlayerShipPropertiesClassA {
 
   static fuel = {
     type: FuelFactory.FUEL_TYPES.xenon,
-    amount: 100,
-    max: 100
+    amount: 1000,
+    max: 1000
   }
 
   static shield = {

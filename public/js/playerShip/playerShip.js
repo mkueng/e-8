@@ -155,9 +155,7 @@ class PlayerShip extends GameObject {
   /**
    *
    */
-  addDependencies = () => {
-    this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
-  }
+
 
   initializeFeatures = () => {
     for (const feature in this.features){
@@ -299,8 +297,11 @@ class PlayerShip extends GameObject {
       if (this.controls.right && this.velX < this.maxVelX) {
         this.velX += this.accX;
         this.dependencies[0].isActive = true; // activate rear propulsion
-        this.engineTrail.create({posX: this.posX, posY: this.posY}); // show engine trail
-        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        if (this.velX > 0) {
+          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
+          this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        }
+
       } else
       if (this.controls.left && this.velX > -this.maxVelX) {
         this.velX -= this.accX;

@@ -18,8 +18,8 @@ body {
 #game
     {
 
-    background: url('../resources/backdrops/backdrop_03.jpg');
-    background-size: cover;
+    /* background: url('../resources/backdrops/backdrop_03.jpg');
+    background-size: cover;*/
     padding: 0;
     margin: auto;
     display: block;
@@ -151,11 +151,11 @@ input[type="range"]::-webkit-slider-thumb {
 
 
 .backdropCanvas {
-    z-index: -1;
+    z-index: 0;
 }
 
 .planetsCanvas {
-    z-index: 0;
+    z-index: 2;
 }
 
 .backgroundFarthestCanvas {
@@ -173,14 +173,14 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .backgroundMiddleCanvas {
-    z-index: 30;
+    z-index: 35;
 }
 
 .playerShipCanvas {
-    z-index: 35;
+    z-index: 30;
 }
 .weaponCanvas {
-    z-index: 35;
+    z-index: 30;
 }
 
 

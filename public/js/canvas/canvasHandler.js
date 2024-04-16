@@ -19,6 +19,11 @@ class CanvasHandler {
   }
 
   #canvases = {
+    "backdrop": {
+      "id":"backdrop",
+      "class": "fullscreenCanvas backdropCanvas",
+      "alpha": false
+    },
     "explosion": {
       "id": "explosion",
       "class": "fullscreenCanvas backgroundFaceCanvas",

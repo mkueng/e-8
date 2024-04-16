@@ -4,6 +4,7 @@ class DustHandler {
 
   #canvas;
   #context;
+  #amountOfParticles = 60;
   #particles = [];
 
   /**
@@ -16,7 +17,7 @@ class DustHandler {
     this.resourceHandler = resourceHandler;
     this.#canvas =  this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
     this.#context = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
-    this.#createParticles({amount:80});
+    this.#createParticles({amount: this.#amountOfParticles});
 
     this.dustParticles = new DustParticles({
       particles: this.#particles,

@@ -22,12 +22,14 @@ class PropulsionIonA extends Propulsion{
   constructor({
                 canvas,
                 posDX,
-                posDY
+                posDY,
+                isActive
   }){
     super({
       spriteSheet: PropulsionIonA.imageResource.image,
       spriteSheetRows: 7,
       spriteSheetColumns: 1,
+      animationLoop: true,
       width: PropulsionIonA.imageResource.image.width,
       height: PropulsionIonA.imageResource.image.height / 12,
       frames: 7,
@@ -41,7 +43,8 @@ class PropulsionIonA extends Propulsion{
       posDY: posDY,
       efficiency: 0.5,
       fuelType: FuelFactory.FUEL_TYPES.xenon,
-      isHittable: false
+      isHittable: false,
+      isActive : isActive || false
     });
   }
 }

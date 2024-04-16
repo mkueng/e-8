@@ -14,36 +14,45 @@ class PlayerShipFactory {
    * @param canvasHandler
    * @param inputHandler
    * @param hudHandler
+   * @param propulsionFactory
+   * @param weaponFactory
+   * @param shieldFactory
+   * @param explosionFactory
+   * @param fuelFactory
+   * @param engineTrailFactory
    */
   constructor({
                 playerShipHandler,
                 resourceHandler,
-                canvasHandler,
                 inputHandler,
-                hudHandler
+                hudHandler,
+                propulsionFactory,
+                weaponFactory,
+                shieldFactory,
+                explosionFactory,
+                fuelFactory,
+                engineTrailFactory
+
   }){
-    this.playerShipHandler = playerShipHandler;
-    this.resourceHandler = resourceHandler;
-    this.inputHandler = inputHandler;
-    this.hudHandler = hudHandler;
-    this.engineTrailFactory = new EngineTrailFactory({canvasHandler,resourceHandler})
-    this.weaponFactory = new WeaponFactory({resourceHandler});
-    this.propulsionFactory = new PropulsionFactory({resourceHandler});
-    this.fuelFactory = new FuelFactory();
-    this.shieldFactory = new ShieldFactory({resourceHandler});
-    this.explosionFactory = new ExplosionFactory({resourceHandler});
+
+    Object.assign(this,{
+      playerShipHandler,
+      resourceHandler,
+      inputHandler,
+      hudHandler,
+      engineTrailFactory,
+      weaponFactory,
+      propulsionFactory,
+      fuelFactory,
+      shieldFactory,
+      explosionFactory
+    })
   }
 
   create3DShip = ()=>{
     return new PlayerShip3D()
   }
 
-  invoke = async ()=>{
-    await this.shieldFactory.invoke();
-    await this.weaponFactory.invoke();
-    await this.propulsionFactory.invoke();
-    await this.explosionFactory.invoke();
-  }
 
   /**
    *

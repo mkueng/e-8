@@ -57,7 +57,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     this.uniqueIdentifier = this.constructor.name;
     this.target = null;
     this.ready = true;
-    this.retention = 500;
+    this.retention = 200;
     this.quotient = 0;
 
   }
@@ -115,6 +115,11 @@ class PhotonTorpedoFireAndForget extends Weapon {
     if (isEnemyShipAlive) {
       this.quotient = (this.target.posX - this.posX) / (this.target.posY - this.posY);
     }
+
+    if (Math.abs(this.quotient) < 0.01) {
+      this.quotient = 0.01; // Set to a default value
+    }
+
 
     this.posY = (this.posY + (this.posX / this.quotient) * 0.03);
     this.posX = this.posX + (this.velX*deltaTime);
