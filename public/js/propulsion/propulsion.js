@@ -1,4 +1,7 @@
 class Propulsion extends GameObject {
+    imageResource;
+    efficiency;
+    fuelType;
 
   /**
    *
@@ -23,7 +26,6 @@ class Propulsion extends GameObject {
    * @param isActive
    */
   constructor({
-                spriteSheet,
                 spriteSheetRows,
                 spriteSheetColumns,
                 width,
@@ -66,5 +68,11 @@ class Propulsion extends GameObject {
     })
     this.efficiency = efficiency;
     this.fuelType = fuelType;
+  }
+
+  invoke = async (resourceHandler, resourceObject) => {
+      this.imageResource =  await resourceHandler.fetchImageResource({
+          resourceObject: resourceObject
+      });
   }
 }

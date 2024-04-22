@@ -113,10 +113,14 @@ class EnemyShip extends GameObject {
     this.particles.velY = this.velY;
     GameObjectsHandler.instance.addGameObject(this.particles);
    
-    this.destroy();
+
     this.enemyShipHandler.shipDestroyed(this.id);
   }
 
+  destroy = () => {
+    this.invokeTerminationSequence();
+    super.destroy()
+  }
 
   /**
    *
@@ -130,7 +134,7 @@ class EnemyShip extends GameObject {
 
     this.invokeShield();
     if (this.shield.strength <= 1){
-      this.invokeTerminationSequence();
+        this.destroy();
     }
     // destroy hitBy object
     if (hitBy.identification !== "playerShip" && hitBy.isDestroyable === true) {
@@ -170,6 +174,7 @@ class EnemyShip extends GameObject {
       this.posX = this.posX + (this.velX*dt)
     } else {
       this.destroy();
+      this.enemyShipHandler.shipDestroyed(this.id);
     }
   }
 }

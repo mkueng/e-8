@@ -96,7 +96,7 @@ class GameInit {
     this.fontHandler = new FontHandler();
     await this.fontHandler.loadFont();
 
-
+    await ScriptLoader.loadScript("js/propulsion/propulsionTypes.js");
     await ScriptLoader.loadScript("js/propulsion/propulsion.js");
     await ScriptLoader.loadScript("js/propulsion/propulsionIonA.js");
 

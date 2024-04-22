@@ -222,23 +222,26 @@ class PlayerShip extends GameObject {
    *
    */
   invokeShield = () => {
-    this.shield.posX = this.posX;
-    this.shield.posY = this.posY;
+    Object.assign(this.shield, {
+      posX: this.posX,
+      posY: this.posY
+    });
     GameObjectsHandler.instance.addGameObject(this.shield);
     SoundHandler.playFX(this.shield.sound);
-    this.shield.strength < 0 ?  this.shield.strength = 0: this.shield.strength -=10;
+    this.shield.strength = Math.max(this.shield.strength - 10, 0);
   }
 
   /**
    *
    */
   invokeTerminationSequence = () => {
-    this.terminationSequence.posX = this.posX;
-    this.terminationSequence.posY = this.posY;
-    this.terminationSequence.velX = this.velX;
-    this.terminationSequence.velY = this.velY;
+    Object.assign(this.terminationSequence, {
+      posX: this.posX,
+      posY: this.posY,
+      velX: this.velX,
+      velY: this.velY
+    });
     GameObjectsHandler.instance.addGameObject(this.terminationSequence);
-
     this.destroy();
     this.destroyDependencies();
     this.inputHandler.unsubscribe(this);
@@ -248,11 +251,8 @@ class PlayerShip extends GameObject {
   /**
    *
    */
-  destroyDependencies = () => {
-    for (const dependency of this.dependencies) {
-      dependency.destroy();
-    }
-  }
+  destroyDependencies = () => this.dependencies.forEach(dependency => dependency.destroy());
+
 
   /**
    *
@@ -273,8 +273,6 @@ class PlayerShip extends GameObject {
     if (this.shield.strength <= 1){
       this.invokeTerminationSequence();
     }
-
-    // Destroy hit object
     hitBy.object.destroy();
   }
 

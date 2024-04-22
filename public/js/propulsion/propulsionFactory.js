@@ -12,8 +12,8 @@ class PropulsionFactory {
   }
 
   invoke = async ()=>{
-    await PropulsionFactory.PROPULSION_TYPES.ionA.invoke(this.resourceHandler);
-    await PropulsionFactory.PROPULSION_TYPES.ionC.invoke(this.resourceHandler);
+    await PropulsionFactory.PROPULSION_TYPES.ionA.invoke(this.resourceHandler, PropulsionFactory.PROPULSION_TYPES.ionA.resourceObject);
+    await PropulsionFactory.PROPULSION_TYPES.ionC.invoke(this.resourceHandler, PropulsionFactory.PROPULSION_TYPES.ionC.resourceObject);
 
   }
 
@@ -33,7 +33,8 @@ class PropulsionFactory {
                               posDY,
                               isActive
 
-  })=>{
+  })=> {
+    const propulsion = new type
     return new type({
       canvas,
       posDX,

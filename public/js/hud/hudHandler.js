@@ -1,7 +1,5 @@
 class HudHandler {
 
-
-
   #staticContext;
   #dynamicContextLeft;
   #dynamicContextRight;
@@ -17,15 +15,15 @@ class HudHandler {
     this.#dynamicContextLeft = this.canvasHandler.getCanvas("hudDynamicLeft").context;
     this.#dynamicContextLeft.width = this.canvasHandler.getCanvas("hudDynamicLeft").width;
     this.#dynamicContextLeft.height = this.canvasHandler.getCanvas("hudDynamicLeft").height;
-    this.#dynamicContextLeft.transform(0.08, 1, 1, 0, 0, 0)
-    this.#dynamicContextLeft.font = "14px myFont";
+    this.#dynamicContextLeft.transform(0.1, 1.2, 1, 0, 0, 0)
+    this.#dynamicContextLeft.font = "10px myFont";
 
     //dynamic right
     this.#dynamicContextRight = this.canvasHandler.getCanvas("hudDynamicRight").context;
     this.#dynamicContextRight.width = this.canvasHandler.getCanvas("hudDynamicRight").width;
     this.#dynamicContextRight.height = this.canvasHandler.getCanvas("hudDynamicRight").height;
-    this.#dynamicContextRight.transform(-0.1, 1.2, 1, 0, 30, 0);
-    this.#dynamicContextRight.font = "14px myFont";
+    this.#dynamicContextRight.transform(-0.15, 1.2, 1, 0, 50, 0);
+    this.#dynamicContextRight.font = "10px myFont";
   }
 
   constructor({canvasHandler}){
@@ -36,20 +34,25 @@ class HudHandler {
     this.naviImage = document.querySelector("#navi");
     this.naviOrbImage = document.querySelector("#navi-orb");
     this.naviImagePosX = (e8.global.screenWidth/6-this.naviImage.width)/2
-    this.naviOrbImagePosX = (e8.global.screenWidth/6-this.naviImage.width)/2;
+    this.naviOrbImagePosX = (e8.global.screenWidth/6-(this.naviOrbImage.width/2));
     this.propulsionInfoBarColor = "green";
     this.#initContexts();
     this.fillRectNavi = this.dynamicContextMiddle.fillRect.bind(this.dynamicContextMiddle);
     this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
 
-
-    this.renderDisplayLeft();
-    this.renderDisplayRight();
+    // this.renderDisplayMiddle();
+    //this.#renderNavi();
+    //this.renderDisplayLeft();
+    //this.renderDisplayRight();
 
     setInterval(()=>{
       this.#updateDisplayRight();
       this.#updateDisplayLeft();
+      //this.#renderNavi();
+
+
+
     }, 2000);
 
 
@@ -93,9 +96,14 @@ class HudHandler {
   }
 
   #updateDisplayLeft = ()=>{
-    this.#dynamicContextLeft.clearRect(-20,-10,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.strokeRect(-20,5,this.#dynamicContextLeft.width-20, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.fillStyle = "white";
+    this.#dynamicContextLeft.clearRect(-20,-10,this.#dynamicContextLeft.width-100, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.lineWidth = 7;
+    this.#dynamicContextLeft.strokeStyle = "grey";
+    this.#dynamicContextLeft.strokeRect(-20,5,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.globalAlpha = 0.15;
+   // this.#dynamicContextLeft.fillRect(-20,0,this.#dynamicContextLeft.width-100, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.fillStyle =  e8.global.colors.info;
+    this.#dynamicContextLeft.globalAlpha = 1;
     this.#dynamicContextLeft.fillText("TIME - "+this.#time, 5,20);
     this.#dynamicContextLeft.fillText("COORDINATES - "+this.#coordinates, 5,35);
     this.#dynamicContextLeft.fillText("SYSTEMS STATUS - "+this.#systemsStatus, 5,50);
@@ -111,15 +119,21 @@ class HudHandler {
 
   #updateDisplayRight =()=>{
     this.#dynamicContextRight.clearRect(-10,-10,this.#dynamicContextRight.width+10, this.#dynamicContextRight.height+10);
-    this.#dynamicContextRight.strokeRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
-
-    this.#dynamicContextRight.fillStyle = "white";
+    this.#dynamicContextRight.lineWidth = 7;
+    this.#dynamicContextRight.strokeStyle = "grey";
+    this.#dynamicContextRight.strokeRect(-100,0,this.#dynamicContextRight.width+20, this.#dynamicContextRight.height);
+    this.#dynamicContextRight.globalAlpha = 0.15;
+    //this.#dynamicContextRight.fillRect(0,0,this.#dynamicContextRight.width, this.#dynamicContextRight.height);
+    this.#dynamicContextRight.globalAlpha = 1
+    this.#dynamicContextRight.fillStyle = e8.global.colors.neutral;
     this.#dynamicContextRight.fillText("TIME - "+this.#time, 5,15);
     this.#dynamicContextRight.fillText("COORDINATES - "+this.#coordinates, 5,30);
+    this.#dynamicContextRight.fillStyle = e8.global.colors.neutral;
     this.#dynamicContextRight.fillText("SYSTEMS STATUS - "+this.#systemsStatus, 5,45);
-    this.#dynamicContextRight.fillText("FUEL", 5,70);
-    this.fillRectRight(60,62,this.#fuel,6);
-    this.#dynamicContextRight.fillText("SHIELD", 5,85);
+    this.#dynamicContextRight.fillStyle = e8.global.colors.info;
+    this.#dynamicContextRight.fillText("FUEL", 5,60);
+    this.fillRectRight(60,55,this.#fuel,6);
+    this.#dynamicContextRight.fillText("SHIELD", 5,75);
 
     let shieldInfoBarColor;
     if (this.#shield) {
@@ -130,35 +144,41 @@ class HudHandler {
             "lightgreen";
     } else shieldInfoBarColor = "grey";
 
-    this.#dynamicContextRight.strokeRect(80,77,100,8);
+    this.#dynamicContextRight.strokeRect(80,67,100,8);
 
     this.#dynamicContextRight.fillStyle = shieldInfoBarColor;
-    this.fillRectRight(80,78,this.#shield,6);
+    this.fillRectRight(80,68,this.#shield,6);
 
   }
 
 
-  renderDisplayMiddle = ()=>{
-    this.dynamicContextMiddle.clearRect(0,0,this.dynamicContextMiddle.width, this.dynamicContextMiddle.height);
+ renderNavi = () => {
+  const { dynamicContextMiddle, naviOrbImagePosX, naviOrbImage, hudImage } = this;
+  const { screenWidth, screenHeight, colors } = e8.global;
+  const { enemyShips } = EnemyShipHandler;
 
+  dynamicContextMiddle.clearRect(0, 0, dynamicContextMiddle.width, dynamicContextMiddle.height);
+
+  for (const enemyShip in enemyShips) {
+
+    const { posX, posY, width } = enemyShips[enemyShip];
+    const naviCoordXQuotient = screenWidth / posX * 3.5;
+    const naviCoordYQuotient = screenHeight / posY * 2.2;
+    const rectX = naviOrbImagePosX + naviOrbImage.width / naviCoordXQuotient + 77;
+    const rectY = 30 + naviOrbImage.height / naviCoordYQuotient;
+
+    if (width >150 ) {
+      dynamicContextMiddle.fillStyle = colors.alloyOrange;
+    } else {
+        dynamicContextMiddle.fillStyle = colors.tiffanyBlue;
+    }
+
+    dynamicContextMiddle.fillRect(rectX, rectY, 5, 5);
   }
 
-  #renderNavi = ()=>{
-    this.dynamicContextMiddle.clearRect(0,0,this.dynamicContextMiddle.width, this.dynamicContextMiddle.height);
-    this.dynamicContextMiddle.drawImage(this.naviImage, this.naviImagePosX ,40);
-    this.dynamicContextMiddle.drawImage(this.naviOrbImage, this.naviOrbImagePosX ,20);
-/*
-    for (let i = 0, len = SpriteHandler.enemies.length; i < len; i++) {
-      const enemy =  SpriteHandler.enemies[i];
-      const xPercentage = 100 / (window.global.screenWidth / enemy.x);
-      const yPercentage = 100 / (window.global.screenHeight / enemy.y);
-      const xPosition = this.naviImagePosX + 50+ xPercentage / 2;
-      const yPosition = 30 + yPercentage / 2;
-
-      this.dynamicContextMiddle.fillStyle ="red";
-      this.fillRectNavi(xPosition, yPosition, 5, 5);
-    }*/
-  }
+  dynamicContextMiddle.drawImage(naviOrbImage, naviOrbImagePosX, 10);
+  dynamicContextMiddle.drawImage(hudImage, 0, 0, dynamicContextMiddle.width, dynamicContextMiddle.height);
+}
 
 
 
@@ -168,49 +188,8 @@ class HudHandler {
     this.fillRectRight(70,50,100,8);
   }
 
-  #renderShield = (percentage)=>{
-
-    /*
-
-    this.#dynamicContextLeft.clearRect(-5,-5,this.#dynamicContextLeft.width+10, this.#dynamicContextLeft.height+10);
 
 
-    this.shieldInfoBarColor =
-      percentage < 30 ? "red" :
-        percentage < 60 ? "yellow":
-          "lightgreen";
-
-    this.#dynamicContextLeft.fillStyle = percentage;
-    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height)
-
-    this.#dynamicContextLeft.fillStyle = "white"
-    this.#dynamicContextLeft.fillText("Shields", this.#dynamicContextLeft.width - 130, 14);
-    this.#dynamicContextLeft.fillStyle = "black"
-
-
-
-
-    this.fillRectLeft(this.#dynamicContextLeft.width - 70,5,  50, 10);
-
-    this.#dynamicContextLeft.fillStyle = this.shieldInfoBarColor;
-    this.#dynamicContextLeft.strokeStyle = "white";
-    this.fillRectLeft( this.#dynamicContextLeft.width - 68, 7, percentage/2-4, 6);
-
-    const gradient = this.#dynamicContextLeft.createLinearGradient(0, 0, 220, 0);
-
-// Add three color stops
-    gradient.addColorStop(0, "green");
-    gradient.addColorStop(0.5, "cyan");
-    gradient.addColorStop(1, "green");
-
-// Set the fill style and draw a rectangle
-    this.#dynamicContextLeft.fillStyle = gradient;
-    this.#dynamicContextLeft.fillRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-
-    //this.#dynamicContextLeft.strokeRect(0,0,this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-
-*/
-  }
 
 
   renderProp = () => {

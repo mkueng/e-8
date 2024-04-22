@@ -8,5 +8,7 @@ e8.global.colors = {
    alloyOrange: "#CA4862",
    rust: "#461D2D",
    rufous: "#AE2012",
-   auburn: "#9B2226"
+   auburn: "#9B2226",
+   info : "#aaaaff",
+   neutral: "#aaaaaa",
 }

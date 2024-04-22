@@ -107,7 +107,7 @@ class CanvasHandler {
 
       },
       "width": 440,
-      "height": 200,
+      "height": 150,
       "opacity": 0.7
     },
     "hudDynamicRight": {
@@ -124,7 +124,7 @@ class CanvasHandler {
 
       },
       "width": 440,
-      "height": 200,
+      "height": 160,
       "opacity": 0.7
     },
 
@@ -137,11 +137,11 @@ class CanvasHandler {
       },
       "canvasStyles": {
         "top": 0 + "px",
-        "left": (window.innerWidth / 2 - e8.global.screenWidth / 12) + "px",
+        "left": (window.innerWidth / 2 - e8.global.screenWidth / 6) + "px",
         "color": "white",
 
       },
-      "width": e8.global.screenWidth / 6,
+      "width": e8.global.screenWidth /3,
       "height": 100,
       "opacity": 0.5
     }

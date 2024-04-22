@@ -95,7 +95,7 @@ class ProceduralEnemyShipFactory {
           particles: particlesObject,
           posDX: 0,
           posDY: 0,
-          posX: e8.global.screenWidth,
+          posX: e8.global.screenWidth+e8.global.screenWidth,
           posY: Math.floor(Math.random() * e8.global.screenHeight),
           shield: shieldInstance,
           terminationSequence: terminationSequence,

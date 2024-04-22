@@ -36,7 +36,7 @@ class EnemyShipHandler {
         shipType: ProceduralEnemyShipFactory.shipTypes.EnemyShipType1,
         shipTypeVariation: ProceduralEnemyShipType1.shipTypeVariations[""+variation]
       }).then(()=>{
-        this.startCreation(Math.floor(Math.random()*3000+1000))
+        this.startCreation(Math.floor(Math.random()*3000+3600))
       });
     },interval)
   }
@@ -46,7 +46,9 @@ class EnemyShipHandler {
    * @param id
    */
   shipDestroyed = (id) => {
+    console.log("shipDestroyed:", id);
     delete EnemyShipHandler.enemyShips[id];
+    console.log(EnemyShipHandler.enemyShips);
   }
 
   /**
