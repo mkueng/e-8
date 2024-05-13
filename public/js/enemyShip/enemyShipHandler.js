@@ -28,7 +28,6 @@ class EnemyShipHandler {
    * @param interval
    */
   startCreation = (interval) => {
-
     setTimeout(()=>{
       const variationKeys = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
       const variation = Math.floor(Math.random() * variationKeys.length);
@@ -46,9 +45,7 @@ class EnemyShipHandler {
    * @param id
    */
   shipDestroyed = (id) => {
-    console.log("shipDestroyed:", id);
     delete EnemyShipHandler.enemyShips[id];
-    console.log(EnemyShipHandler.enemyShips);
   }
 
   /**

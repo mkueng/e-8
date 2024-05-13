@@ -49,8 +49,6 @@ class InputHandler {
     }
 
 
-
-
     //prevent contextmenu
     document.addEventListener('contextmenu', (event) => {
       event.preventDefault();
@@ -70,6 +68,8 @@ class InputHandler {
 
     //check for key down
     document.addEventListener('keydown', (event) => {
+      event.preventDefault();
+      console.log("event code:", event.code);
       if (!event.repeat && typeof this.keyEvents[event.code] === 'undefined') {
         this.keyEvents[event.code] = true;
         this.publishKeyDown(event.code);

@@ -15,6 +15,7 @@ class Planet extends GameObject {
               }) {
     super({
       isActive: true,
+        identification: "planet",
       image,
       width,
       height,

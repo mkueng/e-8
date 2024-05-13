@@ -120,27 +120,13 @@ class PlayerShip extends GameObject {
       right: false
     }
 
-
-
-    // Subscribe to input handler
     this.inputHandler.subscribe(this);
-
-    // Initialize weapons and add to GameObjectsHandler
     this.initializeWeapons();
-
     this.initializeFeatures();
 
-    // Update shield in the HUD
-    this.hudHandler.updateHudInfo({
-      shield : this.shield.strength
-    });
-
-    // Add player ship to GameObjectsHandler
+    // Add playerShip to GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
-
-    // Add dependencies to GameObjectsHandler
     this.addDependencies();
-
   }
 
   /**
@@ -151,11 +137,6 @@ class PlayerShip extends GameObject {
   addKeyEvent = ({key, execute}) => {
     this.keyEvents[key] = execute;
   }
-
-  /**
-   *
-   */
-
 
   initializeFeatures = () => {
     for (const feature in this.features){
@@ -169,9 +150,6 @@ class PlayerShip extends GameObject {
     }
   }
 
-  /**
-   *
-   */
   initializeWeapons = () => {
     for (const weapon in this.weapons) {
       const { controlAssignment, units } = this.weapons[weapon];
@@ -179,11 +157,11 @@ class PlayerShip extends GameObject {
         key: controlAssignment,
         execute: () => {
           if (units.length > 0) {
-            const activeWeapon = units.pop();
-            if (activeWeapon.ready === true) {
-              activeWeapon.activate({posX: this.posX, posY: this.posY, dependency: this});
+            const unit = units.pop();
+            if (unit.ready === true) {
+              unit.activate({posX: this.posX, posY: this.posY, dependency: this});
             } else {
-              units.unshift(activeWeapon);
+              units.unshift(unit);
             }
           }
         }
@@ -194,12 +172,12 @@ class PlayerShip extends GameObject {
 
 
   /**
-   *
+   *x
    * @param message
    * @param obj
    */
   subscriptionsUpdate = (message,obj) => {
-    this.weapons[obj.uniqueIdentifier].units.unshift(obj);
+    //this.weapons[obj.uniqueIdentifier].units.unshift(obj);
   }
 
   /**
@@ -218,9 +196,6 @@ class PlayerShip extends GameObject {
 
   }
 
-  /**
-   *
-   */
   invokeShield = () => {
     Object.assign(this.shield, {
       posX: this.posX,
@@ -248,11 +223,7 @@ class PlayerShip extends GameObject {
     this.playerShipHandler.shipDestroyed(this);
   }
 
-  /**
-   *
-   */
   destroyDependencies = () => this.dependencies.forEach(dependency => dependency.destroy());
-
 
   /**
    *
@@ -299,7 +270,6 @@ class PlayerShip extends GameObject {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
         }
-
       } else
       if (this.controls.left && this.velX > -this.maxVelX) {
         this.velX -= this.accX;
@@ -307,8 +277,6 @@ class PlayerShip extends GameObject {
       } else {
         this.dependencies[0].isActive = false
       }
-
-
     } else {
       this.dependencies[0].isActive = false;
     }
@@ -357,7 +325,8 @@ class PlayerShip extends GameObject {
 
     this.hudHandler.updateHudInfo({
       shield : this.shield.strength,
-      fuel: this.fuel.amount
+      fuel: this.fuel.amount,
+      weapons : this.weapons
     });
 
   }

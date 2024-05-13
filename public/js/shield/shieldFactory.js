@@ -2,40 +2,58 @@
 class ShieldFactory {
 
   static SHIELD_TYPES = {
-    classAShield : ClassAShield,
-    classBShield : ClassBShield
+    shieldA : "shieldA",
+    shieldB : "shieldB"
   }
 
   constructor({resourceHandler}){
     this.resourceHandler = resourceHandler;
   };
 
-  invoke = async ()=>{
-    await ShieldFactory.SHIELD_TYPES.classAShield.invoke(this.resourceHandler);
-    await ShieldFactory.SHIELD_TYPES.classBShield.invoke(this.resourceHandler);
+  fetchResources = async ()=>{
+    for (let type in ShieldFactory.SHIELD_TYPES) {
+      ShieldTypes[type].imageResource = await this.resourceHandler.fetchImageResource({resourceObject: ShieldTypes[type].imageResourceObject});
+    }
   }
 
-  /**
-   *
-   * @param canvas
-   * @param posDX
-   * @param posDY
-   * @param SHIELD_TYPES
-   * @param relatedShip
-   * @returns {SHIELD_TYPES.type}
-   */
+    /**
+     *
+     * @param canvas
+     * @param width
+     * @param height
+     * @param posDX
+     * @param posDY
+     * @param type
+     * @param relatedShip
+     * @returns {Shield}
+     */
   createShield = ({
-                    canvas,
-                    posDX,
-                    posDY,
-                    type,
-                    relatedShip,
+                      canvas,
+                      width,
+                      height,
+                      posDX,
+                      posDY,
+                      type,
+                      relatedShip,
   })=>{
-    return new type({
-      canvas,
-      posDX,
-      posDY,
-      relatedShip
+    return new Shield({
+        canvas: canvas,
+        currentFrame: 0,
+        frames: ShieldTypes[type].frames,
+        isActive: true,
+        isHittable: true,
+        posDX: posDX,
+        posDY: posDY,
+        relatedShip: relatedShip,
+        spriteSheetColumns: ShieldTypes[type].spriteSheetColumns,
+        spriteSheetRows: ShieldTypes[type].spriteSheetRows,
+        strideX: ShieldTypes[type].imageResource.image.width / ShieldTypes[type].spriteSheetColumns,
+        strideY: ShieldTypes[type].imageResource.image.height / ShieldTypes[type].spriteSheetRows,
+        stride: ShieldTypes[type].imageResource.image.height /  ShieldTypes[type].frames,
+        width: width,
+        height: height,
+        spriteSheet: ShieldTypes[type].imageResource.image,
+        strength: ShieldTypes[type].strength
     });
   };
 }

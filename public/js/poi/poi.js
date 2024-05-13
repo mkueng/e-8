@@ -8,7 +8,9 @@ class Poi extends GameObject {
     posY,
     posDX,
     posDY,
-    canvas
+    canvas,
+      dependencies
+
               }){
     super({
       isActive:true,
@@ -19,7 +21,8 @@ class Poi extends GameObject {
       posY,
       posDX,
       posDY,
-      canvas
+      canvas,
+      dependencies
       }
     );
   }

@@ -96,22 +96,33 @@ class GameInit {
     this.fontHandler = new FontHandler();
     await this.fontHandler.loadFont();
 
+    // propulsion
     await ScriptLoader.loadScript("js/propulsion/propulsionTypes.js");
     await ScriptLoader.loadScript("js/propulsion/propulsion.js");
-    await ScriptLoader.loadScript("js/propulsion/propulsionIonA.js");
-
-    await ScriptLoader.loadScript("js/propulsion/propulsionIonC.js");
     await ScriptLoader.loadScript("js/propulsion/propulsionFactory.js");
+
+    // shield
+    await ScriptLoader.loadScript("js/shield/shieldTypes.js");
+
+    // playerShip
     await ScriptLoader.loadScript("js/playerShip/playerShipPropertiesClassA.js");
     await ScriptLoader.loadScript("js/playerShip/playerShipPropertiesClassB.js");
     await ScriptLoader.loadScript("js/playerShip/playerShipFactory.js");
     await ScriptLoader.loadScript("js/playerShip/playerShipHandler.js");
+
+    // freighter
     await ScriptLoader.loadScript("js/freighter/freighter.js");
-
-
     await ScriptLoader.loadScript("js/freighter/freighterClasses.js");
     await ScriptLoader.loadScript("js/freighter/freighterFactory.js");
     await ScriptLoader.loadScript("js/freighter/freighterHandler.js");
+
+
+    //poi
+    await ScriptLoader.loadScript("js/poi/poiHighlight.js");
+    await ScriptLoader.loadScript("js/poi/poiHandler.js");
+
+    // spaceStation
+    await ScriptLoader.loadScript("js/spaceStation/spaceStationHandler.js");
 
     this.stateHandler = new StateHandler(this);
     this.speechHandler = new SpeechHandler()
@@ -129,15 +140,18 @@ class GameInit {
       stateHandler: this.stateHandler
     });
 
+    this.poiHandler = new POIHandler({resourceHandler: this.resourceHandler, inputHandler: this.inputHandler, canvasHandler: this.canvasHandler});
+    await this.poiHandler.invoke();
+
     this.particleGenerator = new ParticleGenerator();
     this.propulsionFactory = new PropulsionFactory({resourceHandler:this.resourceHandler});
-    await this.propulsionFactory.invoke();
+    await this.propulsionFactory.fetchResources();
     this.engineTrailFactory = new EngineTrailFactory({canvasHandler:this.canvasHandler,resourceHandler:this.resourceHandler});
     this.weaponFactory = new WeaponFactory({resourceHandler:this.resourceHandler});
     await this.weaponFactory.invoke();
     this.fuelFactory = new FuelFactory();
     this.shieldFactory = new ShieldFactory({resourceHandler:this.resourceHandler});
-    await this.shieldFactory.invoke();
+    await this.shieldFactory.fetchResources();
     this.explosionFactory = new ExplosionFactory({resourceHandler:this.resourceHandler});
     await this.explosionFactory.invoke();
 
@@ -208,7 +222,8 @@ class GameInit {
       galaxy: this.galaxy,
       resourceHandler: this.resourceHandler,
       canvasHandler: this.canvasHandler,
-      inputHandler: this.inputHandler
+      inputHandler: this.inputHandler,
+      poiHandler: this.poiHandler
     })
 
     await this.spaceStationHandler.invoke();

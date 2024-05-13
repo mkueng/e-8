@@ -76,7 +76,7 @@ class GameObject {
               }){
     this.accX = accX;
     this.accY = accY;
-    this.alpha = alpha || null;
+    this.alpha = alpha || 1;
     this.animationLoop = animationLoop || null;
     this.canDestroy = canDestroy || false;
     this.canvas = canvas;

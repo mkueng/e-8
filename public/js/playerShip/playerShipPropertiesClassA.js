@@ -51,9 +51,11 @@ class PlayerShipPropertiesClassA {
   }
 
   static shield = {
-    type: ShieldFactory.SHIELD_TYPES.classAShield,
-    posDX: -70,
-    posDY: -115
+    type: ShieldFactory.SHIELD_TYPES.shieldA,
+    posDX: -90,
+    posDY: -115,
+    width: 350,
+    height: 300
   }
 
   static terminationSequence = {
@@ -82,15 +84,15 @@ class PlayerShipPropertiesClassA {
     PhotonTorpedo : {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
-      amount: 10,
+      amount: 200,
       posDX: 90,
       posDY: 27
     },
 
     PhotonTorpedoFireAndForget : {
-      controlAssignment : "ControlRight",
+      controlAssignment : "KeyK",
       type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
-      amount: 10,
+      amount: 20,
       posDX : 60,
       posDY : 27
     },

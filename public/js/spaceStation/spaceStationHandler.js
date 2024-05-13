@@ -9,26 +9,29 @@ class SpaceStationHandler {
   })
 
   static poi = {
-    type : PoiFactory.POI_TYPES.spaceStation,
-    posDX: -110,
-    posDY: -120
+    type : POIHandler.POI_TYPES.spaceStation,
+    posDX: -20,
+    posDY: -60,
+    posX:0,
+    posY:0
   }
 
   static imageResource;
 
   #galaxy;
   #resourceHandler;
+  #poiHandler;
 
-  constructor({galaxy, resourceHandler, canvasHandler, inputHandler}){
+  constructor({galaxy, resourceHandler, canvasHandler, inputHandler, poiHandler}){
     this.#galaxy = galaxy;
     this.#resourceHandler = resourceHandler;
+    this.#poiHandler = poiHandler;
     this.canvas = canvasHandler.getCanvas("backgroundFarthest").canvas;
-    this.poiFactory = new PoiFactory({resourceHandler});
     this.poiInstance = null;
-    galaxy.subscribe(this)
-    inputHandler.subscribe(this)
-
+    galaxy.subscribe(this);
+    inputHandler.subscribe(this);
   }
+
 
   keyEvent= (event)=>{
 
@@ -38,29 +41,34 @@ class SpaceStationHandler {
     SpaceStationHandler.imageResource = await this.#resourceHandler.fetchImageResource({
       resourceObject: SpaceStationHandler.imageResourceObject
     });
-    await this.poiFactory.invoke(SpaceStationHandler.poi.type.imageResourceObject)
   }
 
-  update =({planetObject})=>{
-    this.poiInstance = this.poiFactory.createPOI({...SpaceStationHandler.poi, canvas:this.canvas})
-    let spaceStationObject = new GameObject({
+  update ({planetObject}){
+    this.create({planetObject}).then((spaceStation)=>{
+      GameObjectsHandler.instance.addGameObject(spaceStation);
+      spaceStation.addDependencies();
+    });
+  }
+
+  create = async ({planetObject})=>{
+    this.poiInstance = await this.#poiHandler.createPOI({poi: SpaceStationHandler.poi, canvas:this.canvas})
+    return new GameObject({
       isActive: true,
-      identification : "spaceStation",
+      identification: "spaceStation",
       image: SpaceStationHandler.imageResource.image,
       canvas: this.canvas,
-      width : SpaceStationHandler.imageResource.image.width*(planetObject.height/5000),
-      height: SpaceStationHandler.imageResource.image.height*(planetObject.height/5000),
-      posX: planetObject.posX+(planetObject.height),
-      posY: planetObject.posY+planetObject.height/2,
-      velX: planetObject.velX-0.04,
+      width: SpaceStationHandler.imageResource.image.width * (planetObject.height / 1000),
+      height: SpaceStationHandler.imageResource.image.height * (planetObject.height / 1000),
+      posX: planetObject.posX + (planetObject.height),
+      posY: planetObject.posY + planetObject.height / 2,
+      velX: planetObject.velX - 0.04,
       velY: planetObject.velY,
-      dependencies : [this.poiInstance],
-      isHittable : false,
-      isDestroyable : false
+      dependencies: [this.poiInstance],
+      isHittable: false,
+      isDestroyable: false
 
-    })
+    });
 
-    GameObjectsHandler.instance.addGameObject(spaceStationObject);
   }
 
 

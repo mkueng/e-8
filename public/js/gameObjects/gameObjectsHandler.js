@@ -7,7 +7,6 @@ class GameObjectsHandler {
   static contexts = {};
   static gameObjectsToRemove = new Set();
 
-
   /**
    *
    * @param gameObject
@@ -19,8 +18,6 @@ class GameObjectsHandler {
        console.error(e);
     }
     GameObjectsHandler.gameObjects.push(gameObject);
-    //console.log(GameObjectsHandler.gameObjects);
-    //console.log("GameObjects:", GameObjectsHandler.gameObjects);
   }
 
   /**
@@ -49,5 +46,4 @@ class GameObjectsHandler {
     GameObjectsHandler.gameObjectsToRemove.clear();
 
   }
-
 }

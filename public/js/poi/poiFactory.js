@@ -1,8 +1,6 @@
 class PoiFactory {
 
-  static POI_TYPES = {
-    spaceStation : SpaceStation
-  }
+
 
   static imageResource;
 
@@ -31,7 +29,8 @@ class PoiFactory {
       posY : 0,
       posDX : posDX,
       posDY : posDY,
-      canvas: canvas
+      canvas: canvas,
+      dependencies: []
     })
   }
 }
