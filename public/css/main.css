@@ -192,6 +192,15 @@ input[type="range"]::-webkit-slider-thumb {
     z-index: 50;
 }
 
+.terminalCanvas {
+    z-index: 900;
+    display: block;
+}
+
+.terminalContentCanvas {
+    z-index: 910;
+    display: block;
+}
 .settingsCanvas {
     z-index: 999;
 }

@@ -48,12 +48,6 @@ class GameLoop {
     // update game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++) {
-      if (GameObjectsHandler.gameObjects[i].identification === "planet") {
-        GameObjectsHandler.gameObjects[i].width+=1;
-        GameObjectsHandler.gameObjects[i].height+=1;
-        GameObjectsHandler.gameObjects[i].velX-=0.001;
-      }
-
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
   }

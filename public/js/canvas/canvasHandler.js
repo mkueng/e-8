@@ -20,7 +20,7 @@ class CanvasHandler {
 
   #canvases = {
     "backdrop": {
-      "id":"backdrop",
+      "id": "backdrop",
       "class": "fullscreenCanvas backdropCanvas",
       "alpha": false
     },
@@ -69,24 +69,34 @@ class CanvasHandler {
       "class": "fullscreenCanvas backgroundFaceCanvas",
       "alpha": true
     },
-    "weapons" : {
-      "id" : "weapons",
-      "class" : "fullscreenCanvas weaponsCanvas",
+    "weapons": {
+      "id": "weapons",
+      "class": "fullscreenCanvas weaponsCanvas",
       "alpha": true
     },
-    "performanceInfo" : {
+    "performanceInfo": {
       "id": "performanceInfo",
-      "class" : "fullscreenCanvas performanceInfoCanvas",
+      "class": "fullscreenCanvas performanceInfoCanvas",
       "alpha": true
     },
-    "haze" : {
+    "haze": {
       "id": "haze",
-      "class" : "fullscreenCanvas",
+      "class": "fullscreenCanvas",
       "alpha": true
     },
-    "playerShip" : {
+    "playerShip": {
       "id": "playerShip",
       "class": "fullscreenCanvas playerShipCanvas",
+      "alpha": true
+    },
+    "terminal": {
+      "id": "terminal",
+      "class": "fullscreenCanvas terminalCanvas",
+      "alpha": true
+    },
+    "terminalContent": {
+      "id": "terminalContent",
+      "class": "fullscreenCanvas terminalCanvas",
       "alpha": true
     }
   }

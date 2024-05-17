@@ -88,7 +88,7 @@ class HudHandler {
 
     for (const weapon in this.#weapons) {
       this.#dynamicContextLeft.fillStyle = e8.global.colors.info;
-        this.#dynamicContextLeft.fillText(weapon, 5, 35+i);
+      this.#dynamicContextLeft.fillText(weapon, 5, 35+i);
       this.#dynamicContextLeft.fillStyle = e8.global.colors.vanilla;
       this.#dynamicContextLeft.fillText(this.#weapons[weapon].units.length, 300, 35+i);
         i+=15;

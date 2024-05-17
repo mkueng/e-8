@@ -121,6 +121,9 @@ class GameInit {
     await ScriptLoader.loadScript("js/poi/poiHighlight.js");
     await ScriptLoader.loadScript("js/poi/poiHandler.js");
 
+    //terminal
+    await ScriptLoader.loadScript("js/terminal/terminal.js");
+
     // spaceStation
     await ScriptLoader.loadScript("js/spaceStation/spaceStationHandler.js");
 
@@ -139,6 +142,9 @@ class GameInit {
       canvasHandler: this.canvasHandler,
       stateHandler: this.stateHandler
     });
+
+    this.terminal = new Terminal(this.resourceHandler, this.canvasHandler);
+    await this.terminal.invoke();
 
     this.poiHandler = new POIHandler({resourceHandler: this.resourceHandler, inputHandler: this.inputHandler, canvasHandler: this.canvasHandler});
     await this.poiHandler.invoke();

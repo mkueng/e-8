@@ -4,6 +4,8 @@ class GameObjectsHandler {
 
   static instance = new this();
   static gameObjects = [];
+  
+
   static contexts = {};
   static gameObjectsToRemove = new Set();
 
