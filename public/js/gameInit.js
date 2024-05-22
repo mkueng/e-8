@@ -62,10 +62,13 @@ class GameInit {
   }
 
   startGame = ()=>{
+    /*
     this.gameState = this.stateHandler.getState().name;
     this.gameLoop.start();
     this.asteroidHandler.createAsteroids(10000,10);
     this.enemyShipHandler.startCreation(5000);
+
+     */
   }
 
   pauseGame = ()=>{

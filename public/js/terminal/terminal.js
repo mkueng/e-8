@@ -18,9 +18,9 @@ class Terminal {
         this.terminalContentCanvas = this.canvasHandler.getCanvas("terminalContent").canvas;
         this.terminalContentContext = this.canvasHandler.getCanvas("terminalContent").context;
         this.terminalContentContext.imageSmoothingEnabled = false;
-        this.terminalContentContext.font = "20px myFont";
+        this.terminalContentContext.font = "30px Courier New";
         this.terminalContentContext.fillStyle = "grey";
-        this.terminalContentContext.globalAlpha= 0.5;
+        this.terminalContentContext.globalAlpha= 1;
     }
 
     invoke = async ()=>{
@@ -28,27 +28,57 @@ class Terminal {
             resourceObject: Terminal.imageResourceObject
         });
         this.showTerminal();
-        this.renderTopLeftCompartment();
-        this.renderTopRightCompartment();
+        this.renderCompartment(
+          this.terminalContentContext,
+          "Top Left\nnew line\nnew line",
+          100,
+          100,
+          30,
+          "green",
+          "topRight"
+          );
+        //this.renderTopRightCompartment();
         this.renderBottomLeftCompartment();
         this.renderBottomRightCompartment();
         this.applyCRTScreenEffect();
-
     }
 
     showTerminal=()=>{
         this.terminalContext.drawImage(Terminal.imageResource.image, 0, 0, this.terminalCanvas.width, this.terminalCanvas.height)
     }
 
-    renderTopLeftCompartment=()=>{
-        console.log( this.terminalContentCanvas);
-        console.log( this.terminalContext);
-        this.terminalContentContext.fillStyle = "lightgreen";
-        //this.context.fillRect(100, 90, this.canvas.width/2-100, this.canvas.height/2-70);
-        //this.terminalContentContext.globalAlpha= 0.5;
-        this.terminalContentContext.fillText("Terminal", 150, 150);
-
+    renderCompartment = (context, txt, posX, posY, lineHeight, fillStyle, compartment) =>{
+        let offsetX = 0;
+        let offsetY = 0;
+        switch(compartment){
+            case "topLeft":{
+                offsetX = 100;
+                offsetY = 90;
+                break
+            }
+            case "topRight":{
+                offsetX = this.terminalContentCanvas.width/2;
+                offsetY = 90;
+                break
+            }
+            case "bottomLeft":{
+                offsetX = 100;
+                offsetY = this.terminalContentCanvas.height/2+20;
+                break
+            }
+            case "bottomRight":{
+                offsetX = this.terminalContentCanvas.width/2;
+                offsetY = this.terminalContentCanvas.height/2+20;
+                break
+            }
+        }
+        context.fillStyle = fillStyle;
+        const lines = txt.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            context.fillText(lines[i], offsetX+posX, offsetY+posY + (i * lineHeight));
+        }
     }
+
 
     renderTopRightCompartment=()=>{
         this.terminalContentContext.fillStyle = "white";
@@ -87,7 +117,7 @@ class Terminal {
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
                 // Apply a convex distortion
-                const factor = 1 + distance * distance * 0.1;
+                const factor = 1 + distance * distance * 0.03;
                 const srcX = Math.round(centerX + dx * radius * factor);
                 const srcY = Math.round(centerY + dy * radius * factor);
 
