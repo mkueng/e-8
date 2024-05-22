@@ -85,21 +85,96 @@ class GameInit {
 
 
   initGame = async ()=> {
+
+    // localStorage
+    await ScriptLoader.loadScript("js/localStorage/localStorageHandler.js");
     this.localStorageHandler = new LocalStorageHandler();
 
     const resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
     //this.utilityWorker = new Worker('js/workers/utility/utilityWorker.js');
     // this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker');
-    SoundHandler.setFXGain({percentage: 0.0});
-    SoundHandler.setMusicGain({percentage: 0});
+
+
+    // font
+    await ScriptLoader.loadScript("js/font/fontHandler.js");
 
     this.fontHandler = new FontHandler();
     await this.fontHandler.loadFont();
+
+    // fsm
+    await ScriptLoader.loadScript("js/state/state.js");
+    await ScriptLoader.loadScript("js/state/states.js");
+    await ScriptLoader.loadScript("js/state/finiteStateMachine.js");
+    await ScriptLoader.loadScript("js/state/stateHandler.js");
+
+    // gameObject
+await ScriptLoader.loadScript("js/gameObjects/gameObject.js");
+    await ScriptLoader.loadScript("js/gameObjects/GameObjectHandler.js");
+
+    // input
+    await ScriptLoader.loadScript("js/input/inputHandler.js");
+
+
+
+
+    // hud
+    await ScriptLoader.loadScript("js/hud/hudHandler.js");
+
+
+    // resource
+    await ScriptLoader.loadScript("js/resource/resourceHandler.js");
+    await ScriptLoader.loadScript("js/resource/resourceObject.js");
+    await ScriptLoader.loadScript("js/resource/resourceLoader.js");
+
+    // canvas
+    await ScriptLoader.loadScript("js/canvas/canvasHandler.js");
+
+    // sound
+    await ScriptLoader.loadScript("js/sound/soundHandler.js");
+    await ScriptLoader.loadScript("js/speechModule/speechHandler.js");
+    await ScriptLoader.loadScript("js/sound/proceduralMusic.js");
+    await ScriptLoader.loadScript("js/sound/sequencer.js");
+
+
+    SoundHandler.setFXGain({percentage: 0.0});
+    SoundHandler.setMusicGain({percentage: 0});
+
+
+
+    // weapon
+    await ScriptLoader.loadScript("js/weapon/weapon.js");
+    await ScriptLoader.loadScript("js/weapon/photonTorpedo.js");
+    await ScriptLoader.loadScript("js/weapon/laser.js");
+    await ScriptLoader.loadScript("js/weapon/photonTorpedoEnemy.js");
+    await ScriptLoader.loadScript("js/weapon/photonTorpedoFireAndForget.js");
+    await ScriptLoader.loadScript("js/weapon/weaponFactory.js");
+
+    // trail
+    await ScriptLoader.loadScript("js/engineTrail/engineTrail.js");
+    await ScriptLoader.loadScript("js/engineTrail/engineTrailA.js");
+    await ScriptLoader.loadScript("js/engineTrail/engineTrailB.js");
+    await ScriptLoader.loadScript("js/engineTrail/engineTrailParticle.js");
+    await ScriptLoader.loadScript("js/engineTrail/engineTrailFactory.js");
+
+
+    // fuel
+    await ScriptLoader.loadScript("js/fuel/fuel.js");
+    await ScriptLoader.loadScript("js/fuel/fuelFactory.js");
 
     // propulsion
     await ScriptLoader.loadScript("js/propulsion/propulsionTypes.js");
     await ScriptLoader.loadScript("js/propulsion/propulsion.js");
     await ScriptLoader.loadScript("js/propulsion/propulsionFactory.js");
+
+    // explosion
+    await ScriptLoader.loadScript("js/explosion/explosion.js");
+    await ScriptLoader.loadScript("js/explosion/classAPlayerShipExplosion.js");
+    await ScriptLoader.loadScript("js/explosion/classAEnemyShipExplosion.js");
+    await ScriptLoader.loadScript("js/explosion/explosionFactory.js");
+
+    // features
+    await ScriptLoader.loadScript("js/tractor/tractor.js");
+    await ScriptLoader.loadScript("js/probe/probe.js");
 
     // shield
     await ScriptLoader.loadScript("js/shield/shieldTypes.js");
@@ -110,16 +185,34 @@ class GameInit {
     await ScriptLoader.loadScript("js/playerShip/playerShipFactory.js");
     await ScriptLoader.loadScript("js/playerShip/playerShipHandler.js");
 
+    // enemyShip
+    await ScriptLoader.loadScript("js/procedural/ships/proceduralShipImage.js");
+    await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipImageType1.js");
+    await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipType1.js");
+    await ScriptLoader.loadScript("js/enemyShip/enemyShipHandler.js");
+    await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipFactory.js");
+    await ScriptLoader.loadScript("js/enemyShip/enemyShip.js");
+
+
+    // cargo
+    await ScriptLoader.loadScript("js/cargo/cargo.js");
+    await ScriptLoader.loadScript("js/cargo/units.js");
+    await ScriptLoader.loadScript("js/cargo/antimatter.js");
+    await ScriptLoader.loadScript("js/cargo/crystals.js");
+
     // freighter
     await ScriptLoader.loadScript("js/freighter/freighter.js");
     await ScriptLoader.loadScript("js/freighter/freighterClasses.js");
     await ScriptLoader.loadScript("js/freighter/freighterFactory.js");
     await ScriptLoader.loadScript("js/freighter/freighterHandler.js");
 
-
     //poi
+    await ScriptLoader.loadScript("js/poi/poiObjectClasses.js");
+    await ScriptLoader.loadScript("js/poi/poi.js");
     await ScriptLoader.loadScript("js/poi/poiHighlight.js");
     await ScriptLoader.loadScript("js/poi/poiHandler.js");
+    await ScriptLoader.loadScript("js/poi/poiFactory.js");
+
 
     //terminal
     await ScriptLoader.loadScript("js/terminal/terminal.js");
