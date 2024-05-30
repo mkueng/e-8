@@ -7,10 +7,11 @@ document.onreadystatechange = function() {
   } else {
     console.log("loaded");
     //document.querySelector("#loader").style.display = "none";
-
-    e8.init.start();
+    new Init().initApp();
   }
 };
+
+
 
 window.addEventListener("load", function() {
 

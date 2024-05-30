@@ -158,7 +158,7 @@ class CanvasHandler {
   }
 
   constructor(){
-    e8.init.subscribeForGlobalEvents(this);
+    e8.global.subscribeForGlobalEvents(this);
     this.createCanvasElements(this.#canvases);
     this.createCanvasElements(this.#staticCanvases);
   }

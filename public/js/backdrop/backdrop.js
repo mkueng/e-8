@@ -13,7 +13,7 @@ class Backdrop {
     let game = document.getElementById("game");
     game.style.width = e8.global.screenWidth + "px";
     game.style.height = e8.global.screenHeight + "px";
-    e8.init.subscribeForGlobalEvents(this);
+    e8.global.subscribeForGlobalEvents(this);
 
     this.createBackDrop();
   }

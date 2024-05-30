@@ -125,8 +125,8 @@ class Galaxy {
         lacunarityRange : lastDigit / 4,
         persistenceOffset : lastDigit / 10,
         baseFrequencyOffset : lastDigit / 3,
-        r: parseInt((last2Digits*2).toFixed(0)),
-        g: parseInt((last2Digits*2).toFixed(0)),
+        r: parseInt((last2Digits*(Math.random()*2)).toFixed(0)),
+        g: parseInt((last2Digits*(Math.random()*2)).toFixed(0)),
         b: parseInt((last3Digits / 4).toFixed(0)),
         q: last2Digits
       }

@@ -26,17 +26,6 @@
 <body>
     <script>
         var e8 = e8 || {}
-        e8.global = e8.global || {};
-        e8.global.maxWidth = 2700;
-        e8.global.maxHeight = 1800;
-        e8.global.minWidth = 1100;
-        e8.global.minHeight = 420;
-        e8.global.currentWidth = window.innerWidth;
-        e8.global.currentHeight = window.innerHeight;
-
-        e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
-        e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
-
     </script>
 
     <div id="wrapper">
@@ -55,14 +44,13 @@
     <img id="navi" class="" src="resources/hud/navi.png" style="display:none">
 
 
+    <script src="/js/global/global.js"></script>
+
+    <!-- scripts -->
     <script src="/js/util/scriptLoader.js"></script>
+    <script src="/js/scripts/scripts.js"></script>
 
 
-    <!-- game -->
-    <script src="js/stages/stage.js"></script>
-    <script src="js/stages/stage_01.js"></script>
-    <script src="js/stages/stage_02.js"></script>
-    <script src="js/gameLoop/gameLoop.js?v=0.9"></script>
 
 
     <!-- three.js -->

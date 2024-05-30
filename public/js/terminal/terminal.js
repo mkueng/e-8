@@ -9,7 +9,7 @@ class Terminal {
 
     static imageResource;
 
-    constructor(resourceHandler, canvasHandler){
+    constructor({resourceHandler, canvasHandler}){
         this.resourceHandler = resourceHandler;
         this.canvasHandler = canvasHandler;
         this.terminalCanvas = this.canvasHandler.getCanvas("terminal").canvas;
@@ -27,7 +27,12 @@ class Terminal {
         Terminal.imageResource = await this.resourceHandler.fetchImageResource({
             resourceObject: Terminal.imageResourceObject
         });
-        this.showTerminal();
+
+
+    }
+
+    showTerminal=()=>{
+        this.terminalContext.drawImage(Terminal.imageResource.image, 0, 0, this.terminalCanvas.width, this.terminalCanvas.height)
         this.renderCompartment(
           this.terminalContentContext,
           "Top Left\nnew line\nnew line",
@@ -36,15 +41,11 @@ class Terminal {
           30,
           "green",
           "topRight"
-          );
+        );
         //this.renderTopRightCompartment();
         this.renderBottomLeftCompartment();
         this.renderBottomRightCompartment();
         this.applyCRTScreenEffect();
-    }
-
-    showTerminal=()=>{
-        this.terminalContext.drawImage(Terminal.imageResource.image, 0, 0, this.terminalCanvas.width, this.terminalCanvas.height)
     }
 
     renderCompartment = (context, txt, posX, posY, lineHeight, fillStyle, compartment) =>{

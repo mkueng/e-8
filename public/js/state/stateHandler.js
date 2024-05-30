@@ -14,14 +14,14 @@ class StateHandler{
 
   }
 
-  constructor(gameController){
-    this.#gameController = gameController;
+  constructor(){
+
     this.#fsm = new FiniteStateMachine();
     this.#states = [
-      { name: 'AppStarted', instance: new AppStarted('AppStarted', gameController) },
-      { name: 'GameStarted', instance: new GameStarted('GameStarted', gameController) },
-      { name: 'GamePaused', instance: new GamePaused('GamePaused', gameController) },
-      { name: 'GameRestarted', instance: new GameRestarted('GameRestarted', gameController) },
+      { name: 'AppStarted', instance: new AppStarted('AppStarted', ) },
+      { name: 'GameStarted', instance: new GameStarted('GameStarted', e8.global.gameController) },
+      { name: 'GamePaused', instance: new GamePaused('GamePaused', e8.global.gameController) },
+      { name: 'GameRestarted', instance: new GameRestarted('GameRestarted', e8.global.gameController) },
     ];
 
     this.#fsm.registerStates(this.#states);
