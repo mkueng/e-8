@@ -7,9 +7,9 @@ class Init {
 
   initApp= async ()=>{
     await this.#loadScripts();
-    await this.initGame();
+    await this.createComponents();
     await this.#invokeComponents();
-    this.initEventListeners();
+    this.#initEventListeners();
 
     e8.global.gameController = new GameController({
       gameLoop: this.gameLoop,
@@ -23,23 +23,23 @@ class Init {
     await Scripts.getInstance().loadScripts();
   }
 
-  initEventListeners = () =>{
+  #initEventListeners = () =>{
 
     // window resize
-    window.addEventListener('resize', (evt) => {
+    window.addEventListener(e8.global.events.resize, (evt) => {
       e8.global.currentWidth = window.innerWidth;
       e8.global.currentHeight = window.innerHeight;
 
       e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
       e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
-      e8.global.publishEvent({message:"resize", payload: {
+      e8.global.publishEvent({message:e8.global.events.resize, payload: {
         width:e8.global.screenWidth,
         height: e8.global.screenHeight
       }});
     })
 
     // visibility change
-    window.addEventListener('visibilitychange', (evt) => {
+    window.addEventListener(e8.global.events.visibilityChange, (evt) => {
       e8.global.tabIsActive = !e8.global.tabIsActive;
       if (e8.global.tabIsActive) {
         e8.global.publishEvent({message: "tabActive", payload:null})
@@ -71,7 +71,7 @@ class Init {
     await this.enemyShipHandler.invoke();
   }
 
-  initGame = async()=>{
+  createComponents = async()=>{
     this.localStorageHandler = new LocalStorageHandler();
     this.fontHandler = new FontHandler();
     this.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');

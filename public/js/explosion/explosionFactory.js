@@ -6,10 +6,8 @@ class ExplosionFactory {
     classAEnemyShipExplosion: ClassAEnemyShipExplosion
   }
 
-  constructor({
-                resourceHandler
-  }){
-    this.resourceHandler = resourceHandler;
+  constructor(){
+    this.resourceHandler = e8.global.resourceHandler;
   }
 
   invoke = async ()=>{

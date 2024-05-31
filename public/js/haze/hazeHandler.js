@@ -6,14 +6,14 @@ class HazeHandler {
   #upcoming = 0;
   #canvases = {};
 
-  constructor({gameLoop, canvasHandler, resizeImageWorker}){
-    this.#canvases[0] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
-    this.#canvases[1] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddle).canvas;
-    this.#canvases[2] = canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
-    this.resizeImageWorker = resizeImageWorker;
+  constructor(){
+    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
+    this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddle).canvas;
+    this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
+    this.resizeImageWorker = e8.global.resizeImageWorker;
     //this.#upcoming = Math.floor(Math.random()*5+10);
     this.#upcoming =2;
-    resizeImageWorker.onmessage = ({data}) =>{
+    e8.global.resizeImageWorker.onmessage = ({data}) =>{
       let canvas;
       let img = new Image();
 
@@ -50,7 +50,7 @@ class HazeHandler {
       img.src = URL.createObjectURL(data.imageBlob)
     }
 
-    gameLoop.subscribe(this);
+    e8.global.gameLoop.subscribe(this);
 
     return this;
   }

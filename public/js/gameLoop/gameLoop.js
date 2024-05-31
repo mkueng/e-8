@@ -15,8 +15,8 @@ class GameLoop {
   #then = 0;
   #hudInterval = null
 
-  constructor({hudHandler}){
-    this.#hudHandler = hudHandler;
+  constructor(){
+    this.#hudHandler = e8.global.hudHandler;
   }
 
   /**

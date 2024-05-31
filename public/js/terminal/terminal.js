@@ -9,9 +9,9 @@ class Terminal {
 
     static imageResource;
 
-    constructor({resourceHandler, canvasHandler}){
-        this.resourceHandler = resourceHandler;
-        this.canvasHandler = canvasHandler;
+    constructor(){
+        this.resourceHandler = e8.global.resourceHandler;
+        this.canvasHandler = e8.global.canvasHandler;
         this.terminalCanvas = this.canvasHandler.getCanvas("terminal").canvas;
         this.terminalContext = this.canvasHandler.getCanvas("terminal").context;
         //this.terminalContext.globalAlpha= 0.2;

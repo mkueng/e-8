@@ -5,39 +5,26 @@ class PlayerShipHandler {
   #canvas = {};
   static activeShip = null;
 
-  constructor({
-                canvasHandler,
-                resourceHandler,
-                inputHandler,
-                hudHandler,
-                propulsionFactory,
-                weaponsFactory,
-                shieldFactory,
-                explosionFactory,
-                fuelFactory,
-                engineTrailFactory,
-                weaponFactory
-
-  }){
-    this.#canvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
+  constructor(){
+    this.#canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
 
     this.playerShipFactory = new PlayerShipFactory({
       playerShipHandler: this,
-      resourceHandler,
-      canvasHandler,
-      inputHandler,
-      hudHandler,
-      propulsionFactory,
-      weaponsFactory,
-      shieldFactory,
-      explosionFactory,
-      fuelFactory,
-      engineTrailFactory,
-      weaponFactory
+      resourceHandler : e8.global.resourceHandler,
+      canvasHandler: e8.global.canvasHandler,
+      inputHandler: e8.global.inputHandler,
+      hudHandler: e8.global.hudHandler,
+      propulsionFactory: e8.global.propulsionFactory,
+      weaponsFactory: e8.global.weaponFactory,
+      shieldFactory: e8.global.shieldFactory,
+      explosionFactory: e8.global.explosionFactory,
+      fuelFactory: e8.global.fuelFactory,
+      engineTrailFactory: e8.global.engineTrailFactory,
+      weaponFactory: e8.global.weaponFactory
 
     });
 
-    inputHandler.subscribe(this);
+    e8.global.inputHandler.subscribe(this);
   }
 
   shipDestroyed =(id)=>{

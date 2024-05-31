@@ -6,17 +6,14 @@ class AsteroidHandler {
   #asteroids = [];
   #canvases = {};
 
-  constructor({
-                canvasHandler,
-                resourceHandler,
-                resizeImageWorker
-  }){
-    this.#canvases['far'] = canvasHandler.getCanvas("backgroundFar").canvas;
-    this.#canvases['middle'] = canvasHandler.getCanvas("backgroundMiddle").canvas;
-    this.#canvases['front'] = canvasHandler.getCanvas("backgroundFace").canvas;
+  constructor(
+){
+    this.#canvases['far'] = e8.global.canvasHandler.getCanvas("backgroundFar").canvas;
+    this.#canvases['middle'] = e8.global.canvasHandler.getCanvas("backgroundMiddle").canvas;
+    this.#canvases['front'] = e8.global.canvasHandler.getCanvas("backgroundFace").canvas;
 
-    this.#resourceHandler = resourceHandler;
-    this.#resizeImageWorker = resizeImageWorker;
+    this.#resourceHandler = e8.global.resourceHandler;
+    this.#resizeImageWorker = e8.global.resizeImageWorker;
   }
 
   /**

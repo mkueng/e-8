@@ -2,10 +2,11 @@ class GameController {
 
     game;
     constructor({
-      gameLoop,
-      terminal
     }) {
-        this.gameLoop = gameLoop;
+        this.resizeImageWorker =new Worker('js/workers/resizeImageWorker.js');
+        this.resourceHandler = new ResourceHandler();
+
+
         this.game = new Game({
             gameLoop: this.gameLoop
         });

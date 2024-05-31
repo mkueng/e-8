@@ -5,19 +5,16 @@ class FreighterHandler {
   #freighterFactory = null;
   #canvasObject = {};
 
-  constructor({
-                resourceHandler,
-                canvasHandler,
-                propulsionFactory,
-    engineTrailFactory
+  constructor(){
+    this.resourceHandler = e8.global.resourceHandler;
+    this.#canvasObject = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip);
+    this.propulsionFactory = e8.global.propulsionFactory;
+    this.engineTrailFactory = e8.global.engineTrailFactory;
 
-  }){
-    this.resourceHandler = resourceHandler;
-    this.#canvasObject = canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip);
     this.#freighterFactory = new FreighterFactory({
-      resourceHandler,
-      propulsionFactory,
-      engineTrailFactory
+      resourceHandler: this.resourceHandler,
+      propulsionFactory: this.propulsionFactory,
+      engineTrailFactory: this.engineTrailFactory,
     });
 
   }

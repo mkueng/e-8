@@ -23,9 +23,9 @@ class POIHandler {
     #activePOIs = [];
     #selectedPOI = null;
 
-    constructor({resourceHandler, inputHandler, canvasHandler}) {
-        this.resourceHandler = resourceHandler;
-        this.#canvasHandler = canvasHandler;
+    constructor() {
+        this.resourceHandler = e8.global.resourceHandler;
+        this.#canvasHandler = e8.global.canvasHandler;
         this.#poiFactory = new PoiFactory({resourceHandler});
         inputHandler.subscribe(this);
     }

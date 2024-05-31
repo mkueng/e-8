@@ -2,6 +2,11 @@ e8.global = {};
 e8.global.events = {};
 e8.global.subscribers = [];
 
+e8.global.events = {
+  "resize": "resize",
+  "visibilityChange": "visibilityChange"
+}
+
 e8.global.maxWidth = 2700;
 e8.global.maxHeight = 1800;
 e8.global.minWidth = 1100;
@@ -30,7 +35,7 @@ e8.global.colors = {
 }
 
 e8.global.publishEvent = ({message, payload}) => {
-  console.log("publishing event", message, payload);
+  //console.log("publishing event", message, payload);
   e8.global.subscribers.forEach(subscriber => {
     subscriber.updateFromGlobalEvent(message, payload);
   })

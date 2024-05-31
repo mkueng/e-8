@@ -8,8 +8,8 @@ class WeaponFactory {
     laser: Laser
   }
 
-  constructor({resourceHandler}){
-    this.resourceHandler = resourceHandler;
+  constructor(){
+    this.resourceHandler = e8.global.resourceHandler;
   };
 
   invoke = async ()=>{

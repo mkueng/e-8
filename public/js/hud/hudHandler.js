@@ -27,8 +27,8 @@ class HudHandler {
   }
 
 
-  constructor({canvasHandler}) {
-    this.canvasHandler = canvasHandler;
+  constructor() {
+    this.canvasHandler = e8.global.canvasHandler;
     this.#initContexts();
 
     this.hudImage = document.querySelector("#hud");

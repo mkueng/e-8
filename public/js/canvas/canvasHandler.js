@@ -195,7 +195,7 @@ class CanvasHandler {
 
 
   updateFromGlobalEvent = ({message, payload}) =>{
-    if (message === e8.globalEvents.screenResized) {
+    if (message === e8.global.events.resize) {
       for (const canvas in this.#canvases){
         const canvass = document.getElementById(this.#canvases[canvas].id);
         canvass.width = payload.width;

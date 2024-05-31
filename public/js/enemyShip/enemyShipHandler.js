@@ -5,16 +5,17 @@ class EnemyShipHandler {
   #canvas;
 
 
-  constructor({canvasHandler, resourceHandler, particleGenerator}){
-    this.canvasHandler = canvasHandler;
-    this.resourceHandler = resourceHandler;
+  constructor(){
+    this.canvasHandler = e8.global.canvasHandler;
+    this.resourceHandler = e8.global.resourceHandler;
+    this.particleGenerator = e8.global.particleGenerator;
     //this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
     this.enemyShipFactory = new ProceduralEnemyShipFactory({
       enemyShipHandler: this,
-      resourceHandler,
-      canvasHandler,
-      particleGenerator
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler,
+      particleGenerator: this.particleGenerator,
     });
   }
 

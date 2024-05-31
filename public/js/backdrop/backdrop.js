@@ -1,9 +1,9 @@
 'use strict'
 class Backdrop {
 
-  constructor({canvasHandler}){
-    this.canvas = canvasHandler.getCanvas("backdrop").canvas;
-    this.context = canvasHandler.getCanvas("backdrop").context;
+  constructor(){
+    this.canvas = e8.global.canvasHandler.getCanvas("backdrop").canvas;
+    this.context = e8.global.canvasHandler.getCanvas("backdrop").context;
 
     this.amountOfStars = 5000;
     this.sizeRange = 1;
@@ -19,7 +19,7 @@ class Backdrop {
   }
 
   updateFromGlobalEvent = ({message, payload}) => {
-    if (message === e8.globalEvents.screenResized) {
+    if (message === e8.global.events.resize) {
       let game = document.getElementById("game");
       game.style.width = payload.width + "px";
       game.style.height = payload.height + "px";

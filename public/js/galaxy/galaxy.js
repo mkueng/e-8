@@ -8,17 +8,15 @@ class Galaxy {
   #subscribers = [];
 
   constructor({
-                gameLoop,
-                canvasHandler,
                 scale
               }){
     this.#distribution = this.#createPseudoRandomDistribution(scale).reverse();
     this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.#distribution[this.#galaxyIndex];
-    this.canvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
+    this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
 
-    gameLoop.subscribe(this);
+    e8.global.gameLoop.subscribe(this);
 
     this.#galaxyWorker.postMessage({
       type : "init"

@@ -13,16 +13,11 @@ class SettingsHandler {
 
   #template;
 
-  constructor({
-                localStorageHandler,
-                inputHandler,
-                stateHandler,
-                canvasHandler
-  }){
-    this.#localStorageHandler = localStorageHandler;
-    this.#inputHandler = inputHandler;
-    this.#stateHandler = stateHandler;
-    this.#canvasHandler = canvasHandler;
+  constructor(){
+    this.#localStorageHandler = e8.global.localStorageHandler;
+    this.#inputHandler = e8.global.inputHandler;
+    this.#stateHandler = e8.global.stateHandler;
+    this.#canvasHandler = e8.global.canvasHandler;
 
     this.initializeSettings();
     this.#inputHandler.subscribe(this);

@@ -7,14 +7,9 @@ class DustHandler {
   #amountOfParticles = 60;
   #particles = [];
 
-  /**
-   *
-   * @param canvasHandler
-   * @param resourceHandler
-   */
-  constructor({canvasHandler, resourceHandler}){
-    this.canvasHandler = canvasHandler;
-    this.resourceHandler = resourceHandler;
+  constructor(){
+    this.canvasHandler = e8.global.canvasHandler;
+    this.resourceHandler = e8.global.resourceHandler;
     this.#canvas =  this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
     this.#context = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
     this.#createParticles({amount: this.#amountOfParticles});

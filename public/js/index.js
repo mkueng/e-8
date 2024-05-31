@@ -7,7 +7,9 @@ document.onreadystatechange = function() {
   } else {
     console.log("loaded");
     //document.querySelector("#loader").style.display = "none";
-    new Init().initApp();
+    console.log("initializing");
+    new Init().initApp().then((r) => {
+    })
   }
 };
 
