@@ -7,13 +7,12 @@ class ExplosionFactory {
   }
 
   constructor(){
-    this.resourceHandler = e8.global.resourceHandler;
   }
 
   invoke = async ()=>{
 
-    await ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion.invoke(this.resourceHandler);
-    await ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion.invoke(this.resourceHandler);
+    await ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion.invoke();
+    await ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion.invoke();
   }
 
   createExplosion = ({

@@ -1,9 +1,6 @@
 class ProceduralEnemyShipType1 {
 
   #proceduralEnemyShipType1Image;
-  #particleGenerator;
-  #canvasHandler;
-  #resourceHandler;
 
   static shipTypeVariations = {
     0: {
@@ -50,15 +47,10 @@ class ProceduralEnemyShipType1 {
     }
   }
 
-  constructor({resourceHandler, canvasHandler, particleGenerator}){
-    this.#resourceHandler = resourceHandler;
-    this.#canvasHandler = canvasHandler;
-    this.#particleGenerator = particleGenerator;
+  constructor(){
 
-    this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1({
-      resourceHandler,
-      canvasHandler
-    })
+
+    this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()
   }
 
   invoke = async () =>{
@@ -85,7 +77,7 @@ class ProceduralEnemyShipType1 {
         scale: shipTypeVariations[variation].scale
       });
 
-      shipTypeVariations[variation].particles = this.#particleGenerator.createParticles({
+      shipTypeVariations[variation].particles = e8.global.particleGenerator.createParticles({
         imageData: shipTypeImageData.imageData,
         stride: 22,
         particleWidthRange: 8,

@@ -9,19 +9,7 @@ class PlayerShipHandler {
     this.#canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
 
     this.playerShipFactory = new PlayerShipFactory({
-      playerShipHandler: this,
-      resourceHandler : e8.global.resourceHandler,
-      canvasHandler: e8.global.canvasHandler,
-      inputHandler: e8.global.inputHandler,
-      hudHandler: e8.global.hudHandler,
-      propulsionFactory: e8.global.propulsionFactory,
-      weaponsFactory: e8.global.weaponFactory,
-      shieldFactory: e8.global.shieldFactory,
-      explosionFactory: e8.global.explosionFactory,
-      fuelFactory: e8.global.fuelFactory,
-      engineTrailFactory: e8.global.engineTrailFactory,
-      weaponFactory: e8.global.weaponFactory
-
+      playerShipHandler: this
     });
 
     e8.global.inputHandler.subscribe(this);

@@ -16,13 +16,8 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
   #orientation = false;
   #tilesResourceObjects;
 
-  constructor({
-                resourceHandler,
-                canvasHandler
-              }){
+  constructor(){
     super({
-      resourceHandler,
-      canvasHandler
     });
   }
 
@@ -48,9 +43,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
     if (typeof shipSize !== 'number' || typeof scale !== 'number' || shipSize <= 0 || scale <= 0) {
       throw new Error('Invalid parameters: shipSize and scale must be positive numbers.');
     }
-
     const offset = this.#tileSize*scale;
-
     this.setupCanvas({
       shipSize : shipSize,
       offset : offset

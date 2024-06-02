@@ -25,11 +25,11 @@ class ClassAEnemyShipExplosion extends Explosion {
     });
   }
 
-  static async invoke(resourceHandler){
-    ClassAEnemyShipExplosion.imageResource = await resourceHandler.fetchImageResource({
+  static async invoke(){
+    ClassAEnemyShipExplosion.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: ClassAEnemyShipExplosion.imageResourceObject
     });
-    ClassAEnemyShipExplosion.soundResource = await resourceHandler.fetchSoundResource({
+    ClassAEnemyShipExplosion.soundResource = await e8.global.resourceHandler.fetchSoundResource({
       resourceObject: ClassAEnemyShipExplosion.soundResourceObject});
   }
 

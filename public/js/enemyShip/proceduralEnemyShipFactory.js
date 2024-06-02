@@ -7,21 +7,12 @@ class ProceduralEnemyShipFactory {
   }
 
   constructor({
-    resourceHandler,
-    canvasHandler,
-    particleGenerator,
     enemyShipHandler
   }){
-    this.particlesContext = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
-    this.particlesCanvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
-    this.enemyShipHandler = enemyShipHandler,
-    this.explosionFactory = new ExplosionFactory({resourceHandler});
-    this.weaponFactory = new WeaponFactory({resourceHandler});
-    this.shieldFactory = new ShieldFactory({resourceHandler});
-
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1({
-      resourceHandler, canvasHandler, particleGenerator
-    })
+    this.particlesContext = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
+    this.particlesCanvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
+    this.enemyShipHandler = enemyShipHandler;
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1()
   }
 
   /**
@@ -29,9 +20,6 @@ class ProceduralEnemyShipFactory {
    * @returns {Promise<void>}
    */
   invoke = async () =>{
-    await this.shieldFactory.fetchResources();
-    await this.weaponFactory.invoke();
-    await this.explosionFactory.invoke();
     await ProceduralEnemyShipFactory.shipTypes.EnemyShipType1.invoke();
   }
 
@@ -48,12 +36,12 @@ class ProceduralEnemyShipFactory {
     return new Promise(async (resolve) => {
 
       //create shield instance
-      const shieldInstance = this.shieldFactory.createShield({ ...shield, canvas });
+      const shieldInstance = e8.global.shieldFactory.createShield({ ...shield, canvas });
 
       //create terminationSequence
       let terminationSequence = [];
       for (let i=0; i < shipSize; i++){
-        const explosion = this.explosionFactory.createExplosion({
+        const explosion = e8.global.explosionFactory.createExplosion({
           type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
           canvas: canvas,
           posDX: (i*(Math.random()*50+20))-50,
@@ -63,7 +51,7 @@ class ProceduralEnemyShipFactory {
       }
 
       let weapons = {
-        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: this.weaponFactory.createWeapon({
+        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: e8.global.weaponFactory.createWeapon({
           type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
           amount: 1,
           canvas: canvas,

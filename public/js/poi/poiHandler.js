@@ -24,14 +24,12 @@ class POIHandler {
     #selectedPOI = null;
 
     constructor() {
-        this.resourceHandler = e8.global.resourceHandler;
-        this.#canvasHandler = e8.global.canvasHandler;
         this.#poiFactory = new PoiFactory({resourceHandler});
-        inputHandler.subscribe(this);
+        e8.global.inputHandler.subscribe(this);
     }
 
     invoke = async () => {
-        POIHandler.poiHighlightImageResource = await this.resourceHandler.fetchImageResource({
+        POIHandler.poiHighlightImageResource = await e8.global.resourceHandler.fetchImageResource({
             resourceObject: POIHandler.poiHighlightImageResourceObject
         });
         this.poiHighlight = new PoiHighlight({

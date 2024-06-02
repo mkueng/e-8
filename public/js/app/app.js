@@ -7,8 +7,13 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-    this.#createGlobalHandlers();
     await e8.global.fontHandler.init();
+    this.#createGlobalFactories();
+    this.#createGlobalHandlers();
+
+    await this.#initGlobalFactories();
+    await this.#initGlobalHandlers();
+    this.#initEventListeners();
     await this.start();
   }
 
@@ -16,10 +21,60 @@ class App {
 
 
     this.#gameController = new GameController();
+    await this.#gameController.init();
+    await this.#gameController.startGame();
   }
 
   #loadScripts = async() =>{
     await Scripts.getInstance().loadScripts();
+  }
+
+  #initEventListeners = () =>{
+    window.addEventListener(e8.global.events.resize, (evt) => {
+      e8.global.currentWidth = window.innerWidth;
+      e8.global.currentHeight = window.innerHeight;
+
+      e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
+      e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
+      e8.global.publishEvent({message:e8.global.events.resize, payload: {
+        width:e8.global.screenWidth,
+        height: e8.global.screenHeight
+      }});
+    })
+
+    window.addEventListener(e8.global.events.visibilityChange, (evt) => {
+      e8.global.tabIsActive = !e8.global.tabIsActive;
+      if (e8.global.tabIsActive) {
+        e8.global.publishEvent({message: "tabActive", payload:null})
+      } else {
+        e8.global.publishEvent({message: "tabInactive", payload:null})
+      }
+    })
+  }
+
+  #initGlobalFactories = async ()=>{
+    await e8.global.weaponFactory.invoke();
+    await e8.global.propulsionFactory.fetchResources();
+    await e8.global.shieldFactory.fetchResources();
+    await e8.global.explosionFactory.invoke();
+  }
+
+  #initGlobalHandlers = async()=>{
+    await e8.global.poiHandler.invoke();
+    await e8.global.terminal.invoke();
+    await e8.global.spaceStationHandler.invoke();
+    await e8.global.freighterHandler.invoke();
+    await e8.global.asteroidHandler.invoke();
+    await e8.global.enemyShipHandler.invoke();
+  }
+
+  #createGlobalFactories = ()=> {
+    e8.global.weaponFactory = new WeaponFactory();
+    e8.global.propulsionFactory = new PropulsionFactory();
+    e8.global.shieldFactory = new ShieldFactory();
+    e8.global.explosionFactory = new ExplosionFactory();
+    e8.global.engineTrailFactory = new EngineTrailFactory();
+    e8.global.fuelFactory = new FuelFactory();
   }
 
   #createGlobalHandlers = ()=>{
@@ -42,16 +97,9 @@ class App {
     e8.global.terminal = new Terminal();
     e8.global.particleGeneratore = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
-    e8.global.weaponFactory = new WeaponFactory();
-    e8.global.propulsionFactory = new PropulsionFactory();
-    e8.global.shieldFactory = new ShieldFactory();
-    e8.global.explosionFactory = new ExplosionFactory();
-    e8.global.fuelFactory = new FuelFactory();
-    e8.global.engineTrailFactory = new EngineTrailFactory();
-    e8.global.playerShipHandler = new PlayerShipHandler();
-    e8.global.enemyShipHandler = new EnemyShipHandler();
     e8.global.freighterHandler = new FreighterHandler();
     e8.global.spaceStationHandler = new SpaceStationHandler();
+    e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
   }
 
 

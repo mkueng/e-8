@@ -10,42 +10,13 @@ class PlayerShipFactory {
   /**
    *
    * @param playerShipHandler
-   * @param resourceHandler
-   * @param canvasHandler
-   * @param inputHandler
-   * @param hudHandler
-   * @param propulsionFactory
-   * @param weaponFactory
-   * @param shieldFactory
-   * @param explosionFactory
-   * @param fuelFactory
-   * @param engineTrailFactory
    */
   constructor({
-                playerShipHandler,
-                resourceHandler,
-                inputHandler,
-                hudHandler,
-                propulsionFactory,
-                weaponFactory,
-                shieldFactory,
-                explosionFactory,
-                fuelFactory,
-                engineTrailFactory
-
+                playerShipHandler
   }){
 
     Object.assign(this,{
-      playerShipHandler,
-      resourceHandler,
-      inputHandler,
-      hudHandler,
-      engineTrailFactory,
-      weaponFactory,
-      propulsionFactory,
-      fuelFactory,
-      shieldFactory,
-      explosionFactory
+      playerShipHandler
     })
   }
 
@@ -73,7 +44,7 @@ class PlayerShipFactory {
       cargo
     } = shipType;
 
-    const imageResource = await this.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
+    const imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
     const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
     const shieldInstance = await this.#createShield({shield, canvas});
@@ -117,10 +88,10 @@ class PlayerShipFactory {
    *
    * @param shield
    * @param canvas
-   * @returns {Promise<SHIELD_TYPES.type>}
+   * @returns {Promise<Shield>}
    */
   #createShield = async ({shield, canvas})=>{
-    return this.shieldFactory.createShield({...shield, canvas});
+    return e8.global.shieldFactory.createShield({...shield, canvas});
   }
 
   /**
@@ -130,7 +101,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createPropulsion = async ({propulsion, canvas}) => {
-    return this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+    return e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
   }
 
   /**
@@ -140,7 +111,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createEngineTrail = async({engineTrail, canvas}) => {
-    return this.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
+    return e8.global.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
   }
 
   /**
@@ -150,7 +121,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createTerminationSequence = async({terminationSequence, canvas}) =>{
-    return this.explosionFactory.createExplosion({ ...terminationSequence, canvas });
+    return e8.global.explosionFactory.createExplosion({ ...terminationSequence, canvas });
   }
 
   /**
@@ -184,7 +155,7 @@ class PlayerShipFactory {
       const weaponProperties = weapons[weapon];
       weaponsInstances[weapon] = {
         controlAssignment: weaponProperties.controlAssignment,
-        units: this.weaponFactory.createWeapon({
+        units: e8.global.weaponFactory.createWeapon({
           canvas,
           type: weaponProperties.type,
           controlAssignment: weaponProperties.controlAssignment,
@@ -203,6 +174,6 @@ class PlayerShipFactory {
    * @returns {*}
    */
   #createFuel = ({fuel}) => {
-    return this.fuelFactory.createFuel({fuelType: fuel.type, amount: fuel.amount, maximumAmount: fuel.max});
+    return e8.global.fuelFactory.createFuel({fuelType: fuel.type, amount: fuel.amount, maximumAmount: fuel.max});
   }
 }

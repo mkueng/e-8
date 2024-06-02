@@ -12,10 +12,7 @@ class EnemyShipHandler {
     //this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
     this.enemyShipFactory = new ProceduralEnemyShipFactory({
-      enemyShipHandler: this,
-      resourceHandler: this.resourceHandler,
-      canvasHandler: this.canvasHandler,
-      particleGenerator: this.particleGenerator,
+      enemyShipHandler: this
     });
   }
 
