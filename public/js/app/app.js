@@ -65,8 +65,7 @@ class App {
     await e8.global.terminal.invoke();
     await e8.global.spaceStationHandler.invoke();
     await e8.global.freighterHandler.invoke();
-    await e8.global.asteroidHandler.invoke();
-    await e8.global.enemyShipHandler.invoke();
+
   }
 
   #createGlobalFactories = ()=> {
@@ -94,7 +93,7 @@ class App {
     e8.global.hudHandler = new HudHandler();
     e8.global.dustHandler = new DustHandler();
     e8.global.asteroidHandler = new AsteroidHandler();
-    e8.global.gameLoop = new GameLoop();
+
     e8.global.hazeHandler = new HazeHandler();
     e8.global.proceduralMusic = new ProceduralMusic();
     e8.global.terminal = new Terminal();

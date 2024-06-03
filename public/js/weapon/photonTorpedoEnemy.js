@@ -11,8 +11,8 @@ class PhotonTorpedoEnemy extends Weapon{
 
   static imageResource;
 
-  static async invoke(resourceHandler){
-    PhotonTorpedoEnemy.imageResource = await resourceHandler.fetchImageResource({
+  static async invoke(){
+    PhotonTorpedoEnemy.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedoEnemy.resourceObject
     });
   }

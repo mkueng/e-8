@@ -23,12 +23,12 @@ class SpaceStationHandler {
   #poiHandler;
 
   constructor(){
-    this.#galaxy = e8.global.galaxy;
+
     this.#resourceHandler = e8.global.resourceHandler;
     this.#poiHandler = e8.global.poiHandler;
     this.canvas = e8.global.canvasHandler.getCanvas("backgroundFarthest").canvas;
     this.poiInstance = null;
-    e8.global.galaxy.subscribe(this);
+
     e8.global.inputHandler.subscribe(this);
   }
 

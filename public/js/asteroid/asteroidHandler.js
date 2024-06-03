@@ -1,8 +1,5 @@
 'use strict'
 class AsteroidHandler {
-
-  #resourceHandler;
-  #resizeImageWorker;
   #asteroids = [];
   #canvases = {};
 
@@ -12,16 +9,15 @@ class AsteroidHandler {
     this.#canvases['middle'] = e8.global.canvasHandler.getCanvas("backgroundMiddle").canvas;
     this.#canvases['front'] = e8.global.canvasHandler.getCanvas("backgroundFace").canvas;
 
-    this.#resourceHandler = e8.global.resourceHandler;
-    this.#resizeImageWorker = e8.global.resizeImageWorker;
+
   }
 
   /**
    *
    * @returns {Promise<void>}
    */
-  invoke = async ()=>{
-    const asteroidResourceObjects = await this.#resourceHandler.fetchResourceBatch({
+  init = async ()=>{
+    const asteroidResourceObjects = await e8.global.resourceHandler.fetchResourceBatch({
       category: "asteroid",
       fileName : "A",
       fileType : "png",
@@ -65,6 +61,7 @@ class AsteroidHandler {
         velX: velX,
         velY: 0,
         width: width,
+        rotation : 5,
         isActive: true,
       })
       this.#asteroids.push(asteroid);
@@ -85,7 +82,7 @@ class AsteroidHandler {
    * @param interval
    * @param amount
    */
-  createAsteroids = (interval, amount) => {
+  invokeAsteroids = (interval, amount) => {
     let ticker = 0;
 
     const createBatch = (interval) => {
@@ -102,7 +99,7 @@ class AsteroidHandler {
           if (ticker < amount) {
             createBatch(Math.floor(Math.random()*3000 + 3000))
           } else {
-            this.createAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
+            this.invokeAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
           }
 
         }

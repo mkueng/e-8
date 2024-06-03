@@ -20,11 +20,11 @@ class Laser extends Weapon {
     resourcePath : "/resources/sounds/laser.wav"
   })
 
-  static async invoke(resourceHandler){
-    Laser.imageResource = await resourceHandler.fetchImageResource({
+  static async invoke(){
+    Laser.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject : Laser.imageResourceObject
     });
-    Laser.soundResource = await resourceHandler.fetchSoundResource({
+    Laser.soundResource = await e8.global.resourceHandler.fetchSoundResource({
       resourceObject:Laser.soundResourceObject
     });
   }

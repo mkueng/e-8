@@ -50,8 +50,6 @@ class HazeHandler {
       img.src = URL.createObjectURL(data.imageBlob)
     }
 
-    e8.global.gameLoop.subscribe(this);
-
     return this;
   }
 

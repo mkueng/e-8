@@ -5,21 +5,25 @@ class DustHandler {
   #canvas;
   #context;
   #amountOfParticles = 60;
-  #particles = [];
+  #dustParticles = [];
 
   constructor(){
-    this.canvasHandler = e8.global.canvasHandler;
-    this.resourceHandler = e8.global.resourceHandler;
-    this.#canvas =  this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
-    this.#context = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
-    this.#createParticles({amount: this.#amountOfParticles});
+    this.#canvas =  e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
+    this.#context = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
+  }
 
-    this.dustParticles = new DustParticles({
-      particles: this.#particles,
+  init = async ()=>{
+    let particles = this.#createParticles({amount: this.#amountOfParticles});
+
+    this.#dustParticles = new DustParticles({
+      particles: particles,
       canvas: this.#canvas,
       context: this.#context
     })
-    GameObjectsHandler.instance.addGameObject(this.dustParticles);
+  }
+
+  invoke = () =>{
+    GameObjectsHandler.instance.addGameObject(this.#dustParticles);
   }
 
   /**
@@ -28,8 +32,10 @@ class DustHandler {
    */
   #createParticles = ({amount}) => {
 
+    let particles = [];
+
     for (let i=0; i < amount; i++) {
-      this.#particles.push({
+      particles.push({
         color: this.#getRandomGrayscaleColor(),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
@@ -38,6 +44,7 @@ class DustHandler {
         height: Math.floor(Math.random()*3+1)
       })
     }
+    return particles;
   }
 
   #getRandomGrayscaleColor() {

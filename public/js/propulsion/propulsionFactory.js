@@ -8,12 +8,11 @@ class PropulsionFactory {
   }
 
   constructor(){
-    this.resourceHandler = e8.global.resourceHandler;
   }
 
   fetchResources = async () => {
     for (let type in PropulsionFactory.PROPULSION_TYPES) {
-      PropulsionTypes[type].imageResource = await this.resourceHandler.fetchImageResource({resourceObject: PropulsionTypes[type].imageResourceObject});
+      PropulsionTypes[type].imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: PropulsionTypes[type].imageResourceObject});
     }
   }
 

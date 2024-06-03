@@ -21,11 +21,11 @@ class PhotonTorpedoFireAndForget extends Weapon {
   static soundResource;
   static imageResource;
 
-  static async invoke(resourceHandler){
-    PhotonTorpedoFireAndForget.imageResource = await resourceHandler.fetchImageResource({
+  static async invoke(){
+    PhotonTorpedoFireAndForget.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedoFireAndForget.resourceObject
     });
-    PhotonTorpedoFireAndForget.soundResource = await resourceHandler.fetchSoundResource({
+    PhotonTorpedoFireAndForget.soundResource = await e8.global.resourceHandler.fetchSoundResource({
       resourceObject: PhotonTorpedoFireAndForget.soundResourceObject
     });
   }

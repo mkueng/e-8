@@ -37,6 +37,7 @@ class GameObject {
    * @param velY
    * @param width
    * @param isActive
+   * @param rotation
    */
   constructor({
                 accX,
@@ -72,7 +73,8 @@ class GameObject {
                 subscriber,
                 velX,
                 velY,
-                width
+                width,
+                rotation
               }){
     this.accX = accX;
     this.accY = accY;
@@ -109,6 +111,7 @@ class GameObject {
     this.width = width;
     this.id = crypto.randomUUID();
     this.context = null;
+    this.rotation = rotation;
 
     if (canvas){
       this.context = canvas.getContext("2d");
@@ -204,6 +207,7 @@ class GameObject {
         this.height
       );
     } else if (this.image) {
+
       this.context.drawImage(
         this.image,
         this.posX + this.posDX,
@@ -235,6 +239,7 @@ class GameObject {
         }
       }
       this.posY = this.posY +(this.velY*deltaTime);
+
 
       // positioning dependencies
       if (this.dependencies) {

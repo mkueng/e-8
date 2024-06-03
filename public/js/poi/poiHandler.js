@@ -42,7 +42,7 @@ class POIHandler {
             isDestroyable: false,
             canDestroy: false,
             alpha: 0.7,
-            canvas: this.#canvasHandler.getCanvas("backgroundFace").canvas,
+            canvas: e8.global.canvasHandler.getCanvas("backgroundFace").canvas,
             posX: 200,
             posY: 200,
             posDX: -20,
