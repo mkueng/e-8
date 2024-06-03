@@ -4,12 +4,11 @@ class PoiFactory {
 
   static imageResource;
 
-  constructor({resourceHandler}){
-    this.resourceHandler = resourceHandler;
+  constructor(){
   }
 
   invoke = async (imageResourceObject)=>{
-    PoiFactory.imageResource = await this.resourceHandler.fetchImageResource({
+    PoiFactory.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: imageResourceObject
     });
   }

@@ -8,8 +8,7 @@ document.onreadystatechange = function() {
     console.log("loaded");
     //document.querySelector("#loader").style.display = "none";
     console.log("initializing");
-    new Init().initApp().then((r) => {
-    })
+    new App().init().then(() => { console.log("initialized"); });
   }
 };
 

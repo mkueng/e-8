@@ -7,13 +7,14 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-    await e8.global.fontHandler.init();
+
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
 
     await this.#initGlobalFactories();
     await this.#initGlobalHandlers();
     this.#initEventListeners();
+    await e8.global.fontHandler.init();
     await this.start();
   }
 
@@ -78,13 +79,15 @@ class App {
   }
 
   #createGlobalHandlers = ()=>{
+    e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
     e8.global.stateHandler = new StateHandler();
     e8.global.resourceHandler = new ResourceHandler();
+    e8.global.canvasHandler = new CanvasHandler();
     e8.global.localStorageHandler = new LocalStorageHandler();
     e8.global.fontHandler = new FontHandler();
     e8.global.inputHandler = new InputHandler();
     e8.global.settingsHandler = new SettingsHandler();
-    e8.global.cnavasHandler = new CanvasHandler();
+
     e8.global.speechHandler = new SpeechHandler();
     e8.global.infoHandler = new InfoHandler();
     e8.global.poiHandler = new POIHandler();
@@ -99,7 +102,7 @@ class App {
     e8.global.backdrop = new Backdrop();
     e8.global.freighterHandler = new FreighterHandler();
     e8.global.spaceStationHandler = new SpaceStationHandler();
-    e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
+
   }
 
 

@@ -24,7 +24,7 @@ class POIHandler {
     #selectedPOI = null;
 
     constructor() {
-        this.#poiFactory = new PoiFactory({resourceHandler});
+        this.#poiFactory = new PoiFactory();
         e8.global.inputHandler.subscribe(this);
     }
 

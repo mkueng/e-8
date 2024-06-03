@@ -7,28 +7,27 @@ class HudHandler {
   #initContexts = () => {
 
     //dynamic middle
-    this.dynamicContextMiddle = this.canvasHandler.getCanvas("hudDynamicMiddle").context;
-    this.dynamicContextMiddle.width = this.canvasHandler.getCanvas("hudDynamicMiddle").width;
-    this.dynamicContextMiddle.height = this.canvasHandler.getCanvas("hudDynamicMiddle").height;
+    this.dynamicContextMiddle = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").context;
+    this.dynamicContextMiddle.width = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").width;
+    this.dynamicContextMiddle.height = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").height;
 
     //dynamic left
-    this.#dynamicContextLeft = this.canvasHandler.getCanvas("hudDynamicLeft").context;
-    this.#dynamicContextLeft.width = this.canvasHandler.getCanvas("hudDynamicLeft").width;
-    this.#dynamicContextLeft.height = this.canvasHandler.getCanvas("hudDynamicLeft").height;
+    this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;
+    this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
+    this.#dynamicContextLeft.height = e8.global.canvasHandler.getCanvas("hudDynamicLeft").height;
     this.#dynamicContextLeft.transform(0.1, 1.2, 1, 0, 0, 0)
     this.#dynamicContextLeft.font = "11px myFont";
 
     //dynamic right
-    this.#dynamicContextRight = this.canvasHandler.getCanvas("hudDynamicRight").context;
-    this.#dynamicContextRight.width = this.canvasHandler.getCanvas("hudDynamicRight").width;
-    this.#dynamicContextRight.height = this.canvasHandler.getCanvas("hudDynamicRight").height;
+    this.#dynamicContextRight = e8.global.canvasHandler.getCanvas("hudDynamicRight").context;
+    this.#dynamicContextRight.width = e8.global.canvasHandler.getCanvas("hudDynamicRight").width;
+    this.#dynamicContextRight.height = e8.global.canvasHandler.getCanvas("hudDynamicRight").height;
     this.#dynamicContextRight.transform(-0.15, 1.2, 1, 0, 50, 0);
     this.#dynamicContextRight.font = "10px myFont";
   }
 
 
   constructor() {
-    this.canvasHandler = e8.global.canvasHandler;
     this.#initContexts();
 
     this.hudImage = document.querySelector("#hud");
