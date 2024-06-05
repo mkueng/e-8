@@ -6,11 +6,16 @@ class Galaxy {
   #galaxyWorker = null;
   #galaxyIndex = 0;
   #subscribers = [];
+  #scale;
 
   constructor({
                 scale
-              }){
-    this.#distribution = this.#createPseudoRandomDistribution(scale).reverse();
+  }){
+    this.#scale = scale;
+  }
+
+  init = async () =>{
+    this.#distribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
     this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.#distribution[this.#galaxyIndex];

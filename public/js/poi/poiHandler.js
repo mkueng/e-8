@@ -28,7 +28,7 @@ class POIHandler {
         e8.global.inputHandler.subscribe(this);
     }
 
-    invoke = async () => {
+    init = async () => {
         POIHandler.poiHighlightImageResource = await e8.global.resourceHandler.fetchImageResource({
             resourceObject: POIHandler.poiHighlightImageResourceObject
         });

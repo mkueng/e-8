@@ -5,9 +5,7 @@ class AsteroidHandler {
 
   constructor(
 ){
-    this.#canvases['far'] = e8.global.canvasHandler.getCanvas("backgroundFar").canvas;
-    this.#canvases['middle'] = e8.global.canvasHandler.getCanvas("backgroundMiddle").canvas;
-    this.#canvases['front'] = e8.global.canvasHandler.getCanvas("backgroundFace").canvas;
+
 
 
   }
@@ -17,6 +15,11 @@ class AsteroidHandler {
    * @returns {Promise<void>}
    */
   init = async ()=>{
+
+    this.#canvases['far'] = e8.global.canvasHandler.getCanvas("backgroundFar").canvas;
+    this.#canvases['middle'] = e8.global.canvasHandler.getCanvas("backgroundMiddle").canvas;
+    this.#canvases['front'] = e8.global.canvasHandler.getCanvas("backgroundFace").canvas;
+
     const asteroidResourceObjects = await e8.global.resourceHandler.fetchResourceBatch({
       category: "asteroid",
       fileName : "A",

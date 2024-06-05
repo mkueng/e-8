@@ -37,7 +37,7 @@ class SpaceStationHandler {
 
   }
 
-  invoke =async ()=>{
+  init =async ()=>{
     SpaceStationHandler.imageResource = await this.#resourceHandler.fetchImageResource({
       resourceObject: SpaceStationHandler.imageResourceObject
     });

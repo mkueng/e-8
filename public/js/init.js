@@ -9,7 +9,7 @@ class Init {
     await this.#loadScripts();
     await this.createComponents();
     await this.#invokeComponents();
-    this.#initEventListeners();
+
 
     e8.global.gameController = new GameController({
       gameLoop: this.gameLoop,
@@ -23,46 +23,19 @@ class Init {
     await Scripts.getInstance().loadScripts();
   }
 
-  #initEventListeners = () =>{
-
-    // window resize
-    window.addEventListener(e8.global.events.resize, (evt) => {
-      e8.global.currentWidth = window.innerWidth;
-      e8.global.currentHeight = window.innerHeight;
-
-      e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
-      e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
-      e8.global.publishEvent({message:e8.global.events.resize, payload: {
-        width:e8.global.screenWidth,
-        height: e8.global.screenHeight
-      }});
-    })
-
-    // visibility change
-    window.addEventListener(e8.global.events.visibilityChange, (evt) => {
-      e8.global.tabIsActive = !e8.global.tabIsActive;
-      if (e8.global.tabIsActive) {
-        e8.global.publishEvent({message: "tabActive", payload:null})
-      } else {
-        e8.global.publishEvent({message: "tabInactive", payload:null})
-      }
-    })
-
-  }
-
   #invokeComponents = async() =>{
     await this.fontHandler.loadFont();
-    await this.poiHandler.invoke();
-    await this.terminal.invoke();
+    await this.poiHandler.init();
+    await this.terminal.init();
     await this.propulsionFactory.fetchResources();
     await this.weaponFactory.invoke();
     await this.shieldFactory.fetchResources();
     await this.explosionFactory.invoke();
 
-    await this.spaceStationHandler.invoke();
+    await this.spaceStationHandler.init();
     await this.speechHandler.invoke();
     await this.proceduralMusic.fetchAudioAssets();
-    await this.freighterHandler.invoke();
+    await this.freighterHandler.init();
     await this.playerShipHandler.create();
 
     await this.freighterHandler.create();

@@ -23,7 +23,7 @@ class Terminal {
         this.terminalContentContext.globalAlpha= 1;
     }
 
-    invoke = async ()=>{
+    init = async ()=>{
         Terminal.imageResource = await this.resourceHandler.fetchImageResource({
             resourceObject: Terminal.imageResourceObject
         });

@@ -19,7 +19,7 @@ class FreighterHandler {
 
   }
 
-  invoke = async () => {
+  init = async () => {
     await this.#freighterFactory.invoke({resourceHandler: this.resourceHandler})
   }
 

@@ -22,7 +22,7 @@ class DustHandler {
     })
   }
 
-  invoke = () =>{
+  invokeDust = () =>{
     GameObjectsHandler.instance.addGameObject(this.#dustParticles);
   }
 

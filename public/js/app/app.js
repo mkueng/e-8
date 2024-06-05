@@ -10,17 +10,16 @@ class App {
 
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
-
     await this.#initGlobalFactories();
     await this.#initGlobalHandlers();
     this.#initEventListeners();
-    await e8.global.fontHandler.init();
+
+    e8.global.gameLoop = new GameLoop();
+
     await this.start();
   }
 
   start = async()=>{
-
-
     this.#gameController = new GameController();
     await this.#gameController.init();
     await this.#gameController.startGame();
@@ -61,10 +60,11 @@ class App {
   }
 
   #initGlobalHandlers = async()=>{
-    await e8.global.poiHandler.invoke();
-    await e8.global.terminal.invoke();
-    await e8.global.spaceStationHandler.invoke();
-    await e8.global.freighterHandler.invoke();
+    await e8.global.fontHandler.init();
+    await e8.global.poiHandler.init();
+    await e8.global.terminal.init();
+    await e8.global.spaceStationHandler.init();
+    await e8.global.freighterHandler.init();
 
   }
 

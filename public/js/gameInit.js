@@ -118,7 +118,7 @@ class GameInit {
       stateHandler: this.stateHandler
     });
     this.poiHandler = new POIHandler({resourceHandler: this.resourceHandler, inputHandler: this.inputHandler, canvasHandler: this.canvasHandler});
-    await this.poiHandler.invoke();
+    await this.poiHandler.init();
     this.hudHandler = new HudHandler({
       canvasHandler: this.canvasHandler
     });
@@ -135,7 +135,7 @@ class GameInit {
 
     this.proceduralMusic = new ProceduralMusic();
     this.terminal = new Terminal(this.resourceHandler, this.canvasHandler);
-    await this.terminal.invoke();
+    await this.terminal.init();
     this.particleGenerator = new ParticleGenerator();
     this.propulsionFactory = new PropulsionFactory({resourceHandler:this.resourceHandler});
     await this.propulsionFactory.fetchResources();
@@ -207,10 +207,10 @@ class GameInit {
       poiHandler: this.poiHandler
     })
 
-    await this.spaceStationHandler.invoke();
+    await this.spaceStationHandler.init();
     await this.speechHandler.invoke();
     await this.proceduralMusic.fetchAudioAssets();
-    await this.freighterHandler.invoke();
+    await this.freighterHandler.init();
     await this.playerShipHandler.create();
 
     await this.freighterHandler.create();
