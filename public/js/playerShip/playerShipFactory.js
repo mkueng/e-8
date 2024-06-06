@@ -10,13 +10,16 @@ class PlayerShipFactory {
   /**
    *
    * @param playerShipHandler
+   * @param hudHandler
    */
   constructor({
-                playerShipHandler
+                playerShipHandler,
+                hudHandler
   }){
 
     Object.assign(this,{
-      playerShipHandler
+      playerShipHandler,
+      hudHandler
     })
   }
 

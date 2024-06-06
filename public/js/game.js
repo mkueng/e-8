@@ -8,7 +8,7 @@ class Game {
 
   start(){
     console.log("starting game");
-    //e8.global.gameLoop.start();
+    e8.global.gameLoop.start();
   }
 
 

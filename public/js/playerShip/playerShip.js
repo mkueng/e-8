@@ -120,7 +120,7 @@ class PlayerShip extends GameObject {
       right: false
     }
 
-    this.inputHandler.subscribe(this);
+    e8.global.inputHandler.subscribe(this);
     this.initializeWeapons();
     this.initializeFeatures();
 

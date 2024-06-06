@@ -14,9 +14,10 @@ class GameLoop {
   #oldTime = 0;
   #then = 0;
   #hudInterval = null
+  #ticker = 0;
 
   constructor(){
-    this.#hudHandler = e8.global.hudHandler;
+    //this.#hudHandler = e8.global.hudHandler;
   }
 
   /**
@@ -45,11 +46,15 @@ class GameLoop {
     CollisionDetector.instance.performCollisionCheck();
     GameObjectsHandler.instance.removeGameObjects();
 
+
     // update game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++) {
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
+
+
+
   }
 
   /**
@@ -62,7 +67,7 @@ class GameLoop {
     }
 
     //render hud
-    this.#hudHandler.renderNavi();
+    //this.#hudHandler.renderNavi();
 
     //render game objects
     const len = GameObjectsHandler.gameObjects.length;
@@ -92,6 +97,13 @@ class GameLoop {
       this.#render();
       this.#frameCounter++;
     }
+    this.#ticker++;
+    if (this.#ticker % 60 === 0) {
+      this.#subscribers.forEach(subscriber => {
+        subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#galaxyCoordinate}});
+      })
+      this.#frameCounter = 0;
+    }
     this.#animationId = requestAnimationFrame(this.#animate);
   }
 
@@ -105,6 +117,8 @@ class GameLoop {
     this.#then = performance.now();
     this.#animate(performance.now());
 
+
+    /*
    this.#hudInterval = setInterval(()=>{
        this.#hudHandler.updateHudInfo({
          coordinates: this.#galaxyCoordinate,
@@ -116,8 +130,8 @@ class GameLoop {
         for (const subscriber of this.#subscribers) {
           subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#galaxyCoordinate}});
         }
-      },2000)
-    }
+      },2000)*/
+  }
 
 
 

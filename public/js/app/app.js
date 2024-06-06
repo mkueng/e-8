@@ -90,7 +90,7 @@ class App {
     e8.global.speechHandler = new SpeechHandler();
     e8.global.infoHandler = new InfoHandler();
     e8.global.poiHandler = new POIHandler();
-    e8.global.hudHandler = new HudHandler();
+
     e8.global.dustHandler = new DustHandler();
     e8.global.asteroidHandler = new AsteroidHandler();
 
