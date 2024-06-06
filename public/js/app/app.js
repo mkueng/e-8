@@ -16,10 +16,10 @@ class App {
 
     e8.global.gameLoop = new GameLoop();
 
-    await this.start();
+
   }
 
-  start = async()=>{
+  startGame = async()=>{
     this.#gameController = new GameController();
     await this.#gameController.init();
     await this.#gameController.startGame();
