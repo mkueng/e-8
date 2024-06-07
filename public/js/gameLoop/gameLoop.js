@@ -98,9 +98,15 @@ class GameLoop {
       this.#frameCounter++;
     }
     this.#ticker++;
-    if (this.#ticker % 60 === 0) {
+    if (this.#ticker >= 60) {
+      this.#ticker = 0;
       this.#subscribers.forEach(subscriber => {
-        subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#galaxyCoordinate}});
+        subscriber.updateFromGameLoop({
+          "coordinatesUpdate": this.#galaxyCoordinate,
+          "frameTime:": this.#frameCounter
+
+
+        })
       })
       this.#frameCounter = 0;
     }
