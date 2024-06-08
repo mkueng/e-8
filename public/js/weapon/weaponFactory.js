@@ -8,15 +8,13 @@ class WeaponFactory {
     laser: Laser
   }
 
-  constructor(){
-    this.resourceHandler = e8.global.resourceHandler;
-  };
+  constructor(){};
 
   invoke = async ()=>{
-    await WeaponFactory.WEAPON_TYPES.photonTorpedo.invoke(this.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.invoke(this.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.invoke(this.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.laser.invoke(this.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.photonTorpedo.invoke(e8.global.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.invoke(e8.global.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.invoke(e8.global.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.laser.invoke(e8.global.resourceHandler);
   }
 
   createWeapon({

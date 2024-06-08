@@ -63,6 +63,7 @@ class Weapon extends GameObject {
     this.posX = posX;
     this.posY = posY;
     GameObjectsHandler.instance.addGameObject(this);
+    //console.log("activate");
     SoundHandler.playFX(this.sound);
   };
 

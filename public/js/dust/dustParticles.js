@@ -24,6 +24,14 @@ class DustParticles  {
         particle.posX = e8.global.screenWidth;
       } else {
         particle.posX = particle.posX + particle.velX*deltaTime;
+        if (PlayerShip.velY) {
+            particle.posY = particle.posY + PlayerShip.velY*particle.posZ;
+
+
+        }
+        //console.log(PlayerShip.velY);
+        //particle.posY = particle.posY + PlayerShip.velY;
+       // console.log(particle.posY);
       }
     }
   }

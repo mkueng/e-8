@@ -27,6 +27,8 @@ class Scripts {
     // font
     await ScriptLoader.loadScript("js/font/fontHandler.js");
 
+    // screen
+    await ScriptLoader.loadScript("js/screen/screen.js");
 
     // fsm
     await ScriptLoader.loadScript("js/state/state.js");

@@ -21,8 +21,6 @@ document.onreadystatechange = function() {
   }
 };
 
-
-
 window.addEventListener("load", function() {
 
 })

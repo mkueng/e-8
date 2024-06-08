@@ -11,7 +11,7 @@ class InputHandler {
   }
 
   publishMouseClick(event) {
-    this.publishEvent('mouseEvent', event);
+    this.publishEvent('mouseEvent', event.button);
   }
 
   subscribe(subscriber) {
@@ -51,7 +51,9 @@ class InputHandler {
 
     //prevent contextmenu
     document.addEventListener('contextmenu', (event) => {
+
       event.preventDefault();
+      //this.publishMouseClick(event)
     });
 
     //check for mouse down
@@ -62,7 +64,7 @@ class InputHandler {
 
     document.addEventListener('mouseup', (event) => {
       event.preventDefault();
-      this.publishMouseClick(event)
+      //this.publishMouseClick(event)
     });
 
 

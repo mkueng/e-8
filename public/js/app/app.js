@@ -7,15 +7,16 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-
+    SoundHandler.setFXGain({percentage: 0.7});
+    SoundHandler.setMusicGain({percentage: 0.1});
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
     await this.#initGlobalFactories();
     await this.#initGlobalHandlers();
     this.#initEventListeners();
-
+    this.screen = new Screen();
+    this.screen.init();
     e8.global.gameLoop = new GameLoop();
-
 
   }
 
@@ -23,7 +24,27 @@ class App {
     this.#gameController = new GameController();
     await this.#gameController.init();
     await this.#gameController.startGame();
+
+    document.addEventListener("keydown", this.startMusic, true);
+    document.addEventListener("mousedown", this.startMusic, true);
   }
+
+  pauseGame = ()=>{
+    this.gameState = e8.global.stateHandler.getState().name;
+    e8.global.gameLoop.pause();
+  }
+
+  restartGame = () =>{
+    this.gameState = e8.global.stateHandler.getState().name;
+    e8.global.gameLoop.restart();
+  }
+
+  startMusic = ()=>{
+   SoundHandler.playMusic();
+    document.removeEventListener("keydown", this.startMusic, true);
+    document.removeEventListener("mousedown", this.startMusic, true);
+  }
+
 
   #loadScripts = async() =>{
     await Scripts.getInstance().loadScripts();
@@ -97,7 +118,7 @@ class App {
     e8.global.hazeHandler = new HazeHandler();
     e8.global.proceduralMusic = new ProceduralMusic();
     e8.global.terminal = new Terminal();
-    e8.global.particleGeneratore = new ParticleGenerator();
+    e8.global.particleGenerator = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
     e8.global.freighterHandler = new FreighterHandler();
     e8.global.spaceStationHandler = new SpaceStationHandler();

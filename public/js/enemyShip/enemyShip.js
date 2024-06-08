@@ -10,6 +10,7 @@ class EnemyShip extends GameObject {
                 height,
                 posX,
                 posY,
+      posZ,
                 posDX,
                 posDY,
                 velX,
@@ -46,6 +47,7 @@ class EnemyShip extends GameObject {
       canvas,
       posX,
       posY,
+      posZ,
       posDX,
       posDY,
       isDestroyable: true,
@@ -145,10 +147,10 @@ class EnemyShip extends GameObject {
   /**
    *
    * @param message
-   * @param obj
+   * @param data
    */
-  subscriptionsUpdate = (message, obj) => {
-    this.weapons[PhotonTorpedoEnemy].unshift(obj);
+  updateFromGameObjectsHandler = (message, data) => {
+    this.weapons[PhotonTorpedoEnemy].unshift(data);
   }
 
   /**

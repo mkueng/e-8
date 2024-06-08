@@ -1,14 +1,10 @@
 'use strict'
+
 class AsteroidHandler {
   #asteroids = [];
   #canvases = {};
 
-  constructor(
-){
-
-
-
-  }
+  constructor(){}
 
   /**
    *
@@ -51,6 +47,11 @@ class AsteroidHandler {
         }
       }
 
+      let zPosition =  velX*-0.8;
+      if (zPosition > 1) zPosition = 1;
+
+      console.log("zPosition", zPosition);
+
       const asteroid = new GameObject({
         canvas: canvas,
         height: height,
@@ -60,6 +61,7 @@ class AsteroidHandler {
         posDY: 0,
         posX: e8.global.screenWidth,
         posY: Math.random()*e8.global.screenHeight,
+        posZ: zPosition,
         subscriber: this,
         velX: velX,
         velY: 0,
@@ -76,7 +78,7 @@ class AsteroidHandler {
    * @param message
    * @param asteroid
    */
-  subscriptionsUpdate = (message, asteroid) => {
+  updateFromGameObjectsHandler = (message, asteroid) => {
     this.#asteroids.push(asteroid);
   }
 

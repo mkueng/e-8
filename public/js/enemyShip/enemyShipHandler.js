@@ -6,9 +6,7 @@ class EnemyShipHandler {
 
 
   constructor(){
-    this.canvasHandler = e8.global.canvasHandler;
-    this.resourceHandler = e8.global.resourceHandler;
-    this.particleGenerator = e8.global.particleGenerator;
+
     //this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
 
     this.enemyShipFactory = new ProceduralEnemyShipFactory({
@@ -16,8 +14,8 @@ class EnemyShipHandler {
     });
   }
 
-  invoke = async () => {
-    this.#canvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
+  init = async () => {
+    this.#canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
     await this.enemyShipFactory.invoke();
   }
 
@@ -61,7 +59,5 @@ class EnemyShipHandler {
 
     GameObjectsHandler.instance.addGameObject(shipObject);
     EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
-
-
   }
 }

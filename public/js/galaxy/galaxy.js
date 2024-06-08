@@ -54,7 +54,7 @@ class Galaxy {
           velY: 0,
           canvas: this.canvas
         })
-
+        console.log("planet created", planetObject.posZ);
         GameObjectsHandler.instance.addGameObject(planetObject);
         for(const subscriber of this.#subscribers) {
           subscriber.update({planetObject});
@@ -74,10 +74,10 @@ class Galaxy {
 
   /**
    *
-   * @param coordinate
+   * @param data
    */
-  updateFromGameLoop = ({message, payload})=>{
-    if (payload.coordinate > this.upcoming) {
+  updateFromGameLoop = (data)=>{
+    if (data.coordinatesUpdate > this.upcoming) {
       this.#galaxyIndex++
       let randomDistributionEntry = this.#distribution[Math.floor(Math.random()*99)];
       let randomPlanetData = this.#galaxyMap[randomDistributionEntry];

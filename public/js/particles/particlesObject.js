@@ -26,7 +26,7 @@ class ParticlesObject {
     // width = this.particles[i-5];
     // color =  this.particles[i-6];
     // opacity =  this.particles[i-7];
-    if (this.particles.length > 0) {
+    if (this.particles && this.particles.length > 0) {
       for (let i = this.particles.length - 1; i >= 0; i -= 8) {
         this.particles[i - 7] -= 1.5;
         if (this.particles[i - 7] / 100 >= 0) {

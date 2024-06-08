@@ -1,6 +1,11 @@
 'use strict'
 class PlayerShip extends GameObject {
 
+
+  static posX;
+  static posY;
+  static velY;
+
   /**
    *
    * @param image
@@ -41,6 +46,7 @@ class PlayerShip extends GameObject {
                 height,
                 posX,
                 posY,
+      posZ,
                 posDX,
                 posDY,
                 velX,
@@ -176,8 +182,9 @@ class PlayerShip extends GameObject {
    * @param message
    * @param obj
    */
-  subscriptionsUpdate = (message,obj) => {
+  updateFromGameObjectsHandler = (message,obj) => {
     //this.weapons[obj.uniqueIdentifier].units.unshift(obj);
+    //console.log("updateFromGameObjectsHandler", obj);
   }
 
   /**
@@ -219,7 +226,7 @@ class PlayerShip extends GameObject {
     GameObjectsHandler.instance.addGameObject(this.terminationSequence);
     this.destroy();
     this.destroyDependencies();
-    this.inputHandler.unsubscribe(this);
+    e8.global.inputHandler.unsubscribe(this);
     this.playerShipHandler.shipDestroyed(this);
   }
 
@@ -258,10 +265,12 @@ class PlayerShip extends GameObject {
       if (this.controls.down && this.velY < this.maxVelY) {
         this.velY += this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+
       } else
       if (this.controls.up && this.velY > -this.maxVelY) {
         this.velY -= this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+
       } else
       if (this.controls.right && this.velX < this.maxVelX) {
         this.velX += this.accX;
@@ -304,7 +313,17 @@ class PlayerShip extends GameObject {
 
     // position
     this.posY = this.posY + (this.velY*deltaTime);
+    PlayerShip.velY = this.velY;
+
+
     this.posX = this.posX + (this.velX*deltaTime);
+
+    GameObjectsHandler.gameObjects.forEach(obj => {
+      if (obj.posZ) {
+        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 6);
+      }
+
+    })
 
     // position dependencies
     for (const dependency of this.dependencies){
@@ -336,14 +355,15 @@ class PlayerShip extends GameObject {
    * @param event
    */
   mouseEvent = (event)=>{
+    switch (event) {
 
-    switch (event.type) {
-      case "mousedown" : {
+      case 0 : {
         this.keyEvents["Space"]();
         break;
       }
-      case "right": {
-        this.keyEvents["KeyL"]();
+      case 2 : {
+        //console.log("KeyK");
+        this.keyEvents["KeyK"]();
         break;
       }
     }

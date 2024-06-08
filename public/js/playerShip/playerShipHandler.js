@@ -3,7 +3,7 @@
 class PlayerShipHandler {
 
   #canvas = {};
-  #activeShip = null;
+  static activeShip = null;
 
   constructor(){}
 
@@ -24,7 +24,7 @@ class PlayerShipHandler {
   }
 
   createShip = async ()=>{
-    this.#activeShip = await this.playerShipFactory.createShip({
+    PlayerShipHandler.activeShip = await this.playerShipFactory.createShip({
       shipType: PlayerShipFactory.SHIP_TYPES.classA,
       shipImageIdentifier: "initial",
       canvas: this.#canvas
@@ -34,8 +34,8 @@ class PlayerShipHandler {
 
   keyEvent = (event)=>{
     if (event === "KeyE") {
-      this.playerShip3D = new PlayerShip3D(this.#activeShip.posX, this.#activeShip.posY );
-      this.#activeShip.destroy();
+      this.playerShip3D = new PlayerShip3D(PlayerShipHandler.activeShip.posX, PlayerShipHandler.activeShip.posY );
+      PlayerShipHandler.activeShip.destroy();
     }
   }
 }

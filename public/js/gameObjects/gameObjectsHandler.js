@@ -40,7 +40,7 @@ class GameObjectsHandler {
       if (index !== -1) {
         const removedObject = GameObjectsHandler.gameObjects[index];
         if (removedObject.subscriber) {
-          removedObject.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", removedObject);
+          removedObject.subscriber.updateFromGameObjectsHandler("objectRemovedFromGameLoop", removedObject);
         }
         GameObjectsHandler.gameObjects.splice(index, 1);
       }

@@ -76,6 +76,7 @@ class PlayerShipFactory {
       posDX: 0,
       posDY: 0,
       posX: 100,
+      posZ : 1,
       posY: e8.global.screenHeight / 2,
       shield: shieldInstance,
       terminationSequence: terminationSequenceInstance,

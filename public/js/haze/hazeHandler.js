@@ -10,11 +10,13 @@ class HazeHandler {
   }
 
   init = async () =>{
-    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
-    this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddle).canvas;
-    this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
+    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddleFar).canvas;
+    this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
+    this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFarthest).canvas;
     this.resizeImageWorker = e8.global.resizeImageWorker;
     this.#upcoming =2;
+
+    e8.global.gameLoop.subscribe(this);
 
     e8.global.resizeImageWorker.onmessage = ({data}) =>{
       this.createHaze(data);
@@ -41,9 +43,10 @@ class HazeHandler {
         height: img.height,
         posX: e8.global.screenWidth,
         posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/10),
+        posZ: velocity/10,
         posDX: 0,
         posDY: 0,
-        velX: -1 * velocity,
+        velX: -1 * velocity / 2,
         velY: 0
       })
 
@@ -79,15 +82,13 @@ class HazeHandler {
 
   /**
    *
-   * @param message
-   * @param payload
+   * @param data
    */
-  updateFromGameLoop = ({message, payload}) => {
+  updateFromGameLoop = (data) => {
     this.#ticker++;
     if (this.#ticker > this.#upcoming){
       this.#ticker = 0;
-      this.#upcoming = Math.floor(Math.random()*15+10);
-     //this.#upcoming = 2;
+      this.#upcoming = Math.floor(Math.random()*20+20);
       this.invokeHaze();
     }
   }

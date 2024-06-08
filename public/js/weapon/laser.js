@@ -74,7 +74,7 @@ class Laser extends Weapon {
     if (this.timer > this.shootTime) {
       this.destroy();
       this.ready = false;
-      SpeechHandler.playStatement(SpeechHandler.statements.weaponDischarged);
+      //SpeechHandler.playStatement(SpeechHandler.statements.weaponDischarged);
       this.recharge();
     }
   }

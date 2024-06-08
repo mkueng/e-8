@@ -15,7 +15,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     id : "photonShoot",
     filename : "photonShoot",
     type : ResourceObject.TYPES.wav,
-    resourcePath : "/resources/sounds/photonShoot.wav"
+    resourcePath : "/resources/sounds/photonFireAndForget.wav"
   })
 
   static soundResource;

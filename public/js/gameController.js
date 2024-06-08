@@ -36,7 +36,8 @@ class GameController {
 
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();
-        //await this.#enemyShipHandler.invoke();
+        await this.#enemyShipHandler.init();
+        this.#enemyShipHandler.startCreation(1000);
 
         this.game = new Game({});
         document.querySelector("#game").style.display = "block";

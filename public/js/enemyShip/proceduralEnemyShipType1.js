@@ -12,8 +12,8 @@ class ProceduralEnemyShipType1 {
       shield: {
         type: ShieldFactory.SHIELD_TYPES.shieldB,
         posDX:-60,
-        posDY:-10,
-        width: 150,
+        posDY:-8,
+        width: 170,
         height: 50
       },
     },
@@ -27,7 +27,7 @@ class ProceduralEnemyShipType1 {
         type: ShieldFactory.SHIELD_TYPES.shieldB,
         posDX:-80,
         posDY:-28,
-        width: 200,
+        width: 220,
         height:100
       },
     },

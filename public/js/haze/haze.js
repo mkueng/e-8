@@ -7,6 +7,7 @@ class Haze extends GameObject{
     height,
     posX,
     posY,
+      posZ,
     velX,
     velY
               }){
@@ -18,6 +19,7 @@ class Haze extends GameObject{
       height,
       posX,
       posY,
+      posZ,
       velX,
       velY,
       canDestroy : false,

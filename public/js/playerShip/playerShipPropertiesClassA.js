@@ -35,7 +35,7 @@ class PlayerShipPropertiesClassA {
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
     posDX : -30,
-    posDY :25
+    posDY :28
   }
 
   static propulsion = {
@@ -84,7 +84,7 @@ class PlayerShipPropertiesClassA {
     PhotonTorpedo : {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
-      amount: 200,
+      amount: 2000,
       posDX: 90,
       posDY: 27
     },
@@ -92,17 +92,17 @@ class PlayerShipPropertiesClassA {
     PhotonTorpedoFireAndForget : {
       controlAssignment : "KeyK",
       type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
-      amount: 20,
+      amount: 1000,
       posDX : 60,
       posDY : 27
     },
 
     Laser : {
-      controlAssignment : "KeyL",
+      controlAssignment : "KeyF",
       type : WeaponFactory.WEAPON_TYPES.laser,
-      amount: 1,
-      posDX : 145,
-      posDY : 25
+      amount: 100,
+      posDX : 72,
+      posDY : 17
     }
   }
 }
