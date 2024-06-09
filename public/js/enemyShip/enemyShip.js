@@ -126,6 +126,10 @@ class EnemyShip extends GameObject {
     super.destroy()
   }
 
+  terminate = () => {
+    super.destroy();
+  }
+
   /**
    *
    * @param hitBy
@@ -177,7 +181,7 @@ class EnemyShip extends GameObject {
     if (this.posX >- this.width) {
       this.posX = this.posX + (this.velX*dt)
     } else {
-      this.destroy();
+      this.terminate();
       this.enemyShipHandler.shipDestroyed(this.id);
     }
   }

@@ -40,7 +40,7 @@ class App {
   }
 
   startMusic = ()=>{
-   SoundHandler.playMusic();
+  // SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
     document.removeEventListener("mousedown", this.startMusic, true);
   }
