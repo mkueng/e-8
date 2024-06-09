@@ -98,6 +98,7 @@ class EnemyShip extends GameObject {
 
     let i = 0;
 
+
     for (const explosion of this.terminationSequence) {
       i++;
       explosion.posX = this.posX;
@@ -106,6 +107,7 @@ class EnemyShip extends GameObject {
       explosion.velY = this.velY;
       setTimeout(() => {
         GameObjectsHandler.instance.addGameObject(explosion);
+        SoundHandler.playFX(explosion.sound)
       }, Math.random() * 100 * i)
     }
 

@@ -48,8 +48,6 @@ class ProceduralEnemyShipType1 {
   }
 
   constructor(){
-
-
     this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()
   }
 

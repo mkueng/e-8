@@ -16,7 +16,7 @@ class ClassAEnemyShipExplosion extends Explosion {
     id: "classAPlayerShipExplosionSound",
     filename: "explosion.wav",
     type: ResourceObject.TYPES.wav,
-    resourcePath: "/resources/sounds/explosion.wav"
+    resourcePath: "/resources/sounds/explosionDeep.wav"
   })
 
   static async fetchSpriteSheet(resourceHandler){
