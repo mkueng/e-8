@@ -320,7 +320,7 @@ class PlayerShip extends GameObject {
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
-        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 6);
+        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 4);
       }
 
     })

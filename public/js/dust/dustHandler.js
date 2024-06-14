@@ -4,7 +4,7 @@ class DustHandler {
 
   #canvas;
   #context;
-  #amountOfParticles = 60;
+  #amountOfParticles = 250;
   #dustParticles = [];
 
   constructor(){
@@ -35,12 +35,12 @@ class DustHandler {
     let particles = [];
 
     for (let i=0; i < amount; i++) {
-      let velocity = -1 * (Math.random()*5+0.5);
+      let velocity = -1 * (Math.random()*7+0.5);
       particles.push({
         color: this.#getRandomGrayscaleColor(),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
-        posZ : 0.05* velocity,
+        posZ : 0.1* velocity,
         velX: velocity,
         width: Math.floor(Math.random()*5+1),
         height: Math.floor(Math.random()*3+1)
