@@ -23,7 +23,11 @@ class DustParticles  {
       if (particle.posX < 0 ) {
         particle.posX = e8.global.screenWidth;
       } else {
-        particle.posX = particle.posX + particle.velX*deltaTime;
+        if (PlayerShip.velX) {
+          particle.posX = particle.posX + ((particle.velX*deltaTime)-PlayerShip.velX);
+
+        }
+
         if (PlayerShip.velY) {
             particle.posY = particle.posY + PlayerShip.velY*particle.posZ;
 

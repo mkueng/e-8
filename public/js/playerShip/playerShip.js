@@ -5,6 +5,7 @@ class PlayerShip extends GameObject {
   static posX;
   static posY;
   static velY;
+  static velX;
 
   /**
    *
@@ -114,7 +115,7 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth - this.width;
+    this.upperBoundX = e8.global.screenWidth/2 - this.width;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
@@ -281,7 +282,7 @@ class PlayerShip extends GameObject {
         }
       } else
       if (this.controls.left && this.velX > -this.maxVelX) {
-        this.velX -= this.accX;
+        this.velX -= this.accX/2;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       } else {
         this.dependencies[0].isActive = false
@@ -303,7 +304,7 @@ class PlayerShip extends GameObject {
 
     if (this.posX > this.upperBoundX) {
       this.posX = this.upperBoundX;
-      this.velX=0;
+     //this.velX=0;
     } else
 
     if (this.posX < 1) {
@@ -314,13 +315,14 @@ class PlayerShip extends GameObject {
     // position
     this.posY = this.posY + (this.velY*deltaTime);
     PlayerShip.velY = this.velY;
+    PlayerShip.velX = this.velX;
 
 
     this.posX = this.posX + (this.velX*deltaTime);
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
-        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 4);
+        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 2);
       }
 
     })

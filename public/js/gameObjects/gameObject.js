@@ -17,6 +17,7 @@ class GameObject {
    * @param identification
    * @param image
    * @param imageData
+   * @param isActive
    * @param isHittable
    * @param isDestroyable
    * @param maxVelX
@@ -25,6 +26,7 @@ class GameObject {
    * @param posDY
    * @param posX
    * @param posY
+   * @param posZ
    * @param sound
    * @param spriteSheet
    * @param spriteSheetColumns
@@ -36,7 +38,6 @@ class GameObject {
    * @param velX
    * @param velY
    * @param width
-   * @param isActive
    * @param rotation
    */
   constructor({
@@ -53,7 +54,6 @@ class GameObject {
                 hitWidth,
                 identification,
                 image,
-                imageData,
                 isActive,
                 isHittable,
                 isDestroyable,
@@ -63,7 +63,7 @@ class GameObject {
                 posDY,
                 posX,
                 posY,
-                  posZ,
+                posZ,
                 sound,
                 spriteSheet,
                 spriteSheetColumns,
@@ -99,7 +99,7 @@ class GameObject {
     this.posDY = posDY || 0;
     this.posX = posX;
     this.posY = posY;
-    this.posZ = posZ || 0;
+    this.posZ = posZ;
     this.sound = sound;
     this.spriteSheet = spriteSheet;
     this.spriteSheetColumns = spriteSheetColumns;
@@ -231,7 +231,8 @@ class GameObject {
   update(deltaTime) {
     if (this.isActive) {
       if (this.posX+this.posDX > 0 - this.width) {
-        this.posX = this.posX + (this.velX*deltaTime)
+       // this.posX = this.posX + (this.velX*deltaTime)
+        this.posX = this.posX + this.velX*deltaTime*this.posZ*PlayerShip.velX;
       } else {
         this.destroy();
         if (this.dependencies) {

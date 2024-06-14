@@ -4,7 +4,7 @@ class DustHandler {
 
   #canvas;
   #context;
-  #amountOfParticles = 250;
+  #amountOfParticles = 100;
   #dustParticles = [];
 
   constructor(){
