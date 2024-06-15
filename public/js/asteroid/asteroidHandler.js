@@ -47,8 +47,8 @@ class AsteroidHandler {
         }
       }
 
-      let zPosition =  velX*-0.8;
-      if (zPosition > 1) zPosition = 1;
+      let zPosition =  velX/3;
+     // if (zPosition > 1) zPosition = 1;
 
       console.log("zPosition", zPosition);
 
@@ -63,7 +63,7 @@ class AsteroidHandler {
         posY: Math.random()*e8.global.screenHeight,
         posZ: zPosition,
         subscriber: this,
-        velX: velX,
+        velX: 0,
         velY: 0,
         width: width,
         rotation : 5,
@@ -102,9 +102,9 @@ class AsteroidHandler {
           clearInterval(currentInterval);
           ticker++;
           if (ticker < amount) {
-            createBatch(Math.floor(Math.random()*3000 + 3000))
+            createBatch(Math.floor(Math.random()*3000 + 1000))
           } else {
-            this.invokeAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*5)+5)
+            this.invokeAsteroids(Math.floor(Math.random()*3000+3000),Math.floor(Math.random()*5)+5)
           }
 
         }

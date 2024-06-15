@@ -75,7 +75,7 @@ class PlayerShipFactory {
       playerShipHandler: this.playerShipHandler,
       posDX: 0,
       posDY: 0,
-      posX: 100,
+      posX: 400,
       posZ : 1,
       posY: e8.global.screenHeight / 2,
       shield: shieldInstance,

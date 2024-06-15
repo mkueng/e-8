@@ -115,7 +115,7 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth/2 - this.width;
+    this.upperBoundX = e8.global.screenWidth /2 - this.width;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
@@ -302,14 +302,11 @@ class PlayerShip extends GameObject {
       this.velY = 0;
     } else
 
-    if (this.posX > this.upperBoundX) {
-      this.posX = this.upperBoundX;
-     //this.velX=0;
-    } else
+
 
     if (this.posX < 1) {
       this.posX = 1;
-      this.velX = 0;
+      //this.velX = 0;
     }
 
     // position
@@ -317,8 +314,15 @@ class PlayerShip extends GameObject {
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
 
+    //console.log("PlayerShip.velX", PlayerShip.velX);
 
-    this.posX = this.posX + (this.velX*deltaTime);
+
+      //this.posX = this.posX + (this.velX*deltaTime);
+
+  /*
+  if (this.posX >= this.upperBoundX) {
+    this.posX = this.upperBoundX;
+  }*/
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {

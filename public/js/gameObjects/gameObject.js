@@ -232,7 +232,8 @@ class GameObject {
     if (this.isActive) {
       if (this.posX+this.posDX > 0 - this.width) {
        // this.posX = this.posX + (this.velX*deltaTime)
-        this.posX = this.posX + this.velX*deltaTime*this.posZ*PlayerShip.velX;
+        this.posX = this.posX + this.velX*deltaTime+(PlayerShip.velX*this.posZ);
+       //console.log(this.posX);
       } else {
         this.destroy();
         if (this.dependencies) {
@@ -241,8 +242,7 @@ class GameObject {
           }
         }
       }
-      this.posY = this.posY +(this.velY*deltaTime);
-
+      this.posY = this.posY +(PlayerShip.velY*this.posZ*deltaTime);
 
       // positioning dependencies
       if (this.dependencies) {
