@@ -115,10 +115,12 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth /2 - this.width;
+    this.upperBoundX = e8.global.screenWidth/1.5 - this.width;
+    this.lowerBoundX = 200;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
+    this.viewPortVelX = 0;
 
     this.controls = {
       down: false,
@@ -275,20 +277,21 @@ class PlayerShip extends GameObject {
       } else
       if (this.controls.right && this.velX < this.maxVelX) {
         this.velX += this.accX;
+        this.viewPortVelX += this.accX;
         this.dependencies[0].isActive = true; // activate rear propulsion
-        if (this.velX > 0) {
+
+
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-        }
+
       } else
       if (this.controls.left && this.velX > -this.maxVelX) {
-        this.velX -= this.accX/2;
+        this.velX -= this.accX;
+        this.viewPortVelX -= this.accX;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-      } else {
-        this.dependencies[0].isActive = false
       }
     } else {
-      this.dependencies[0].isActive = false;
+     //this.dependencies[0].isActive = false;
     }
 
     // bounds
@@ -304,25 +307,24 @@ class PlayerShip extends GameObject {
 
 
 
-    if (this.posX < 1) {
-      this.posX = 1;
-      //this.velX = 0;
-    }
-
     // position
     this.posY = this.posY + (this.velY*deltaTime);
+    this.posX = this.posX + ( this.viewPortVelX *deltaTime);
+
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
 
-    //console.log("PlayerShip.velX", PlayerShip.velX);
 
 
-      //this.posX = this.posX + (this.velX*deltaTime);
+    if (this.posX >= this.upperBoundX) {
+      this.viewPortVelX = 0;
+      this.posX = this.upperBoundX;
+    } else
 
-  /*
-  if (this.posX >= this.upperBoundX) {
-    this.posX = this.upperBoundX;
-  }*/
+    if (this.posX <= this.lowerBoundX) {
+      this.viewPortVelX = 0;
+      this.posX = this.lowerBoundX;
+    }
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {

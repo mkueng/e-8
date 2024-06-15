@@ -99,7 +99,7 @@ class GameObject {
     this.posDY = posDY || 0;
     this.posX = posX;
     this.posY = posY;
-    this.posZ = posZ;
+    this.posZ = posZ || 0;
     this.sound = sound;
     this.spriteSheet = spriteSheet;
     this.spriteSheetColumns = spriteSheetColumns;
