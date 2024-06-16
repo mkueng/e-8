@@ -4,11 +4,8 @@ class EnemyShipHandler {
   static enemyShips = {};
   #canvas;
 
-
   constructor(){
-
     //this.enemyShipWorker = new Worker('js/workers/enemyShip/enemyShipWorker.js');
-
     this.enemyShipFactory = new ProceduralEnemyShipFactory({
       enemyShipHandler: this
     });
@@ -31,7 +28,7 @@ class EnemyShipHandler {
         shipType: ProceduralEnemyShipFactory.shipTypes.EnemyShipType1,
         shipTypeVariation: ProceduralEnemyShipType1.shipTypeVariations[""+variation]
       }).then(()=>{
-        this.startCreation(Math.floor(Math.random()*1000+1600))
+        this.startCreation(Math.floor(Math.random()*3000+1600))
       });
     },interval)
   }

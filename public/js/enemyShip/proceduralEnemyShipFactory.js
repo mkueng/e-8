@@ -74,7 +74,7 @@ class ProceduralEnemyShipFactory {
 
       //create ship instance once ship image is loaded
       img.onload = () => {
-        const velX = -1 * (Math.random()*3+2-(shipSize/5));
+        const velX = -1 * ((Math.random()*4*(1/shipSize))+3);
      
         let shipObject = new EnemyShip({
           canvas: canvas,
@@ -85,7 +85,7 @@ class ProceduralEnemyShipFactory {
           posDY: 0,
           posX: e8.global.screenWidth,//+e8.global.screenWidth,
           posY: Math.floor(Math.random() * e8.global.screenHeight),
-          posZ: velX*-0.5,
+          posZ: velX*-0.2,
           shield: shieldInstance,
           terminationSequence: terminationSequence,
           velX: velX,
