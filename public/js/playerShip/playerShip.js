@@ -17,6 +17,7 @@ class PlayerShip extends GameObject {
    * @param height
    * @param posX
    * @param posY
+   * @param posZ
    * @param posDX
    * @param posDY
    * @param velX
@@ -32,6 +33,8 @@ class PlayerShip extends GameObject {
    * @param features
    * @param shield
    * @param cargo
+   * @param fuel
+   * @param fuelConsumption
    * @param terminationSequence
    * @param engineTrail
    * @param playerShipHandler
@@ -47,7 +50,7 @@ class PlayerShip extends GameObject {
                 height,
                 posX,
                 posY,
-      posZ,
+                posZ,
                 posDX,
                 posDY,
                 velX,
@@ -89,6 +92,7 @@ class PlayerShip extends GameObject {
       canvas,
       posX,
       posY,
+      posZ,
       posDX,
       posDY,
       isDestroyable: true,
@@ -133,7 +137,7 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
     this.initializeFeatures();
 
-    // Add playerShip to GameObjectsHandler
+    // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
     this.addDependencies();
   }
@@ -262,36 +266,31 @@ class PlayerShip extends GameObject {
    * @param deltaTime
    */
   update = (deltaTime) =>{
-    //spatial controls
+    //check fuel
     if (this.fuel.amount > 0 ) {
 
+      //controls
       if (this.controls.down && this.velY < this.maxVelY) {
         this.velY += this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-
-      } else
-      if (this.controls.up && this.velY > -this.maxVelY) {
+      }
+      else if (this.controls.up && this.velY > -this.maxVelY) {
         this.velY -= this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-
-      } else
-      if (this.controls.right && this.velX < this.maxVelX) {
-        this.velX += this.accX;
+      }
+      else if (this.controls.right) {
         this.viewPortVelX += this.accX;
-        this.dependencies[0].isActive = true; // activate rear propulsion
-
-
+        if (this.velX < this.maxVelX) {
+          this.velX += this.accX;
+          this.dependencies[0].isActive = true;
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-
-      } else
-      if (this.controls.left) {
+        }
+      } else if (this.controls.left) {
         this.viewPortVelX -= this.accX;
         if (this.velX > 0) {
           this.velX -= this.accX;
         }
-
-
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
     }
@@ -300,39 +299,30 @@ class PlayerShip extends GameObject {
     if (this.posY > this.upperBoundY) {
       this.posY = this.upperBoundY ;
       this.velY = 0;
-    } else
-
-    if (this.posY < 0 ) {
+    } else if (this.posY < 0 ) {
       this.posY = 0 ;
       this.velY = 0;
-    } else
-
-
+    }
 
     // position
-    this.posY = this.posY + (this.velY*deltaTime);
-    this.posX = this.posX + ( this.viewPortVelX *deltaTime);
-
-    PlayerShip.velY = this.velY;
-    PlayerShip.velX = this.velX;
-
-
+    this.posY = this.posY + (this.velY * deltaTime);
+    this.posX = this.posX + (this.viewPortVelX * deltaTime);
 
     if (this.posX >= this.upperBoundX) {
       this.viewPortVelX = 0;
       this.posX = this.upperBoundX;
-    } else
-
-    if (this.posX <= this.lowerBoundX) {
+    } else if (this.posX <= this.lowerBoundX) {
       this.viewPortVelX = 0;
       this.posX = this.lowerBoundX;
     }
+
+    PlayerShip.velY = this.velY;
+    PlayerShip.velX = this.velX;
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
         obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 2);
       }
-
     })
 
     // position dependencies
@@ -357,7 +347,6 @@ class PlayerShip extends GameObject {
       fuel: this.fuel.amount,
       weapons : this.weapons
     });
-
   }
 
   /**
