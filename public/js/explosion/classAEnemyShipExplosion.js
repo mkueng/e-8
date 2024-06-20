@@ -4,6 +4,10 @@ class ClassAEnemyShipExplosion extends Explosion {
   static imageResource;
   static soundResource;
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static imageResourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.explosion,
     name : "classAEnemyShipExplosion",
@@ -12,6 +16,10 @@ class ClassAEnemyShipExplosion extends Explosion {
     resourcePath : "/resources/explosions/explosion_03/images/"
   })
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static soundResourceObject = new ResourceObject({
     id: "classAPlayerShipExplosionSound",
     filename: "explosion.wav",
@@ -19,12 +27,21 @@ class ClassAEnemyShipExplosion extends Explosion {
     resourcePath: "/resources/sounds/explosionDeep.wav"
   })
 
+  /**
+   *
+   * @param resourceHandler
+   * @returns {Promise<*>}
+   */
   static async fetchSpriteSheet(resourceHandler){
     return await resourceHandler.fetchImageResource({
       resourceObject: ClassAEnemyShipExplosion.imageResourceObject
     });
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   static async invoke(){
     ClassAEnemyShipExplosion.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: ClassAEnemyShipExplosion.imageResourceObject
@@ -63,6 +80,5 @@ class ClassAEnemyShipExplosion extends Explosion {
   }
 
   invoke = ()=>{
-
   }
 }

@@ -7,6 +7,17 @@ class ProceduralEnemyShipType1 {
       shipSize: 1,
       scale: 0.5,
       weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      propulsion:  {
+        type : PropulsionFactory.PROPULSION_TYPES.ionB,
+        posDX: 75,
+        posDY: 7,
+        isActive: true
+      },
+      spinner: {
+        type : PropulsionFactory.PROPULSION_TYPES.spinner,
+        posDX: 5,
+        posDY: 0
+      },
       particles: [],
       playerShipTracking : true,
       shield: {
@@ -23,6 +34,17 @@ class ProceduralEnemyShipType1 {
       particles: [],
       playerShipTracking : true,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      propulsion:  {
+        type : PropulsionFactory.PROPULSION_TYPES.ionB,
+        posDX: 165,
+        posDY: 10,
+        isActive: true
+      },
+      spinner: {
+        type : PropulsionFactory.PROPULSION_TYPES.spinner,
+        posDX: 5,
+        posDY: 4
+      },
       shield: {
         type: ShieldFactory.SHIELD_TYPES.shieldB,
         posDX:-80,
@@ -37,6 +59,17 @@ class ProceduralEnemyShipType1 {
       particles: [],
       playerShipTracking : false,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      propulsion:  {
+        type : PropulsionFactory.PROPULSION_TYPES.ionB,
+        posDX: 395,
+        posDY: 17,
+        isActive: true
+      },
+      spinner: {
+        type : PropulsionFactory.PROPULSION_TYPES.spinner,
+        posDX: 5,
+        posDY: 8
+      },
       shield: {
         type: ShieldFactory.SHIELD_TYPES.shieldB,
         posDX:-100,
@@ -53,13 +86,17 @@ class ProceduralEnemyShipType1 {
 
   invoke = async () =>{
     await this.#proceduralEnemyShipType1Image.invoke();
-
     await this.#createParticlesForAllShipTypeVariations({
       shipType: this.#proceduralEnemyShipType1Image,
       shipTypeVariations: ProceduralEnemyShipType1.shipTypeVariations
     })
   }
 
+  /**
+   *
+   * @param shipTypeVariation
+   * @returns {Promise<*>}
+   */
   createImage = async ({shipTypeVariation}) =>{
     return await this.#proceduralEnemyShipType1Image.create({
       shipSize: shipTypeVariation.shipSize,
@@ -68,6 +105,12 @@ class ProceduralEnemyShipType1 {
   }
 
 
+  /**
+   *
+   * @param shipType
+   * @param shipTypeVariations
+   * @returns {Promise<void>}
+   */
   #createParticlesForAllShipTypeVariations = async ({shipType, shipTypeVariations}) =>{
     for (const variation in shipTypeVariations) {
       const shipTypeImageData = await shipType.create({

@@ -48,13 +48,13 @@ class EnemyShipHandler {
    * @returns {Promise<void>}
    */
   #create = async ({shipType, shipTypeVariation}) => {
-    const shipObject = await this.enemyShipFactory.createShip({
+    const ship = await this.enemyShipFactory.createShip({
       shipType,
       shipTypeVariation,
       canvas: this.#canvas
     });
 
-    GameObjectsHandler.instance.addGameObject(shipObject);
-    EnemyShipHandler.enemyShips[shipObject.id] = shipObject;
+    ship.activate();
+    EnemyShipHandler.enemyShips[ship.id] = ship;
   }
 }

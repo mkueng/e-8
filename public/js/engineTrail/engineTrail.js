@@ -1,4 +1,5 @@
 class EngineTrail {
+
   width;
   height;
   canvas;
@@ -14,13 +15,23 @@ class EngineTrail {
     });
   }
 
-
+  /**
+   *
+   * @param resourceHandler
+   * @param resourceObject
+   * @returns {Promise<void>}
+   */
   invoke = async (resourceHandler, resourceObject) => {
     this.imageResource =  await resourceHandler.fetchImageResource({
       resourceObject: resourceObject
     });
   }
 
+  /**
+   *
+   * @param posX
+   * @param posY
+   */
   createParticle = ({posX, posY}) => {
     const engineTrailParticle = new EngineTrailParticle({
       image: this.imageResource.image,

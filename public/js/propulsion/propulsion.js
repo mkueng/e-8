@@ -26,7 +26,7 @@ class Propulsion extends GameObject {
    * @param isActive
    */
   constructor({
-                  spriteSheet,
+                spriteSheet,
                 spriteSheetRows,
                 spriteSheetColumns,
                 width,
@@ -43,7 +43,8 @@ class Propulsion extends GameObject {
                 canvas,
                 efficiency,
                 fuelType,
-                isActive
+                isActive,
+    animationLoop
               }) {
     super({
       isActive: isActive || false,
@@ -63,8 +64,9 @@ class Propulsion extends GameObject {
       posDY,
       canvas,
       isHittable: false,
-      animationLoop: true
+      animationLoop: animationLoop || false
     })
+
     this.efficiency = efficiency;
     this.fuelType = fuelType;
   }

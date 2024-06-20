@@ -1,5 +1,4 @@
 'use strict'
-
 class DustHandler {
 
   #canvas;
@@ -46,9 +45,7 @@ class DustHandler {
         height: Math.floor(Math.random()*3+1)
       })
     }
-    console.log(particles);
     return particles;
-
   }
 
   #getRandomGrayscaleColor() {

@@ -15,15 +15,15 @@ class HudHandler {
     this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;
     this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
     this.#dynamicContextLeft.height = e8.global.canvasHandler.getCanvas("hudDynamicLeft").height;
-    this.#dynamicContextLeft.transform(0.1, 1.2, 1, 0, 0, 0)
-    this.#dynamicContextLeft.font = "11px myFont";
+    this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0)
+    this.#dynamicContextLeft.font = "8px myFont";
 
     //dynamic right
     this.#dynamicContextRight = e8.global.canvasHandler.getCanvas("hudDynamicRight").context;
     this.#dynamicContextRight.width = e8.global.canvasHandler.getCanvas("hudDynamicRight").width;
     this.#dynamicContextRight.height = e8.global.canvasHandler.getCanvas("hudDynamicRight").height;
-    this.#dynamicContextRight.transform(-0.15, 1.2, 1, 0, 50, 0);
-    this.#dynamicContextRight.font = "10px myFont";
+    this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
+    this.#dynamicContextRight.font = "8px myFont";
   }
 
 
@@ -40,6 +40,7 @@ class HudHandler {
     this.fillRectNavi = this.dynamicContextMiddle.fillRect.bind(this.dynamicContextMiddle);
     this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
+    this.renderNavi();
 
     this.#updateDisplayLeft();
     this.#updateDisplayRight();
@@ -47,8 +48,11 @@ class HudHandler {
     setInterval(() => {
       this.#updateDisplayRight();
       this.#updateDisplayLeft();
-    }, 1000);
 
+    }, 1000);
+  }
+
+  init = async() => {
 
   }
 
@@ -78,36 +82,63 @@ class HudHandler {
 
   #updateDisplayLeft = () => {
     this.#dynamicContextLeft.clearRect(-20, -20, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.lineWidth = 7;
-    this.#dynamicContextLeft.strokeStyle = "grey";
-    this.#dynamicContextLeft.fillStyle = e8.global.colors.info;
+    this.#dynamicContextLeft.globalAlpha = 0.1;
+    this.#dynamicContextLeft.lineWidth = 3;
+    this.#dynamicContextLeft.strokeRect(-20, 22, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.fillRect(-20, 20, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+    this.#dynamicContextLeft.lineWidth = 1;
+    this.#dynamicContextLeft.globalAlpha = 0.8;
+    this.#dynamicContextLeft.strokeStyle = e8.global.colors.vanilla;
+    this.#dynamicContextLeft.fillStyle = e8.global.colors.lightVanilla;
     this.#dynamicContextLeft.fillText("WEAPONS STATUS", 0, 10);
-    this.#dynamicContextLeft.strokeRect(-20, 20, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
+
+
     let i=0;
 
+
     for (const weapon in this.#weapons) {
-      this.#dynamicContextLeft.fillStyle = e8.global.colors.info;
-      this.#dynamicContextLeft.fillText(weapon, 5, 35+i);
-      this.#dynamicContextLeft.fillStyle = e8.global.colors.vanilla;
-      this.#dynamicContextLeft.fillText(this.#weapons[weapon].units.length, 300, 35+i);
-        i+=15;
+      this.#dynamicContextLeft.beginPath();
+      this.#dynamicContextLeft.roundRect(i, 30, 50,30,3);
+      this.#dynamicContextLeft.stroke();
+      //this.#dynamicContextLeft.fillStyle = e8.global.colors.info;
+      this.#dynamicContextLeft.fillText(weapon, 5+i, 55);
+      //this.#dynamicContextLeft.fillStyle = e8.global.colors.vanilla;
+      this.#dynamicContextLeft.fillText(this.#weapons[weapon].units.length, 5+i, 40);
+        i+=60;
     }
   }
 
   #updateDisplayRight = () => {
-    this.#dynamicContextRight.clearRect(-20, -20, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height + 20);
-    this.#dynamicContextRight.fillStyle = e8.global.colors.neutral;
-    this.#dynamicContextRight.fillText("SHIP STATUS", -30, -10);
-    this.#dynamicContextRight.lineWidth = 7;
-    this.#dynamicContextRight.strokeStyle = "grey";
-    this.#dynamicContextRight.strokeRect(-100, 0, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
+    this.#dynamicContextRight.clearRect(-40, -20, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height + 20);
+    this.#dynamicContextRight.globalAlpha = 0.1;
+    this.#dynamicContextRight.fillStyle = e8.global.colors.lightVanilla;
+    this.#dynamicContextRight.fillRect(-100, 0, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
+    this.#dynamicContextRight.lineWidth = 3;
+    this.#dynamicContextRight.strokeRect(-100, 2, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
+    this.#dynamicContextRight.globalAlpha = 0.6;
+    this.#dynamicContextRight.fillText("SHIP STATUS", -20, -10);
+    this.#dynamicContextRight.lineWidth = 2;
+
+
+
     this.#dynamicContextRight.fillText("TIME - " + this.#time, -20, 15);
     this.#dynamicContextRight.fillText("COORDINATES - " + this.#coordinates, -20, 30);
-    this.#dynamicContextRight.fillStyle = e8.global.colors.neutral;
+
     this.#dynamicContextRight.fillText("SYSTEMS STATUS - " + this.#systemsStatus, -20, 45);
     this.#dynamicContextRight.fillStyle = e8.global.colors.info;
+    this.#dynamicContextRight.strokeStyle = e8.global.colors.alloyOrange;
+    this.#dynamicContextRight.beginPath();
+    this.#dynamicContextRight.roundRect(160, 10, 50,30,3);
+    this.#dynamicContextRight.roundRect(220, 10, 50,30,3);
+    this.#dynamicContextRight.roundRect(280, 10, 50,30,3);
+    this.#dynamicContextRight.stroke();
+    this.#dynamicContextRight.strokeStyle = e8.global.colors.neutral;
     this.#dynamicContextRight.fillText("FUEL", -20, 60);
-    this.fillRectRight(60, 55, this.#fuel, 6);
+    this.#dynamicContextRight.strokeRect(40, 54, 100, 8);
+
+
+    if (this.#fuel > 100) this.#fuel = 100;
+    this.fillRectRight(40, 55, this.#fuel, 6);
     this.#dynamicContextRight.fillText("SHIELD", -20, 75);
 
     let shieldInfoBarColor;
@@ -119,9 +150,9 @@ class HudHandler {
                   "lightgreen";
     } else shieldInfoBarColor = "grey";
 
-    this.#dynamicContextRight.strokeRect(80, 67, 100, 8);
+    this.#dynamicContextRight.strokeRect(40, 67, 100, 8);
     this.#dynamicContextRight.fillStyle = shieldInfoBarColor;
-    this.fillRectRight(80, 68, this.#shield, 6);
+    this.fillRectRight(40, 68, this.#shield, 6);
   }
 
   renderNavi = () => {

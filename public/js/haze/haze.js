@@ -23,7 +23,7 @@ class Haze extends GameObject{
       velX,
       velY,
       canDestroy : false,
-      isHitable : false,
+      isHittable : false,
       isDestroyable: false,
     });
     this.boundX = 0-this.width;
@@ -34,7 +34,11 @@ class Haze extends GameObject{
    * @param dt
    */
   update(dt) {
-    this.posX = this.posX+(this.velX*dt);
+    if (PlayerShip.velX) {
+      this.posX = this.posX + this.velX*dt+(PlayerShip.velX*this.posZ);
+      this.posY = this.posY +(PlayerShip.velY*this.posZ*dt);
+    }
+
     if (this.posX < this.boundX) {
       this.destroy();
     }

@@ -30,7 +30,7 @@ class HazeHandler {
 
     img.onload =()=>{
       const size = img.width;
-      const velocity = size * 0.0003;
+      const velocity = -1 * (size * 0.0003);
 
       if (velocity >= 0.7 ) canvas = this.#canvases[0];
       if (velocity > 0.5 && velocity < 0.7) canvas = this.#canvases[1];
@@ -43,10 +43,10 @@ class HazeHandler {
         height: img.height,
         posX: e8.global.screenWidth,
         posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/10),
-        posZ: velocity/10,
+        posZ: 0.05* velocity,
         posDX: 0,
         posDY: 0,
-        velX: -1 * velocity / 2,
+        velX: 0,
         velY: 0
       })
 

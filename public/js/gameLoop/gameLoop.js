@@ -67,7 +67,7 @@ class GameLoop {
     }
 
     //render hud
-    //this.#hudHandler.renderNavi();
+    e8.global.hudHandler.renderNavi();
 
     //render game objects
     const len = GameObjectsHandler.gameObjects.length;

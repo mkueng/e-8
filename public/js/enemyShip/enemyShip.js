@@ -10,7 +10,7 @@ class EnemyShip extends GameObject {
                 height,
                 posX,
                 posY,
-      posZ,
+                posZ,
                 posDX,
                 posDY,
                 velX,
@@ -66,12 +66,9 @@ class EnemyShip extends GameObject {
     });
 
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
-    this.shield.relatedShip = this
+    this.shield.relatedShip = this;
   }
 
-  /**
-   *
-   */
   fireWeapon = () => {
     if (this.activeWeapon.length > 0) {
       let weapon = this.activeWeapon.pop();
@@ -83,9 +80,6 @@ class EnemyShip extends GameObject {
     }
   }
 
-  /**
-   *
-   */
   invokeShield = () => {
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
@@ -97,8 +91,6 @@ class EnemyShip extends GameObject {
   invokeTerminationSequence = () => {
 
     let i = 0;
-
-
     for (const explosion of this.terminationSequence) {
       i++;
       explosion.posX = this.posX;
@@ -116,8 +108,6 @@ class EnemyShip extends GameObject {
     this.particles.velX = this.velX;
     this.particles.velY = this.velY;
     GameObjectsHandler.instance.addGameObject(this.particles);
-   
-
     this.enemyShipHandler.shipDestroyed(this.id);
   }
 
@@ -173,16 +163,20 @@ class EnemyShip extends GameObject {
     }
     if (this.playerShipTracking) {
       this.quotient = (PlayerShipHandler.activeShip.posY - this.posY ) / 300;
-      this.posY = this.posY + this.quotient +(this.velY*dt);
+      this.posY = this.posY + this.quotient + (this.velY * dt);
     } else {
-      this.posY = this.posY + (this.velY*dt);
+      this.posY = this.posY + (this.velY * dt);
     }
 
-    if (this.posX >- this.width) {
-      this.posX = this.posX + ((this.velX*dt)+(PlayerShip.velX/5))
+    if (this.posX >- this.width && this.posX < (e8.global.screenWidth + e8.global.screenWidth+this.width)) {
+      this.posX = this.posX + ((this.velX * dt) + (PlayerShip.velX / 7))
     } else {
       this.terminate();
       this.enemyShipHandler.shipDestroyed(this.id);
+    }
+    for (const dependency of this.dependencies){
+      dependency.posX = this.posX;
+      dependency.posY = this.posY;
     }
   }
 }

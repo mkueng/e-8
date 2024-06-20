@@ -20,6 +20,7 @@ class GameObjectsHandler {
        console.error(e);
     }
     GameObjectsHandler.gameObjects.push(gameObject);
+
   }
 
   /**
@@ -34,11 +35,13 @@ class GameObjectsHandler {
    *
    */
   removeGameObjects = () =>{
+
     for (let id of GameObjectsHandler.gameObjectsToRemove){
       const index = GameObjectsHandler.gameObjects.findIndex(obj => obj.id === id);
 
       if (index !== -1) {
         const removedObject = GameObjectsHandler.gameObjects[index];
+
         if (removedObject.subscriber) {
           removedObject.subscriber.updateFromGameObjectsHandler("objectRemovedFromGameLoop", removedObject);
         }

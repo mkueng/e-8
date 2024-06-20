@@ -22,7 +22,7 @@ class Planet extends GameObject {
       height,
       posX,
       posY,
-        posZ,
+      posZ,
       posDX,
       posDY,
       velX,

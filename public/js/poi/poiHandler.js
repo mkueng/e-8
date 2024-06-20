@@ -50,7 +50,7 @@ class POIHandler {
             velX: 0,
             velY: 0
         })
-        GameObjectsHandler.instance.addGameObject(this.poiHighlight);
+        //GameObjectsHandler.instance.addGameObject(this.poiHighlight);
     }
 
     /**

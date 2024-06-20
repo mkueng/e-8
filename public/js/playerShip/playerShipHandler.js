@@ -9,11 +9,11 @@ class PlayerShipHandler {
 
   init = async () =>{
     this.#canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
-    this.hudHandler = new HudHandler();
+    e8.global.hudHandler = new HudHandler();
 
     this.playerShipFactory = new PlayerShipFactory({
       playerShipHandler: this,
-      hudHandler: this.hudHandler
+      hudHandler: e8.global.hudHandler
     });
 
 

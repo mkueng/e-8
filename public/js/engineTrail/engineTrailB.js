@@ -1,6 +1,10 @@
 'use strict'
 class EngineTrailB extends EngineTrail {
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static resourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.propulsion,
     name: "engineTrailB",

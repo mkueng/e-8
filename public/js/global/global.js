@@ -24,7 +24,7 @@ e8.global.colors = {
   midnightGreen: "#005F73",
   darkCyan: "#0A9396",
   tiffanyBlue: "#52BBB7",
-  vanilla: "#8FDEB4",
+  vanilla: "#dbb867",
   gamboge: "#F16764",
   alloyOrange: "#CA4862",
   rust: "#461D2D",
@@ -32,6 +32,7 @@ e8.global.colors = {
   auburn: "#9B2226",
   info : "#aaaaff",
   neutral: "#aaaaaa",
+  lightVanilla: "#e3d8bf"
 }
 
 e8.global.publishEvent = ({message, payload}) => {

@@ -6,6 +6,10 @@ class ProceduralEnemyShipFactory {
     EnemyShipType1: ProceduralEnemyShipType1
   }
 
+  /**
+   *
+   * @param enemyShipHandler
+   */
   constructor({
     enemyShipHandler
   }){
@@ -31,14 +35,13 @@ class ProceduralEnemyShipFactory {
    * @returns {Promise<unknown>}
    */
   createShip = async ({shipType, shipTypeVariation, canvas}) => {
-    const {shipSize, shield, playerShipTracking} = shipTypeVariation;
+    const {shipSize, shield, propulsion, spinner, playerShipTracking} = shipTypeVariation;
 
     return new Promise(async (resolve) => {
-
-      //create shield instance
       const shieldInstance = e8.global.shieldFactory.createShield({ ...shield, canvas });
+      const propulsionInstance = e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+      const spinnerInstance = e8.global.propulsionFactory.createPropulsion({ ...spinner, canvas });
 
-      //create terminationSequence
       let terminationSequence = [];
       for (let i=0; i < shipSize; i++){
         const explosion = e8.global.explosionFactory.createExplosion({
@@ -83,10 +86,11 @@ class ProceduralEnemyShipFactory {
           particles: particlesObject,
           posDX: 0,
           posDY: 0,
-          posX: e8.global.screenWidth,//+e8.global.screenWidth,
+          posX: e8.global.screenWidth+e8.global.screenWidth,//+e8.global.screenWidth,
           posY: Math.floor(Math.random() * e8.global.screenHeight),
-          posZ: velX*-0.2,
+          posZ: velX*-0.05,
           shield: shieldInstance,
+          dependencies: [propulsionInstance, spinnerInstance],
           terminationSequence: terminationSequence,
           velX: velX,
           velY: 0,

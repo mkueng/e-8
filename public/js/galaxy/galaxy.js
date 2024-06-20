@@ -51,7 +51,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1*Math.random()*0.03,
+          posZ: -1 * Math.random() * 0.01,
           velY: 0,
           canvas: this.canvas
         })

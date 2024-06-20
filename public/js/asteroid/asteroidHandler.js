@@ -50,8 +50,6 @@ class AsteroidHandler {
       let zPosition =  velX/3;
      // if (zPosition > 1) zPosition = 1;
 
-      console.log("zPosition", zPosition);
-
       const asteroid = new GameObject({
         canvas: canvas,
         height: height,

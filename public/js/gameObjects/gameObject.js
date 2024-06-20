@@ -76,7 +76,7 @@ class GameObject {
                 velY,
                 width,
                 rotation
-              }){
+              }) {
     this.accX = accX;
     this.accY = accY;
     this.alpha = alpha || 1;
@@ -115,14 +115,11 @@ class GameObject {
     this.context = null;
     this.rotation = rotation;
 
-    if (canvas){
+    if (canvas) {
       this.context = canvas.getContext("2d");
     }
   }
 
-  /**
-   *
-   */
   addDependencies(){
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
@@ -135,21 +132,20 @@ class GameObject {
     this.subscriber = subscriber;
   }
 
-  /**
-   *
-   */
   unsubscribe(){
     this.subscriber = null;
   }
 
-  /**
-   *
-   */
-  activate(){};
 
-  /**
-   *
-   */
+  activate(){
+    this.isActive = true;
+    GameObjectsHandler.instance.addGameObject(this);
+    this.dependencies.forEach(dependency => {
+      dependency.isActive = true;
+      GameObjectsHandler.instance.addGameObject(dependency);
+    });
+  };
+
   deactivate(){};
 
   /**
@@ -158,27 +154,25 @@ class GameObject {
    */
   hit (hitBy){};
 
-  /**
-   *
-   */
   destroy(){
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
+    if (this.dependencies) {
+      this.destroyDependencies();
+    }
+
   };
 
-  /**
-   *
-   */
   destroyDependencies(){
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
   }
 
-  /**
-   *
-   */
   render() {
-    if (!this.isActive) return;
+
+    if (this.isActive === false)  {
+      return;
+    }
     if (this.alpha) {
       this.context.globalAlpha = this.alpha;
     }
@@ -188,7 +182,7 @@ class GameObject {
       } else {
         this.currentFrame++;
         if (this.currentFrame >= this.frames) {
-          this.destroy();
+          this.isActive = false;
           this.currentFrame = 0;
           return;
         }

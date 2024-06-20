@@ -3,7 +3,8 @@ class PlayerShipPropertiesClassB {
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
     posDX: -15,
-    posDY: 25
+    posDY: 25,
+    isActive : false
   }
 
   static fuel = {

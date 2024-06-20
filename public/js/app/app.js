@@ -40,11 +40,10 @@ class App {
   }
 
   startMusic = ()=>{
-  // SoundHandler.playMusic();
+    SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
     document.removeEventListener("mousedown", this.startMusic, true);
   }
-
 
   #loadScripts = async() =>{
     await Scripts.getInstance().loadScripts();
@@ -73,6 +72,10 @@ class App {
     })
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   #initGlobalFactories = async ()=>{
     await e8.global.weaponFactory.invoke();
     await e8.global.propulsionFactory.fetchResources();
@@ -80,6 +83,10 @@ class App {
     await e8.global.explosionFactory.invoke();
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   #initGlobalHandlers = async()=>{
     await e8.global.fontHandler.init();
     await e8.global.poiHandler.init();
@@ -89,6 +96,9 @@ class App {
 
   }
 
+  /**
+   * Creates global factories
+   */
   #createGlobalFactories = ()=> {
     e8.global.weaponFactory = new WeaponFactory();
     e8.global.propulsionFactory = new PropulsionFactory();
@@ -98,6 +108,9 @@ class App {
     e8.global.fuelFactory = new FuelFactory();
   }
 
+  /**
+   * Creates global handlers
+   */
   #createGlobalHandlers = ()=>{
     e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
     e8.global.stateHandler = new StateHandler();
@@ -124,6 +137,4 @@ class App {
     e8.global.spaceStationHandler = new SpaceStationHandler();
 
   }
-
-
 }

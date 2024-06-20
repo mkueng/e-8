@@ -106,6 +106,7 @@ class CanvasHandler {
     "hudDynamicLeft": {
       "id": "hudDynamicLeft",
       "class": "sectionCanvasLeft",
+      "alpha": true,
       "contextStyles": {
         "font": "15px myFont"
       },
@@ -118,7 +119,7 @@ class CanvasHandler {
       },
       "width": 440,
       "height": 150,
-      "opacity": 0.7
+      "opacity": 0.1
     },
     "hudDynamicRight": {
       "id": "hudDynamicRight",

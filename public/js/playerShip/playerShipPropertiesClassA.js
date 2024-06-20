@@ -18,10 +18,10 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX:20,
+    maxVelX:30,
     maxVelY: 7,
-    accX: 0.2,
-    accY: 0.2
+    accX: 0.14,
+    accY: 0.3
   }
 
   static cargo = {
@@ -41,7 +41,15 @@ class PlayerShipPropertiesClassA {
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
     posDX: -15,
-    posDY: 25
+    posDY: 25,
+    isActive : false
+  }
+
+  static throttle = {
+    type: PropulsionFactory.PROPULSION_TYPES.throttle,
+    posDX: 70,
+    posDY: 8,
+    isActive: false
   }
 
   static fuel = {
@@ -81,7 +89,7 @@ class PlayerShipPropertiesClassA {
 
   static weapons = {
 
-    PhotonTorpedo : {
+    PT : {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
       amount: 2000,
@@ -89,7 +97,7 @@ class PlayerShipPropertiesClassA {
       posDY: 27
     },
 
-    PhotonTorpedoFireAndForget : {
+    FaF : {
       controlAssignment : "KeyK",
       type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
       amount: 1000,

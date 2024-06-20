@@ -42,6 +42,4 @@ class SpatialHashMap {
     const hash = this.hashCoordinates(x, y);
     return this.hashTable.get(hash) || [];
   }
-
-
 }

@@ -119,7 +119,7 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth/2 - this.width;
+    this.upperBoundX = e8.global.screenWidth/1.5 - this.width;
     this.lowerBoundX = 10;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
@@ -287,11 +287,14 @@ class PlayerShip extends GameObject {
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
         }
       } else if (this.controls.left) {
+        this.dependencies[1].isActive = true;
         this.viewPortVelX -= this.accX;
-        if (this.velX > 0) {
+        if (this.velX > 0 && this.posX === this.lowerBoundX) {
           this.velX -= this.accX;
         }
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+      } else {
+        this.dependencies[0].isActive = false;
       }
     }
 

@@ -43,7 +43,7 @@ class Explosion extends GameObject {
       posDX,
       posDY,
       canvas,
-      isHitable : false,
+      isHittable : false,
       animationLoop : false
     });
   }

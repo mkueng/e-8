@@ -38,6 +38,7 @@ class PlayerShipFactory {
     const {
       engineTrail,
       propulsion,
+      throttle,
       fuel,
       shield,
       terminationSequence,
@@ -47,9 +48,11 @@ class PlayerShipFactory {
       cargo
     } = shipType;
 
+    console.log("propulsion:", propulsion);
     const imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
     const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
+    const throttleInstance = await this.#createThrottle({propulsion: throttle, canvas});
     const shieldInstance = await this.#createShield({shield, canvas});
     const terminationSequenceInstance = await this.#createTerminationSequence({terminationSequence, canvas})
     const featureInstances = this.#createFeatures({features, canvas});
@@ -63,7 +66,7 @@ class PlayerShipFactory {
       propulsion: propulsionInstance,
       fuel: fuelInstance,
       fuelConsumption : 1 / (fuelInstance.energyDensity * propulsionInstance.efficiency),
-      dependencies: [propulsionInstance],
+      dependencies: [propulsionInstance, throttleInstance],
       engineTrail : engineTrailInstance,
       features: featureInstances,
       cargo: cargo,
@@ -105,6 +108,16 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createPropulsion = async ({propulsion, canvas}) => {
+    return e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+  }
+
+  /**
+   *
+   * @param propulsion
+   * @param canvas
+   * @returns {Promise<*>}
+   */
+  #createThrottle = async ({propulsion, canvas}) => {
     return e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
   }
 
