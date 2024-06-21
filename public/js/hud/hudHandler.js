@@ -10,6 +10,7 @@ class HudHandler {
     this.dynamicContextMiddle = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").context;
     this.dynamicContextMiddle.width = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").width;
     this.dynamicContextMiddle.height = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").height;
+    this.dynamicContextMiddle.globalAlpha = 0.8;
 
     //dynamic left
     this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;

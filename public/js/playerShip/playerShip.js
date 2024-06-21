@@ -136,6 +136,7 @@ class PlayerShip extends GameObject {
     e8.global.inputHandler.subscribe(this);
     this.initializeWeapons();
     this.initializeFeatures();
+    this.initializeShield();
 
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -210,12 +211,18 @@ class PlayerShip extends GameObject {
 
   }
 
-  invokeShield = () => {
+  initializeShield = () => {
     Object.assign(this.shield, {
       posX: this.posX,
       posY: this.posY
     });
     GameObjectsHandler.instance.addGameObject(this.shield);
+  }
+
+  activateShield = () =>{
+    this.shield.posX = this.posX;
+    this.shield.posY = this.posY;
+    this.shield.isActive = true;
     SoundHandler.playFX(this.shield.sound);
     this.shield.strength = Math.max(this.shield.strength - 10, 0);
   }
@@ -247,7 +254,7 @@ class PlayerShip extends GameObject {
     if (hitBy.identification === "weaponPlayer") {
       return; // Ignore hits from player's own weapon
     }
-    this.invokeShield();
+    this.activateShield();
 
     if (this.shield.strength < 30 && this.shieldInfoCritical === false) {
       SpeechHandler.playStatement(SpeechHandler.statements.shieldCritical)
@@ -280,21 +287,26 @@ class PlayerShip extends GameObject {
       }
       else if (this.controls.right) {
         this.viewPortVelX += this.accX;
+        this.dependencies[0].isActive = true; // propulsion on
+        if (this.posX < this.upperBoundX) {
+          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
+        }
         if (this.velX < this.maxVelX) {
           this.velX += this.accX;
-          this.dependencies[0].isActive = true;
-          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        } else {
+          // this.dependencies[0].isActive = false; // propulsion off
         }
       } else if (this.controls.left) {
-        this.dependencies[1].isActive = true;
+        this.dependencies[0].isActive = false; // propulsion off
+        this.dependencies[1].isActive = true; // throttle on
         this.viewPortVelX -= this.accX;
         if (this.velX > 0 && this.posX === this.lowerBoundX) {
           this.velX -= this.accX;
         }
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       } else {
-        this.dependencies[0].isActive = false;
+        this.dependencies[0].isActive = false; // propulsion off
       }
     }
 

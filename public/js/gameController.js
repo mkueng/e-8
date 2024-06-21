@@ -39,6 +39,11 @@ class GameController {
         await this.#enemyShipHandler.init();
         this.#enemyShipHandler.startCreation(1000);
 
+        // freighters
+        this.freighterHandler = new FreighterHandler();
+        await this.freighterHandler.init();
+        await this.freighterHandler.create();
+
         this.game = new Game({});
         document.querySelector("#game").style.display = "block";
     }

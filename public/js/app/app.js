@@ -92,7 +92,7 @@ class App {
     await e8.global.poiHandler.init();
     await e8.global.terminal.init();
     await e8.global.spaceStationHandler.init();
-    await e8.global.freighterHandler.init();
+
 
   }
 
@@ -133,7 +133,7 @@ class App {
     e8.global.terminal = new Terminal();
     e8.global.particleGenerator = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
-    e8.global.freighterHandler = new FreighterHandler();
+
     e8.global.spaceStationHandler = new SpaceStationHandler();
 
   }

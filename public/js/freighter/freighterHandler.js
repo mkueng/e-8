@@ -32,7 +32,7 @@ class FreighterHandler {
       posY : Math.floor(Math.random()*(e8.global.screenHeight-500)+200)
     })
 
-    //GameObjectsHandler.instance.addGameObject(freighter);
+    GameObjectsHandler.instance.addGameObject(freighter);
     FreighterHandler.freighters[freighter.id] = freighter;
   }
 }

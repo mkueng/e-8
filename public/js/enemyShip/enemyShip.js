@@ -67,6 +67,7 @@ class EnemyShip extends GameObject {
 
     this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
     this.shield.relatedShip = this;
+    this.initializeShield();
   }
 
   fireWeapon = () => {
@@ -80,10 +81,17 @@ class EnemyShip extends GameObject {
     }
   }
 
-  invokeShield = () => {
+  initializeShield = () => {
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     GameObjectsHandler.instance.addGameObject(this.shield);
+
+  }
+
+  activateShield = () =>{
+    this.shield.posX = this.posX;
+    this.shield.posY = this.posY;
+    this.shield.isActive = true;
     SoundHandler.playFX(this.shield.sound);
     this.shield.strength < 0 ? this.shield.strength = 1 : this.shield.strength -= 50;
   }
@@ -130,7 +138,7 @@ class EnemyShip extends GameObject {
       return;
     }
 
-    this.invokeShield();
+    this.activateShield();
     if (this.shield.strength <= 1){
         this.destroy();
     }

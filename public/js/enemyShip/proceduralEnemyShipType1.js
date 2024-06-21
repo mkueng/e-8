@@ -61,7 +61,7 @@ class ProceduralEnemyShipType1 {
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
-        posDX: 395,
+        posDX: 380,
         posDY: 17,
         isActive: true
       },
