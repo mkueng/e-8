@@ -7,7 +7,7 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-    SoundHandler.setFXGain({percentage: 0.9});
+    SoundHandler.setFXGain({percentage: 0.8});
     SoundHandler.setMusicGain({percentage: 0.1});
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
@@ -39,7 +39,7 @@ class App {
   }
 
   startMusic = ()=>{
-    //SoundHandler.playMusic();
+    SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
     document.removeEventListener("mousedown", this.startMusic, true);
   }

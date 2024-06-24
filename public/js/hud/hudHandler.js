@@ -16,6 +16,7 @@ class HudHandler {
     this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;
     this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
     this.#dynamicContextLeft.height = e8.global.canvasHandler.getCanvas("hudDynamicLeft").height;
+    this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0);
     this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0)
     this.#dynamicContextLeft.font = "10px myFont";
 
@@ -24,43 +25,29 @@ class HudHandler {
     this.#dynamicContextRight.width = e8.global.canvasHandler.getCanvas("hudDynamicRight").width;
     this.#dynamicContextRight.height = e8.global.canvasHandler.getCanvas("hudDynamicRight").height;
     this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
+    this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
     this.#dynamicContextRight.font = "10px myFont";
   }
 
 
   constructor() {
-    this.#initContexts();
-
     this.hudImage = document.querySelector("#hud");
-    this.naviImage = document.querySelector("#navi");
     this.naviOrbImage = document.querySelector("#navi-orb");
-    this.naviImagePosX = (e8.global.screenWidth / 6 - this.naviImage.width) / 2
     this.naviOrbImagePosX = (e8.global.screenWidth / 6 - (this.naviOrbImage.width / 2));
-    this.propulsionInfoBarColor = "green";
-    this.#initContexts();
-    this.fillRectNavi = this.dynamicContextMiddle.fillRect.bind(this.dynamicContextMiddle);
-    this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
-    this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
-    this.renderNavi();
-
-    //this.#renderDisplayLeft();
-    //this.#renderDisplayRight();
 
     setInterval(() => {
-      //this.#renderDisplayRight();
-      //this.#updateDisplayLeft();
-      const start = performance.now();
       this.#renderDisplayLeft();
       this.#renderDisplayRight();
-      const stop = performance.now();
+
       //console.log("hud render time: ", stop - start);
     }, 500);
   }
 
   init = async() => {
 
-    this.#renderDisplayLeft();
-    this.#renderDisplayRight();
+    this.#initContexts();
+    this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
+
 
   }
 
@@ -135,10 +122,10 @@ class HudHandler {
     ctx.fillStyle = colors.info;
     ctx.strokeStyle = e8.global.colors.alloyOrange;
     ctx.beginPath();
-    ctx.roundRect(225, 55, 45,30,3);
-    ctx.roundRect(225, 15, 45,30,3);
-    ctx.roundRect(280, 15, 45,30,3);
-    ctx.roundRect(280, 55, 45,30,3);
+    ctx.roundRect(225, 55, 45,30,45);
+    ctx.roundRect(225, 15, 45,30,45);
+    ctx.roundRect(280, 15, 45,30,45);
+    ctx.roundRect(280, 55, 45,30,45);
     ctx.stroke();
     ctx.strokeStyle = e8.global.colors.neutral;
     ctx.fillText("FUEL", -20, 67);
