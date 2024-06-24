@@ -20,7 +20,7 @@ class PhotonTorpedo extends Weapon{
   static soundResource;
   static imageResource;
 
-  static async invoke(){
+  static async init(){
     PhotonTorpedo.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedo.imageResourceObject
     });
@@ -36,21 +36,21 @@ class PhotonTorpedo extends Weapon{
                  controlAssignment
   }) {
     super({
-      identification : "weaponPlayer",
+      identification: "weaponPlayer",
       controlAssignment,
-      canvas : canvas,
-      image : PhotonTorpedo.imageResource.image,
-      sound : PhotonTorpedo.soundResource,
-      width : PhotonTorpedo.imageResource.image.width,
-      height : PhotonTorpedo.imageResource.image.height,
-      posX : 0,
-      posY : 0,
-      posDX : posDX,
-      posDY : posDY,
-      velX : 15,
-      velY : 0,
-      isHittable : false,
-      isDestroyable : false
+      canvas: canvas,
+      image: PhotonTorpedo.imageResource.image,
+      sound: PhotonTorpedo.soundResource,
+      width: PhotonTorpedo.imageResource.image.width,
+      height: PhotonTorpedo.imageResource.image.height,
+      posX: 0,
+      posY: 0,
+      posDX: posDX,
+      posDY: posDY,
+      velX: 15,
+      velY: 0,
+      isHittable: false,
+      isDestroyable: false
     })
 
     this.uniqueIdentifier = this.constructor.name;
@@ -66,5 +66,4 @@ class PhotonTorpedo extends Weapon{
       this.destroy();
     }
   }
-
 }

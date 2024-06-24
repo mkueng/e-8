@@ -141,7 +141,7 @@ class GameInit {
     await this.propulsionFactory.fetchResources();
     this.engineTrailFactory = new EngineTrailFactory({canvasHandler:this.canvasHandler,resourceHandler:this.resourceHandler});
     this.weaponFactory = new WeaponFactory({resourceHandler:this.resourceHandler});
-    await this.weaponFactory.invoke();
+    await this.weaponFactory.init();
     this.fuelFactory = new FuelFactory();
     this.shieldFactory = new ShieldFactory({resourceHandler:this.resourceHandler});
     await this.shieldFactory.fetchResources();

@@ -11,7 +11,7 @@ class PhotonTorpedoEnemy extends Weapon{
 
   static imageResource;
 
-  static async invoke(){
+  static async init(){
     PhotonTorpedoEnemy.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedoEnemy.resourceObject
     });
@@ -24,21 +24,21 @@ class PhotonTorpedoEnemy extends Weapon{
                  controlAssignment
                }) {
     super({
-        identification : "enemyWeapon",
-        uniqueIdentifier : "PhotonTorpedoEnemy",
+        identification: "enemyWeapon",
+        uniqueIdentifier: "PhotonTorpedoEnemy",
         controlAssignment,
-        canvas : canvas,
-        image : PhotonTorpedoEnemy.imageResource.image,
-        width : PhotonTorpedoEnemy.imageResource.image.width,
-        height : PhotonTorpedoEnemy.imageResource.image.height,
-        posX : 0,
-        posY : 0,
-        posDX : posDX,
-        posDY : posDY,
-        velX : -7,
-        velY : 0,
-        isHittable : false,
-        isDestroyable : false
+        canvas: canvas,
+        image: PhotonTorpedoEnemy.imageResource.image,
+        width: PhotonTorpedoEnemy.imageResource.image.width,
+        height: PhotonTorpedoEnemy.imageResource.image.height,
+        posX: 0,
+        posY: 0,
+        posDX: posDX,
+        posDY: posDY,
+        velX: -7,
+        velY: 0,
+        isHittable: false,
+        isDestroyable: false
       })
     }
 }

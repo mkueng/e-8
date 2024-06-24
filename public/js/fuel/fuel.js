@@ -20,7 +20,7 @@ class Nuclear extends Fuel {
 class Xenon extends Fuel {
   constructor({amount, maximumAmount}){
     super({
-      energyDensity: 20,
+      energyDensity: 50,
       amount,
       maximumAmount
     })

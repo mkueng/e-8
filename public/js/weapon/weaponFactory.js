@@ -10,29 +10,26 @@ class WeaponFactory {
 
   constructor(){};
 
-  invoke = async ()=>{
-    await WeaponFactory.WEAPON_TYPES.photonTorpedo.invoke(e8.global.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.invoke(e8.global.resourceHandler);
-    await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.invoke(e8.global.resourceHandler);
+  init = async ()=>{
+    await WeaponFactory.WEAPON_TYPES.photonTorpedo.init(e8.global.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.init(e8.global.resourceHandler);
+    await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.init(e8.global.resourceHandler);
     await WeaponFactory.WEAPON_TYPES.laser.invoke(e8.global.resourceHandler);
   }
 
   createWeapon({
-                       type,
-                       controlAssignment,
-                       amount,
-                       canvas,
-                       posDX,
-                       posDY
-                     }) {
+                 type,
+                 controlAssignment,
+                 amount,
+                 canvas,
+                 posDX,
+                 posDY
+  }) {
     /**
-     *
-     * @param instance
-     * @returns {*[]}
+     * Creates weapon instances
      */
-    const invokeWeapon  = (instance) => {
-
-      return Array.from({ length: amount }, () => new instance({
+    const createWeaponInstances  = (type) => {
+      return Array.from({ length: amount }, () => new type({
         controlAssignment,
         posDX,
         posDY,
@@ -40,6 +37,6 @@ class WeaponFactory {
       }));
     };
 
-    return invokeWeapon(type);
+    return createWeaponInstances(type);
   }
 }

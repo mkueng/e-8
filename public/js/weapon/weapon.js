@@ -63,12 +63,11 @@ class Weapon extends GameObject {
     this.posX = posX;
     this.posY = posY;
     GameObjectsHandler.instance.addGameObject(this);
-    //console.log("activate");
     SoundHandler.playFX(this.sound);
   };
 
   recharge = () =>{
-    setTimeout(()=>{;
+    setTimeout(()=>{
       SpeechHandler.playStatement(SpeechHandler.statements.weaponRecharged);
       this.currentLoad = 0;
       this.ready = true;

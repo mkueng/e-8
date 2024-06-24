@@ -18,7 +18,7 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX:30,
+    maxVelX:40,
     maxVelY: 7,
     accX: 0.14,
     accY: 0.3
@@ -34,7 +34,7 @@ class PlayerShipPropertiesClassA {
 
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
-    posDX : -30,
+    posDX : -40,
     posDY :28
   }
 
@@ -54,7 +54,7 @@ class PlayerShipPropertiesClassA {
 
   static fuel = {
     type: FuelFactory.FUEL_TYPES.xenon,
-    amount: 1000,
+    amount: 150,
     max: 1000
   }
 

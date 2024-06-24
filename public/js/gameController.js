@@ -29,10 +29,15 @@ class GameController {
         await e8.global.hazeHandler.init();
         e8.global.hazeHandler.invokeHaze();
 
+
+
         // player ship
         this.#playerShipHandler = new PlayerShipHandler();
         this.#playerShipHandler.init();
         await this.#playerShipHandler.createShip();
+
+        //hud
+        await e8.global.hudHandler.init();
 
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();

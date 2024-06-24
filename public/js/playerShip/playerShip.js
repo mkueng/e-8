@@ -137,6 +137,11 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
     this.initializeFeatures();
     this.initializeShield();
+    this.hudHandler.updateHudInfo({
+      shield : this.shield.strength,
+      fuel: this.fuel.amount,
+      weapons : this.weapons
+    });
 
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);

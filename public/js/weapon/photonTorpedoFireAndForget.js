@@ -1,5 +1,4 @@
 'use strict'
-
 class PhotonTorpedoFireAndForget extends Weapon {
 
   static resourceObject = new ResourceObject({
@@ -21,7 +20,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
   static soundResource;
   static imageResource;
 
-  static async invoke(){
+  static async init(){
     PhotonTorpedoFireAndForget.imageResource = await e8.global.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedoFireAndForget.resourceObject
     });
@@ -37,21 +36,21 @@ class PhotonTorpedoFireAndForget extends Weapon {
                  controlAssignment
   }){
     super({
-      identification : "weaponPlayer",
-      controlAssignment,
-      canvas : canvas,
-      image : PhotonTorpedoFireAndForget.imageResource.image,
-      sound : PhotonTorpedoFireAndForget.soundResource,
-      width : PhotonTorpedoFireAndForget.imageResource.image.width,
-      height : PhotonTorpedoFireAndForget.imageResource.image.height,
-      posX : 0,
-      posY : 0,
-      posDX : posDX,
-      posDY : posDY,
-      velX : 7,
-      velY : 0,
-      isHittable : false,
-      isDestroyable : false
+      identification: "weaponPlayer",
+      controlAssignment: controlAssignment,
+      canvas: canvas,
+      image: PhotonTorpedoFireAndForget.imageResource.image,
+      sound: PhotonTorpedoFireAndForget.soundResource,
+      width: PhotonTorpedoFireAndForget.imageResource.image.width,
+      height: PhotonTorpedoFireAndForget.imageResource.image.height,
+      posX: 0,
+      posY: 0,
+      posDX: posDX,
+      posDY: posDY,
+      velX: 7,
+      velY: 0,
+      isHittable: false,
+      isDestroyable: false
     })
 
     this.uniqueIdentifier = this.constructor.name;
@@ -59,7 +58,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     this.ready = true;
     this.retention = 200;
     this.quotient = 0;
-
+    this.pathSmoothing = 0.03;
   }
 
   /**
@@ -72,11 +71,8 @@ class PhotonTorpedoFireAndForget extends Weapon {
     }
   }
 
-  /**
-   *
-   */
   cleanupAndDestroy = () => {
-    this.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", this);
+    //this.subscriber.subscriptionsUpdate("objectRemovedFromGameLoop", this);
     this.destroy();
   }
 
@@ -108,8 +104,9 @@ class PhotonTorpedoFireAndForget extends Weapon {
 
   /**
    *
+   * @param dt
    */
-  update = (deltaTime) => {
+  update = (dt) => {
     const isEnemyShipAlive = EnemyShipHandler.enemyShips[this.target.id];
 
     if (isEnemyShipAlive) {
@@ -120,9 +117,8 @@ class PhotonTorpedoFireAndForget extends Weapon {
       this.quotient = 0.01; // Set to a default value
     }
 
-
-    this.posY = (this.posY + (this.posX / this.quotient) * 0.03);
-    this.posX = this.posX + (this.velX*deltaTime);
+    this.posY = (this.posY + (this.posX / this.quotient) * this.pathSmoothing);
+    this.posX = this.posX + (this.velX*dt);
     const isOutsideScreen = this.posX > e8.global.screenWidth || this.posX < 0 || this.posY > e8.global.screenHeight || this.posY < 0;
 
     if (isOutsideScreen) {
@@ -130,4 +126,3 @@ class PhotonTorpedoFireAndForget extends Weapon {
     }
   }
 }
-

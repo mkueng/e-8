@@ -36,26 +36,26 @@ class Laser extends Weapon {
                 controlAssignment
               }){
     super({
-      identification : "weaponPlayer",
+      identification: "weaponPlayer",
       controlAssignment,
-      canvas : canvas,
-      spriteSheet :  Laser.imageResource.image,
-      spriteSheetRows : 3,
-      spriteSheetColumns : 1,
-      width : e8.global.screenWidth,
-      height : 16,
-      frames : 3,
-      currentFrame : 0,
-      sound : Laser.soundResource,
-      strideX : Laser.imageResource.image.width / 1,
-      strideY : Laser.imageResource.image.height / 3,
-      stride : Laser.imageResource.image.height / 3,
-      posDX : posDX,
-      posDY : posDY,
-      animationLoop : true,
+      canvas: canvas,
+      spriteSheet:  Laser.imageResource.image,
+      spriteSheetRows: 3,
+      spriteSheetColumns: 1,
+      width: e8.global.screenWidth,
+      height: 16,
+      frames: 3,
+      currentFrame: 0,
+      sound: Laser.soundResource,
+      strideX: Laser.imageResource.image.width / 1,
+      strideY: Laser.imageResource.image.height / 3,
+      stride: Laser.imageResource.image.height / 3,
+      posDX: posDX,
+      posDY: posDY,
+      animationLoop: true,
       rechargeTime: 5000,
-      isHittable : false,
-      isDestroyable : false
+      isHittable: false,
+      isDestroyable: false
     });
 
     this.uniqueIdentifier = this.constructor.name;
@@ -82,7 +82,7 @@ class Laser extends Weapon {
   activate = ({posX, posY, dependency})=> {
     this.timer = 0;
     this.dependency = dependency;
-    if (this.ready === true) {
+    if (this.ready) {
       this.posX = posX;
       this.posY = posY;
       GameObjectsHandler.instance.addGameObject(this);
@@ -95,5 +95,4 @@ class Laser extends Weapon {
       }
     }
   }
-
 }

@@ -62,6 +62,7 @@ class Tractor  {
       GameObjectsHandler.instance.addGameObject(this);
     } else {
       this.isActive = false;
+      this.releaseTarget();
       this.targetCargoInfo.destroy();
       GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     }
@@ -165,8 +166,8 @@ class Tractor  {
     if (this.isLocked) {
       context.globalAlpha = Math.random() * 0.2 + 0.1;
       context.moveTo(this.posX, this.posY);
-      context.lineTo(this.posX + this.halfWidth, this.posY + this.lockedYDiff + 30);
-      context.lineTo(this.posX - this.halfWidth, this.posY + this.lockedYDiff + 30);
+      context.lineTo(this.posX + this.halfWidth, this.posY + this.lockedYDiff + 50);
+      context.lineTo(this.posX - this.halfWidth, this.posY + this.lockedYDiff + 50);
       context.closePath();
       context.fill();
     }

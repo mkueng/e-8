@@ -46,6 +46,7 @@ class Freighter extends GameObject{
                 height,
                 posX,
                 posY,
+                posZ,
                 velX,
                 velY,
                 shield,
@@ -64,8 +65,11 @@ class Freighter extends GameObject{
       height,
       posX,
       posY,
+      posZ,
       velX,
-      velY
+      velY,
+      isHittable: true,
+      isDestroyable: true
     });
 
     Object.assign(this,{
@@ -78,8 +82,13 @@ class Freighter extends GameObject{
 
     GameObjectsHandler.instance.addGameObject(this);
     this.addDependencies();
-
-
   };
+
+  hit(hitBy){
+    if (hitBy.identification === "enemyWeapon") {
+      return;
+    }
+    this.destroy();
+  }
 
 }

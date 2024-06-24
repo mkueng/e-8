@@ -2,7 +2,8 @@ class FreighterFactory {
 
 
   static FREIGHTER_TYPES = {
-    classAFreighter: ClassAFreighter
+    classAFreighter: ClassAFreighter,
+    classBFreighter: ClassBFreighter
   }
 
   resourceHandler;
@@ -15,6 +16,7 @@ class FreighterFactory {
 
   invoke = async ()=>{
     await FreighterFactory.FREIGHTER_TYPES.classAFreighter.invoke({resourceHandler:this.resourceHandler});
+    await FreighterFactory.FREIGHTER_TYPES.classBFreighter.invoke({resourceHandler:this.resourceHandler});
   }
 
   /**
@@ -24,9 +26,10 @@ class FreighterFactory {
    * @param context
    * @param posX
    * @param posY
-   * @returns {Freighter}
+   * @param posZ
+   * @returns {Promise<Freighter>}
    */
-  createFreighter =async ({freighterType, canvas, context,posX, posY }) => {
+  createFreighter =async ({freighterType, canvas, context,posX, posY, posZ}) => {
     const {
       properties,
       shield,
@@ -37,16 +40,16 @@ class FreighterFactory {
     const propulsionInstance = await this.propulsionFactory.createPropulsion({...propulsion,canvas});
     const engineTrailInstance = await this.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
 
-
     return new Freighter({
       isActive: true,
       canvas: canvas,
       context: context,
       image: freighterType["resources"]["Image"]["image"],
-      width: freighterType["resources"]["Image"]["image"].width,
-      height: freighterType["resources"]["Image"]["image"].height,
+      width: properties.width || freighterType["resources"]["Image"]["image"].width,
+      height: properties.height || freighterType["resources"]["Image"]["image"].height,
       posX: posX,
       posY: posY,
+      posZ: posZ,
       posDX: 0,
       posDY: 0,
       velX: properties.velX,

@@ -17,14 +17,14 @@ class HudHandler {
     this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
     this.#dynamicContextLeft.height = e8.global.canvasHandler.getCanvas("hudDynamicLeft").height;
     this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0)
-    this.#dynamicContextLeft.font = "8px myFont";
+    this.#dynamicContextLeft.font = "10px myFont";
 
     //dynamic right
     this.#dynamicContextRight = e8.global.canvasHandler.getCanvas("hudDynamicRight").context;
     this.#dynamicContextRight.width = e8.global.canvasHandler.getCanvas("hudDynamicRight").width;
     this.#dynamicContextRight.height = e8.global.canvasHandler.getCanvas("hudDynamicRight").height;
     this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
-    this.#dynamicContextRight.font = "8px myFont";
+    this.#dynamicContextRight.font = "10px myFont";
   }
 
 
@@ -43,17 +43,24 @@ class HudHandler {
     this.fillRectLeft = this.#dynamicContextLeft.fillRect.bind(this.#dynamicContextLeft);
     this.renderNavi();
 
-    this.#updateDisplayLeft();
-    this.#updateDisplayRight();
+    //this.#renderDisplayLeft();
+    //this.#renderDisplayRight();
 
     setInterval(() => {
-      this.#updateDisplayRight();
-      this.#updateDisplayLeft();
-
-    }, 1000);
+      //this.#renderDisplayRight();
+      //this.#updateDisplayLeft();
+      const start = performance.now();
+      this.#renderDisplayLeft();
+      this.#renderDisplayRight();
+      const stop = performance.now();
+      //console.log("hud render time: ", stop - start);
+    }, 500);
   }
 
   init = async() => {
+
+    this.#renderDisplayLeft();
+    this.#renderDisplayRight();
 
   }
 
@@ -81,66 +88,74 @@ class HudHandler {
     this.#systemsStatus = systemsStatus || this.#systemsStatus;
   }
 
-  #updateDisplayLeft = () => {
-    this.#dynamicContextLeft.clearRect(-20, -20, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.globalAlpha = 0.1;
-    this.#dynamicContextLeft.lineWidth = 3;
-    this.#dynamicContextLeft.strokeRect(-20, 22, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.fillRect(-20, 20, this.#dynamicContextLeft.width, this.#dynamicContextLeft.height);
-    this.#dynamicContextLeft.lineWidth = 1;
-    this.#dynamicContextLeft.globalAlpha = 0.8;
-    this.#dynamicContextLeft.strokeStyle = e8.global.colors.vanilla;
-    this.#dynamicContextLeft.fillStyle = e8.global.colors.lightVanilla;
-    this.#dynamicContextLeft.fillText("WEAPONS STATUS", 0, 10);
+  #renderDisplayLeft = () => {
+    const ctx = this.#dynamicContextLeft;
+    const colors = e8.global.colors;
 
+    ctx.clearRect(-20, -20, ctx.width, ctx.height);
+    ctx.globalAlpha = 0.2;
+    ctx.lineWidth = 8;
+    ctx.fillStyle = colors.lightVanilla;
+    ctx.strokeStyle = colors.vanilla;
+    ctx.strokeRect(-20, 22, ctx.width, ctx.height);
+    ctx.fillRect(-20, 20, ctx.width, ctx.height);
+    ctx.globalAlpha = 0.8;
+    ctx.fillText("WEAPONS STATUS", 0, 10);
 
     let i=0;
-
-
-    for (const weapon in this.#weapons) {
-      this.#dynamicContextLeft.beginPath();
-      this.#dynamicContextLeft.roundRect(i, 30, 50,30,3);
-      this.#dynamicContextLeft.stroke();
-      //this.#dynamicContextLeft.fillStyle = e8.global.colors.info;
-      this.#dynamicContextLeft.fillText(weapon, 5+i, 55);
-      //this.#dynamicContextLeft.fillStyle = e8.global.colors.vanilla;
-      this.#dynamicContextLeft.fillText(this.#weapons[weapon].units.length, 5+i, 40);
-        i+=60;
-    }
+    ctx.lineWidth = 1;
+    Object.entries(this.#weapons).forEach(([weapon, { units }], index) => {
+      const offset = index * 60;
+      ctx.beginPath();
+      ctx.roundRect(offset, 33, 50, 30, 3);
+      ctx.stroke();
+      ctx.fillText(weapon, 5 + offset, 58);
+      ctx.fillText(units.length, 5 + offset, 44);
+    });
   }
 
-  #updateDisplayRight = () => {
-    this.#dynamicContextRight.clearRect(-40, -20, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height + 20);
-    this.#dynamicContextRight.globalAlpha = 0.1;
-    this.#dynamicContextRight.fillStyle = e8.global.colors.lightVanilla;
-    this.#dynamicContextRight.fillRect(-100, 0, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
-    this.#dynamicContextRight.lineWidth = 3;
-    this.#dynamicContextRight.strokeRect(-100, 2, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
-    this.#dynamicContextRight.globalAlpha = 0.6;
-    this.#dynamicContextRight.fillText("SHIP STATUS", -20, -10);
-    this.#dynamicContextRight.lineWidth = 2;
 
+  #renderDisplayRight = () => {
+    const ctx = this.#dynamicContextRight;
+    const colors = e8.global.colors;
 
+    ctx.clearRect(-40, -20, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height + 20);
+    ctx.globalAlpha = 0.2;
+    ctx.lineWidth = 8;
+    ctx.fillStyle = colors.lightVanilla;
+    ctx.fillRect(-100, 0, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
 
-    this.#dynamicContextRight.fillText("TIME - " + this.#time, -20, 15);
-    this.#dynamicContextRight.fillText("COORDINATES - " + this.#coordinates, -20, 30);
+    ctx.strokeRect(-100, 2, this.#dynamicContextRight.width + 20, this.#dynamicContextRight.height);
+    ctx.globalAlpha = 0.6;
+    ctx.fillText("SHIP STATUS", -20, -10);
+    ctx.lineWidth = 2;
+    ctx.fillText("TIME - " + this.#time, -20, 20);
+    ctx.fillText("COORDINATES - " + this.#coordinates, -20, 35);
+    ctx.fillText("SYSTEMS STATUS - " + this.#systemsStatus, -20, 50);
+    ctx.fillStyle = colors.info;
+    ctx.strokeStyle = e8.global.colors.alloyOrange;
+    ctx.beginPath();
+    ctx.roundRect(225, 55, 45,30,3);
+    ctx.roundRect(225, 15, 45,30,3);
+    ctx.roundRect(280, 15, 45,30,3);
+    ctx.roundRect(280, 55, 45,30,3);
+    ctx.stroke();
+    ctx.strokeStyle = e8.global.colors.neutral;
+    ctx.fillText("FUEL", -20, 67);
 
-    this.#dynamicContextRight.fillText("SYSTEMS STATUS - " + this.#systemsStatus, -20, 45);
-    this.#dynamicContextRight.fillStyle = e8.global.colors.info;
-    this.#dynamicContextRight.strokeStyle = e8.global.colors.alloyOrange;
-    this.#dynamicContextRight.beginPath();
-    this.#dynamicContextRight.roundRect(160, 10, 50,30,3);
-    this.#dynamicContextRight.roundRect(220, 10, 50,30,3);
-    this.#dynamicContextRight.roundRect(280, 10, 50,30,3);
-    this.#dynamicContextRight.stroke();
-    this.#dynamicContextRight.strokeStyle = e8.global.colors.neutral;
-    this.#dynamicContextRight.fillText("FUEL", -20, 60);
-    this.#dynamicContextRight.strokeRect(40, 54, 100, 8);
-
-
+    let fuelInfoBarColor;
     if (this.#fuel > 100) this.#fuel = 100;
-    this.fillRectRight(40, 55, this.#fuel, 6);
-    this.#dynamicContextRight.fillText("SHIELD", -20, 75);
+
+    fuelInfoBarColor =
+      this.#fuel < 30 ? "red" :
+        this.#fuel < 60 ? "yellow" :
+          "lightgreen";
+
+    ctx.strokeRect(40, 60, 100, 8);
+    ctx.fillStyle = fuelInfoBarColor;
+    this.fillRectRight(40, 61, this.#fuel, 6);
+    ctx.fillStyle = colors.info;
+    ctx.fillText("SHIELD", -20, 84);
 
     let shieldInfoBarColor;
     if (this.#shield) {
@@ -151,30 +166,27 @@ class HudHandler {
                   "lightgreen";
     } else shieldInfoBarColor = "grey";
 
-    this.#dynamicContextRight.strokeRect(40, 67, 100, 8);
-    this.#dynamicContextRight.fillStyle = shieldInfoBarColor;
-    this.fillRectRight(40, 68, this.#shield, 6);
+    ctx.strokeRect(40, 76, 100, 8);
+    ctx.fillStyle = shieldInfoBarColor;
+    this.fillRectRight(40, 77, this.#shield, 6);
   }
 
   renderNavi = () => {
-    const {dynamicContextMiddle, naviOrbImagePosX, naviOrbImage, hudImage} = this;
-    const {screenWidth, screenHeight, colors} = e8.global;
-    const {enemyShips} = EnemyShipHandler;
+    const { dynamicContextMiddle: ctx, naviOrbImagePosX, naviOrbImage, hudImage } = this;
+    const { screenWidth, screenHeight, colors } = e8.global;
+    const enemyShips = EnemyShipHandler.enemyShips;
 
-    dynamicContextMiddle.clearRect(0, 0, dynamicContextMiddle.width, dynamicContextMiddle.height);
+    ctx.clearRect(0, 0, ctx.width, ctx.height);
 
-    for (const { posX, posY, width } of Object.values(enemyShips)) {
-      const naviCoordXQuotient = screenWidth / posX * 3.5;
-      const naviCoordYQuotient = screenHeight / posY * 2.2;
-      const rectX = naviOrbImagePosX + naviOrbImage.width / naviCoordXQuotient + 77;
-      const rectY = 30 + naviOrbImage.height / naviCoordYQuotient;
+    Object.values(enemyShips).forEach(({ posX, posY, width }) => {
+      const rectX = naviOrbImagePosX + naviOrbImage.width / (screenWidth / posX * 3.5) + 65;
+      const rectY = 30 + naviOrbImage.height / (screenHeight / posY * 2.2);
 
-      dynamicContextMiddle.fillStyle = width > 150 ? colors.alloyOrange : colors.tiffanyBlue;
-      dynamicContextMiddle.fillRect(rectX, rectY, 5, 5);
-    }
+      ctx.fillStyle = width > 150 ? colors.alloyOrange : colors.tiffanyBlue;
+      ctx.fillRect(rectX, rectY, 5, 5);
+    });
 
-    dynamicContextMiddle.drawImage(naviOrbImage, naviOrbImagePosX, 10);
-    dynamicContextMiddle.drawImage(hudImage, 0, 0, dynamicContextMiddle.width, dynamicContextMiddle.height);
+    ctx.drawImage(naviOrbImage, naviOrbImagePosX, 10);
+    ctx.drawImage(hudImage, 0, 0, ctx.width, ctx.height);
   }
-
 }

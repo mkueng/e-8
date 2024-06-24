@@ -104,8 +104,6 @@ class GameLoop {
         subscriber.updateFromGameLoop({
           "coordinatesUpdate": this.#galaxyCoordinate,
           "frameTime:": this.#frameCounter
-
-
         })
       })
       this.#frameCounter = 0;

@@ -17,7 +17,6 @@ class App {
     this.screen = new Screen();
     this.screen.init();
     e8.global.gameLoop = new GameLoop();
-
   }
 
   startGame = async()=>{
@@ -40,7 +39,7 @@ class App {
   }
 
   startMusic = ()=>{
-    SoundHandler.playMusic();
+    //SoundHandler.playMusic();
     document.removeEventListener("keydown", this.startMusic, true);
     document.removeEventListener("mousedown", this.startMusic, true);
   }
@@ -56,10 +55,13 @@ class App {
 
       e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
       e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
-      e8.global.publishEvent({message:e8.global.events.resize, payload: {
-        width:e8.global.screenWidth,
-        height: e8.global.screenHeight
-      }});
+      e8.global.publishEvent({
+        message:e8.global.events.resize,
+        payload: {
+          width:e8.global.screenWidth,
+          height: e8.global.screenHeight
+        }
+      });
     })
 
     window.addEventListener(e8.global.events.visibilityChange, (evt) => {
@@ -77,7 +79,7 @@ class App {
    * @returns {Promise<void>}
    */
   #initGlobalFactories = async ()=>{
-    await e8.global.weaponFactory.invoke();
+    await e8.global.weaponFactory.init();
     await e8.global.propulsionFactory.fetchResources();
     await e8.global.shieldFactory.fetchResources();
     await e8.global.explosionFactory.invoke();
@@ -120,21 +122,18 @@ class App {
     e8.global.fontHandler = new FontHandler();
     e8.global.inputHandler = new InputHandler();
     e8.global.settingsHandler = new SettingsHandler();
-
     e8.global.speechHandler = new SpeechHandler();
     e8.global.infoHandler = new InfoHandler();
     e8.global.poiHandler = new POIHandler();
-
     e8.global.dustHandler = new DustHandler();
     e8.global.asteroidHandler = new AsteroidHandler();
-
     e8.global.hazeHandler = new HazeHandler();
     e8.global.proceduralMusic = new ProceduralMusic();
     e8.global.terminal = new Terminal();
     e8.global.particleGenerator = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
-
     e8.global.spaceStationHandler = new SpaceStationHandler();
+    e8.global.hudHandler = new HudHandler();
 
   }
 }

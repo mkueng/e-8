@@ -28,7 +28,7 @@ class Init {
     await this.poiHandler.init();
     await this.terminal.init();
     await this.propulsionFactory.fetchResources();
-    await this.weaponFactory.invoke();
+    await this.weaponFactory.init();
     await this.shieldFactory.fetchResources();
     await this.explosionFactory.invoke();
 

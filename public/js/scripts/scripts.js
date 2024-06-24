@@ -169,7 +169,7 @@ class Scripts {
 
     // freighter
     await ScriptLoader.loadScript("js/freighter/freighter.js");
-    await ScriptLoader.loadScript("js/freighter/freighterClasses.js");
+    await ScriptLoader.loadScript("js/freighter/freighterTypes.js");
     await ScriptLoader.loadScript("js/freighter/freighterFactory.js");
     await ScriptLoader.loadScript("js/freighter/freighterHandler.js");
 
