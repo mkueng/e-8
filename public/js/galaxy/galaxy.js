@@ -16,6 +16,7 @@ class Galaxy {
 
   init = async () =>{
     this.#distribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
+    console.log(this.#distribution);
     this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.#distribution[this.#galaxyIndex];
@@ -80,7 +81,7 @@ class Galaxy {
   updateFromGameLoop = (data)=>{
     if (data.coordinatesUpdate > this.upcoming) {
       this.#galaxyIndex++
-      let randomDistributionEntry = this.#distribution[Math.floor(Math.random()*99)];
+      let randomDistributionEntry = this.#distribution[this.#galaxyIndex];
       let randomPlanetData = this.#galaxyMap[randomDistributionEntry];
       this.#createPlanet(randomPlanetData);
       this.upcoming = this.#distribution[this.#galaxyIndex].toFixed(0);

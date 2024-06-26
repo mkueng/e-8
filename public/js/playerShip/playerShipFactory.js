@@ -58,7 +58,8 @@ class PlayerShipFactory {
     const featureInstances = this.#createFeatures({features, canvas});
     const weaponsInstances = this.#createWeapons({weapons, canvas});
     const fuelInstance = this.#createFuel({fuel});
-    const radar = this.#createRadar();
+    await this.#createRadar();
+    await this.#createHud();
 
 
     return new PlayerShip({
@@ -90,11 +91,16 @@ class PlayerShipFactory {
       weapons: weaponsInstances,
       width: imageResource.image.width,
       image: imageResource.image,
+      coordinates : 0
     });
   };
 
-  #createRadar = async ()=>{
+  #createHud = async () =>{
+    await new HudLeft().init();
+    await new HudRight().init();
+  }
 
+  #createRadar = async ()=>{
     return await new Radar().init();
   }
 

@@ -6,6 +6,7 @@ class PlayerShip extends GameObject {
   static posY;
   static velY;
   static velX;
+  static coordinates;
 
   /**
    *
@@ -40,6 +41,7 @@ class PlayerShip extends GameObject {
    * @param playerShipHandler
    * @param inputHandler
    * @param hudHandler
+   * @param coordinates
    */
   constructor({
                 image,
@@ -72,7 +74,8 @@ class PlayerShip extends GameObject {
                 engineTrail,
                 playerShipHandler,
                 inputHandler,
-                hudHandler
+                hudHandler,
+                coordinates
               }) {
     super({
       isActive: true,
@@ -97,7 +100,8 @@ class PlayerShip extends GameObject {
       posDY,
       isDestroyable: true,
       canDestroy: true,
-      hitWidth: width + 70
+      hitWidth: width + 70,
+      coordinates
     })
 
     Object.assign(this, {
@@ -336,6 +340,12 @@ class PlayerShip extends GameObject {
       this.posX = this.lowerBoundX;
     }
 
+    //coordinates
+    this.coordinates = this.coordinates + (this.velX * deltaTime);
+
+    console.log(this.coordinates);
+
+    PlayerShip.coordinates = this.coordinates;
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
 

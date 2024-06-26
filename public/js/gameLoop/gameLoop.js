@@ -7,7 +7,6 @@ class GameLoop {
   #galaxyCoordinatesIncrement = 5;
   #gameSpeedFactor = 0.1;
   #subscribers = [];
-  #galaxyCoordinate = 50000;
   #animationId = null;
   #frameCounter = 0;
   #deltaTime = 0;
@@ -42,7 +41,6 @@ class GameLoop {
    * @param deltaTime
    */
   #update = (deltaTime) => {
-    this.#galaxyCoordinate += this.#galaxyCoordinatesIncrement;
     CollisionDetector.instance.performCollisionCheck();
     GameObjectsHandler.instance.removeGameObjects();
 
@@ -97,7 +95,6 @@ class GameLoop {
       this.#ticker = 0;
       this.#subscribers.forEach(subscriber => {
         subscriber.updateFromGameLoop({
-          "coordinatesUpdate": this.#galaxyCoordinate,
           "frameTime:": this.#frameCounter
         })
       })
@@ -153,14 +150,13 @@ class GameLoop {
     this.#animate(performance.now());
     this.#hudInterval = setInterval(()=>{
       this.#hudHandler.updateHudInfo({
-        coordinates: this.#galaxyCoordinate,
         time: this.#deltaTime.toFixed(2),
         systemsStatus: this.#frameCounter/2
       });
 
       this.#frameCounter = 0;
       for (const subscriber of this.#subscribers) {
-        subscriber.updateFromGameLoop({message:"coordinatesUpdate", payload: {coordinate: this.#galaxyCoordinate}});
+        subscriber.updateFromGameLoop({message:""});
       }
     },2000)
   }

@@ -5,29 +5,15 @@ class HudHandler {
   #dynamicContextRight;
 
   #initContexts = () => {
-    //dynamic left
-    this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;
-    this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
-    this.#dynamicContextLeft.height = e8.global.canvasHandler.getCanvas("hudDynamicLeft").height;
-    this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0);
-    this.#dynamicContextLeft.transform(0.05, 1.2, 1, 0, 10, 0)
-    this.#dynamicContextLeft.font = "10px myFont";
 
-    //dynamic right
-    this.#dynamicContextRight = e8.global.canvasHandler.getCanvas("hudDynamicRight").context;
-    this.#dynamicContextRight.width = e8.global.canvasHandler.getCanvas("hudDynamicRight").width;
-    this.#dynamicContextRight.height = e8.global.canvasHandler.getCanvas("hudDynamicRight").height;
-    this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
-    this.#dynamicContextRight.transform(-0.05, 1.2, 1, 0, 40, 0);
-    this.#dynamicContextRight.font = "10px myFont";
   }
 
 
   constructor() {
 
     setInterval(() => {
-      this.#renderDisplayLeft();
-      this.#renderDisplayRight();
+      //this.#renderDisplayLeft();
+      //this.#renderDisplayRight();
 
       //console.log("hud render time: ", stop - start);
     }, 500);
@@ -35,8 +21,8 @@ class HudHandler {
 
   init = async() => {
 
-    this.#initContexts();
-    this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
+    //this.#initContexts();
+    //this.fillRectRight = this.#dynamicContextRight.fillRect.bind(this.#dynamicContextRight);
 
 
   }

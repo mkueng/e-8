@@ -15,7 +15,12 @@ class CanvasHandler {
     haze: "haze",
     dust: "dust",
     explosion: "explosion",
-    playerShip: "playerShip"
+    playerShip: "playerShip",
+    hudDynamicRight: "hudDynamicRight",
+    hudDynamicLeft: "hudDynamicLeft",
+    hudDynamicMiddle: "hudDynamicMiddle",
+    terminal: "terminal",
+    terminalContent: "terminalContent"
   }
 
   #canvases = {
@@ -112,7 +117,7 @@ class CanvasHandler {
       },
       "canvasStyles": {
         "top": 20 + "px",
-        "left": 100+"px",
+        "left": 100 + "px",
         "color": "grey",
         "border-radius": "10px"
 
@@ -124,19 +129,20 @@ class CanvasHandler {
     "hudDynamicRight": {
       "id": "hudDynamicRight",
       "class": "sectionCanvasRight",
+      "alpha": true,
       "contextStyles": {
         "font": "15px myFont"
       },
       "canvasStyles": {
-        "top": 20+ "px",
-        "right": 100+ "px",
-        "color": "red",
+        "top": 20 + "px",
+        "right": 115 + "px",
+        "color": "grey",
         "border-radius": "10px",
 
       },
       "width": 440,
-      "height": 160,
-      "opacity": 0.7
+      "height": 150,
+      "opacity": 0.1
     },
 
     "hudDynamicMiddle": {

@@ -75,7 +75,8 @@ class GameObject {
                 velX,
                 velY,
                 width,
-                rotation
+                rotation,
+                coordinates
               }) {
     this.accX = accX || 0;
     this.accY = accY || 0;
@@ -114,6 +115,7 @@ class GameObject {
     this.id = crypto.randomUUID();
     this.context = null;
     this.rotation = rotation || 0;
+    this.coordinates = coordinates || null;
 
     if (canvas) {
       this.context = canvas.getContext("2d");
