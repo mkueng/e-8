@@ -77,35 +77,35 @@ class GameObject {
                 width,
                 rotation
               }) {
-    this.accX = accX;
-    this.accY = accY;
+    this.accX = accX || 0;
+    this.accY = accY || 0;
     this.alpha = alpha || 1;
     this.animationLoop = animationLoop || null;
     this.canDestroy = canDestroy || false;
-    this.canvas = canvas;
-    this.currentFrame = currentFrame;
-    this.dependencies = dependencies;
-    this.frames = frames;
-    this.height = height;
+    this.canvas = canvas || null;
+    this.currentFrame = currentFrame || 0;
+    this.dependencies = dependencies || [];
+    this.frames = frames || 1;
+    this.height = height || 0;
     this.hitWidth = hitWidth || width;
-    this.identification = identification;
+    this.identification = identification || "";
     this.image = image;
     this.isActive = isActive || false;
     this.isDestroyable = isDestroyable || false;
     this.isHittable = isHittable || false;
-    this.maxVelX = maxVelX;
-    this.maxVelY = maxVelY;
+    this.maxVelX = maxVelX || 0;
+    this.maxVelY = maxVelY || 0;
     this.posDX = posDX || 0;
     this.posDY = posDY || 0;
-    this.posX = posX;
-    this.posY = posY;
+    this.posX = posX || 0;
+    this.posY = posY || 0;
     this.posZ = posZ || 0;
-    this.sound = sound;
-    this.spriteSheet = spriteSheet;
-    this.spriteSheetColumns = spriteSheetColumns;
-    this.spriteSheetRows = spriteSheetRows;
-    this.stride = stride;
-    this.strideX = strideX;
+    this.sound = sound || null;
+    this.spriteSheet = spriteSheet || null;
+    this.spriteSheetColumns = spriteSheetColumns || null;
+    this.spriteSheetRows = spriteSheetRows || null;
+    this.stride = stride || null;
+    this.strideX = strideX || null;
     this.strideY = strideY;
     this.subscriber = subscriber;
     this.velX = velX || 0;
@@ -113,7 +113,7 @@ class GameObject {
     this.width = width;
     this.id = crypto.randomUUID();
     this.context = null;
-    this.rotation = rotation;
+    this.rotation = rotation || 0;
 
     if (canvas) {
       this.context = canvas.getContext("2d");
@@ -225,9 +225,7 @@ class GameObject {
   update(deltaTime) {
     if (this.isActive) {
       if (this.posX+this.posDX > 0 - this.width) {
-       // this.posX = this.posX + (this.velX*deltaTime)
         this.posX = this.posX + this.velX*deltaTime+(PlayerShip.velX*this.posZ);
-       //console.log(this.posX);
       } else {
         this.destroy();
         if (this.dependencies) {

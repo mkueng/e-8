@@ -5,13 +5,6 @@ class HudHandler {
   #dynamicContextRight;
 
   #initContexts = () => {
-
-    //dynamic middle
-    this.dynamicContextMiddle = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").context;
-    this.dynamicContextMiddle.width = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").width;
-    this.dynamicContextMiddle.height = e8.global.canvasHandler.getCanvas("hudDynamicMiddle").height;
-    this.dynamicContextMiddle.globalAlpha = 0.8;
-
     //dynamic left
     this.#dynamicContextLeft = e8.global.canvasHandler.getCanvas("hudDynamicLeft").context;
     this.#dynamicContextLeft.width = e8.global.canvasHandler.getCanvas("hudDynamicLeft").width;
@@ -31,9 +24,6 @@ class HudHandler {
 
 
   constructor() {
-    this.hudImage = document.querySelector("#hud");
-    this.naviOrbImage = document.querySelector("#navi-orb");
-    this.naviOrbImagePosX = (e8.global.screenWidth / 6 - (this.naviOrbImage.width / 2));
 
     setInterval(() => {
       this.#renderDisplayLeft();
@@ -158,22 +148,5 @@ class HudHandler {
     this.fillRectRight(40, 77, this.#shield, 6);
   }
 
-  renderNavi = () => {
-    const { dynamicContextMiddle: ctx, naviOrbImagePosX, naviOrbImage, hudImage } = this;
-    const { screenWidth, screenHeight, colors } = e8.global;
-    const enemyShips = EnemyShipHandler.enemyShips;
 
-    ctx.clearRect(0, 0, ctx.width, ctx.height);
-
-    Object.values(enemyShips).forEach(({ posX, posY, width }) => {
-      const rectX = naviOrbImagePosX + naviOrbImage.width / (screenWidth / posX * 3.5) + 65;
-      const rectY = 30 + naviOrbImage.height / (screenHeight / posY * 2.2);
-
-      ctx.fillStyle = width > 150 ? colors.alloyOrange : colors.tiffanyBlue;
-      ctx.fillRect(rectX, rectY, 5, 5);
-    });
-
-    ctx.drawImage(naviOrbImage, naviOrbImagePosX, 10);
-    ctx.drawImage(hudImage, 0, 0, ctx.width, ctx.height);
-  }
 }

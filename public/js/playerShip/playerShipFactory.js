@@ -58,6 +58,8 @@ class PlayerShipFactory {
     const featureInstances = this.#createFeatures({features, canvas});
     const weaponsInstances = this.#createWeapons({weapons, canvas});
     const fuelInstance = this.#createFuel({fuel});
+    const radar = this.#createRadar();
+
 
     return new PlayerShip({
       accX: generic.accX,
@@ -90,6 +92,11 @@ class PlayerShipFactory {
       image: imageResource.image,
     });
   };
+
+  #createRadar = async ()=>{
+
+    return await new Radar().init();
+  }
 
   /**
    *

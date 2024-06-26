@@ -46,15 +46,11 @@ class GameLoop {
     CollisionDetector.instance.performCollisionCheck();
     GameObjectsHandler.instance.removeGameObjects();
 
-
     // update game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++) {
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
-
-
-
   }
 
   /**
@@ -67,12 +63,11 @@ class GameLoop {
     }
 
     //render hud
-    e8.global.hudHandler.renderNavi();
+    //e8.global.hudHandler.renderNavi();
 
     //render game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++){
-
       GameObjectsHandler.gameObjects[i].render();
     }
   }

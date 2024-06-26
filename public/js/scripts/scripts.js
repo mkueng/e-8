@@ -90,6 +90,7 @@ class Scripts {
 
     // hud
     await ScriptLoader.loadScript("js/hud/hudHandler.js");
+    await ScriptLoader.loadScript("js/hud/radar.js");
 
     // canvas
     await ScriptLoader.loadScript("js/canvas/canvasHandler.js");
