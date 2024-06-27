@@ -7,6 +7,7 @@ class PlayerShip extends GameObject {
   static velY;
   static velX;
   static coordinates;
+  static fuel;
 
   /**
    *
@@ -341,13 +342,15 @@ class PlayerShip extends GameObject {
     }
 
     //coordinates
-    this.coordinates = this.coordinates + (this.velX * deltaTime);
+    this.coordinates = this.coordinates + (this.velX * deltaTime / 5);
 
-    console.log(this.coordinates);
+   // console.log(this.coordinates);
 
     PlayerShip.coordinates = this.coordinates;
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
+    PlayerShip.fuel = this.fuel.amount;
+    PlayerShip.shield = this.shield.strength;
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {

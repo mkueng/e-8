@@ -114,8 +114,8 @@ class ProceduralPlanet {
     const noise = new Noise(noiseRange);
     const octaves = (octavesRange);
     const lacunarity = (lacunarityRange)+1; //2
-    const persistence = (Math.random())+persistenceOffset;
-    const baseFrequency = Math.floor(Math.random()+baseFrequencyOffset);
+    const persistence = persistenceOffset;
+    const baseFrequency = baseFrequencyOffset;
 
     for (let y = 0; y < height; y+=2) {
       for (let x = 0; x < width; x+=2) {
@@ -190,15 +190,15 @@ class ProceduralPlanet {
    */
   #addAtmosphere =(r, g, b, radius, offScreenCtx)=>{
 
-    offScreenCtx.globalAlpha =0.8;
+    offScreenCtx.globalAlpha = 0.9;
     const gradient = this.#offScreenContext.createRadialGradient(
       radius+40, radius+40, 20,
       radius+40, radius+40, radius+20
     );
 
     gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(0.87, "rgba("+r+","+ g+"," +b+", 0.8)");
-    gradient.addColorStop(1, "rgba("+r+","+ g+"," +b+", 1)");
+    gradient.addColorStop(0.93, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(1, "rgba("+r+5+","+ g+5+"," +b+5+", 0.8)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";

@@ -41,6 +41,7 @@ class Galaxy {
   #createGameObjectFromWorkerData = (dataFromWorker) =>{
       let img = new Image();
       let planetData = dataFromWorker.planetData;
+      console.log("planetData", planetData);
       img.onload = () => {
 
         let planetObject = new Planet({
@@ -48,15 +49,15 @@ class Galaxy {
           width: img.width/2,
           height: img.height/2,
           posX: e8.global.screenWidth,
-          posY: Math.floor(Math.random()*e8.global.screenHeight)-(planetData.radius*1.2),
+          posY: e8.global.screenHeight-(e8.global.screenHeight / 50 * planetData.q),
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1 * Math.random() * 0.01,
+          posZ: -1 * planetData.radius / 10 * 0.0001,
           velY: 0,
           canvas: this.canvas
         })
-        console.log("planet created", planetObject.posZ);
+        console.log("planet created", planetObject.posY);
         GameObjectsHandler.instance.addGameObject(planetObject);
         for(const subscriber of this.#subscribers) {
           subscriber.update({planetObject});
@@ -79,10 +80,12 @@ class Galaxy {
    * @param data
    */
   updateFromGameLoop = (data)=>{
-    if (data.coordinatesUpdate > this.upcoming) {
+    if (PlayerShip.coordinates > this.upcoming) {
       this.#galaxyIndex++
+      console.log("creating planet");
       let randomDistributionEntry = this.#distribution[this.#galaxyIndex];
       let randomPlanetData = this.#galaxyMap[randomDistributionEntry];
+      console.log("randomPlanetData", randomPlanetData);
       this.#createPlanet(randomPlanetData);
       this.upcoming = this.#distribution[this.#galaxyIndex].toFixed(0);
     }
@@ -124,7 +127,7 @@ class Galaxy {
       const last3Digits = this.#getLastNDigits(value,3);
 
       galaxyMap[value.toFixed(0)]= {
-        radius: parseInt((this.#getLastNDigits(value, 2) * 6+40).toFixed(0)),
+        radius: parseInt((this.#getLastNDigits(value, 2) * 8+40).toFixed(0)),
         noiseRange : lastDigit,
         octavesRange : lastDigit,
         lacunarityRange : lastDigit / 4,
@@ -146,7 +149,7 @@ class Galaxy {
    */
   #createPseudoRandomDistribution = (scale)=> {
     return Array.from({ length: scale }, (_, i) => i)
-      .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 10000000))
+      .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 100000000))
       .sort((a, b) => b - a);
   }
 }

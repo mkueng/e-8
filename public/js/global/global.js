@@ -7,7 +7,7 @@ e8.global.events = {
   "visibilityChange": "visibilityChange"
 }
 
-e8.global.maxWidth = 2700;
+e8.global.maxWidth = 3700;
 e8.global.maxHeight = 1800;
 e8.global.minWidth = 1100;
 e8.global.minHeight = 420;

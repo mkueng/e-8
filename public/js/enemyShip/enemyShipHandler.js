@@ -21,6 +21,7 @@ class EnemyShipHandler {
    * @param interval
    */
   startCreation = (interval) => {
+
     setTimeout(()=>{
       const variationKeys = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
       const variation = Math.floor(Math.random() * variationKeys.length);

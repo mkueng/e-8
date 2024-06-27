@@ -18,9 +18,9 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX:4000,
+    maxVelX: 20,
     maxVelY: 7,
-    accX: 1.4,
+    accX: 0.15,
     accY: 0.3
   }
 
@@ -54,8 +54,8 @@ class PlayerShipPropertiesClassA {
 
   static fuel = {
     type: FuelFactory.FUEL_TYPES.xenon,
-    amount: 150,
-    max: 1000
+    amount: 100,
+    max: 100
   }
 
   static shield = {

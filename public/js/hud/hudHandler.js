@@ -110,8 +110,8 @@ class HudHandler {
     if (this.#fuel > 100) this.#fuel = 100;
 
     fuelInfoBarColor =
-      this.#fuel < 30 ? "red" :
-        this.#fuel < 60 ? "yellow" :
+      PlayerShip.fuel < 30 ? "red" :
+        PlayerShip.fuel < 60 ? "yellow" :
           "lightgreen";
 
     ctx.strokeRect(40, 60, 100, 8);
@@ -129,7 +129,7 @@ class HudHandler {
                   "lightgreen";
     } else shieldInfoBarColor = "grey";
 
-    ctx.strokeRect(40, 76, 100, 8);
+    ctx.strokeRect(40, 76, 103, 8);
     ctx.fillStyle = shieldInfoBarColor;
     this.fillRectRight(40, 77, this.#shield, 6);
   }
