@@ -7,6 +7,7 @@ class Galaxy {
   #galaxyIndex = 0;
   #subscribers = [];
   #scale;
+  #planetObjects = {};
 
   constructor({
                 scale
@@ -20,6 +21,7 @@ class Galaxy {
     this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.#distribution[this.#galaxyIndex];
+    console.log("this.upcoming:", this.upcoming);
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
 
     e8.global.gameLoop.subscribe(this);
@@ -27,6 +29,13 @@ class Galaxy {
     this.#galaxyWorker.postMessage({
       type : "init"
     })
+
+    let distributionEntry = this.#distribution[this.#galaxyIndex];
+    let planetData = this.#galaxyMap[distributionEntry];
+    planetData["coordinates"]= distributionEntry;
+    console.log("creating planet: ", planetData);
+    this.#createPlanet(planetData);
+    this.#galaxyIndex++
 
     this.#galaxyWorker.onmessage = (event)=> {
       const dataFromWorker = event.data;
@@ -41,15 +50,15 @@ class Galaxy {
   #createGameObjectFromWorkerData = (dataFromWorker) =>{
       let img = new Image();
       let planetData = dataFromWorker.planetData;
-      console.log("planetData", planetData);
       img.onload = () => {
 
         let planetObject = new Planet({
+          coordinates: planetData.coordinates,
           image: img,
           width: img.width/2,
           height: img.height/2,
           posX: e8.global.screenWidth,
-          posY: e8.global.screenHeight-(e8.global.screenHeight / 50 * planetData.q),
+          posY: e8.global.screenHeight-(e8.global.screenHeight / 60 * planetData.q),
           posDX: 0,
           posDY: 0,
           velX: 0,
@@ -57,11 +66,9 @@ class Galaxy {
           velY: 0,
           canvas: this.canvas
         })
-        console.log("planet created", planetObject.posY);
-        GameObjectsHandler.instance.addGameObject(planetObject);
-        for(const subscriber of this.#subscribers) {
-          subscriber.update({planetObject});
-        }
+        console.log("planet created", planetObject);
+        this.#planetObjects[planetObject.coordinates]= planetObject;
+        console.log("this.#planetObjects:", this.#planetObjects);
         URL.revokeObjectURL(img.src);
       }
       img.src = URL.createObjectURL(dataFromWorker.imageBlob)
@@ -81,13 +88,17 @@ class Galaxy {
    */
   updateFromGameLoop = (data)=>{
     if (PlayerShip.coordinates > this.upcoming) {
+      GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcoming]);
+      let distributionEntry = this.#distribution[this.#galaxyIndex];
+      let planetData = this.#galaxyMap[distributionEntry];
+      planetData["coordinates"]= distributionEntry;
+      console.log("creating planet: ", planetData);
+      this.#createPlanet(planetData);
+      this.upcoming = this.#distribution[this.#galaxyIndex];
       this.#galaxyIndex++
-      console.log("creating planet");
-      let randomDistributionEntry = this.#distribution[this.#galaxyIndex];
-      let randomPlanetData = this.#galaxyMap[randomDistributionEntry];
-      console.log("randomPlanetData", randomPlanetData);
-      this.#createPlanet(randomPlanetData);
-      this.upcoming = this.#distribution[this.#galaxyIndex].toFixed(0);
+      console.log("this.upcoming:", this.upcoming);
+
+
     }
   }
 
@@ -127,7 +138,7 @@ class Galaxy {
       const last3Digits = this.#getLastNDigits(value,3);
 
       galaxyMap[value.toFixed(0)]= {
-        radius: parseInt((this.#getLastNDigits(value, 2) * 8+40).toFixed(0)),
+        radius: parseInt((this.#getLastNDigits(value, 2) * 12+40).toFixed(0)),
         noiseRange : lastDigit,
         octavesRange : lastDigit,
         lacunarityRange : lastDigit / 4,
@@ -149,7 +160,7 @@ class Galaxy {
    */
   #createPseudoRandomDistribution = (scale)=> {
     return Array.from({ length: scale }, (_, i) => i)
-      .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 100000000))
+      .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 200000000))
       .sort((a, b) => b - a);
   }
 }

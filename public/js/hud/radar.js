@@ -29,7 +29,7 @@ class Radar extends GameObject {
 
     Object.values(enemyShips).forEach(({ posX, posY, width }) => {
       const rectX = naviOrbImagePosX + naviOrbImage.width / (screenWidth / posX * 3.5) + 65;
-      const rectY = 30 + naviOrbImage.height / (screenHeight / posY * 2.2);
+      const rectY = 20 + naviOrbImage.height / (screenHeight / posY * 2);
 
       ctx.fillStyle = width > 150 ? colors.alloyOrange : colors.tiffanyBlue;
       ctx.fillRect(rectX, rectY, 5, 5);

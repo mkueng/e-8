@@ -2,12 +2,13 @@
 class Planet extends GameObject {
 
   constructor({
+    coordinates,
                 image,
                 width,
                 height,
                 posX,
                 posY,
-                  posZ,
+                posZ,
                 posDX,
                 posDY,
                 velX,
@@ -16,6 +17,7 @@ class Planet extends GameObject {
               }) {
     super({
       isActive: true,
+      coordinates,
         identification: "planet",
       image,
       width,

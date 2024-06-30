@@ -8,6 +8,8 @@ class PlayerShip extends GameObject {
   static velX;
   static coordinates;
   static fuel;
+  static status;
+  static weapons;
 
   /**
    *
@@ -130,6 +132,8 @@ class PlayerShip extends GameObject {
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
     this.viewPortVelX = 0;
+    this.status = "green";
+    PlayerShip.weapons = this.weapons;
 
     this.controls = {
       down: false,
@@ -142,11 +146,7 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
     this.initializeFeatures();
     this.initializeShield();
-    this.hudHandler.updateHudInfo({
-      shield : this.shield.strength,
-      fuel: this.fuel.amount,
-      weapons : this.weapons
-    });
+
 
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -270,6 +270,7 @@ class PlayerShip extends GameObject {
       SpeechHandler.playStatement(SpeechHandler.statements.shieldCritical)
       this.shieldInfoCritical = true;
       this.shieldInfoRecharged = false;
+
     }
 
     if (this.shield.strength <= 1){
@@ -318,6 +319,12 @@ class PlayerShip extends GameObject {
       } else {
         this.dependencies[0].isActive = false; // propulsion off
       }
+    }
+
+    if (this.fuel.amount < 30 || this.shield.strength < 30) {
+      PlayerShip.status = "red"
+    } else {
+      PlayerShip.status = "green"
     }
 
     // bounds
@@ -375,11 +382,12 @@ class PlayerShip extends GameObject {
       }
     }
 
+    /*
     this.hudHandler.updateHudInfo({
       shield : this.shield.strength,
       fuel: this.fuel.amount,
       weapons : this.weapons
-    });
+    });*/
   }
 
   /**

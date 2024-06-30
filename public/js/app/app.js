@@ -7,7 +7,7 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-    SoundHandler.setFXGain({percentage: 1});
+    SoundHandler.setFXGain({percentage: 0.7});
     SoundHandler.setMusicGain({percentage: 0.1});
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
@@ -133,7 +133,6 @@ class App {
     e8.global.particleGenerator = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
     e8.global.spaceStationHandler = new SpaceStationHandler();
-    e8.global.hudHandler = new HudHandler();
 
   }
 }

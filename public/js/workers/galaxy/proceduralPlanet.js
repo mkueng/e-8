@@ -26,6 +26,7 @@ class ProceduralPlanet {
    */
   createPlanet=({
 
+                  coordinates,
                   radius,
                   noiseRange,
                   octavesRange,
@@ -197,7 +198,7 @@ class ProceduralPlanet {
     );
 
     gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(0.93, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(0.95, "rgba("+r+","+ g+"," +b+", 0.8)");
     gradient.addColorStop(1, "rgba("+r+5+","+ g+5+"," +b+5+", 0.8)");
 
     offScreenCtx.fillStyle = gradient;

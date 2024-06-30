@@ -16,7 +16,6 @@ class GameObject {
    * @param hitWidth
    * @param identification
    * @param image
-   * @param imageData
    * @param isActive
    * @param isHittable
    * @param isDestroyable
@@ -39,6 +38,8 @@ class GameObject {
    * @param velY
    * @param width
    * @param rotation
+   * @param coordinates
+   * @param contextClear
    */
   constructor({
                 accX,
@@ -76,7 +77,8 @@ class GameObject {
                 velY,
                 width,
                 rotation,
-                coordinates
+                coordinates,
+                isContextPreventedOfBeingCleared
               }) {
     this.accX = accX || 0;
     this.accY = accY || 0;
@@ -116,6 +118,8 @@ class GameObject {
     this.context = null;
     this.rotation = rotation || 0;
     this.coordinates = coordinates || null;
+    this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
+
 
     if (canvas) {
       this.context = canvas.getContext("2d");

@@ -37,7 +37,7 @@ class GameController {
         await this.#playerShipHandler.createShip();
 
         //hud
-        await e8.global.hudHandler.init();
+
 
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();
@@ -47,7 +47,7 @@ class GameController {
         // freighters
         this.freighterHandler = new FreighterHandler();
         await this.freighterHandler.init();
-        await this.freighterHandler.create();
+        //await this.freighterHandler.create();
 
         this.game = new Game({});
         document.querySelector("#game").style.display = "block";

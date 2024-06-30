@@ -15,12 +15,14 @@ class GameObjectsHandler {
    */
   addGameObject = (gameObject) => {
     try {
-      GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
+      if (!gameObject.isContextPreventedOfBeingCleared) {
+        GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
+      }
+
     } catch(e){
        console.error(e);
     }
     GameObjectsHandler.gameObjects.push(gameObject);
-
   }
 
   /**

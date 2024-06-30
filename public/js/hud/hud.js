@@ -1,10 +1,12 @@
 class Hud extends GameObject {
 
 
-  constructor({canvas}){
+  constructor({canvas, isContextPreventedOfBeingCleared}){
 
     super({
-      canvas
+      canvas,
+      isContextPreventedOfBeingCleared
+
     });
   }
 

@@ -18,6 +18,7 @@ onmessage = (evt)=>{
     case "create" : {
       const planetData = evt.data.payload;
       proceduralPlanet.createPlanet({
+        coordinates: planetData.coordinates,
         radius: planetData.radius,
         noiseRange : planetData.noiseRange,
         octavesRange : planetData.octavesRange,
