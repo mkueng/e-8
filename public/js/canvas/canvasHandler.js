@@ -153,7 +153,7 @@ class CanvasHandler {
         "fillStyle": "white"
       },
       "canvasStyles": {
-        "top": 0 + "px",
+        "top": 10 + "px",
         "left": (window.innerWidth / 2 - e8.global.screenWidth / 6) + "px",
         "color": "white",
 
