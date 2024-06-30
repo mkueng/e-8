@@ -9,7 +9,6 @@ class Radar extends GameObject {
   }
 
   init = async () => {
-    this.hudImage = document.querySelector("#hud");
     this.naviOrbImage = document.querySelector("#navi-orb");
     this.naviOrbImagePosX = (e8.global.screenWidth / 6 - (this.naviOrbImage.width / 2));
     GameObjectsHandler.instance.addGameObject(this);
@@ -36,7 +35,7 @@ class Radar extends GameObject {
     });
 
     ctx.drawImage(naviOrbImage, naviOrbImagePosX, 10);
-    ctx.drawImage(hudImage, 0, 0, canvas.width, canvas.height);
+
 
   }
 }

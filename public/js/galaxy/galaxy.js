@@ -9,6 +9,15 @@ class Galaxy {
   #scale;
   #planetObjects = {};
 
+
+  get distribution() {
+    return this.#distribution;
+  }
+
+  get galaxyIndex() {
+    return this.#galaxyIndex;
+  }
+
   constructor({
                 scale
   }){

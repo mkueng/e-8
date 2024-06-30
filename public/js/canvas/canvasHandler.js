@@ -117,7 +117,7 @@ class CanvasHandler {
       },
       "canvasStyles": {
         "top": 20 + "px",
-        "left": 100 + "px",
+        "left": 30 + "px",
         "color": "grey",
         "border-radius": "10px"
 
@@ -135,7 +135,7 @@ class CanvasHandler {
       },
       "canvasStyles": {
         "top": 20 + "px",
-        "right": 115 + "px",
+        "right": 40 + "px",
         "color": "grey",
         "border-radius": "10px",
 

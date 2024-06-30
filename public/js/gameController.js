@@ -37,7 +37,8 @@ class GameController {
         await this.#playerShipHandler.createShip();
 
         //hud
-
+        this.scanner = new Scanner({galaxy: this.#galaxy});
+        await this.scanner.init();
 
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();
