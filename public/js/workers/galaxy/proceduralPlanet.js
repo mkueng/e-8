@@ -191,15 +191,15 @@ class ProceduralPlanet {
    */
   #addAtmosphere =(r, g, b, radius, offScreenCtx)=>{
 
-    offScreenCtx.globalAlpha = 0.9;
+    offScreenCtx.globalAlpha = 1;
     const gradient = this.#offScreenContext.createRadialGradient(
       radius+40, radius+40, 20,
       radius+40, radius+40, radius+20
     );
 
     gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(0.95, "rgba("+r+","+ g+"," +b+", 0.8)");
-    gradient.addColorStop(1, "rgba("+r+5+","+ g+5+"," +b+5+", 0.8)");
+    gradient.addColorStop(0.96, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(1, "rgba("+r+5+","+ g+5+"," +b+5+", 1)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
