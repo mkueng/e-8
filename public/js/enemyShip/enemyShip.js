@@ -177,7 +177,7 @@ class EnemyShip extends GameObject {
     }
 
     if (this.posX >- this.width && this.posX < (e8.global.screenWidth + e8.global.screenWidth+this.width)) {
-      this.posX = this.posX + ((this.velX * dt) + (PlayerShip.velX / 7))
+      this.posX = this.posX + ((this.velX * dt) + (PlayerShip.velX / 15))
     } else {
       this.terminate();
       this.enemyShipHandler.shipDestroyed(this.id);

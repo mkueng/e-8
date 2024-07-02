@@ -279,6 +279,8 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
+
+
   /**
    *
    * @param deltaTime
@@ -382,12 +384,6 @@ class PlayerShip extends GameObject {
       }
     }
 
-    /*
-    this.hudHandler.updateHudInfo({
-      shield : this.shield.strength,
-      fuel: this.fuel.amount,
-      weapons : this.weapons
-    });*/
   }
 
   /**

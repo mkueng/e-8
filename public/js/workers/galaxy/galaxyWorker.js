@@ -9,7 +9,7 @@ onmessage = (evt)=>{
       importScripts('proceduralPlanet.js');
       importScripts('sphereImageLib.js');
       importScripts('noise.js');
-      importScripts('/js/util/util.js');
+
 
       proceduralPlanet = new ProceduralPlanet();
       break;

@@ -112,11 +112,17 @@ class ProceduralPlanet {
                     baseFrequencyOffset
                   })=> {
 
-    const noise = new Noise(noiseRange);
+    const noise = new Noise(10000);
+    console.log("noiseRange:", noiseRange);
     const octaves = (octavesRange);
-    const lacunarity = (lacunarityRange)+1; //2
-    const persistence = persistenceOffset;
-    const baseFrequency = baseFrequencyOffset;
+    const lacunarity = (lacunarityRange);
+    console.log("lacunarity:", lacunarity);
+    const persistence = persistenceOffset = 0.9;
+    console.log("persistence:", persistence);
+    const baseFrequency = baseFrequencyOffset =2;
+    console.log("baseFrequency:", baseFrequency);
+
+
 
     for (let y = 0; y < height; y+=2) {
       for (let x = 0; x < width; x+=2) {
@@ -197,9 +203,9 @@ class ProceduralPlanet {
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(0.96, "rgba("+r+","+ g+"," +b+", 0.8)");
-    gradient.addColorStop(1, "rgba("+r+5+","+ g+5+"," +b+5+", 1)");
+    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.4)");
+    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 1)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";

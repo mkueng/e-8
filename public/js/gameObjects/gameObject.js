@@ -197,6 +197,7 @@ class GameObject {
       const column = this.currentFrame % this.spriteSheetColumns;
       const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
 
+
       this.context.drawImage(
         this.spriteSheet,
         column * this.strideX,
@@ -209,6 +210,7 @@ class GameObject {
         this.height
       );
     } else if (this.image) {
+
 
       this.context.drawImage(
         this.image,

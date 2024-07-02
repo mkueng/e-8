@@ -25,9 +25,9 @@ class Galaxy {
   }
 
   init = async () =>{
-    this.#distribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
+    this.#distribution = this.createPseudoRandomDistribution(this.#scale).reverse();
     console.log(this.#distribution);
-    this.#galaxyMap = this.#createGalaxyMap(this.#distribution);
+    this.#galaxyMap = this.createGalaxyMap(this.#distribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcoming = this.#distribution[this.#galaxyIndex];
     console.log("this.upcoming:", this.upcoming);
@@ -64,14 +64,14 @@ class Galaxy {
         let planetObject = new Planet({
           coordinates: planetData.coordinates,
           image: img,
-          width: img.width/2,
-          height: img.height/2,
+          width: img.width,
+          height: img.height,
           posX: e8.global.screenWidth,
           posY: e8.global.screenHeight-(e8.global.screenHeight / 60 * planetData.q),
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1 * planetData.radius / 10 * 0.0001,
+          posZ: -1 * planetData.radius / 10 * 0.0003,
           velY: 0,
           canvas: this.canvas
         })
@@ -139,7 +139,7 @@ class Galaxy {
    * @param distribution
    * @returns {{}}
    */
-  #createGalaxyMap = (distribution) =>{
+  createGalaxyMap = (distribution) =>{
     let galaxyMap = {};
     for (const value of distribution){
       const lastDigit = this.#getLastNDigits(value,1);
@@ -147,7 +147,7 @@ class Galaxy {
       const last3Digits = this.#getLastNDigits(value,3);
 
       galaxyMap[value.toFixed(0)]= {
-        radius: parseInt((this.#getLastNDigits(value, 2) * 12+40).toFixed(0)),
+        radius: parseInt((this.#getLastNDigits(value, 2) * 4+40).toFixed(0)),
         noiseRange : lastDigit,
         octavesRange : lastDigit,
         lacunarityRange : lastDigit / 4,
@@ -167,7 +167,7 @@ class Galaxy {
    * @param scale
    * @returns {number[]}
    */
-  #createPseudoRandomDistribution = (scale)=> {
+  createPseudoRandomDistribution = (scale)=> {
     return Array.from({ length: scale }, (_, i) => i)
       .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 200000000))
       .sort((a, b) => b - a);

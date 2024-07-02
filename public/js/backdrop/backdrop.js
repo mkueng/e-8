@@ -5,6 +5,7 @@ class Backdrop {
     this.canvas = e8.global.canvasHandler.getCanvas("backdrop").canvas;
     this.context = e8.global.canvasHandler.getCanvas("backdrop").context;
 
+
     this.amountOfStars = 5000;
     this.sizeRange = 1;
     this.greyColorRange = 50;
@@ -14,8 +15,9 @@ class Backdrop {
     game.style.width = e8.global.screenWidth + "px";
     game.style.height = e8.global.screenHeight + "px";
     e8.global.subscribeForGlobalEvents(this);
-
+    
     this.createBackDrop();
+
   }
 
   updateFromGlobalEvent = ({message, payload}) => {

@@ -14,7 +14,7 @@ class GameController {
     init = async () =>{
 
         // galaxy
-        this.#galaxy = new Galaxy({scale:800});
+        this.#galaxy = new Galaxy({scale:600});
         this.#galaxy.init();
 
         // dust
