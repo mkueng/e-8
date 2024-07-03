@@ -64,6 +64,9 @@ class Scripts {
     await ScriptLoader.loadScript("js/info/freighterCargoInfo.js?v=0.17");
     await ScriptLoader.loadScript("js/info/infoHandler.js?v=0.17");
 
+    // sun
+    await ScriptLoader.loadScript("js/galaxy/sun/sun.js?v=0.17");
+
 
     // backdrop
     await ScriptLoader.loadScript("js/backdrop/backdrop.js?v=0.17");

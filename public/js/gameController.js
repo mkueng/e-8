@@ -16,6 +16,8 @@ class GameController {
         // galaxy
         this.#galaxy = new Galaxy({scale:600});
         this.#galaxy.init();
+        this.sun = new Sun();
+        this.sun.init();
 
         // dust
         await e8.global.dustHandler.init();
