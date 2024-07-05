@@ -5,7 +5,7 @@ class Galaxy {
   #planetMap = {};
   #galaxyWorker = null;
   #planetIndex = 0;
-  #sunIndex =0
+  #sunIndex = 0
   #subscribers = [];
   #scale;
   #planetObjects = {};
@@ -118,8 +118,8 @@ class Galaxy {
     new Sun({
       width: size,
       height: size,
-      posX: 100,
-      posY: 200
+      posX: 350,
+      posY: 300
     })
   }
 

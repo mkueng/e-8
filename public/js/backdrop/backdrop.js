@@ -5,7 +5,6 @@ class Backdrop {
     this.canvas = e8.global.canvasHandler.getCanvas("backdrop").canvas;
     this.context = e8.global.canvasHandler.getCanvas("backdrop").context;
 
-
     this.amountOfStars = 5000;
     this.sizeRange = 1;
     this.greyColorRange = 50;

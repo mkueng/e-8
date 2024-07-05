@@ -5,30 +5,18 @@
     border-radius: 50%;
     position: absolute;
     top:0;
-    right: 0px;
-    margin: 0 auto;
-    box-shadow: 0 0 30px white, 0 0 40px white, 0 0 50px antiquewhite, 0 0 60px antiquewhite, 0 0 70px antiquewhite;
-    z-index: 1;
-}
-#sune {
-    background: azure;
-    width: 0;
-    height: 0;
-
-    position: absolute;
-    top:0;
     right: 0;
-    margin: 0 auto;
+    margin: 0;
+    filter: blur(1px) contrast(15);
+
+    box-shadow: 0 0 30px white, 0 0 40px white, 0 0 50px antiquewhite, 0 0 60px antiquewhite, 0 0 70px antiquewhite;
+
+
     z-index: 1;
 }
-body {
 
-}
 
-#ui {
 
-    z-index:1;
-}
 #ui .cover {
 
 }
@@ -37,12 +25,7 @@ body {
     filter: blur(3px) contrast(15);
 }
 
-#ui .sun_fire {
-    position: absolute;
-    top: 50px;
-    left: -70px;
 
-}
 #ui .sun_fire_inner {
     box-sizing: border-box;
 }
@@ -57,14 +40,14 @@ body {
     border-bottom: 3px solid #ffffff;
     border-left: 7px solid #e0dfdf;
     border-radius: 43% 12% 67% 47%;
-    animation: sunFireInner 112786ms infinite alternate linear;
+    animation: sunFireInner 12786ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(2) {
-    animation: sunFireLeft 191906ms infinite linear;
+    animation: sunFireLeft 91906ms infinite linear;
 }
 
 #ui .sun_fire:nth-child(3) {
-    animation: sunFire 115539ms infinite linear;
+    animation: sunFire 15539ms infinite linear;
 }
 #ui .sun_fire:nth-child(3) .sun_fire_inner {
     width: 91px;
@@ -74,27 +57,27 @@ body {
     border-bottom: 4px solid #ffffff;
     border-left: 2px solid #ffffff;
     border-radius: 52% 63% 19% 72%;
-    animation: sunFireInner 112869ms infinite alternate linear;
+    animation: sunFireInner 12869ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(4) {
-    animation: sunFire 117181ms infinite linear;
+    animation: sunFire 17181ms infinite linear;
 }
 #ui .sun_fire:nth-child(4) .sun_fire_inner {
-    width: 113px;
-    height: 113px;
+    width: 81px;
+    height: 81px;
     border-top: 7px solid #ffffff;
     border-right: 4px solid #ffffff;
     border-bottom: 8px solid #ffffff;
     border-left: 2px solid #ffffff;
     border-radius: 25% 36% 45% 77%;
-    animation: sunFireInner 112052ms infinite alternate linear;
+    animation: sunFireInner 12052ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(5) {
-    animation: sunFire 111596ms infinite linear;
+    animation: sunFire 11596ms infinite linear;
 }
 #ui .sun_fire:nth-child(5) .sun_fire_inner {
-    width: 120px;
-    height: 120px;
+    width: 87px;
+    height: 71px;
     border-top: 3px solid #ffffff;
     border-right: 5px solid #ffffff;
     border-bottom: 2px solid #ffffff;
@@ -103,7 +86,7 @@ body {
     animation: sunFireInner 12903ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(6) {
-    animation: sunFire 114450ms infinite linear;
+    animation: sunFire 14450ms infinite linear;
 }
 #ui .sun_fire:nth-child(6) .sun_fire_inner {
     width: 53px;
@@ -116,11 +99,11 @@ body {
     animation: sunFireInner 14516ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(7) {
-    animation: sunFire 118317ms infinite linear;
+    animation: sunFire 18317ms infinite linear;
 }
 #ui .sun_fire:nth-child(7) .sun_fire_inner {
-    width: 117px;
-    height: 117px;
+    width: 97px;
+    height: 97px;
     border-top: 2px solid #ffffff;
     border-right: 1px solid #ffffff;
     border-bottom: 3px solid #ffffff;
@@ -129,7 +112,7 @@ body {
     animation: sunFireInner 13986ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(8) {
-    animation: sunFirLeft 118696ms infinite linear;
+    animation: sunFirLeft 18696ms infinite linear;
 }
 #ui .sun_fire:nth-child(8) .sun_fire_inner {
     width: 106px;
@@ -142,7 +125,7 @@ body {
     animation: sunFireInner 13953ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(9) {
-    animation: sunFireLeft 111240ms infinite linear;
+    animation: sunFireLeft 11240ms infinite linear;
 }
 #ui .sun_fire:nth-child(9) .sun_fire_inner {
     width: 82px;
@@ -176,29 +159,7 @@ body {
     }
 }
 
-@keyframes sunFireInner {
-    0% {
-        transform: translate(20px, -50%) rotateZ(0deg);
-    }
-    50% {
-        transform: translate(30px, -50%) rotateZ(180deg);
-    }
-    100% {
-        transform: translate(20px, -50%) rotateZ(360deg);
-    }
-}
 
-@keyframes sunFireInnerLeft {
-    0% {
-        transform: translate(20px, -50%) rotateZ(0deg);
-    }
-    50% {
-        transform: translate(30px, -50%) rotateZ(-180deg);
-    }
-    100% {
-        transform: translate(20px, -50%) rotateZ(-360deg);
-    }
-}
 
 /*
 @keyframes moveSun {
