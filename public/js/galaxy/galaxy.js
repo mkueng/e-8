@@ -1,21 +1,23 @@
 'use strict'
 class Galaxy {
 
-  #distribution = [];
-  #galaxyMap = {};
+  #planetDistribution = [];
+  #planetMap = {};
   #galaxyWorker = null;
-  #galaxyIndex = 0;
+  #planetIndex = 0;
+  #sunIndex =0
   #subscribers = [];
   #scale;
   #planetObjects = {};
+  #sunDistribution = [];
 
 
   get distribution() {
-    return this.#distribution;
+    return this.#planetDistribution;
   }
 
-  get galaxyIndex() {
-    return this.#galaxyIndex;
+  get planetIndex() {
+    return this.#planetIndex;
   }
 
   constructor({
@@ -25,12 +27,17 @@ class Galaxy {
   }
 
   init = async () =>{
-    this.#distribution = this.createPseudoRandomDistribution(this.#scale).reverse();
-    console.log(this.#distribution);
-    this.#galaxyMap = this.createGalaxyMap(this.#distribution);
+    this.#planetDistribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
+    this.#sunDistribution = this.#createPseudoRandomDistribution(this.#scale/10).reverse();
+
+    console.log("planetDistribution:", this.#planetDistribution);
+    console.log("sunDistribution:", this.#sunDistribution);
+
+    this.#planetMap = this.#createPlanetMap(this.#planetDistribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
-    this.upcoming = this.#distribution[this.#galaxyIndex];
-    console.log("this.upcoming:", this.upcoming);
+    this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
+    this.upcomingSun = this.#sunDistribution[this.#sunIndex];
+    console.log("this.upcomingPlanet:", this.upcomingPlanet);
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
 
     e8.global.gameLoop.subscribe(this);
@@ -39,12 +46,9 @@ class Galaxy {
       type : "init"
     })
 
-    let distributionEntry = this.#distribution[this.#galaxyIndex];
-    let planetData = this.#galaxyMap[distributionEntry];
-    planetData["coordinates"]= distributionEntry;
-    console.log("creating planet: ", planetData);
-    this.#createPlanet(planetData);
-    this.#galaxyIndex++
+    this.#createPlanet();
+    this.#createSun();
+    this.#planetIndex++
 
     this.#galaxyWorker.onmessage = (event)=> {
       const dataFromWorker = event.data;
@@ -75,7 +79,6 @@ class Galaxy {
           velY: 0,
           canvas: this.canvas
         })
-        console.log("planet created", planetObject);
         this.#planetObjects[planetObject.coordinates]= planetObject;
         console.log("this.#planetObjects:", this.#planetObjects);
         URL.revokeObjectURL(img.src);
@@ -96,26 +99,37 @@ class Galaxy {
    * @param data
    */
   updateFromGameLoop = (data)=>{
-    if (PlayerShip.coordinates > this.upcoming) {
-      GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcoming]);
-      let distributionEntry = this.#distribution[this.#galaxyIndex];
-      let planetData = this.#galaxyMap[distributionEntry];
-      planetData["coordinates"]= distributionEntry;
-      console.log("creating planet: ", planetData);
-      this.#createPlanet(planetData);
-      this.upcoming = this.#distribution[this.#galaxyIndex];
-      this.#galaxyIndex++
-      console.log("this.upcoming:", this.upcoming);
 
 
+    if (PlayerShip.coordinates > this.upcomingPlanet) {
+      GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcomingPlanet]);
+      this.#createPlanet();
+      this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
+      this.#planetIndex++
     }
   }
 
-  /**
-   *
-   * @param planetData
-   */
-  #createPlanet = (planetData) => {
+  #createSun = () =>{
+    console.log("CREATE SUN");
+    const distributionEntry = this.#sunDistribution[this.#sunIndex];
+    const size = this.#getLastNDigits(distributionEntry, 2)*25;
+    console.log("sun distributionEntry:", distributionEntry);
+    console.log("sun size: ", size);
+    new Sun({
+      width: size,
+      height: size,
+      posX: 100,
+      posY: 200
+    })
+  }
+
+
+  #createPlanet = () => {
+    let distributionEntry = this.#planetDistribution[this.#planetIndex];
+    let planetData = this.#planetMap[distributionEntry];
+    planetData["coordinates"] = distributionEntry;
+    console.log("creating planet: ", planetData);
+
     this.#galaxyWorker.postMessage({
       type : "create",
       payload : planetData
@@ -139,14 +153,14 @@ class Galaxy {
    * @param distribution
    * @returns {{}}
    */
-  createGalaxyMap = (distribution) =>{
-    let galaxyMap = {};
+  #createPlanetMap = (distribution) =>{
+    let planetMap = {};
     for (const value of distribution){
       const lastDigit = this.#getLastNDigits(value,1);
       const last2Digits = this.#getLastNDigits(value,2);
       const last3Digits = this.#getLastNDigits(value,3);
 
-      galaxyMap[value.toFixed(0)]= {
+      planetMap[value.toFixed(0)]= {
         radius: parseInt((this.#getLastNDigits(value, 2) * 4+40).toFixed(0)),
         noiseRange : lastDigit,
         octavesRange : lastDigit,
@@ -159,7 +173,7 @@ class Galaxy {
         q: last2Digits
       }
     }
-    return galaxyMap;
+    return planetMap;
   }
 
   /**
@@ -167,7 +181,7 @@ class Galaxy {
    * @param scale
    * @returns {number[]}
    */
-  createPseudoRandomDistribution = (scale)=> {
+  #createPseudoRandomDistribution = (scale)=> {
     return Array.from({ length: scale }, (_, i) => i)
       .map(i => Math.floor((i * 9301 + 49297) % 233280 / 233280 * 200000000))
       .sort((a, b) => b - a);

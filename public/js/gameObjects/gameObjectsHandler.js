@@ -4,8 +4,6 @@ class GameObjectsHandler {
 
   static instance = new this();
   static gameObjects = [];
-  
-
   static contexts = {};
   static gameObjectsToRemove = new Set();
 
@@ -18,7 +16,6 @@ class GameObjectsHandler {
       if (!gameObject.isContextPreventedOfBeingCleared) {
         GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
       }
-
     } catch(e){
        console.error(e);
     }
@@ -33,9 +30,6 @@ class GameObjectsHandler {
     GameObjectsHandler.gameObjectsToRemove.add(id)
   }
 
-  /**
-   *
-   */
   removeGameObjects = () =>{
 
     for (let id of GameObjectsHandler.gameObjectsToRemove){

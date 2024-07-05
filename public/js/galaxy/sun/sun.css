@@ -1,15 +1,206 @@
 .sun{
-    background: azure;
-    width: 1000px;
-    height: 1000px;
+    background: white;
+    width: 0;
+    height: 0;
     border-radius: 50%;
-    position: relative;
-    top:-700px;
+    position: absolute;
+    top:0;
+    right: 0px;
     margin: 0 auto;
-    box-shadow: 0 0 60px white, 0 0 70px white, 0 0 80px white, 0 0 90px white, 0 0 100px white;
+    box-shadow: 0 0 30px white, 0 0 40px white, 0 0 50px antiquewhite, 0 0 60px antiquewhite, 0 0 70px antiquewhite;
     z-index: 1;
 }
+#sune {
+    background: azure;
+    width: 0;
+    height: 0;
 
+    position: absolute;
+    top:0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 1;
+}
+body {
+
+}
+
+#ui {
+
+    z-index:1;
+}
+#ui .cover {
+
+}
+#ui .sune {
+
+    filter: blur(3px) contrast(15);
+}
+
+#ui .sun_fire {
+    position: absolute;
+    top: 50px;
+    left: -70px;
+
+}
+#ui .sun_fire_inner {
+    box-sizing: border-box;
+}
+#ui .sun_fire:nth-child(1) {
+    animation: sunFireLeft 110607ms infinite linear;
+}
+#ui .sun_fire:nth-child(1) .sun_fire_inner {
+    width: 71px;
+    height: 71px;
+    border-top: 3px solid #ffffff;
+    border-right: 5px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+    border-left: 7px solid #e0dfdf;
+    border-radius: 43% 12% 67% 47%;
+    animation: sunFireInner 112786ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(2) {
+    animation: sunFireLeft 191906ms infinite linear;
+}
+
+#ui .sun_fire:nth-child(3) {
+    animation: sunFire 115539ms infinite linear;
+}
+#ui .sun_fire:nth-child(3) .sun_fire_inner {
+    width: 91px;
+    height: 91px;
+    border-top: 5px solid #ffffff;
+    border-right: 3px solid #ffffff;
+    border-bottom: 4px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-radius: 52% 63% 19% 72%;
+    animation: sunFireInner 112869ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(4) {
+    animation: sunFire 117181ms infinite linear;
+}
+#ui .sun_fire:nth-child(4) .sun_fire_inner {
+    width: 113px;
+    height: 113px;
+    border-top: 7px solid #ffffff;
+    border-right: 4px solid #ffffff;
+    border-bottom: 8px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-radius: 25% 36% 45% 77%;
+    animation: sunFireInner 112052ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(5) {
+    animation: sunFire 111596ms infinite linear;
+}
+#ui .sun_fire:nth-child(5) .sun_fire_inner {
+    width: 120px;
+    height: 120px;
+    border-top: 3px solid #ffffff;
+    border-right: 5px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    border-left: 6px solid #ffffff;
+    border-radius: 72% 34% 16% 39%;
+    animation: sunFireInner 12903ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(6) {
+    animation: sunFire 114450ms infinite linear;
+}
+#ui .sun_fire:nth-child(6) .sun_fire_inner {
+    width: 53px;
+    height: 53px;
+    border-top: 4px solid #ffffff;
+    border-right: 6px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+    border-left: 7px solid #ffffff;
+    border-radius: 18% 37% 66% 18%;
+    animation: sunFireInner 14516ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(7) {
+    animation: sunFire 118317ms infinite linear;
+}
+#ui .sun_fire:nth-child(7) .sun_fire_inner {
+    width: 117px;
+    height: 117px;
+    border-top: 2px solid #ffffff;
+    border-right: 1px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+    border-left: 4px solid #ffffff;
+    border-radius: 23% 63% 13% 62%;
+    animation: sunFireInner 13986ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(8) {
+    animation: sunFirLeft 118696ms infinite linear;
+}
+#ui .sun_fire:nth-child(8) .sun_fire_inner {
+    width: 106px;
+    height: 106px;
+    border-top: 2px solid #ffffff;
+    border-right: 6px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
+    border-left: 5px solid #ffffff;
+    border-radius: 43% 68% 18% 54%;
+    animation: sunFireInner 13953ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(9) {
+    animation: sunFireLeft 111240ms infinite linear;
+}
+#ui .sun_fire:nth-child(9) .sun_fire_inner {
+    width: 82px;
+    height: 82px;
+    border-top: 2px solid #ffffff;
+    border-right: 5px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+    border-left: 1px solid #ffffff;
+    border-radius: 63% 40% 42% 62%;
+    animation: sunFireInnerLeft 12772ms infinite alternate linear;
+}
+#ui .sun_fire:nth-child(10) {
+    animation: sunFireLeft 13740ms infinite linear;
+}
+
+@keyframes sunFire {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+@keyframes sunFireLeft {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(-360deg);
+    }
+}
+
+@keyframes sunFireInner {
+    0% {
+        transform: translate(20px, -50%) rotateZ(0deg);
+    }
+    50% {
+        transform: translate(30px, -50%) rotateZ(180deg);
+    }
+    100% {
+        transform: translate(20px, -50%) rotateZ(360deg);
+    }
+}
+
+@keyframes sunFireInnerLeft {
+    0% {
+        transform: translate(20px, -50%) rotateZ(0deg);
+    }
+    50% {
+        transform: translate(30px, -50%) rotateZ(-180deg);
+    }
+    100% {
+        transform: translate(20px, -50%) rotateZ(-360deg);
+    }
+}
+
+/*
 @keyframes moveSun {
     from {
         transform: translateX(100vw);
@@ -18,11 +209,13 @@
         transform: translateX(-100%);
     }
 }
-
+*/
+/*
 .sun {
-    /*
-    position: absolute;
-    animation: moveSun  50s linear ;
-    */
+
+   position: absolute;
+   animation: moveSun  50s linear ;
+
 
 }
+*/

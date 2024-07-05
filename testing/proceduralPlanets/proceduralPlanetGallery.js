@@ -3,7 +3,7 @@ class ProceduralPlanetGallery {
   constructor(){
     console.log("procedural planet loading");
     this.galaxy = new Galaxy({scale:600});
-    this.distribution = this.galaxy.createPseudoRandomDistribution(600).reverse()
+    this.distribution = this.galaxy.#createPseudoRandomDistribution(600).reverse()
     this.galaxyMap = this.galaxy.createGalaxyMap(this.distribution);
     console.log(this.galaxyMap);
     this.canvas = document.getElementById("canvas");
