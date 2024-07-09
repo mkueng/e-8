@@ -9,6 +9,7 @@ class Galaxy {
   #subscribers = [];
   #scale;
   #planetObjects = {};
+  #sunObjects = {};
   #sunDistribution = [];
 
   get distribution() {
@@ -80,6 +81,15 @@ class Galaxy {
         })
         this.#planetObjects[planetObject.coordinates]= planetObject;
         console.log("this.#planetObjects:", this.#planetObjects);
+        this.#subscribers.forEach(subscriber => {
+          try {
+            subscriber.updateFromGalaxy({message:"planets", payload: this.#planetObjects});
+          } catch(e) {
+            console.error(e);
+          }
+
+        })
+
         URL.revokeObjectURL(img.src);
       }
       img.src = URL.createObjectURL(dataFromWorker.imageBlob)
@@ -129,7 +139,7 @@ class Galaxy {
     GameObjectsHandler.instance.addGameObject(sun);
     this.#subscribers.forEach(subscriber => {
       try {
-        subscriber.updateFromGalaxy(sun);
+        subscriber.updateFromGalaxy({message:"sun created", payload: sun});
       } catch(e) {
         console.error(e);
       }

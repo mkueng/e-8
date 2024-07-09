@@ -23,7 +23,7 @@ class Radar extends GameObject {
     const {screenWidth, screenHeight, colors} = e8.global;
     const enemyShips = EnemyShipHandler.enemyShips;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
 
     Object.values(enemyShips).forEach(({ posX, posY, width }) => {

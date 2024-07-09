@@ -2,6 +2,8 @@ class Scanner extends GameObject {
 
   #preFactor = null;
   #zeroPoint = null;
+  #ticker = -1;
+  #planets = {};
 
   constructor({galaxy}){
 
@@ -29,6 +31,7 @@ class Scanner extends GameObject {
     this.#preFactor = 0.6 / this.canvas.width; // 0.6 is the height of the parabola
     this.#zeroPoint = this.canvas.width / 2;
 
+
     for (let i= - this.canvas.width / 2; i < this.canvas.width / 2; i+=1){
       let x = i;
       let y = this.canvas.height - (this.#preFactor * Math.pow(x, 2))-10;
@@ -38,21 +41,32 @@ class Scanner extends GameObject {
     this.context.globalAlpha = 0.7;
     this.context.strokeStyle = e8.global.colors.lightVanilla
     this.context.fillStyle = e8.global.colors.darkCyan;
+    console.log("this:", this);
     GameObjectsHandler.instance.addGameObject(this);
   }
 
   updateFromGalaxy =(data) =>{
-
+    console.log("update from galaxy data:", data);
+    this.#planets = data.payload;
   }
 
   update = ()=>{
   }
 
   render() {
-    const {context: ctx, canvas} = this;
-    let x = -1 *PlayerShip.coordinates/100;
-    let y = canvas.height - this.#preFactor * Math.pow(x, 2);
-    ctx.drawImage(this.arcCanvas, 0, 0);
-    ctx.drawImage(this.piCanvas, this.#zeroPoint +  x, y - this.pisDouble);
-  }
+
+      const {context: ctx, canvas} = this;
+
+      Object.values(this.#planets).forEach(planet => {
+        
+        let y = canvas.height - this.#preFactor * Math.pow(planet.posX, 2);
+        ctx.drawImage(this.piCanvas, this.#zeroPoint+planet.posX, y - this.pisDouble);
+      });
+
+     // let x = -1 * PlayerShip.coordinates / 100;
+
+      ctx.drawImage(this.arcCanvas, 0, 0);
+      //ctx.drawImage(this.piCanvas, this.#zeroPoint + x, y - this.pisDouble);
+    }
+
 }
