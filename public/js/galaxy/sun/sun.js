@@ -26,33 +26,30 @@ class Sun extends GameObject{
     sunDiv.classList.add("sun");
     document.getElementById("game").append(sunDiv);
     this.sun = document.getElementById(this.id);
-    this.sun.style.left = this.posX+"px";
+    this.posXCenter = this.posX - this.width/2;
+    this.sun.style.left = this.posXCenter+"px";
     this.sun.style.width = this.width+"px";
     this.sun.style.height = this.height+"px";
-    this.sun.style.top = this.posY+"px"
-    console.log("posX:", this.posX);
+    this.sun.style.top = this.posY-this.height/2+"px"
 
+    const newTranslatePx = this.width/2-30-(100/this.width*70); // New value for translate
+    const newTranslatePx50 = this.width/2-30-(100/this.width*70); // New value for 50% translate
 
+    this.style = document.createElement('style');
 
-
-    // Step 1: Define new pixel values
-    const newTranslatePx = this.width-240; // New value for translate
-    const newTranslatePx50 = this.width-200; // New value for 50% translate
-
-// Step 2: Create a style element
-    const style = document.createElement('style');
-    style.type = 'text/css';
-
-// Step 3: Generate CSS text with new pixel values
     const keyframesCSS = `
+    .sun_fire {
+      position: absolute;
+      top: ${0}px;
+      left: ${0}px;
+      z-index:1;
+    }
     
- 
-    
-    #ui .sun_fire {
-    position: absolute;
-    top: ${this.posY+160}px;
-    left: ${this.posX+140}px;
-    z-index:1;
+    #sun-fire {
+      position: absolute;
+      top: ${this.posY-40}px;
+      left: ${this.posXCenter+this.width/2-60}px;
+      z-index:1;
     }
     
 @keyframes sunFireInner {
@@ -79,21 +76,11 @@ class Sun extends GameObject{
     }
 }`;
 
-// Step 4: Append the style to the document
-    if (style.styleSheet) {
-      style.styleSheet.cssText = keyframesCSS;
-    } else {
-      style.appendChild(document.createTextNode(keyframesCSS));
-    }
+    this.style.appendChild(document.createTextNode(keyframesCSS));
+    document.head.appendChild(this.style);
+    this.sunFire = document.getElementById("sun-fire");
 
-    document.head.appendChild(style);
-
-
-    console.log("sun:", this);
-    GameObjectsHandler.instance.addGameObject(this);
   }
-
-
 
 
   render=()=>{
@@ -101,9 +88,17 @@ class Sun extends GameObject{
 
   update=(deltaTime) =>{
     if (PlayerShip.velX) {
-      this.posX = this.posX + this.velX*deltaTime+(PlayerShip.velX*this.posV);
-      this.sun.style.left = this.posX+"px";
-      //this.sune.style.left = this.posX+"px";
+      if (this.isActive === false) return;
+      this.posXCenter = this.posXCenter + this.velX*deltaTime+(PlayerShip.velX*this.posV);
+      this.sun.style.left = this.posXCenter+"px";
+      this.sunFire.style.left = this.posXCenter+this.width/2-60+"px";
+      if (this.posXCenter < -this.width) {
+        this.isActive = false;
+        this.destroy();
+        this.sun.remove();
+        this.sunFire.remove();
+
+      }
     }
   }
 }

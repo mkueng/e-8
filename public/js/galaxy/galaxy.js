@@ -5,12 +5,11 @@ class Galaxy {
   #planetMap = {};
   #galaxyWorker = null;
   #planetIndex = 0;
-  #sunIndex = 0
+  #sunIndex = 0;
   #subscribers = [];
   #scale;
   #planetObjects = {};
   #sunDistribution = [];
-
 
   get distribution() {
     return this.#planetDistribution;
@@ -28,7 +27,7 @@ class Galaxy {
 
   init = async () =>{
     this.#planetDistribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
-    this.#sunDistribution = this.#createPseudoRandomDistribution(this.#scale/10).reverse();
+    this.#sunDistribution = this.#createPseudoRandomDistribution(this.#scale*2).reverse();
 
     console.log("planetDistribution:", this.#planetDistribution);
     console.log("sunDistribution:", this.#sunDistribution);
@@ -37,6 +36,7 @@ class Galaxy {
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
     this.upcomingSun = this.#sunDistribution[this.#sunIndex];
+    console.log("this.upcomingSun:", this.upcomingSun);
     console.log("this.upcomingPlanet:", this.upcomingPlanet);
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
 
@@ -47,7 +47,6 @@ class Galaxy {
     })
 
     this.#createPlanet();
-    this.#createSun();
     this.#planetIndex++
 
     this.#galaxyWorker.onmessage = (event)=> {
@@ -75,7 +74,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1 * planetData.radius / 10 * 0.0003,
+          posZ: -1 * planetData.radius / 10 * 0.0002,
           velY: 0,
           canvas: this.canvas
         })
@@ -99,7 +98,12 @@ class Galaxy {
    * @param data
    */
   updateFromGameLoop = (data)=>{
+    if (PlayerShip.coordinates > this.upcomingSun) {
+      this.#createSun();
+      this.#sunIndex++
+      this.upcomingSun = this.#sunDistribution[this.#sunIndex];
 
+    }
 
     if (PlayerShip.coordinates > this.upcomingPlanet) {
       GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcomingPlanet]);
@@ -112,14 +116,24 @@ class Galaxy {
   #createSun = () =>{
     console.log("CREATE SUN");
     const distributionEntry = this.#sunDistribution[this.#sunIndex];
-    const size = this.#getLastNDigits(distributionEntry, 2)*25;
+    let size = Math.max(this.#getLastNDigits(distributionEntry, 2) * 15, 200);
     console.log("sun distributionEntry:", distributionEntry);
     console.log("sun size: ", size);
-    new Sun({
+    const sun = new Sun({
       width: size,
       height: size,
-      posX: 350,
-      posY: 300
+      posX:  e8.global.screenWidth + size,
+      posY: e8.global.screenHeight / this.#getLastNDigits(distributionEntry, 1)
+    })
+
+    GameObjectsHandler.instance.addGameObject(sun);
+    this.#subscribers.forEach(subscriber => {
+      try {
+        subscriber.updateFromGalaxy(sun);
+      } catch(e) {
+        console.error(e);
+      }
+
     })
   }
 

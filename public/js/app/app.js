@@ -7,8 +7,8 @@ class App {
 
   init = async () => {
     await this.#loadScripts();
-    SoundHandler.setFXGain({percentage: 0.1});
-    SoundHandler.setMusicGain({percentage: 0.1});
+    SoundHandler.setFXGain({percentage: 0});
+    SoundHandler.setMusicGain({percentage: 0});
     this.#createGlobalFactories();
     this.#createGlobalHandlers();
     await this.#initGlobalFactories();

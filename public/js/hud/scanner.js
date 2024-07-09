@@ -3,7 +3,6 @@ class Scanner extends GameObject {
   #preFactor = null;
   #zeroPoint = null;
 
-
   constructor({galaxy}){
 
   super({
@@ -13,45 +12,47 @@ class Scanner extends GameObject {
   }
 
   init = async()=>{
-    this.offscreenCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
-    this.offscreenContext = this.offscreenCanvas.getContext('2d');
-    this.offscreenContext.fillStyle = e8.global.colors.vanilla
-    this.#preFactor = 0.6 / this.canvas.width;
+    this.galaxy.subscribe(this);
+    this.pis = 10; // planet icon size
+    this.pisDouble = this.pis*2;
 
+    this.piCanvas = new OffscreenCanvas( this.pis*2,  this.pis*2);
+    this.piCtx = this.piCanvas.getContext('2d');
+    this.piCtx.fillStyle = e8.global.colors.lightVanilla;
+    this.piCtx.beginPath();
+    this.piCtx.arc( this.pis,  this.pis,  this.pis, 0, 2 * Math.PI);
+    this.piCtx.fill();
+
+    this.arcCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
+    this.arcContext = this.arcCanvas.getContext('2d');
+    this.arcContext.fillStyle = e8.global.colors.lightVanilla
+    this.#preFactor = 0.6 / this.canvas.width; // 0.6 is the height of the parabola
     this.#zeroPoint = this.canvas.width / 2;
+
     for (let i= - this.canvas.width / 2; i < this.canvas.width / 2; i+=1){
       let x = i;
-      let y = this.canvas.height - this.#preFactor * Math.pow(x, 2);
-      this.offscreenContext.fillRect(this.#zeroPoint + x, y-4,   2, 2);
-      this.offscreenContext.fillRect(this.#zeroPoint + x, y-14,   4, 4);
+      let y = this.canvas.height - (this.#preFactor * Math.pow(x, 2))-10;
+      this.arcContext.fillRect(this.#zeroPoint + x, y-4, 2, 2);
+      this.arcContext.fillRect(this.#zeroPoint + x, y-14, 4, 4);
     }
-    //this.scannerImage = document.querySelector("#hud");
-    this.context.globalAlpha = 0.9;
+    this.context.globalAlpha = 0.7;
     this.context.strokeStyle = e8.global.colors.lightVanilla
-    this.context.fillStyle = e8.global.colors.auburn;
+    this.context.fillStyle = e8.global.colors.darkCyan;
     GameObjectsHandler.instance.addGameObject(this);
+  }
+
+  updateFromGalaxy =(data) =>{
+
   }
 
   update = ()=>{
   }
 
   render() {
-   const {context: ctx, canvas} = this;
-    ctx.drawImage(this.offscreenCanvas, 0, 0);
-    let x = -1 *PlayerShip.coordinates/1000;
+    const {context: ctx, canvas} = this;
+    let x = -1 *PlayerShip.coordinates/100;
     let y = canvas.height - this.#preFactor * Math.pow(x, 2);
-    ctx.fillRect(this.#zeroPoint + x, y-10, 10, 10);
-    /*
-
-    let zeroPint = canvas.width / 2;
-
-for (let i=-canvas.width/2; i <canvas.width/2 ; i=i+10){
- // Adjust this value to change the curvature of the parabola
-  let x = i;
-  let y =  canvas.height - a* Math.pow(x, 2); // y = ax^2
-
-  ctx.strokeRect(zeroPint + x, y-10, 10, 10);
-}*/
-
+    ctx.drawImage(this.arcCanvas, 0, 0);
+    ctx.drawImage(this.piCanvas, this.#zeroPoint +  x, y - this.pisDouble);
   }
 }

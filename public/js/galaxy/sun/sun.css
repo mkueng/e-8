@@ -8,29 +8,19 @@
     right: 0;
     margin: 0;
     filter: blur(1px) contrast(15);
-
     box-shadow: 0 0 30px white, 0 0 40px white, 0 0 50px antiquewhite, 0 0 60px antiquewhite, 0 0 70px antiquewhite;
-
-
     z-index: 1;
 }
 
-
-
-#ui .cover {
-
-}
-#ui .sune {
-
+.sun_fire {
     filter: blur(3px) contrast(15);
 }
-
 
 #ui .sun_fire_inner {
     box-sizing: border-box;
 }
 #ui .sun_fire:nth-child(1) {
-    animation: sunFireLeft 110607ms infinite linear;
+    animation: sunFireLeft 210607ms infinite linear;
 }
 #ui .sun_fire:nth-child(1) .sun_fire_inner {
     width: 71px;
@@ -39,15 +29,15 @@
     border-right: 5px solid #ffffff;
     border-bottom: 3px solid #ffffff;
     border-left: 7px solid #e0dfdf;
-    border-radius: 43% 12% 67% 47%;
+    border-radius: 43% 52% 67% 47%;
     animation: sunFireInner 12786ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(2) {
-    animation: sunFireLeft 91906ms infinite linear;
+    animation: sunFireLeft 191906ms infinite linear;
 }
 
 #ui .sun_fire:nth-child(3) {
-    animation: sunFire 15539ms infinite linear;
+    animation: sunFire 115539ms infinite linear;
 }
 #ui .sun_fire:nth-child(3) .sun_fire_inner {
     width: 91px;
@@ -56,11 +46,11 @@
     border-right: 3px solid #ffffff;
     border-bottom: 4px solid #ffffff;
     border-left: 2px solid #ffffff;
-    border-radius: 52% 63% 19% 72%;
+    border-radius: 52% 63% 59% 72%;
     animation: sunFireInner 12869ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(4) {
-    animation: sunFire 17181ms infinite linear;
+    animation: sunFireLeft 317181ms infinite linear;
 }
 #ui .sun_fire:nth-child(4) .sun_fire_inner {
     width: 81px;
@@ -69,11 +59,11 @@
     border-right: 4px solid #ffffff;
     border-bottom: 8px solid #ffffff;
     border-left: 2px solid #ffffff;
-    border-radius: 25% 36% 45% 77%;
+    border-radius: 55% 36% 45% 77%;
     animation: sunFireInner 12052ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(5) {
-    animation: sunFire 11596ms infinite linear;
+    animation: sunFire 211596ms infinite linear;
 }
 #ui .sun_fire:nth-child(5) .sun_fire_inner {
     width: 87px;
@@ -82,11 +72,11 @@
     border-right: 5px solid #ffffff;
     border-bottom: 2px solid #ffffff;
     border-left: 6px solid #ffffff;
-    border-radius: 72% 34% 16% 39%;
+    border-radius: 72% 34% 56% 69%;
     animation: sunFireInner 12903ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(6) {
-    animation: sunFire 14450ms infinite linear;
+    animation: sunFire 314450ms infinite linear;
 }
 #ui .sun_fire:nth-child(6) .sun_fire_inner {
     width: 53px;
@@ -95,11 +85,11 @@
     border-right: 6px solid #ffffff;
     border-bottom: 3px solid #ffffff;
     border-left: 7px solid #ffffff;
-    border-radius: 18% 37% 66% 18%;
+    border-radius: 68% 37% 66% 18%;
     animation: sunFireInner 14516ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(7) {
-    animation: sunFire 18317ms infinite linear;
+    animation: sunFire 318317ms infinite linear;
 }
 #ui .sun_fire:nth-child(7) .sun_fire_inner {
     width: 97px;
@@ -108,11 +98,11 @@
     border-right: 1px solid #ffffff;
     border-bottom: 3px solid #ffffff;
     border-left: 4px solid #ffffff;
-    border-radius: 23% 63% 13% 62%;
+    border-radius: 23% 63% 53% 62%;
     animation: sunFireInner 13986ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(8) {
-    animation: sunFirLeft 18696ms infinite linear;
+    animation: sunFirLeft 218696ms infinite linear;
 }
 #ui .sun_fire:nth-child(8) .sun_fire_inner {
     width: 106px;
@@ -121,11 +111,11 @@
     border-right: 6px solid #ffffff;
     border-bottom: 1px solid #ffffff;
     border-left: 5px solid #ffffff;
-    border-radius: 43% 68% 18% 54%;
+    border-radius: 43% 68% 48% 54%;
     animation: sunFireInner 13953ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(9) {
-    animation: sunFireLeft 11240ms infinite linear;
+    animation: sunFireLeft 211240ms infinite linear;
 }
 #ui .sun_fire:nth-child(9) .sun_fire_inner {
     width: 82px;
@@ -135,10 +125,10 @@
     border-bottom: 3px solid #ffffff;
     border-left: 1px solid #ffffff;
     border-radius: 63% 40% 42% 62%;
-    animation: sunFireInnerLeft 12772ms infinite alternate linear;
+    animation: sunFireInner 12772ms infinite alternate linear;
 }
 #ui .sun_fire:nth-child(10) {
-    animation: sunFireLeft 13740ms infinite linear;
+    animation: sunFireLeft 213740ms infinite linear;
 }
 
 @keyframes sunFire {

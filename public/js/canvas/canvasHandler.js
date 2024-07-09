@@ -159,7 +159,7 @@ class CanvasHandler {
 
       },
       "width": e8.global.screenWidth /3,
-      "height": 100,
+      "height": 120,
       "opacity": 0.5
     }
   }

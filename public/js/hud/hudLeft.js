@@ -16,6 +16,7 @@ class HudLeft extends Hud{
     this.context.font = "10px myFont";
     this.initStaticHud({lineWidth: 34});
     this.context.fillStyle = e8.global.colors.lightVanilla;
+    this.context.strokeStyle = e8.global.colors.vanilla;
     GameObjectsHandler.instance.addGameObject(this);
   }
 
@@ -25,7 +26,6 @@ class HudLeft extends Hud{
 
 
   render = () => {
-    //if (!this.#renderPass) return;
     this.#ticker++;
     if (this.#ticker % 60 === 0) {
       const weapons = PlayerShip.weapons;
@@ -43,11 +43,11 @@ class HudLeft extends Hud{
       let offset = 10;
       Object.entries(weapons).forEach(([weapon, {units}]) => {
         ctx.beginPath();
-        ctx.roundRect(offset, 33, 50, 30, 3);
+        ctx.roundRect(offset, 27, 50, 30, 3);
         ctx.stroke();
-        ctx.fillText(weapon, 5 + offset, 58);
-        ctx.fillText(units.length, 5 + offset, 44);
-        offset += 60;
+        ctx.fillText(weapon, 5 + offset, 51);
+        ctx.fillText(units.length, 5 + offset, 40);
+        offset += 58;
       });
     }
   };
