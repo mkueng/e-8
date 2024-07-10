@@ -30,11 +30,12 @@ class Scanner extends GameObject {
     this.arcContext.fillStyle = e8.global.colors.lightVanilla
     this.#preFactor = 0.6 / this.canvas.width; // 0.6 is the height of the parabola
     this.#zeroPoint = this.canvas.width / 2;
+    this.piTranslate = this.#zeroPoint / 8;
 
 
     for (let i= - this.canvas.width / 2; i < this.canvas.width / 2; i+=1){
       let x = i;
-      let y = this.canvas.height - (this.#preFactor * Math.pow(x, 2))-10;
+      let y = this.canvas.height - (this.#preFactor * Math.pow(x, 2))-20;
       this.arcContext.fillRect(this.#zeroPoint + x, y-4, 2, 2);
       this.arcContext.fillRect(this.#zeroPoint + x, y-14, 4, 4);
     }
@@ -55,15 +56,15 @@ class Scanner extends GameObject {
 
   render() {
 
-      const {context: ctx, canvas} = this;
+    const {context: ctx, canvas} = this;
+    const planets = Object.values(this.#planets); // Cache this if planets don't change often
 
-      Object.values(this.#planets).forEach(planet => {
-        
-        let y = canvas.height - this.#preFactor * Math.pow(planet.posX, 2);
-        ctx.drawImage(this.piCanvas, this.#zeroPoint+planet.posX, y - this.pisDouble);
+
+    planets.forEach(planet => {
+        let x = ((planet.coordinates-PlayerShip.coordinates) /1000)+(this.piTranslate);
+        let y = canvas.height - this.#preFactor * Math.pow(x.toFixed(0), 2);
+        ctx.drawImage(this.piCanvas, this.#zeroPoint+x, y-30);
       });
-
-     // let x = -1 * PlayerShip.coordinates / 100;
 
       ctx.drawImage(this.arcCanvas, 0, 0);
       //ctx.drawImage(this.piCanvas, this.#zeroPoint + x, y - this.pisDouble);

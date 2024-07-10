@@ -28,7 +28,7 @@ class Galaxy {
 
   init = async () =>{
     this.#planetDistribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
-    this.#sunDistribution = this.#createPseudoRandomDistribution(this.#scale*2).reverse();
+    this.#sunDistribution = this.#createPseudoRandomDistribution(this.#scale/2).reverse();
 
     console.log("planetDistribution:", this.#planetDistribution);
     console.log("sunDistribution:", this.#sunDistribution);
@@ -70,12 +70,12 @@ class Galaxy {
           image: img,
           width: img.width,
           height: img.height,
-          posX: e8.global.screenWidth,
+          posX: null,
           posY: e8.global.screenHeight-(e8.global.screenHeight / 60 * planetData.q),
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1 * planetData.radius / 10 * 0.0002,
+          posZ: -1 * planetData.radius / 10 * 0.0007,
           velY: 0,
           canvas: this.canvas
         })
@@ -116,6 +116,8 @@ class Galaxy {
     }
 
     if (PlayerShip.coordinates > this.upcomingPlanet) {
+
+      this.#planetObjects[this.upcomingPlanet].posX = e8.global.screenWidth;
       GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcomingPlanet]);
       this.#createPlanet();
       this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
@@ -126,7 +128,7 @@ class Galaxy {
   #createSun = () =>{
     console.log("CREATE SUN");
     const distributionEntry = this.#sunDistribution[this.#sunIndex];
-    let size = Math.max(this.#getLastNDigits(distributionEntry, 2) * 15, 200);
+    let size = Math.max(this.#getLastNDigits(distributionEntry, 2) * 5, 200);
     console.log("sun distributionEntry:", distributionEntry);
     console.log("sun size: ", size);
     const sun = new Sun({
@@ -139,7 +141,7 @@ class Galaxy {
     GameObjectsHandler.instance.addGameObject(sun);
     this.#subscribers.forEach(subscriber => {
       try {
-        subscriber.updateFromGalaxy({message:"sun created", payload: sun});
+        subscriber.updateFromGalaxy({message:"sun created", payload:  this.#planetObjects});
       } catch(e) {
         console.error(e);
       }

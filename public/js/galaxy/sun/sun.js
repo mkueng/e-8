@@ -90,15 +90,20 @@ class Sun extends GameObject{
     if (PlayerShip.velX) {
       if (this.isActive === false) return;
       this.posXCenter = this.posXCenter + this.velX*deltaTime+(PlayerShip.velX*this.posV);
-      this.sun.style.left = this.posXCenter+"px";
-      this.sunFire.style.left = this.posXCenter+this.width/2-60+"px";
+      if (this.sun) {
+        this.sun.style.left = this.posXCenter+"px";
+        this.sunFire.style.left = this.posXCenter+this.width/2-60+"px";
+      }
+
+      /*
       if (this.posXCenter < -this.width) {
         this.isActive = false;
-        this.destroy();
-        this.sun.remove();
         this.sunFire.remove();
+        this.sun.remove();
 
-      }
+        this.destroy();
+
+      }*/
     }
   }
 }
