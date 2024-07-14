@@ -17,8 +17,7 @@ class GameObjectsHandler {
         GameObjectsHandler.contexts[gameObject.canvas.id] = gameObject.context;
 
       } else {
-        console.log("GameObjectsHandler context not cleared:", gameObject);
-        console.log("contexts:", GameObjectsHandler.contexts);
+
       }
     } catch(e){
        console.error(e);

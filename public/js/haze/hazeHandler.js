@@ -42,7 +42,7 @@ class HazeHandler {
         width: img.width,
         height: img.height,
         posX: e8.global.screenWidth,
-        posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/10),
+        posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/5),
         posZ: 0.05* velocity,
         posDX: 0,
         posDY: 0,

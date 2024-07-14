@@ -30,24 +30,24 @@ class AsteroidHandler {
       const height = asteroidResourceObject.image.height;
       const size = width * height;
       let velX = -1*size/30000;
-      if (velX < -6) {
-        velX = -6;
+      if (velX < -4) {
+        velX = -4;
       }
       let canvas= null;
 
       switch (true) {
-        case (velX > -2.5) : {
+        case (velX > -1.5) : {
           canvas = this. #canvases["far"]; break
         }
-        case (velX >= -3.5 && velX < -2.5) : {
+        case (velX >= -2.5 && velX < -1.5) : {
          canvas = this.#canvases['middle']; break
         }
-        case (velX <= -3.5) : {
+        case (velX <= -2.5) : {
           canvas = this.#canvases['front']; break
         }
       }
 
-      let zPosition =  velX/3;
+      let zPosition =  velX/6;
      // if (zPosition > 1) zPosition = 1;
 
       const asteroid = new GameObject({
@@ -100,9 +100,9 @@ class AsteroidHandler {
           clearInterval(currentInterval);
           ticker++;
           if (ticker < amount) {
-            createBatch(Math.floor(Math.random()*1000 + 1000))
+            createBatch(Math.floor(Math.random()*1000))
           } else {
-            this.invokeAsteroids(Math.floor(Math.random()*3000+3000),Math.floor(Math.random()*5)+5)
+            this.invokeAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*10)+10)
           }
 
         }

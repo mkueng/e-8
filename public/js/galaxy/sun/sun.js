@@ -20,7 +20,7 @@ class Sun extends GameObject{
       canDestroy : false
     })
 
-    this.posV = -0.0001/(10/width);
+    this.posV = -0.00008/(10/width);
     const sunDiv = document.createElement("div");
     sunDiv.id = this.id;
     sunDiv.classList.add("sun");

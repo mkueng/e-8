@@ -67,6 +67,17 @@ class Util {
 
 
 
+  static pseudoRandomNumbers = (seed, length, amount) => {
+    const randomNumbers = [];
+    for (let i = 0; i < amount; i++) {
+      seed = Math.sin(seed) * length;
+      let randomNumber = (seed - Math.floor(seed));
+      randomNumber = randomNumber*1000000000;
+      randomNumbers.push(parseInt(randomNumber.toFixed(0)));
+    }
+    return randomNumbers;
+  }
+
   // graphics
 
 

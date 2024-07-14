@@ -20,7 +20,8 @@ class CanvasHandler {
     hudDynamicLeft: "hudDynamicLeft",
     hudDynamicMiddle: "hudDynamicMiddle",
     terminal: "terminal",
-    terminalContent: "terminalContent"
+    terminalContent: "terminalContent",
+    planetScanner: "planetScanner"
   }
 
   #canvases = {
@@ -146,6 +147,24 @@ class CanvasHandler {
     },
 
     "hudDynamicMiddle": {
+      "id": "hudDynamicMiddle",
+      "class": "sectionCanvasMiddle",
+      "contextStyles": {
+        "font": "12px myFont",
+        "fillStyle": "white"
+      },
+      "canvasStyles": {
+        "top": 10 + "px",
+        "left": (window.innerWidth / 2 - e8.global.screenWidth / 6) + "px",
+        "color": "white",
+
+      },
+      "width": e8.global.screenWidth /3,
+      "height": 120,
+      "opacity": 0.5
+    },
+
+    "planetScanner": {
       "id": "hudDynamicMiddle",
       "class": "sectionCanvasMiddle",
       "contextStyles": {
