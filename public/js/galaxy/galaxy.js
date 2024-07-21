@@ -2,6 +2,7 @@
 class Galaxy {
 
   #planetDistribution = [];
+  #clonedPlanetDistribution = [];
   #planetMap = {};
   #galaxyWorker = null;
   #planetIndex = 0;
@@ -12,6 +13,8 @@ class Galaxy {
   #sunObjects = {};
   #sunDistribution = [];
 
+  #planetQueueBuffer;
+
   get distribution() {
     return this.#planetDistribution;
   }
@@ -20,42 +23,58 @@ class Galaxy {
     return this.#planetIndex;
   }
 
-  constructor({
-                scale
-  }){
+  constructor({scale}){
     this.#scale = scale;
   }
 
   init = async () =>{
-    this.#planetDistribution = this.#createPseudoRandomDistribution(this.#scale).reverse();
-    this.#sunDistribution = this.#createPseudoRandomDistribution_old(this.#scale/3).reverse();
 
-    this.pseudoRandomNumbers = Util.pseudoRandomNumbers(1224,16,500);
-    console.log("this.pseudoRandomNumbers:", this.pseudoRandomNumbers);
+    this.#planetQueueBuffer = 5;
+    this.#planetIndex = 0;
+    this.#sunIndex = 0;
 
-    console.log("planetDistribution:", this.#planetDistribution);
-    console.log("sunDistribution:", this.#sunDistribution);
+    this.#planetDistribution =  Util.pseudoRandomClusteredDistribution({
+      seed: 1273827,
+      amountOfClusters: 400,
+      range: 200000000,
+      rangeWithinCluster: 1000
+    })
+
+    this.#clonedPlanetDistribution = [...this.#planetDistribution];
+
+    console.log("this.#planetDistribution:", this.#planetDistribution);
+
+    this.#sunDistribution =  Util.pseudoRandomClusteredDistribution({
+      seed: 8998492304982,
+      amountOfClusters: 100,
+      range: 100000000,
+      rangeWithinCluster: 300000
+    })
+    console.log("this.#sunDistribution:", this.#sunDistribution);
 
     this.#planetMap = this.#createPlanetMap(this.#planetDistribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
-    this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
-    this.upcomingSun = this.#sunDistribution[this.#sunIndex];
-    console.log("this.upcomingSun:", this.upcomingSun);
-    console.log("this.upcomingPlanet:", this.upcomingPlanet);
+    this.#galaxyWorker.postMessage({
+      type : "init"
+    })
+    this.upcomingPlanetCoordinates = this.#planetDistribution[this.#planetIndex];
+    this.upcomingSunCoordinates = this.#sunDistribution[this.#sunIndex];
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
 
     e8.global.gameLoop.subscribe(this);
 
-    this.#galaxyWorker.postMessage({
-      type : "init"
-    })
+    Promise.all(
+      Array.from({ length: this.#planetQueueBuffer }).map(() => this.#createPlanet())
+    ).then(() => {
+      console.log('planets created:', this.#planetObjects);
+    }).catch(error => {
+      console.error('An error occurred while creating planets:', error);
+    });
 
-    this.#createPlanet();
-    this.#planetIndex++
 
     this.#galaxyWorker.onmessage = (event)=> {
       const dataFromWorker = event.data;
-      this.#createGameObjectFromWorkerData(dataFromWorker)
+      this.#createPlanetObjectFromWorkerData(dataFromWorker)
     }
   }
 
@@ -63,7 +82,7 @@ class Galaxy {
    *
    * @param dataFromWorker
    */
-  #createGameObjectFromWorkerData = (dataFromWorker) =>{
+  #createPlanetObjectFromWorkerData = (dataFromWorker) =>{
       let img = new Image();
       let planetData = dataFromWorker.planetData;
       img.onload = () => {
@@ -85,8 +104,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          // posZ: -1 * planetData.radius / 10 * 0.0003,
-          posZ: 0,
+          posZ: -1 * planetData.radius / 10 * 0.0003,
           velY: 0,
           canvas: this.canvas
         })
@@ -121,25 +139,26 @@ class Galaxy {
    * @param data
    */
   updateFromGameLoop = (data)=>{
-    if (PlayerShip.coordinates > this.upcomingSun) {
+    //console.log("this.#planetObjects:", this.#planetObjects);
+    //console.log("this.#clonedPlanetDistribution", this.#clonedPlanetDistribution[this.#planetIndex]);
+/*
+    if (PlayerShip.coordinates > this.#sunDistribution[0]) {
       this.#createSun();
-      this.#sunIndex++
-      this.upcomingSun = this.#sunDistribution[this.#sunIndex];
-
     }
+*/
+    if (PlayerShip.coordinates > this.#clonedPlanetDistribution[this.#planetIndex]) {
+      console.log("SHOWING PLANET");
 
-    if (PlayerShip.coordinates > this.upcomingPlanet) {
-
-      this.#planetObjects[this.upcomingPlanet].posX = e8.global.screenWidth;
-      GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.upcomingPlanet]);
+      this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]].posX = e8.global.screenWidth;
+      GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]]);
+      //this.#clonedPlanetDistribution.shift();
+      this.#planetIndex++;
       this.#createPlanet();
-      this.upcomingPlanet = this.#planetDistribution[this.#planetIndex];
-      this.#planetIndex++
     }
   }
 
   #createSun = () =>{
-    console.log("CREATE SUN");
+    console.log("Creating SUN");
     const distributionEntry = this.#sunDistribution[this.#sunIndex];
     let size = Math.max(this.#getLastNDigits(distributionEntry, 2) * 5, 200);
     console.log("sun distributionEntry:", distributionEntry);
@@ -163,14 +182,15 @@ class Galaxy {
   }
 
 
-  #createPlanet = () => {
-    let distributionEntry = this.#planetDistribution[this.#planetIndex];
+  #createPlanet = async () => {
+    let distributionEntry = this.#planetDistribution.shift();
     let planetData = this.#planetMap[distributionEntry];
+    console.log("this.planetMap:", this.#planetMap);
     planetData["coordinates"] = distributionEntry;
-    console.log("creating planet: ", planetData);
+
 
     if (planetData.type === "beauty") {
-      let planetImage = this.#createBeautyPlanet(planetData);
+      await this.#createBeautyPlanet(planetData);
     } else {
       this.#galaxyWorker.postMessage({
         type : "create",
@@ -180,7 +200,7 @@ class Galaxy {
   }
 
   #createBeautyPlanet = async (planetData) => {
-    console.log("planetData:", planetData);
+
     let planetImage = await e8.global.resourceHandler.fetchImageResource({resourceObject:planetData.imageResourceObject});
     let planetObject = new Planet({
       coordinates: planetData.coordinates,
@@ -196,7 +216,7 @@ class Galaxy {
       velY: 0,
       canvas: this.canvas
     })
-    this.#planetObjects[planetObject.coordinates]= planetObject;
+    this.#planetObjects[planetObject.coordinates] = planetObject;
     console.log("this.#planetObjects:", this.#planetObjects);
     this.#subscribers.forEach(subscriber => {
       try {

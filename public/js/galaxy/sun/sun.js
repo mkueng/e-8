@@ -20,7 +20,7 @@ class Sun extends GameObject{
       canDestroy : false
     })
 
-    this.posV = -0.00008/(10/width);
+    this.posV = -0.00003/(10/width);
     const sunDiv = document.createElement("div");
     sunDiv.id = this.id;
     sunDiv.classList.add("sun");
@@ -94,16 +94,6 @@ class Sun extends GameObject{
         this.sun.style.left = this.posXCenter+"px";
         this.sunFire.style.left = this.posXCenter+this.width/2-60+"px";
       }
-
-      /*
-      if (this.posXCenter < -this.width) {
-        this.isActive = false;
-        this.sunFire.remove();
-        this.sun.remove();
-
-        this.destroy();
-
-      }*/
     }
   }
 }
