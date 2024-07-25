@@ -175,55 +175,55 @@ class GameObject {
   }
 
   render() {
+    if (!this.isActive) return;
 
-    if (this.isActive === false)  {
-      return;
+    // Only update alpha if it's different to minimize context state changes.
+    const newAlpha = this.alpha || 1;
+    if (this.context.globalAlpha !== newAlpha) {
+      this.context.globalAlpha = newAlpha;
     }
-    if (this.alpha) {
-      this.context.globalAlpha = this.alpha;
+
+    const posX = this.posX + this.posDX, posY = this.posY + this.posDY;
+
+    // Direct path for static images.
+    if (this.image && !this.spriteSheet) {
+      this.context.drawImage(
+        this.image,
+        posX,
+        posY,
+        this.width,
+        this.height
+      );
     }
-    if (this.spriteSheet) {
+    // Path for sprite sheets.
+    else if (this.spriteSheet) {
+      // Optimized frame calculation.
+      let frame = this.currentFrame;
       if (this.animationLoop) {
-        this.currentFrame = (this.currentFrame + 1) % this.frames;
+        frame = (frame + 1) % this.frames;
       } else {
-        this.currentFrame++;
-        if (this.currentFrame >= this.frames) {
-          this.isActive = false;
-          this.currentFrame = 0;
-          return;
-        }
+        frame = frame + 1 < this.frames ? frame + 1 : 0;
+        this.isActive = frame !== 0;
       }
-
-      const column = this.currentFrame % this.spriteSheetColumns;
-      const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
-
-
+      this.currentFrame = frame;
+      const column = frame % this.spriteSheetColumns;
+      const row = Math.floor(frame / this.spriteSheetColumns);
       this.context.drawImage(
         this.spriteSheet,
         column * this.strideX,
         row * this.strideY,
         this.strideX,
         this.strideY,
-        this.posX + this.posDX,
-        this.posY + this.posDY,
-        this.width,
-        this.height
-      );
-    } else if (this.image) {
-
-
-      this.context.drawImage(
-        this.image,
-        this.posX + this.posDX,
-        this.posY + this.posDY,
+        posX,
+        posY,
         this.width,
         this.height
       );
     }
-    if (this.alpha) {
+    // Reset alpha to default if it was changed.
+    if (newAlpha !== 1) {
       this.context.globalAlpha = 1;
     }
-
   }
 
   /**
@@ -231,26 +231,18 @@ class GameObject {
    * @param deltaTime
    */
   update(deltaTime) {
-    if (this.isActive) {
-      if (this.posX+this.posDX > 0 - this.width) {
-        this.posX = this.posX + this.velX*deltaTime+(PlayerShip.velX*this.posZ);
-      } else {
-        this.destroy();
-        if (this.dependencies) {
-          for (const dependency of this.dependencies){
-            dependency.destroy();
-          }
-        }
-      }
-      this.posY = this.posY +(PlayerShip.velY*this.posZ*deltaTime);
+    if (!this.isActive) return;
 
-      // positioning dependencies
-      if (this.dependencies) {
-        for (const dependency of this.dependencies){
-          dependency.posX = this.posX;
-          dependency.posY = this.posY;
-        }
-      }
+    if (this.posX + this.posDX <= 0 - this.width) {
+      this.destroy();
+      this.dependencies.forEach(dependency => dependency.destroy());
+    } else {
+      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZ;
+      this.posY += PlayerShip.velY * this.posZ * deltaTime;
+      this.dependencies.forEach(dependency => {
+        dependency.posX = this.posX;
+        dependency.posY = this.posY;
+      });
     }
   }
 }

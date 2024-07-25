@@ -50,7 +50,6 @@ class Scanner extends GameObject {
   }
 
   updateFromGalaxy =(data) =>{
-    console.log("update from galaxy data:", data);
     this.#planets = data.payload;
   }
 

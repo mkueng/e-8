@@ -92,8 +92,6 @@ class Galaxy {
           posY = e8.global.screenHeight - img.height;
         }
 
-        console.log("posYGenerated", posY);
-
         let planetObject = new Planet({
           coordinates: planetData.coordinates,
           image: img,
@@ -109,9 +107,7 @@ class Galaxy {
           canvas: this.canvas
         })
 
-        console.log("POSY:", planetObject.posY);
         this.#planetObjects[planetObject.coordinates]= planetObject;
-        console.log("this.#planetObjects:", this.#planetObjects);
         this.#subscribers.forEach(subscriber => {
           try {
             subscriber.updateFromGalaxy({message:"planets", payload: this.#planetObjects});
@@ -146,7 +142,10 @@ class Galaxy {
       this.#createSun();
     }
 */
-    if (PlayerShip.coordinates > this.#clonedPlanetDistribution[this.#planetIndex]) {
+
+    const upcomingPlanetCoordinates = this.#clonedPlanetDistribution[this.#planetIndex];
+
+    if (PlayerShip.coordinates > upcomingPlanetCoordinates && this.#planetObjects[upcomingPlanetCoordinates]) {
       console.log("SHOWING PLANET");
 
       this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]].posX = e8.global.screenWidth;
@@ -183,11 +182,10 @@ class Galaxy {
 
 
   #createPlanet = async () => {
+    console.log("create planet");
     let distributionEntry = this.#planetDistribution.shift();
     let planetData = this.#planetMap[distributionEntry];
-    console.log("this.planetMap:", this.#planetMap);
     planetData["coordinates"] = distributionEntry;
-
 
     if (planetData.type === "beauty") {
       await this.#createBeautyPlanet(planetData);
@@ -220,11 +218,10 @@ class Galaxy {
     console.log("this.#planetObjects:", this.#planetObjects);
     this.#subscribers.forEach(subscriber => {
       try {
-        subscriber.updateFromGalaxy({message:"planets", payload: this.#planetObjects});
+        subscriber.updateFromGalaxy({message:"planetObjects", payload: this.#planetObjects});
       } catch(e) {
         console.error(e);
       }
-
     })
   }
   /**

@@ -113,14 +113,14 @@ class ProceduralPlanet {
                   })=> {
 
     const noise = new Noise(10000);
-    console.log("noiseRange:", noiseRange);
+    //console.log("noiseRange:", noiseRange);
     const octaves = (octavesRange);
     const lacunarity = (lacunarityRange);
-    console.log("lacunarity:", lacunarity);
+    //console.log("lacunarity:", lacunarity);
     const persistence = persistenceOffset = 0.9;
-    console.log("persistence:", persistence);
+    //console.log("persistence:", persistence);
     const baseFrequency = baseFrequencyOffset =2;
-    console.log("baseFrequency:", baseFrequency);
+    //console.log("baseFrequency:", baseFrequency);
 
 
 

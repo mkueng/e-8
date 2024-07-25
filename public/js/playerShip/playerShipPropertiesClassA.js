@@ -11,9 +11,9 @@ class PlayerShipPropertiesClassA {
 
     "eagle" : {
       name : "ship_02",
-      filename : "ship_02",
+      filename : "ship_05",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/ship_02/images/"
+      resourcePath : "/resources/ships/ship_05/images/"
     }
   }
 
@@ -21,7 +21,7 @@ class PlayerShipPropertiesClassA {
     maxVelX: 60,
     maxVelY: 10,
     accX: 0.15,
-    accY: 0.5
+    accY: 0.3
   }
 
   static cargo = {

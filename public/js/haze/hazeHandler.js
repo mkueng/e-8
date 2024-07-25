@@ -51,8 +51,6 @@ class HazeHandler {
       })
 
       GameObjectsHandler.instance.addGameObject(haze);
-      console.log("haze created");
-
       //releasing object URL
       URL.revokeObjectURL(img.src);
     }

@@ -133,7 +133,7 @@ class PlayerShip extends GameObject {
     this.shieldInfoRecharged = true;
     this.viewPortVelX = 0;
     this.status = "green";
-    this.coordinates = 0;
+    this.coordinates = 300000;
     PlayerShip.weapons = this.weapons;
 
     this.controls = {
@@ -364,7 +364,7 @@ class PlayerShip extends GameObject {
 
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
-        obj.posY = obj.posY- (this.velY*deltaTime * obj.posZ / 2);
+        obj.posY = obj.posY- (this.velY * deltaTime * obj.posZ / 2);
       }
     })
 

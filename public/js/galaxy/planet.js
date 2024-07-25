@@ -33,12 +33,21 @@ class Planet extends GameObject {
       isDestroyable: false
     })
   }
-/*
-  update=(deltaTime)=>{
-    if (this.posX > (-this.width)) {
-      this.posX = this.posX + ((this.velX * deltaTime)-PlayerShip.velX/10);
-    } else {
+
+   update(deltaTime) {
+    if (!this.isActive) return;
+
+    if (this.posX + this.posDX <= 0 - this.width) {
       this.destroy();
+      this.dependencies.forEach(dependency => dependency.destroy());
+    } else {
+      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZ;
+      this.posY -= PlayerShip.velY * this.posZ * deltaTime;
+      this.dependencies.forEach(dependency => {
+        dependency.posX = this.posX;
+        dependency.posY = this.posY;
+      });
     }
-  }*/
+  }
+
 }

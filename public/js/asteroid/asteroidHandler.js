@@ -95,6 +95,8 @@ class AsteroidHandler {
 
           asteroid.posX = e8.global.screenWidth;
           asteroid.posY = Math.random() * (e8.global.screenHeight - 200);
+          asteroid.posZ = -1*Math.random()-0.05;
+          //console.log("asteroid.posZ:", asteroid.posZ);
 
           GameObjectsHandler.instance.addGameObject(asteroid);
           clearInterval(currentInterval);

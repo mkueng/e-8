@@ -45,7 +45,7 @@ class GameController {
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();
         await this.#enemyShipHandler.init();
-        this.#enemyShipHandler.startCreation(1000);
+        this.#enemyShipHandler.startCreation(3000);
 
         // freighters
         this.freighterHandler = new FreighterHandler();

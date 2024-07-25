@@ -31,41 +31,39 @@ class ProceduralShipImage {
    * @param tilesResourcePath
    * @returns {Promise<*>}
    */
-  fetchResources = async ({
-                            tiles,
-                            filePrefix,
-                            resourcePath
-  }) => {
-
-    let allPromisesResolved;
+  async fetchResources({ tiles, filePrefix, resourcePath }) {
     let resourceObjects = {};
 
-    tiles.forEach((value,key)=>{
-      resourceObjects[key]= {};
-    })
+    tiles.forEach((value, key) => {
+      resourceObjects[key] = {};
+    });
 
-    tiles.forEach((amount, type)=>{
-      this.promises = [];
-
-      this.promises.push(e8.global.resourceHandler.fetchResourceBatch({
-        category : type,
-        fileName : filePrefix +"_"+type,
-        fileType : "png",
-        filePath : resourcePath,
+    for (const [type, amount] of tiles) {
+      // Ensure fetchResourceBatch returns an array of promises
+      const promises = await e8.global.resourceHandler.fetchResourceBatch({
+        category: type,
+        fileName: `${filePrefix}_${type}`,
+        fileType: "png",
+        filePath: resourcePath,
         lowerLimit: 0,
-        upperLimit : amount
-      }));
+        upperLimit: amount
+      });
 
-      allPromisesResolved = Promise.all(this.promises).then((fetchedResourceObjects)=>{
-        fetchedResourceObjects.map((resourceObject)=>{
-          for (const object in resourceObject){
-            resourceObjects[type][resourceObject[object].filename]=resourceObject[object];
-          }
-        })
-      })
-    })
+      // Check if promises is an array
+      if (!Array.isArray(promises)) {
+        throw new TypeError("fetchResourceBatch did not return an array of promises");
+      }
 
-    await allPromisesResolved;
+      const fetchedResourceObjects = await Promise.all(promises);
+      console.log("fetchedResourceObjects:", fetchedResourceObjects);
+      fetchedResourceObjects.forEach(resourceObject => {
+
+
+          resourceObjects[type][resourceObject.fileName] = resourceObject;
+
+      });
+    }
+
     return resourceObjects;
   }
 

@@ -6,7 +6,10 @@ class App {
   }
 
   init = async () => {
+    console.log("scripts loading");
     await this.#loadScripts();
+    console.log("scripts loaded");
+
     SoundHandler.setFXGain({percentage: 0});
     SoundHandler.setMusicGain({percentage: 0});
     this.#createGlobalFactories();
@@ -23,7 +26,7 @@ class App {
     this.#gameController = new GameController();
     await this.#gameController.init();
     await this.#gameController.startGame();
-
+    document.querySelector("#loading").style.display = "none";
     document.addEventListener("keydown", this.startMusic, true);
     document.addEventListener("mousedown", this.startMusic, true);
   }

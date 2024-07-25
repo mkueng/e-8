@@ -1,5 +1,4 @@
 html {
-
 }
 
 
@@ -14,6 +13,7 @@ body {
     min-height: 300px;
     overflow:hidden;
     cursor: pointer;
+    font-family: brunoAce;
 }
 
 #game
@@ -31,6 +31,37 @@ body {
     right: 0;
     min-width: 400px;
     min-height: 300px;
+}
+
+#version {
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+    font-size: 15px;
+    color: white;
+    z-index: 1999;
+}
+#loading-bar-inner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1999;
+
+}
+#loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width:500px;
+    height:500px;
+    background-image: url('../resources/backdrops/loading.png');
+    background-size: cover;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    z-index: 1999;
 }
 
 input[type="range"] {

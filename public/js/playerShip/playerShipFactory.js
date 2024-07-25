@@ -48,7 +48,6 @@ class PlayerShipFactory {
       cargo
     } = shipType;
 
-    console.log("propulsion:", propulsion);
     const imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
     const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
