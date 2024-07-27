@@ -27,7 +27,7 @@ class ProceduralPlanetGallery {
 
     setInterval(() => {
       let planetData = this.planetMap[this.planetDistribution[this.i]];
-      if (planetData.type !=="beauty") {
+      if ( this.i < 50 && planetData.type !=="beauty") {
         this.createPlanet(planetData);
       }
 
@@ -54,9 +54,9 @@ class ProceduralPlanetGallery {
 
   drawImage = (img) => {
 
-    this.ctx.drawImage(img, this.x,this.y,300,300);
+    this.ctx.drawImage(img, this.x,this.y);
     this.x+=300;
-    if (this.x % 1200 === 0) {
+    if (this.x % 2200 === 0) {
       this.y += 300;
       this.x = 0;
     }

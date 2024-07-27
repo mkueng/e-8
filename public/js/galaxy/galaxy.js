@@ -273,12 +273,12 @@ class Galaxy {
         let r = parseInt(last3Digits % 56);
         let g = parseInt(last3Digits % 57);
         let b = parseInt(last3Digits % 54);
-        let q = parseInt(last3Digits % 20);
+        let q = parseInt(last3Digits % 54);
 
         planetMap[value.toFixed(0)]= {
           type : "generated",
-          radius: parseInt((this.#getLastNDigits(value, 2) * 2+40).toFixed(0)),
-          noiseRange : last3Digits * 2,
+          radius: parseInt((this.#getLastNDigits(value, 2) +40).toFixed(0)),
+          noiseRange : last2Digits * 2 ,
           octavesRange : lastDigit,
           lacunarityRange : lastDigit / 4,
           persistenceOffset : lastDigit / 10,

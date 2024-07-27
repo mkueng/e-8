@@ -37,8 +37,8 @@ class ProceduralPlanet {
 
                 })=>{
 
-    const width = 6.5 * radius;
-    const height = 6.5 * radius;
+    const width = 6 * radius;
+    const height = 6 * radius;
 
     this.#initializeCanvases(width, height, radius);
     this.#valueVector = [];
@@ -54,6 +54,7 @@ class ProceduralPlanet {
     });
 
     this.#drawMap(r,g,b,q, width, height,this.#mapContext);
+    //return this.#mapCanvas.convertToBlob();
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b,radius, this.#offScreenContext);
     this.#addGradient(radius, this.#offScreenContext, "source-over");
@@ -68,7 +69,7 @@ class ProceduralPlanet {
     this.#offScreenContext.arc(
       radius+40, // x
       radius+40, // y
-      radius+7, // radius
+      radius+3, // radius
       0, // start angle
       2 * Math.PI // end angle
     );
@@ -81,6 +82,8 @@ class ProceduralPlanet {
   }
 
   #initializeCanvases = (width, height, radius) => {
+
+
     this.#mapCanvas = null;
     this.#mapCanvas = new OffscreenCanvas(width, height);
     this.#mapContext = this.#mapCanvas.getContext("2d");
@@ -125,14 +128,14 @@ class ProceduralPlanet {
 
 
 
-    for (let y = 0; y < height; y+=2) {
-      for (let x = 0; x < width; x+=2) {
+    for (let y = 0; y < height; y+=1) {
+      for (let x = 0; x < width; x+=1) {
         let value = 0;
         let frequency = baseFrequency;
         let amplitude = 1;
 
         for (let i = 0; i < octaves; i++) {
-          value += amplitude * noise.perlin2(x / 100 * frequency, y / 100 * frequency);
+          value += amplitude * noise.perlin3(x / 100 * frequency, y / 100 * frequency, 1*frequency);
           frequency *= lacunarity;
           amplitude *= persistence;
         }
@@ -153,19 +156,23 @@ class ProceduralPlanet {
    * @param ctx
    */
   #drawMap =(r, g, b, q, width, height, ctx)=>{
+
+
     let index = 0;
-    for (let y = 0; y < height; y+=2) {
-      for (let x = 0; x < width; x+=2) {
+    for (let y = 0; y < height; y+=1) {
+      for (let x = 0; x < width; x+=1) {
         let value = 0;
         value = this.#valueVector[index];
 
-        if (value < 0.5) {
-          ctx.fillStyle = `rgba(${Math.floor(value * g)}, ${Math.floor(value * b)}, ${Math.floor(value * q)}, 0.3)`; // Ocean
+        if (value < 1) {
+
+          ctx.fillStyle = `rgba(${Math.floor(q*3)}, ${Math.floor(value*g)}, ${Math.floor(value*b)}, 0.9)`; // Ocean
         } else {
-          ctx.fillStyle = `rgba(${Math.floor(value * r)}, ${Math.floor(value * g)}, ${Math.floor(value * q)}, 1)`; // Land
+          //ctx.fillStyle = "#fac";
+          ctx.fillStyle = `rgba(${Math.floor(value * r)}, ${Math.floor(value * g)}, ${Math.floor(value * b)}, 1)`; // Land
         }
 
-        ctx.fillRect(x, y, 2, 2);
+        ctx.fillRect(x, y, 1, 1);
         index++;
       }
     }
@@ -204,9 +211,9 @@ class ProceduralPlanet {
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.1)");
-    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 0.8)");
+    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.5)");
+    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 1)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
