@@ -1,5 +1,5 @@
 'use strict'
-class App {
+class AppController {
 
   #gameController;
   constructor() {

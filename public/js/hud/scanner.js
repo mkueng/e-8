@@ -29,17 +29,18 @@ class Scanner extends GameObject {
     // create scanner arc
     this.arcCanvas = new OffscreenCanvas(this.canvas.width, this.canvas.height);
     this.arcContext = this.arcCanvas.getContext('2d');
-    this.arcContext.fillStyle = e8.global.colors.lightVanilla
-    this.arcContext.globalAlpha = 0.7;
+    this.arcContext.translate(0.5,0.5);
+    this.arcContext.fillStyle = e8.global.colors.alloyOrange;
+    this.arcContext.globalAlpha = 0.5;
     this.#preFactor = 0.4 / this.canvas.width; // 0.6 is the height of the parabola
     this.#zeroPoint = this.canvas.width / 2;
 
     for (let i= - this.canvas.width / 2; i < this.canvas.width / 2-10; i+=1){
       let x = parseInt(i.toFixed(2));
-      let y = parseInt(this.canvas.height - this.#preFactor * Math.pow(x.toFixed(0), 2)).toFixed(2);
+      let y = parseInt(this.canvas.height - this.#preFactor * Math.pow(x.toFixed(0), 2)).toFixed(0);
 
-      this.arcContext.fillRect(this.#zeroPoint + x+5, y-24, 2, 2);
-      this.arcContext.fillRect(this.#zeroPoint + x+5, y-34, 5, 5);
+      this.arcContext.fillRect(this.#zeroPoint + x+5, y-24, 1, 1);
+      this.arcContext.fillRect(this.#zeroPoint + x+5, y-34, 2, 4);
     }
     this.context.globalAlpha = 0.7;
     this.context.strokeStyle = e8.global.colors.lightVanilla

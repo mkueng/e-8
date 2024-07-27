@@ -117,8 +117,8 @@ class CanvasHandler {
         "font": "15px myFont"
       },
       "canvasStyles": {
-        "top": 20 + "px",
-        "left": 30 + "px",
+        "top": 60 + "px",
+        "left": 90 + "px",
         "color": "grey",
         "border-radius": "10px"
 
@@ -135,8 +135,8 @@ class CanvasHandler {
         "font": "15px myFont"
       },
       "canvasStyles": {
-        "top": 20 + "px",
-        "right": 40 + "px",
+        "top": 60 + "px",
+        "right": 100 + "px",
         "color": "grey",
         "border-radius": "10px",
 
@@ -154,7 +154,7 @@ class CanvasHandler {
         "fillStyle": "white"
       },
       "canvasStyles": {
-        "top": 10 + "px",
+        "top": 50 + "px",
         "left": (window.innerWidth / 2 - e8.global.screenWidth / 6) + "px",
         "color": "white",
 
@@ -172,12 +172,12 @@ class CanvasHandler {
         "fillStyle": "white"
       },
       "canvasStyles": {
-        "top": 10 + "px",
-        "left": (window.innerWidth / 2 - e8.global.screenWidth / 6) + "px",
+        "top": 50 + "px",
+        "left": (window.innerWidth / 2 - e8.global.screenWidth / 8) + "px",
         "color": "white",
 
       },
-      "width": e8.global.screenWidth /3,
+      "width": e8.global.screenWidth /4,
       "height": 120,
       "opacity": 0.5
     }

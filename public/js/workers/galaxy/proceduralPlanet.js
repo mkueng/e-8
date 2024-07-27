@@ -56,7 +56,8 @@ class ProceduralPlanet {
     this.#drawMap(r,g,b,q, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b,radius, this.#offScreenContext);
-    this.#addGradient(radius, this.#offScreenContext);
+    this.#addGradient(radius, this.#offScreenContext, "source-over");
+    this.#addGradient(radius, this.#offScreenContext, "overlay");
 
     // only draw image where mask is
     this.#offScreenContext.globalCompositeOperation = 'destination-in';
@@ -112,14 +113,14 @@ class ProceduralPlanet {
                     baseFrequencyOffset
                   })=> {
 
-    const noise = new Noise(10000);
+    const noise = new Noise(noiseRange);
     //console.log("noiseRange:", noiseRange);
-    const octaves = (octavesRange);
-    const lacunarity = (lacunarityRange);
+    const octaves = (8);
+    const lacunarity = (0.2);
     //console.log("lacunarity:", lacunarity);
-    const persistence = persistenceOffset = 0.9;
+    const persistence = persistenceOffset = 2.1;
     //console.log("persistence:", persistence);
-    const baseFrequency = baseFrequencyOffset =2;
+    const baseFrequency = baseFrequencyOffset =baseFrequencyOffset;
     //console.log("baseFrequency:", baseFrequency);
 
 
@@ -203,9 +204,9 @@ class ProceduralPlanet {
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.4)");
-    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.8)");
-    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 1)");
+    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.1)");
+    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.6)");
+    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 0.8)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
@@ -218,13 +219,15 @@ class ProceduralPlanet {
    * @param radius
    * @param offScreenCtx
    */
-  #addGradient = (radius, offScreenCtx)=>{
+  #addGradient = (radius, offScreenCtx, compositionOperation)=>{
     offScreenCtx.beginPath();
-    offScreenCtx.strokeStyle = "transparent"
+    offScreenCtx.strokeStyle = "transparent";
+    offScreenCtx.globalCompositeOperation = compositionOperation;
     const gradient = this.#offScreenContext.createLinearGradient(0,0,radius*2+40,0)
-    gradient.addColorStop(0, "rgba(1, 1, 1, 0.9)");
-    gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.8)");
+    gradient.addColorStop(0, "rgba(1, 1, 1, 0.6)");
+    gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.6)");
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0.5)');
+    offScreenCtx.globalAlpha = 1;
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.fillRect(20,20,  radius*2+40,radius*2+40);
     offScreenCtx.closePath();

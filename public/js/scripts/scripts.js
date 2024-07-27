@@ -1,7 +1,7 @@
 class Scripts {
   // Private instance stored in a closure
   static #instance = null;
-  static version  = "0.25";
+  static version  = "0.26";
 
   // Private constructor to prevent direct instantiation
   constructor() {

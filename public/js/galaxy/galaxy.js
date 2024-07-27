@@ -52,7 +52,7 @@ class Galaxy {
     })
     console.log("this.#sunDistribution:", this.#sunDistribution);
 
-    this.#planetMap = this.#createPlanetMap(this.#planetDistribution);
+    this.#planetMap = this.createPlanetMap(this.#planetDistribution);
     this.#galaxyWorker = new Worker("js/workers/galaxy/galaxyWorker.js");
     this.#galaxyWorker.postMessage({
       type : "init"
@@ -102,7 +102,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZ: -1 * planetData.radius / 10 * 0.0003,
+          posZFixed: -1 * planetData.radius / 10 * 0.0003,
           velY: 0,
           canvas: this.canvas
         })
@@ -207,15 +207,15 @@ class Galaxy {
       height: planetImage.image.height,
       posX: null,
       posY: 300,
+      posZ: null,
       posDX: 0,
       posDY: 0,
       velX: 0,
-      posZ: -1 * planetImage.image.width/2 / 10 * 0.0003,
+      posZFixed: -1 * planetImage.image.width/2 / 10 * 0.0003,
       velY: 0,
       canvas: this.canvas
     })
     this.#planetObjects[planetObject.coordinates] = planetObject;
-    console.log("this.#planetObjects:", this.#planetObjects);
     this.#subscribers.forEach(subscriber => {
       try {
         subscriber.updateFromGalaxy({message:"planetObjects", payload: this.#planetObjects});
@@ -241,15 +241,17 @@ class Galaxy {
    * @param distribution
    * @returns {{}}
    */
-  #createPlanetMap = (distribution) =>{
+  createPlanetMap = (distribution) =>{
     let planetMap = {};
-    let ticker = 0;
+    let ticker = this.#getLastNDigits(distribution[0], 1);
+    console.log("ticker:", ticker);
     let beautyPlanetTicker = Math.floor(Math.random()*2+1);
 
     for (const value of distribution){
+      //console.log("value:", value);
+      if (ticker === this.#getLastNDigits(value, 1)) {
+        let planetImageNr = this.#getLastNDigits(value, 1);
 
-      if (ticker === beautyPlanetTicker) {
-        let planetImageNr = Math.floor(Math.random()*10);
         let imageResourceObject = new ResourceObject({
           name : "planet_"+planetImageNr,
           fileName : "planet_"+planetImageNr,
@@ -261,29 +263,34 @@ class Galaxy {
           type: "beauty",
           imageResourceObject: imageResourceObject
         }
-        ticker = 0;
         beautyPlanetTicker = Math.floor(Math.random()*2+1);
-
+        ticker = this.#getLastNDigits(value, 1);
       } else {
         const lastDigit = this.#getLastNDigits(value,1);
         const last2Digits = this.#getLastNDigits(value,2);
         const last3Digits = this.#getLastNDigits(value,3);
 
+        let r = parseInt(last3Digits % 56);
+        let g = parseInt(last3Digits % 57);
+        let b = parseInt(last3Digits % 54);
+        let q = parseInt(last3Digits % 20);
+
         planetMap[value.toFixed(0)]= {
           type : "generated",
-          radius: parseInt((this.#getLastNDigits(value, 2) * 4+40).toFixed(0)),
-          noiseRange : lastDigit,
+          radius: parseInt((this.#getLastNDigits(value, 2) * 2+40).toFixed(0)),
+          noiseRange : last3Digits * 2,
           octavesRange : lastDigit,
           lacunarityRange : lastDigit / 4,
           persistenceOffset : lastDigit / 10,
-          baseFrequencyOffset : lastDigit / 3,
-          r: parseInt((last2Digits*(Math.random()*2)).toFixed(0)),
-          g: parseInt((last2Digits*(Math.random()*2)).toFixed(0)),
-          b: parseInt((last3Digits / 4).toFixed(0)),
-          q: last2Digits
+          baseFrequencyOffset : last3Digits,
+          r: r,
+          g: g,
+          b: b,
+          q: q
         }
       }
-      ticker++;
+      ticker = this.#getLastNDigits(value, 1);
+
     }
     console.log("planetMap:", planetMap);
     return planetMap;

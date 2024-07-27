@@ -38,7 +38,7 @@ class Radar extends GameObject {
         ctx.fillRect(rectX, rectY, 5, 5);
       });
 
-      ctx.drawImage(naviOrbImage, naviOrbImagePosX, 10);
+      //ctx.drawImage(naviOrbImage, naviOrbImagePosX, 10);
     }
 
   }

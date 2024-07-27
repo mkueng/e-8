@@ -9,6 +9,7 @@ class Planet extends GameObject {
                 posX,
                 posY,
                 posZ,
+                posZFixed,
                 posDX,
                 posDY,
                 velX,
@@ -32,6 +33,7 @@ class Planet extends GameObject {
       canvas,
       isDestroyable: false
     })
+    this.posZfixed = posZFixed;
   }
 
    update(deltaTime) {
@@ -41,8 +43,8 @@ class Planet extends GameObject {
       this.destroy();
       this.dependencies.forEach(dependency => dependency.destroy());
     } else {
-      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZ;
-      this.posY -= PlayerShip.velY * this.posZ * deltaTime;
+      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZfixed;
+      //this.posY -= PlayerShip.velY * deltaTime;
       this.dependencies.forEach(dependency => {
         dependency.posX = this.posX;
         dependency.posY = this.posY;

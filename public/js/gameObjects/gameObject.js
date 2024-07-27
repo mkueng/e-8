@@ -102,7 +102,7 @@ class GameObject {
     this.posDY = posDY || 0;
     this.posX = posX || 0;
     this.posY = posY || 0;
-    this.posZ = posZ || 0;
+    this.posZ = posZ;
     this.sound = sound || null;
     this.spriteSheet = spriteSheet || null;
     this.spriteSheetColumns = spriteSheetColumns || null;

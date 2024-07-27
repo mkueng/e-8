@@ -8,7 +8,7 @@ document.onreadystatechange = function() {
     console.log("app loaded");
     //document.querySelector("#loader").style.display = "none";
     console.log("app initializing");
-    e8.global.app = new App();
+    e8.global.app = new AppController();
 
 
     const startApp = async () => {

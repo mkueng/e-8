@@ -16,7 +16,8 @@ class HudLeft extends Hud{
     this.context.font = "10px myFont";
     this.initStaticHud({lineWidth: 34});
     this.context.fillStyle = e8.global.colors.lightVanilla;
-    this.context.strokeStyle = e8.global.colors.vanilla;
+    this.context.strokeStyle = e8.global.colors.alloyOrange;
+    this.context.lineWidth = 2;
     GameObjectsHandler.instance.addGameObject(this);
   }
 

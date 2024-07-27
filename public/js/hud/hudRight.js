@@ -52,9 +52,9 @@ class HudRight extends Hud{
       ctx.fillText("FUEL", 5, 35);
       let fuelInfoBarColor;
       fuelInfoBarColor =
-        PlayerShip.fuel < 30 ? "red" :
-          PlayerShip.fuel < 60 ? "yellow" :
-            "lightgreen";
+        PlayerShip.fuel < 30 ? e8.global.colors.auburn :
+          PlayerShip.fuel < 60 ? e8.global.colors.vanilla :
+            e8.global.colors.tiffanyBlue;
 
       ctx.strokeRect(40, 31, 52, 4);
       ctx.fillStyle = fuelInfoBarColor;
@@ -68,9 +68,9 @@ class HudRight extends Hud{
       if (PlayerShip.shield) {
 
         shieldInfoBarColor =
-          PlayerShip.shield < 30 ? "red" :
-            PlayerShip.shield < 60 ? "yellow" :
-              "lightgreen";
+          PlayerShip.shield < 30 ? e8.global.colors.auburn :
+            PlayerShip.shield < 60 ? e8.global.colors.vanilla :
+              e8.global.colors.tiffanyBlue;
       } else shieldInfoBarColor = "grey";
       ctx.strokeRect(40, 38, 52, 4);
       ctx.fillStyle = shieldInfoBarColor;

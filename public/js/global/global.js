@@ -26,7 +26,7 @@ e8.global.colors = {
   tiffanyBlue: "#52BBB7",
   vanilla: "#dbb867",
   gamboge: "#F16764",
-  alloyOrange: "#CA4862",
+  alloyOrange: "#ca8548",
   rust: "#461D2D",
   rufous: "#AE2012",
   auburn: "#9B2226",
