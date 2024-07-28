@@ -127,8 +127,8 @@ class ProceduralPlanet {
     //console.log("baseFrequency:", baseFrequency);
 
 
-    for (let y = 0; y < height; y+=1) {
-      for (let x = 0; x < width; x+=1) {
+    for (let y = 0; y < height; y+=3) {
+      for (let x = 0; x < width; x+=3) {
         let value = 0;
         let frequency = baseFrequency;
         let amplitude = 1;
@@ -157,8 +157,8 @@ class ProceduralPlanet {
   #drawMap =(r, g, b, q, width, height, ctx)=>{
 
     let index = 0;
-    for (let y = 0; y < height; y+=1) {
-      for (let x = 0; x < width; x+=1) {
+    for (let y = 0; y < height; y+=3) {
+      for (let x = 0; x < width; x+=3) {
         let value = 0;
         value = this.#valueVector[index];
 
@@ -170,7 +170,7 @@ class ProceduralPlanet {
           ctx.fillStyle = `rgba(${Math.floor(value * r)}, ${Math.floor(value * g)}, ${Math.floor(value * b)}, 1)`; // Land
         }
 
-        ctx.fillRect(x, y, 1, 1);
+        ctx.fillRect(x, y, 3, 3);
         index++;
       }
     }

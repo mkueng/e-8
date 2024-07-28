@@ -25,11 +25,11 @@ class ProceduralPlanetGallery {
 
     setInterval(() => {
       let planetData = this.planetMap[this.planetDistribution[this.i]];
-      if ( this.i < 50 && planetData.type !=="beauty") {
+      if ( this.i < 50 && planetData.type !=="preRendered") {
         this.createPlanet(planetData);
       }
       this.i++;
-    }, 2000)
+    }, 1000)
 
 
     this.galaxyWorker.onmessage = (event)=> {
@@ -46,7 +46,7 @@ class ProceduralPlanetGallery {
 
   drawImage = (img) => {
 
-    this.ctx.drawImage(img, this.x,this.y);
+    this.ctx.drawImage(img, this.x,this.y,300,300);
     this.previousPlanetRadius = img.width;
     this.x+=this.previousPlanetRadius;
 
@@ -69,9 +69,6 @@ class ProceduralPlanetGallery {
     img.onload = () => {
       console.log("image loaded");
       this.drawImage(img);
-
-
-
     }
     img.src = URL.createObjectURL(dataFromWorker.imageBlob)
 

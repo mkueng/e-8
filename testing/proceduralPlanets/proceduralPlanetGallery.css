@@ -7,8 +7,8 @@ body{
 #canvas{
     position: absolute;
     top: 50px;
-    left: 5px;
+    left: 0px;
     z-index: -1;
-    border:solid 1px white;
+
 
 }

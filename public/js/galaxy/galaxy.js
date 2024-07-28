@@ -100,7 +100,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZFixed: -1 * planetData.radius / 10 * 0.0003,
+          posZFixed: -1 * planetData.radius / (Math.floor(Math.random()*20000+45000)),
           velY: 0,
           canvas: this.canvas
         })
@@ -174,19 +174,17 @@ class Galaxy {
       } catch(e) {
         console.error(e);
       }
-
     })
   }
 
 
   #createPlanet = async () => {
-    console.log("create planet");
     let distributionEntry = this.#planetDistribution.shift();
     let planetData = this.#planetMap[distributionEntry];
     planetData["coordinates"] = distributionEntry;
 
-    if (planetData.type === "beauty") {
-      await this.#createBeautyPlanet(planetData);
+    if (planetData.type === "preRendered") {
+      await this.#createPreRenderedPlanet(planetData);
     } else {
       this.#galaxyWorker.postMessage({
         type : "create",
@@ -195,7 +193,7 @@ class Galaxy {
     }
   }
 
-  #createBeautyPlanet = async (planetData) => {
+  #createPreRenderedPlanet = async (planetData) => {
 
     let planetImage = await e8.global.resourceHandler.fetchImageResource({resourceObject:planetData.imageResourceObject});
     let planetObject = new Planet({
@@ -246,10 +244,12 @@ class Galaxy {
 
     for (const value of distribution){
 
-      if (planetSizeCounter === 5) {
+      if (planetSizeCounter >= 5) {
         planetSizeCounter = 1;
       }
-      if ((ticker % 2) === 0) {
+
+      // preRenderedPlanet
+      if ((ticker % 40) === 0) {
         let planetImageNr = this.#getLastNDigits(value, 2) % 15;
 
 
@@ -261,11 +261,13 @@ class Galaxy {
 
         })
         planetMap[value.toFixed(0)] = {
-          type: "beauty",
+          type: "preRendered",
           imageResourceObject: imageResourceObject
         }
 
         ticker = this.#getLastNDigits(value, 1);
+
+        // generated Planet
       } else {
         const lastDigit = this.#getLastNDigits(value,1);
         const last2Digits = this.#getLastNDigits(value,2);
@@ -274,7 +276,7 @@ class Galaxy {
         let r = parseInt(last3Digits % 56);
         let g = parseInt(last3Digits % 57);
         let b = parseInt(last3Digits % 54);
-        let q = parseInt(last3Digits % 54);
+        let q = parseInt(last3Digits % 73);
 
         planetMap[value.toFixed(0)]= {
           type : "generated",
