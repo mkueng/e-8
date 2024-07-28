@@ -1,24 +1,22 @@
 class ProceduralPlanetGallery {
 
   constructor() {
-    console.log("procedural planet loading");
+
     this.galaxy = new Galaxy({scale: 600});
     this.planetDistribution = Util.pseudoRandomClusteredDistribution({
-      seed: 1273827,
-      amountOfClusters: 400,
-      range: 200000000,
-      rangeWithinCluster: 1000
+      ...e8.global.planetDistribution
     })
     this.planetMap = this.galaxy.createPlanetMap(this.planetDistribution);
 
-
-
     this.canvas = document.getElementById("canvas");
+    this.canvas.width = e8.global.screenWidth;
+    this.canvas.height = 10000
+
     this.ctx = this.canvas.getContext("2d");
 
-    this.x = 0;
-    this.y = 0;
-    this.i = 20;
+    this.x = this.y = this.i = 0;
+    this.previousPlanetRadius = 0;
+
 
     this.galaxyWorker = new Worker("../../public/js/workers/galaxy/galaxyWorker.js");
     this.galaxyWorker.postMessage({
@@ -30,14 +28,8 @@ class ProceduralPlanetGallery {
       if ( this.i < 50 && planetData.type !=="beauty") {
         this.createPlanet(planetData);
       }
-
       this.i++;
-    }, 1000)
-
-
-
-
-
+    }, 2000)
 
 
     this.galaxyWorker.onmessage = (event)=> {
@@ -55,8 +47,10 @@ class ProceduralPlanetGallery {
   drawImage = (img) => {
 
     this.ctx.drawImage(img, this.x,this.y);
-    this.x+=300;
-    if (this.x % 2200 === 0) {
+    this.previousPlanetRadius = img.width;
+    this.x+=this.previousPlanetRadius;
+
+    if (this.x > this.canvas.width) {
       this.y += 300;
       this.x = 0;
     }

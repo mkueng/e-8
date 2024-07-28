@@ -37,8 +37,8 @@ class ProceduralPlanet {
 
                 })=>{
 
-    const width = 6 * radius;
-    const height = 6 * radius;
+    const width = 7 * radius;
+    const height = 7 * radius;
 
     this.#initializeCanvases(width, height, radius);
     this.#valueVector = [];
@@ -70,8 +70,8 @@ class ProceduralPlanet {
       radius+40, // x
       radius+40, // y
       radius+3, // radius
-      0, // start angle
-      2 * Math.PI // end angle
+      0.5, // start angle
+    2.5* Math.PI // end angle
     );
     this.#offScreenContext.fill();
 
@@ -83,7 +83,6 @@ class ProceduralPlanet {
 
   #initializeCanvases = (width, height, radius) => {
 
-
     this.#mapCanvas = null;
     this.#mapCanvas = new OffscreenCanvas(width, height);
     this.#mapContext = this.#mapCanvas.getContext("2d");
@@ -93,7 +92,6 @@ class ProceduralPlanet {
     this.#offScreenCanvas = new OffscreenCanvas(radius*2+80, radius*2+80);
     this.#offScreenContext = this.#offScreenCanvas.getContext("2d");
     this.#offScreenContext.clearRect(0,0, radius*2+80, radius*2+80);
-
   };
 
   /**
@@ -117,15 +115,16 @@ class ProceduralPlanet {
                   })=> {
 
     const noise = new Noise(noiseRange);
+    console.log("noiseRange:", noiseRange);
+    console.log("baseFrequencyOffset:", baseFrequencyOffset);
     //console.log("noiseRange:", noiseRange);
     const octaves = (8);
-    const lacunarity = (0.2);
+    const lacunarity = (0.25);
     //console.log("lacunarity:", lacunarity);
     const persistence = persistenceOffset = 2.1;
     //console.log("persistence:", persistence);
-    const baseFrequency = baseFrequencyOffset =baseFrequencyOffset;
+    const baseFrequency = baseFrequencyOffset*2;
     //console.log("baseFrequency:", baseFrequency);
-
 
 
     for (let y = 0; y < height; y+=1) {
@@ -156,7 +155,6 @@ class ProceduralPlanet {
    * @param ctx
    */
   #drawMap =(r, g, b, q, width, height, ctx)=>{
-
 
     let index = 0;
     for (let y = 0; y < height; y+=1) {

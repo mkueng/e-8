@@ -2,7 +2,7 @@
 class GameLoop {
 
   #hudHandler;
-  #fpsTarget= 100;
+  #fpsTarget= 60;
   #renderTargetInterval = 0;
   #galaxyCoordinatesIncrement = 5;
   #gameSpeedFactor = 0.1;

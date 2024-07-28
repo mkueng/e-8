@@ -33,12 +33,10 @@ class Galaxy {
     this.#planetIndex = 0;
     this.#sunIndex = 0;
 
-    this.#planetDistribution =  Util.pseudoRandomClusteredDistribution({
-      seed: 1273827,
-      amountOfClusters: 400,
-      range: 200000000,
-      rangeWithinCluster: 1000
-    })
+    this.#planetDistribution =  Util.pseudoRandomClusteredDistribution(
+    {...e8.global.planetDistribution}
+
+    )
 
     this.#clonedPlanetDistribution = [...this.#planetDistribution];
 
@@ -46,7 +44,7 @@ class Galaxy {
 
     this.#sunDistribution =  Util.pseudoRandomClusteredDistribution({
       seed: 8998492304982,
-      amountOfClusters: 100,
+      amountOfClusters: 1000,
       range: 100000000,
       rangeWithinCluster: 300000
     })
@@ -87,7 +85,7 @@ class Galaxy {
       let planetData = dataFromWorker.planetData;
       img.onload = () => {
 
-        let posY = e8.global.screenHeight-(e8.global.screenHeight / 100 * planetData.q);
+        let posY = e8.global.screenHeight-(e8.global.screenHeight / 50 * planetData.r);
         if (posY >= e8.global.screenHeight) {
           posY = e8.global.screenHeight - img.height;
         }
@@ -244,13 +242,16 @@ class Galaxy {
   createPlanetMap = (distribution) =>{
     let planetMap = {};
     let ticker = this.#getLastNDigits(distribution[0], 1);
-    console.log("ticker:", ticker);
-    let beautyPlanetTicker = Math.floor(Math.random()*2+1);
+    let planetSizeCounter = 1
 
     for (const value of distribution){
-      //console.log("value:", value);
-      if (ticker === this.#getLastNDigits(value, 1)) {
-        let planetImageNr = this.#getLastNDigits(value, 1);
+
+      if (planetSizeCounter === 5) {
+        planetSizeCounter = 1;
+      }
+      if ((ticker % 2) === 0) {
+        let planetImageNr = this.#getLastNDigits(value, 2) % 15;
+
 
         let imageResourceObject = new ResourceObject({
           name : "planet_"+planetImageNr,
@@ -263,7 +264,7 @@ class Galaxy {
           type: "beauty",
           imageResourceObject: imageResourceObject
         }
-        beautyPlanetTicker = Math.floor(Math.random()*2+1);
+
         ticker = this.#getLastNDigits(value, 1);
       } else {
         const lastDigit = this.#getLastNDigits(value,1);
@@ -277,7 +278,7 @@ class Galaxy {
 
         planetMap[value.toFixed(0)]= {
           type : "generated",
-          radius: parseInt((this.#getLastNDigits(value, 2) +40).toFixed(0)),
+          radius: parseInt((this.#getLastNDigits(value, 3)/2+10).toFixed(0)),
           noiseRange : last2Digits * 2 ,
           octavesRange : lastDigit,
           lacunarityRange : lastDigit / 4,
@@ -288,8 +289,10 @@ class Galaxy {
           b: b,
           q: q
         }
+        planetSizeCounter++;
       }
       ticker = this.#getLastNDigits(value, 1);
+
 
     }
     console.log("planetMap:", planetMap);

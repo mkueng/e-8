@@ -4,23 +4,23 @@ class PlayerShipPropertiesClassA {
   static imageResourceObjects = {
     "initial" : {
       name : "ship01ClassA",
-      filename : "SpaceShip3D-2D",
+      filename : "spaceship_01",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/ship_01/images/"
+      resourcePath : "/resources/ships/"
     },
 
     "eagle" : {
       name : "ship_02",
-      filename : "ship_05",
+      filename : "spaceship_01",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/ship_05/images/"
+      resourcePath : "/resources/ships/"
     }
   }
 
   static generic = {
     maxVelX: 6000,
     maxVelY: 10,
-    accX: 10.15,
+    accX: 100.15,
     accY: 0.3
   }
 

@@ -9,5 +9,6 @@ body{
     top: 50px;
     left: 5px;
     z-index: -1;
+    border:solid 1px white;
 
 }

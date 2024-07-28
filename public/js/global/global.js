@@ -7,6 +7,13 @@ e8.global.events = {
   "visibilityChange": "visibilityChange"
 }
 
+e8.global.planetDistribution = {
+  seed: 726391,
+  amountOfClusters: 400,
+  range: 200000000,
+  rangeWithinCluster: 1000
+}
+
 e8.global.maxWidth = 3700;
 e8.global.maxHeight = 1800;
 e8.global.minWidth = 1100;
