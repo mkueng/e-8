@@ -2,6 +2,8 @@ class ProceduralPlanet {
 
   #offScreenContext;
   #offScreenCanvas;
+  #scaledCanvas;
+  #scaledContext;
   #mapCanvas;
   #mapContext;
   #valueVector;
@@ -90,6 +92,8 @@ class ProceduralPlanet {
 
     this.#offScreenCanvas= null;
     this.#offScreenCanvas = new OffscreenCanvas(radius*2+80, radius*2+80);
+    this.#scaledCanvas = new OffscreenCanvas(2*radius*2+80, 2*radius*2+80);
+    this.#scaledContext = this.#scaledCanvas.getContext("2d");
     this.#offScreenContext = this.#offScreenCanvas.getContext("2d");
     this.#offScreenContext.clearRect(0,0, radius*2+80, radius*2+80);
   };
@@ -127,8 +131,8 @@ class ProceduralPlanet {
     //console.log("baseFrequency:", baseFrequency);
 
 
-    for (let y = 0; y < height; y+=3) {
-      for (let x = 0; x < width; x+=3) {
+    for (let y = 0; y < height; y+=2) {
+      for (let x = 0; x < width; x+=2) {
         let value = 0;
         let frequency = baseFrequency;
         let amplitude = 1;
@@ -157,8 +161,8 @@ class ProceduralPlanet {
   #drawMap =(r, g, b, q, width, height, ctx)=>{
 
     let index = 0;
-    for (let y = 0; y < height; y+=3) {
-      for (let x = 0; x < width; x+=3) {
+    for (let y = 0; y < height; y+=2) {
+      for (let x = 0; x < width; x+=2) {
         let value = 0;
         value = this.#valueVector[index];
 
@@ -170,7 +174,7 @@ class ProceduralPlanet {
           ctx.fillStyle = `rgba(${Math.floor(value * r)}, ${Math.floor(value * g)}, ${Math.floor(value * b)}, 1)`; // Land
         }
 
-        ctx.fillRect(x, y, 3, 3);
+        ctx.fillRect(x, y, 2, 2);
         index++;
       }
     }
@@ -209,8 +213,8 @@ class ProceduralPlanet {
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.5)");
-    gradient.addColorStop(0.94, "rgba("+r+","+ g+"," +b+", 0.8)");
+    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.1)");
+    gradient.addColorStop(0.93, "rgba("+r+","+ g+"," +b+", 0.9)");
     gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 1)");
 
     offScreenCtx.fillStyle = gradient;

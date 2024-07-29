@@ -87,7 +87,7 @@ class Galaxy {
 
         let posY = e8.global.screenHeight-(e8.global.screenHeight / 50 * planetData.r);
         if (posY >= e8.global.screenHeight) {
-          posY = e8.global.screenHeight - img.height;
+          posY = e8.global.screenHeight - img.height / 2;
         }
 
         let planetObject = new Planet({
@@ -100,7 +100,7 @@ class Galaxy {
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZFixed: -1 * planetData.radius / (Math.floor(Math.random()*20000+45000)),
+          posZFixed: -1 * planetData.radius / (Math.floor(Math.random()*70000+25000)),
           velY: 0,
           canvas: this.canvas
         })
@@ -280,7 +280,7 @@ class Galaxy {
 
         planetMap[value.toFixed(0)]= {
           type : "generated",
-          radius: parseInt((this.#getLastNDigits(value, 3)/2+10).toFixed(0)),
+          radius: parseInt((this.#getLastNDigits(value, 3)/2+10).toFixed(0))*1.5,
           noiseRange : last2Digits * 2 ,
           octavesRange : lastDigit,
           lacunarityRange : lastDigit / 4,

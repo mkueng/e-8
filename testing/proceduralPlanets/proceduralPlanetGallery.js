@@ -46,7 +46,7 @@ class ProceduralPlanetGallery {
 
   drawImage = (img) => {
 
-    this.ctx.drawImage(img, this.x,this.y,300,300);
+    this.ctx.drawImage(img, this.x,this.y);
     this.previousPlanetRadius = img.width;
     this.x+=this.previousPlanetRadius;
 

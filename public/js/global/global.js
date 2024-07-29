@@ -8,7 +8,8 @@ e8.global.events = {
 }
 
 e8.global.planetDistribution = {
-  seed: 726391,
+  //seed: 726391,
+  seed: 72891782182,
   amountOfClusters: 400,
   range: 200000000,
   rangeWithinCluster: 1000
