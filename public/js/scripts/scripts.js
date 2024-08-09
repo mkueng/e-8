@@ -112,8 +112,8 @@ class Scripts {
     await ScriptLoader.loadScript("js/sound/sequencer.js?v="+Scripts.version);
 
     // galaxy
+    await ScriptLoader.loadScript("js/galaxy/generatedPlanet.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/galaxy/galaxy.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/workers/galaxy/galaxyWorker.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/galaxy/planet.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/workers/galaxy/proceduralPlanet.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/workers/galaxy/noise.js?v="+Scripts.version);

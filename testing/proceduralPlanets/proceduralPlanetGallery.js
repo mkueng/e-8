@@ -1,3 +1,4 @@
+'use strict';
 class ProceduralPlanetGallery {
 
   constructor() {
@@ -9,43 +10,26 @@ class ProceduralPlanetGallery {
     this.planetMap = this.galaxy.createPlanetMap(this.planetDistribution);
 
     this.canvas = document.getElementById("canvas");
-    this.canvas.width = e8.global.screenWidth;
+    this.planetWorker = new Worker("../../public/js/workers/galaxy/planetWorker.js");
+    this.generatedPlanet = new GeneratedPlanet({canvas: this.canvas,planetWorker: this.planetWorker});
+    this.canvas.width = e8.global.screenWidth-20;
     this.canvas.height = 10000
-
     this.ctx = this.canvas.getContext("2d");
 
     this.x = this.y = this.i = 0;
     this.previousPlanetRadius = 0;
-
-
-    this.galaxyWorker = new Worker("../../public/js/workers/galaxy/galaxyWorker.js");
-    this.galaxyWorker.postMessage({
-      type: "init"
-    })
+    this.i = 0;
 
     setInterval(() => {
       let planetData = this.planetMap[this.planetDistribution[this.i]];
-      if ( this.i < 50 && planetData.type !=="preRendered") {
+      if ( this.i < 100 && planetData.type !=="preRendered") {
         this.createPlanet(planetData);
       }
       this.i++;
     }, 1000)
-
-
-    this.galaxyWorker.onmessage = (event)=> {
-      const dataFromWorker = event.data;
-      this.createImageFromWorkerData(dataFromWorker)
-    }
-  }
-
-
-  createPlanetsFromPlanetMap = () => {
-    let planetData = this.planetMap[this.planetDistribution[i]];
-    this.createPlanet(planetData);
   }
 
   drawImage = (img) => {
-
     this.ctx.drawImage(img, this.x,this.y);
     this.previousPlanetRadius = img.width;
     this.x+=this.previousPlanetRadius;
@@ -57,20 +41,9 @@ class ProceduralPlanetGallery {
   }
 
   createPlanet = (planetData) => {
-    this.galaxyWorker.postMessage({
-      type : "create",
-      payload : planetData
+    this.generatedPlanet.create(planetData).then(planetObject => {
+      console.log("planetObject", planetObject);
+      this.drawImage(planetObject.image);
     })
-  }
-
-  createImageFromWorkerData = (dataFromWorker)=> {
-    let img = new Image();
-    let planetData = dataFromWorker.planetData;
-    img.onload = () => {
-      console.log("image loaded");
-      this.drawImage(img);
-    }
-    img.src = URL.createObjectURL(dataFromWorker.imageBlob)
-
   }
 }

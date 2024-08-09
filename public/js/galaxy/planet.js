@@ -2,7 +2,7 @@
 class Planet extends GameObject {
 
   constructor({
-    coordinates,
+                coordinates,
                 image,
                 width,
                 height,
@@ -18,8 +18,8 @@ class Planet extends GameObject {
               }) {
     super({
       isActive: true,
+      identification: "planet",
       coordinates,
-        identification: "planet",
       image,
       width,
       height,
@@ -41,15 +41,8 @@ class Planet extends GameObject {
 
     if (this.posX + this.posDX <= 0 - this.width) {
       this.destroy();
-      this.dependencies.forEach(dependency => dependency.destroy());
     } else {
       this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZfixed;
-      //this.posY -= PlayerShip.velY * deltaTime;
-      this.dependencies.forEach(dependency => {
-        dependency.posX = this.posX;
-        dependency.posY = this.posY;
-      });
     }
   }
-
 }

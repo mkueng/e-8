@@ -55,7 +55,6 @@ class ProceduralShipImage {
       }
 
       const fetchedResourceObjects = await Promise.all(promises);
-      console.log("fetchedResourceObjects:", fetchedResourceObjects);
       fetchedResourceObjects.forEach(resourceObject => {
 
 

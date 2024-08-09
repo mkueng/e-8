@@ -72,7 +72,7 @@ class PlayerShipFactory {
       engineTrail : engineTrailInstance,
       features: featureInstances,
       cargo: cargo,
-      height: imageResource.image.height,
+      height: imageResource.image.height /17,
       hudHandler: this.hudHandler,
       inputHandler: this.inputHandler,
       maxVelX: generic.maxVelX,
@@ -89,7 +89,14 @@ class PlayerShipFactory {
       velY: 0,
       weapons: weaponsInstances,
       width: imageResource.image.width,
-      image: imageResource.image,
+      spriteSheet: imageResource.image,
+      strideX: imageResource.image.width / 1,
+      strideY: imageResource.image.height / 17,
+      stride: imageResource.image.height / 17,
+      spriteSheetColumns: 1,
+      spriteSheetRows: 17,
+      animationLoop: false,
+      currentFrame: 1,
       coordinates : 0
     });
   };

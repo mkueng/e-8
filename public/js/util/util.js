@@ -66,7 +66,17 @@ class Util {
   Math.floor(Math.random() * range + offset);
 
 
-
+  /**
+   *
+   * @param number
+   * @param n
+   * @returns {number|number}
+   */
+  static getLastNDigits = (number, n) => {
+    const numberString = number.toString();
+    const lastNDigits = parseInt(numberString.slice(-n));
+    return isNaN(lastNDigits) ? 0 : lastNDigits;
+  }
 
 
   static pseudoRandomNumbers = ({seed, length, amount}) => {
@@ -200,11 +210,12 @@ class Util {
   }
 
 
-  static pseudoRandomNumbers_old = (seed, length, amount) => {
+  static pseudoRandomNumbers_old = ({seed, length, amount}) => {
     const randomNumbers = [];
     for (let i = 0; i < amount; i++) {
       seed = Math.sin(seed) * length;
       let randomNumber = (seed - Math.floor(seed));
+      console.log("randomNumber:", randomNumber);
       randomNumber = randomNumber*1000000000;
       randomNumbers.push(parseInt(randomNumber.toFixed(0)));
     }

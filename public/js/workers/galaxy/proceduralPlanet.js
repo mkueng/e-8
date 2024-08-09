@@ -1,3 +1,4 @@
+'use strict'
 class ProceduralPlanet {
 
   #offScreenContext;
@@ -27,17 +28,16 @@ class ProceduralPlanet {
    * @param q
    */
   createPlanet=({
-
-                  coordinates,
                   radius,
                   noiseRange,
+                  stripeFactor,
                   octavesRange,
                   lacunarityRange,
                   persistenceOffset,
                   baseFrequencyOffset,
+                  inFrontOfStar,
                   r,g,b,q
-
-                })=>{
+  })=>{
 
     const width = 7 * radius;
     const height = 7 * radius;
@@ -46,21 +46,24 @@ class ProceduralPlanet {
     this.#valueVector = [];
 
     this.#generateNoise({
-      width : width,
-      height : height,
-      noiseRange : noiseRange,
-      octavesRange : octavesRange,
-      lacunarityRange : lacunarityRange,
-      persistenceOffset : persistenceOffset,
-      baseFrequencyOffset : baseFrequencyOffset
+      width: width,
+      height: height,
+      noiseRange: noiseRange,
+      stripeFactor: stripeFactor,
+      octavesRange: octavesRange,
+      lacunarityRange: lacunarityRange,
+      persistenceOffset: persistenceOffset,
+      baseFrequencyOffset: baseFrequencyOffset
     });
 
+    //2d map of the planet surface
     this.#drawMap(r,g,b,q, width, height,this.#mapContext);
     //return this.#mapCanvas.convertToBlob();
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b,radius, this.#offScreenContext);
-    this.#addGradient(radius, this.#offScreenContext, "source-over");
-    this.#addGradient(radius, this.#offScreenContext, "overlay");
+    //shadow
+    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar);
+    this.#addGradient(radius, this.#offScreenContext, "overlay", inFrontOfStar);
 
     // only draw image where mask is
     this.#offScreenContext.globalCompositeOperation = 'destination-in';
@@ -69,17 +72,16 @@ class ProceduralPlanet {
     this.#offScreenContext.fillStyle = '#000';
     this.#offScreenContext.beginPath();
     this.#offScreenContext.arc(
-      radius+40, // x
-      radius+40, // y
-      radius+3, // radius
+      radius + 40, // x
+      radius + 40, // y
+      radius + (radius / 30), // radius
       0.5, // start angle
-    2.5* Math.PI // end angle
+      2.5* Math.PI // end angle
     );
     this.#offScreenContext.fill();
 
     // restore to default composite operation (is draw over current image)
     this.#offScreenContext.globalCompositeOperation = 'source-over';
-    //return this.#offScreenContext.getImageData(0, 0, this.#offScreenContext.canvas.width, this.#offScreenContext.canvas.height);
     return this.#offScreenCanvas.convertToBlob();
   }
 
@@ -90,11 +92,10 @@ class ProceduralPlanet {
     this.#mapContext = this.#mapCanvas.getContext("2d");
     this.#mapContext.clearRect(0,0,  width, height)
 
-    this.#offScreenCanvas= null;
     this.#offScreenCanvas = new OffscreenCanvas(radius*2+80, radius*2+80);
+    this.#offScreenContext = this.#offScreenCanvas.getContext("2d");
     this.#scaledCanvas = new OffscreenCanvas(2*radius*2+80, 2*radius*2+80);
     this.#scaledContext = this.#scaledCanvas.getContext("2d");
-    this.#offScreenContext = this.#offScreenCanvas.getContext("2d");
     this.#offScreenContext.clearRect(0,0, radius*2+80, radius*2+80);
   };
 
@@ -109,26 +110,22 @@ class ProceduralPlanet {
    * @param baseFrequencyOffset
    */
   #generateNoise =({
-                    width,
-                    height,
-                    noiseRange,
-                    octavesRange,
-                    lacunarityRange,
-                    persistenceOffset,
-                    baseFrequencyOffset
-                  })=> {
+                     width,
+                     height,
+                     noiseRange,
+                     stripeFactor,
+                     octavesRange,
+                     lacunarityRange,
+                     persistenceOffset,
+                     baseFrequencyOffset
+  })=> {
 
     const noise = new Noise(noiseRange);
-    console.log("noiseRange:", noiseRange);
-    console.log("baseFrequencyOffset:", baseFrequencyOffset);
-    //console.log("noiseRange:", noiseRange);
+
     const octaves = (8);
     const lacunarity = (0.25);
-    //console.log("lacunarity:", lacunarity);
     const persistence = persistenceOffset = 2.1;
-    //console.log("persistence:", persistence);
-    const baseFrequency = baseFrequencyOffset*2;
-    //console.log("baseFrequency:", baseFrequency);
+    const baseFrequency = baseFrequencyOffset*3;
 
 
     for (let y = 0; y < height; y+=2) {
@@ -138,7 +135,7 @@ class ProceduralPlanet {
         let amplitude = 1;
 
         for (let i = 0; i < octaves; i++) {
-          value += amplitude * noise.perlin3(x / 100 * frequency, y / 100 * frequency, 1*frequency);
+          value += amplitude * noise.perlin3(x / (stripeFactor*100) * frequency, y / 100 * frequency, frequency);
           frequency *= lacunarity;
           amplitude *= persistence;
         }
@@ -167,7 +164,6 @@ class ProceduralPlanet {
         value = this.#valueVector[index];
 
         if (value < 1) {
-
           ctx.fillStyle = `rgba(${Math.floor(q*3)}, ${Math.floor(value*g)}, ${Math.floor(value*b)}, 0.9)`; // Ocean
         } else {
           //ctx.fillStyle = "#fac";
@@ -206,36 +202,46 @@ class ProceduralPlanet {
    * @param offScreenCtx
    */
   #addAtmosphere =(r, g, b, radius, offScreenCtx)=>{
-
     offScreenCtx.globalAlpha = 1;
     const gradient = this.#offScreenContext.createRadialGradient(
       radius+40, radius+40, 20,
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.1)");
-    gradient.addColorStop(0.93, "rgba("+r+","+ g+"," +b+", 0.9)");
-    gradient.addColorStop(1, "rgba("+r+20+","+ g+20+"," +b+20+", 1)");
+    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
+    gradient.addColorStop(0.96, "rgba("+r+","+ g+"," +b+", 0.9)");
+    gradient.addColorStop(1, "rgba("+r+15+","+ g+15+"," +b+15+", 1)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
     offScreenCtx.fillRect(20, 20, radius*2+30, radius*2+30);
-    offScreenCtx.globalAlpha =1;
+    offScreenCtx.globalAlpha = 1;
   }
 
   /**
    *
    * @param radius
    * @param offScreenCtx
+   * @param compositionOperation
    */
-  #addGradient = (radius, offScreenCtx, compositionOperation)=>{
+  #addGradient = (radius, offScreenCtx, compositionOperation, inFrontOfStar)=>{
     offScreenCtx.beginPath();
     offScreenCtx.strokeStyle = "transparent";
     offScreenCtx.globalCompositeOperation = compositionOperation;
-    const gradient = this.#offScreenContext.createLinearGradient(0,0,radius*2+40,0)
-    gradient.addColorStop(0, "rgba(1, 1, 1, 0.6)");
-    gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.6)");
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.5)');
+    let gradient = null;
+
+    if (inFrontOfStar) {
+      gradient = this.#offScreenContext.createRadialGradient( radius+40,radius+40, 10, radius+40, radius+40, radius+5);
+      gradient.addColorStop(0, "rgba(1, 1, 1, 0.5)");
+      gradient.addColorStop(0.97, "rgba(1, 1, 1, 0.5)");
+      gradient.addColorStop(1, 'rgba(155, 155, 155, 0.1)');
+    } else {
+      gradient = this.#offScreenContext.createLinearGradient(0,0,radius*2+40,0);
+      gradient.addColorStop(0, "rgba(1, 1, 1, 0.6)");
+      gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.6)");
+      gradient.addColorStop(1, "rgba(255, 255, 255, 0.5)");
+    }
+
     offScreenCtx.globalAlpha = 1;
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.fillRect(20,20,  radius*2+40,radius*2+40);

@@ -15,6 +15,11 @@ class PlayerShip extends GameObject {
    *
    * @param image
    * @param spriteSheet
+   * @param spriteSheetRows
+   * @param spriteSheetColumns
+   * @param strideX
+   * @param strideY
+   * @param animationLoop
    * @param currentFrame
    * @param stride
    * @param width
@@ -49,6 +54,11 @@ class PlayerShip extends GameObject {
   constructor({
                 image,
                 spriteSheet,
+    spriteSheetRows,
+    spriteSheetColumns,
+    strideX,
+    strideY,
+    animationLoop,
                 currentFrame,
                 stride,
                 width,
@@ -83,10 +93,14 @@ class PlayerShip extends GameObject {
     super({
       isActive: true,
       identification: "playerShip",
-      image,
       currentFrame,
-      stride,
+      animationLoop,
       spriteSheet,
+      stride,
+      spriteSheetColumns,
+      spriteSheetRows,
+      strideX,
+      strideY,
       width,
       height,
       velX,
@@ -219,7 +233,6 @@ class PlayerShip extends GameObject {
   }
 
   unloadCargo = () => {
-
   }
 
   initializeShield = () => {
@@ -238,9 +251,6 @@ class PlayerShip extends GameObject {
     this.shield.strength = Math.max(this.shield.strength - 10, 0);
   }
 
-  /**
-   *
-   */
   invokeTerminationSequence = () => {
     Object.assign(this.terminationSequence, {
       posX: this.posX,
@@ -271,7 +281,6 @@ class PlayerShip extends GameObject {
       SpeechHandler.playStatement(SpeechHandler.statements.shieldCritical)
       this.shieldInfoCritical = true;
       this.shieldInfoRecharged = false;
-
     }
 
     if (this.shield.strength <= 1){
@@ -280,8 +289,23 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
+  render = () => {
+    const frame = this.currentFrame;
+    const column = frame % this.spriteSheetColumns;
+    const row = Math.floor(frame / this.spriteSheetColumns);
 
-
+    this.context.drawImage(
+      this.spriteSheet,
+      column * this.strideX,
+      row * this.strideY,
+      this.strideX,
+      this.strideY,
+      this.posX,
+      this.posY,
+      this.width,
+      this.height
+    );
+  }
   /**
    *
    * @param deltaTime
@@ -290,18 +314,33 @@ class PlayerShip extends GameObject {
     //check fuel
     if (this.fuel.amount > 0 ) {
 
-      //controls
+      //control down
       if (this.controls.down && this.velY < this.maxVelY) {
+        if (this.currentFrame < 16) {
+          this.currentFrame = this.currentFrame + 1;
+        }
         this.velY += this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
+      //control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
+        if (this.currentFrame > 0 ) {
+          this.currentFrame = this.currentFrame - 1;
+        }
+
         this.velY -= this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
+      //control right
       else if (this.controls.right) {
         this.viewPortVelX += this.accX;
         this.dependencies[0].isActive = true; // propulsion on
+        if (this.currentFrame < 10) {
+          this.currentFrame++;
+        }
+        if (this.currentFrame > 10) {
+          this.currentFrame--;
+        }
         if (this.posX < this.upperBoundX) {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
         }
@@ -311,7 +350,14 @@ class PlayerShip extends GameObject {
         } else {
           // this.dependencies[0].isActive = false; // propulsion off
         }
+        //control left
       } else if (this.controls.left) {
+        if (this.currentFrame < 10) {
+          this.currentFrame++;
+        }
+        if (this.currentFrame > 10) {
+          this.currentFrame--;
+        }
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
         this.viewPortVelX -= this.accX;
@@ -321,6 +367,12 @@ class PlayerShip extends GameObject {
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       } else {
         this.dependencies[0].isActive = false; // propulsion off
+        if (this.currentFrame < 10) {
+          this.currentFrame++;
+        }
+        if (this.currentFrame > 10) {
+          this.currentFrame--;
+        }
       }
     }
 
@@ -353,18 +405,16 @@ class PlayerShip extends GameObject {
 
     //coordinates
     this.coordinates = this.coordinates + (this.velX * deltaTime / 5);
-
-   // console.log(this.coordinates);
-
     PlayerShip.coordinates = this.coordinates;
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
     PlayerShip.fuel = this.fuel.amount;
     PlayerShip.shield = this.shield.strength;
 
+    //update posY of affected gameObjects based on this.posY
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
-        obj.posY = obj.posY- (this.velY * deltaTime * obj.posZ / 2);
+        obj.posY = obj.posY - (this.velY * deltaTime * obj.posZ / 2);
       }
     })
 
@@ -384,7 +434,6 @@ class PlayerShip extends GameObject {
         SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged)
       }
     }
-
   }
 
   /**
@@ -399,7 +448,6 @@ class PlayerShip extends GameObject {
         break;
       }
       case 2 : {
-        //console.log("KeyK");
         this.keyEvents["KeyK"]();
         break;
       }

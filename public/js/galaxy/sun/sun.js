@@ -79,7 +79,7 @@ class Sun extends GameObject{
     this.style.appendChild(document.createTextNode(keyframesCSS));
     document.head.appendChild(this.style);
     this.sunFire = document.getElementById("sun-fire");
-
+    this.sunFire.style.display = "block";
   }
 
 
