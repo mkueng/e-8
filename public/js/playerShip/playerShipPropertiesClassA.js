@@ -19,8 +19,8 @@ class PlayerShipPropertiesClassA {
   static generic = {
     maxVelX: 40,
     maxVelY: 10,
-    accX:0.10,
-    accY: 0.15
+    accX:0.15,
+    accY: 0.17,
   }
 
   static cargo = {
@@ -92,8 +92,8 @@ class PlayerShipPropertiesClassA {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
       amount: 2000,
-      posDX: 90,
-      posDY: 57
+      posDX: 70,
+      posDY: 50
     },
 
     FaF : {
@@ -101,7 +101,7 @@ class PlayerShipPropertiesClassA {
       type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
       amount: 1000,
       posDX : 60,
-      posDY : 57
+      posDY : 50
     },
 
     Laser : {

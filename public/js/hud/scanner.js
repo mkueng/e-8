@@ -40,7 +40,7 @@ class Scanner extends GameObject {
       let y = parseInt(this.canvas.height - this.#preFactor * Math.pow(x.toFixed(0), 2)).toFixed(0);
 
       this.arcContext.fillRect(this.#zeroPoint + x+5, y-24, 1, 1);
-      this.arcContext.fillRect(this.#zeroPoint + x+5, y-34, 2, 4);
+      this.arcContext.fillRect(this.#zeroPoint + x+5, y-34, 2, 2);
     }
     this.context.globalAlpha = 0.7;
     this.context.strokeStyle = e8.global.colors.lightVanilla

@@ -110,7 +110,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     const isEnemyShipAlive = EnemyShipHandler.enemyShips[this.target.id];
 
     if (isEnemyShipAlive) {
-      this.quotient = (this.target.posX - this.posX) / (this.target.posY - this.posY);
+      this.quotient = (this.target.posX - this.posX) / (this.target.posY - (this.posY+this.posDY));
     }
 
     if (Math.abs(this.quotient) < 0.01) {
