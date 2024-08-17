@@ -4,9 +4,8 @@ class ProceduralPlanetGallery {
   constructor() {
 
     this.galaxy = new Galaxy({scale: 600});
-    this.planetDistribution = Util.pseudoRandomClusteredDistribution({
-      ...e8.global.planetDistribution
-    })
+    this.psuedoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution({...e8.global.planetDistribution});
+    this.planetDistribution =  this.psuedoRandomClusteredDistribution["clustersArray"];
     this.planetMap = this.galaxy.createPlanetMap(this.planetDistribution);
 
     this.canvas = document.getElementById("canvas");

@@ -34,7 +34,11 @@ class Util {
     return null; // No nested object found
   };
 
-  //hash
+  /**
+   *
+   * @param str
+   * @returns {string}
+   */
   static simpleHash = function(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -45,9 +49,11 @@ class Util {
     return new Uint32Array([hash])[0].toString(36);
   };
 
-
-  // json
-
+  /**
+   *
+   * @param file
+   * @returns {Promise<any>}
+   */
   static fetchJSON = async function (file){
     const response = await fetch(file);
     return await response.json();
@@ -64,6 +70,19 @@ class Util {
    */
   static randomIntInRange = (range, offset=0) =>
   Math.floor(Math.random() * range + offset);
+
+
+  /**
+   *
+   * @param number
+   * @param n
+   * @returns {number|number}
+   */
+  static getFirstNDigits = (number, n) => {
+    const numberString = number.toString();
+    const lastNDigits = parseInt(numberString.slice(0,n));
+    return isNaN(lastNDigits) ? 0 : lastNDigits;
+  }
 
 
   /**
@@ -96,6 +115,31 @@ class Util {
       seed = int;
     }
     return randomNumbers;
+  }
+
+  static createPseudoRandomNumber = ({seed, length}) => {
+    if (seed === undefined || length === undefined) {
+      throw new Error('All arguments (seed, length) are required.');
+    }
+    const currentSeed = (seed * 9301 + 49297) % 233280;
+    const randomNumber = Math.floor((currentSeed / 2380) * (length + 1));
+    console.log("randomNumber:", randomNumber);
+    return randomNumber;
+  }
+
+  static createNumericHash(number, length) {
+    const str = number.toString();
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      const charCode = str.charCodeAt(i);
+      hash = (hash * 31 + charCode) % 1000000007; // Use a large prime number for modulus
+    }
+
+    // Convert the hash to a string and trim/pad it to the desired length
+    const hashStr = Math.abs(hash).toString().padStart(length, '0');
+    const pad =  hashStr.slice(-length);
+    return parseInt(pad);
   }
 
 
@@ -134,6 +178,7 @@ class Util {
       seed
     }) {
     let clusters = [];
+    let clustersObject = {};
     let distribution = Util.pseudoRandomNumbersWithinRange({
       min: 1,
       max: range,
@@ -159,10 +204,17 @@ class Util {
       })
 
       clusterOffset.forEach((offset) => {
-        clusters.push(cluster + offset);
+        let moduloCoordinates = (cluster + offset) % 10000;
+        let snapCoordinates = (cluster + offset) - moduloCoordinates;
+
+        clusters.push(snapCoordinates);
+        clustersObject[snapCoordinates] = snapCoordinates;
       })
     })
-    return clusters.sort((a, b) => a - b);
+    return  {
+      clustersObject: clustersObject,
+      clustersArray: clusters.sort((a, b) => a - b)
+    };
   }
 
 

@@ -11,7 +11,7 @@ e8.global.planetDistribution = {
   //seed: 726391,
   seed: 72891782182,
   amountOfClusters: 400,
-  range: 200000000,
+  range: 400000000,
   rangeWithinCluster: 10000
 }
 

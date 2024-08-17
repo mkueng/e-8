@@ -147,7 +147,7 @@ class PlayerShip extends GameObject {
     this.shieldInfoRecharged = true;
     this.viewPortVelX = 0;
     this.status = "green";
-    this.coordinates = 200000;
+    this.coordinates = 10000000;
     PlayerShip.weapons = this.weapons;
 
     this.controls = {

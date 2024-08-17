@@ -44,9 +44,12 @@ class GeneratedPlanet {
       let planetData = data.planetData;
       img.onload = () => {
         let posY = e8.global.screenHeight - 10 * planetData.r;
-        console.log("posY", posY);
+        let posZFixed = -1 * planetData.radius / (Math.floor(0.5 * 70000 + 25000));
+        console.log("planetData radius", planetData.radius);
+        //console.log("posZFixed", posZFixed);
+        //console.log("posY", posY);
         if (posY >= e8.global.screenHeight) {
-          posY = e8.global.screenHeight - img.height / 2;
+          posY = 500;//e8.global.screenHeight - img.height / 2;
         }
 
         let planetObject = new Planet({
@@ -55,11 +58,11 @@ class GeneratedPlanet {
           width: img.width,
           height: img.height,
           posX: null,
-          posY: posY,
+          posY: 500,
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZFixed: -1 * planetData.radius / (Math.floor(Math.random() * 70000 + 25000)),
+          posZFixed: posZFixed,
           velY: 0,
           canvas: this.canvas
         })
