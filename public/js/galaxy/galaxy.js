@@ -34,9 +34,6 @@ class Galaxy {
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
     this.planetWorker = new Worker("../../js/workers/galaxy/planetWorker.js");
     this.generatedPlanet = new GeneratedPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
-    this.#planetQueueBufferSize = 5;
-    this.#planetIndex = 0;
-    this.#sunIndex = 0;
 
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}
@@ -45,13 +42,8 @@ class Galaxy {
 
     this.#planetDistributionArray =  pseudoRandomClusteredDistribution["clustersArray"];
     this.#planetDistributionObject = pseudoRandomClusteredDistribution["clustersObject"];
-
     this.#planetDistributionObjectKeys = Object.keys(this.#planetDistributionObject).map(Number);
-    console.log("this.#planetDistributionObjectKeys:", this.#planetDistributionObjectKeys);
-    console.log(" this.#planetDistributionArray:", this.#planetDistributionArray);
 
-    //this.#clonedPlanetDistribution = [...this.#planetDistribution];
-    //this.#upcomingPlanetCoordinates = this.#clonedPlanetDistribution[this.#planetIndex];
     this.#sunDistribution = Util.pseudoRandomNumbersWithinRange({
       min: 1,
       max: 1000000000,
@@ -59,27 +51,10 @@ class Galaxy {
       seed: 1289821937
     })
 
-    /*
-    this.#sunDistribution =  Util.pseudoRandomClusteredDistribution({
-      seed: 8998492304982,
-      amountOfClusters: 1000,
-      range: 100000000,
-      rangeWithinCluster: 300000
-    })*/
-    console.log("this.#planetDistribution:", this.#planetDistributionArray);
-    console.log("this.#sunDistribution:", this.#sunDistribution);
-
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
     console.log("this.#planetMap:",  this.#planetMap);
-
-    this.upcomingPlanetCoordinates = this.#planetDistributionArray[this.#planetIndex];
-    this.upcomingSunCoordinates = this.#sunDistribution[this.#sunIndex];
-
+    
     e8.global.gameLoop.subscribe(this);
-/*
-    for (let i = 0; i < this.#planetQueueBufferSize; i++) {
-      await this.#createPlanet();
-    }*/
   }
 
   /**
@@ -197,75 +172,49 @@ class Galaxy {
    */
   createPlanetMap = (distribution) =>{
     let planetMap = {};
-    let ticker = Util.getFirstNDigits(distribution[0], 1);
+
     let planetSizeCounter = 1
-    for (const value of distribution){
+    for (const coordinate of distribution){
       if (planetSizeCounter >= 5) {
         planetSizeCounter = 1;
       }
 
-      // preRenderedPlanet
-      /*
-      if ((ticker % 40) === 0) {
-        let planetImageNr = Util.getLastNDigits(value, 2) % 15;
+      const oneDigit = Util.createNumericHash(coordinate,1);
+      const twoDigits = Util.createNumericHash(coordinate,2);
+      const threeDigits = Util.createNumericHash(coordinate,3);
 
-
-        let imageResourceObject = new ResourceObject({
-          name : "planet_"+planetImageNr,
-          fileName : "planet_"+planetImageNr,
-          fileType : ResourceObject.TYPES.png,
-          resourcePath : "/resources/planets/"
-
-        })
-        planetMap[value.toFixed(0)] = {
-          type: "preRendered",
-          imageResourceObject: imageResourceObject
-        }
-
-        ticker = Util.getLastNDigits(value, 1);
-
-        // generated Planet
-      } else {
-      */
-      {
-        const firstDigit = Util.createNumericHash(value,1);
-        const first2Digits = Util.createNumericHash(value,2);
-        const first3Digits = Util.createNumericHash(value,3);
-
-        let r = parseInt(first3Digits % 120);
-        let g = parseInt(first3Digits % 142);
-        let b = parseInt(first3Digits % 109);
-        let q = parseInt(first3Digits % 10);
+      let r = parseInt(threeDigits % 120);
+      let g = parseInt(threeDigits % 142);
+      let b = parseInt(threeDigits % 109);
+      let q = parseInt(threeDigits % 10);
 
        // let stripeFactor = lastDigit / 7+1;
 
-        let stripeFactor = firstDigit;
-        if (firstDigit > 4 ) stripeFactor = value % 20;
+      let stripeFactor = oneDigit;
+      if (oneDigit > 4 ) stripeFactor = coordinate % 20;
 
-        let radius = Util.createNumericHash(value,3);
-        console.log("radius:", radius);
+      let radius = Math.floor(Util.createNumericHash(coordinate,3) / 4);
 
-
-        planetMap[value.toFixed(0)]= {
-          type : "generated",
-          coordinates: value,
-          radius: radius / 4,
-          noiseRange : first2Digits * 2 ,
-          octavesRange : firstDigit,
-          lacunarityRange : firstDigit / 2,
-          persistenceOffset : firstDigit / 5,
-          baseFrequencyOffset : first3Digits,
-          stripeFactor : stripeFactor,
-          r: r,
-          g: g,
-          b: b,
-          q: q
-        }
-        //console.log("rgbq:", r,g,b,q);
-        planetSizeCounter++;
+      planetMap[coordinate]= {
+        type : "generated",
+        coordinates: coordinate,
+        radius: radius,
+        noiseRange : twoDigits / 1.2 ,
+        octavesRange : oneDigit,
+        lacunarityRange : 0.25,
+        persistenceOffset : oneDigit / 5,
+        baseFrequencyOffset : threeDigits *4,
+        stripeFactor : stripeFactor,
+        r: r,
+        g: g,
+        b: b,
+        q: q
       }
-      ticker = Util.getFirstNDigits(value, 1);
+      //console.log("rgbq:", r,g,b,q);
+      planetSizeCounter++;
     }
+
+
     console.log("planetMap:", planetMap);
     return planetMap;
   }

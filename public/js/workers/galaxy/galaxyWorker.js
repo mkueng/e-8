@@ -22,7 +22,7 @@ onmessage = (evt)=>{
         radius: planetData.radius,
         noiseRange : planetData.noiseRange,
         octavesRange : planetData.octavesRange,
-        lacunarityRange : 0.5,
+        lacunarityRange : planetData.lacunarityRange,
         persistenceOffset : 0,
         stripeFactor: planetData.stripeFactor,
         baseFrequencyOffset : planetData.baseFrequencyOffset,

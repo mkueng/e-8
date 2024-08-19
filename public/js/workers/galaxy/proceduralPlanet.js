@@ -51,7 +51,7 @@ class ProceduralPlanet {
       noiseRange: noiseRange,
       stripeFactor: stripeFactor,
       octavesRange: octavesRange,
-      lacunarityRange: lacunarityRange,
+      lacunarityRange: 0.25,
       persistenceOffset: persistenceOffset,
       baseFrequencyOffset: baseFrequencyOffset
     });
@@ -123,7 +123,7 @@ class ProceduralPlanet {
     const noise = new Noise(noiseRange);
 
     const octaves = (8);
-    const lacunarity = (0.25);
+    const lacunarity = (lacunarityRange);
     const persistence = persistenceOffset = 2.1;
     const baseFrequency = baseFrequencyOffset*3;
 
