@@ -17,7 +17,7 @@ class LocalStorageHandler {
   readLocalStorage = () => {
     this.#storageItems.music_volume = localStorage.getItem("music_volume") || 50;
     this.#storageItems.fx_volume = localStorage.getItem("fx_volume") || 70;
-    console.log("storageItems: ", this.#storageItems);
+    //console.log("storageItems: ", this.#storageItems);
   }
 
   getStorageItem = (key) => {

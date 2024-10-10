@@ -14,12 +14,12 @@ class GameController {
     init = async () =>{
 
         // galaxy
-        this.#galaxy = new Galaxy({scale:800});
+        this.#galaxy = new Galaxy({scale:8000});
         this.#galaxy.init();
-
-
+        /*
 
         // dust
+
         await e8.global.dustHandler.init();
         e8.global.dustHandler.invokeDust();
 
@@ -32,12 +32,14 @@ class GameController {
         e8.global.hazeHandler.invokeHaze();
 
 
+        */
 
         // player ship
         this.#playerShipHandler = new PlayerShipHandler();
         this.#playerShipHandler.init();
         await this.#playerShipHandler.createShip();
 
+        /*
         //hud
         this.scanner = new Scanner({galaxy: this.#galaxy});
         await this.scanner.init();
@@ -51,7 +53,7 @@ class GameController {
         this.freighterHandler = new FreighterHandler();
         await this.freighterHandler.init();
         //await this.freighterHandler.create();
-
+        */
         this.game = new Game({});
         document.querySelector("#game").style.display = "block";
     }
@@ -59,7 +61,4 @@ class GameController {
     startGame =  ()=>{
         this.game.start();
     }
-
-
-
 }

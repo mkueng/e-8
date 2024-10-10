@@ -2,7 +2,6 @@ class Util {
 
   static instance = new this();
 
-
   // objects
 
   /**
@@ -60,7 +59,6 @@ class Util {
   }
 
   // numbers
-
 
   /**
    *
@@ -123,7 +121,6 @@ class Util {
     }
     const currentSeed = (seed * 9301 + 49297) % 233280;
     const randomNumber = Math.floor((currentSeed / 2380) * (length + 1));
-    console.log("randomNumber:", randomNumber);
     return randomNumber;
   }
 
@@ -204,7 +201,7 @@ class Util {
       })
 
       clusterOffset.forEach((offset) => {
-        let moduloCoordinates = (cluster + offset) % 10000;
+        let moduloCoordinates = (cluster + offset) % 12345;
         let snapCoordinates = (cluster + offset) - moduloCoordinates;
 
         clusters.push(snapCoordinates);
@@ -227,7 +224,6 @@ class Util {
     })
     let previousClusterCoordinates = 0;
     for (let i=0; i < amount; i++) {
-      console.log("i:", i);
       const clusterCoordinateInterval = Util.pseudoRandomNumbers({
         seed: randomNumbers[i],
         length: 5,
@@ -267,7 +263,6 @@ class Util {
     for (let i = 0; i < amount; i++) {
       seed = Math.sin(seed) * length;
       let randomNumber = (seed - Math.floor(seed));
-      console.log("randomNumber:", randomNumber);
       randomNumber = randomNumber*1000000000;
       randomNumbers.push(parseInt(randomNumber.toFixed(0)));
     }

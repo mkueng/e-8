@@ -36,8 +36,7 @@ class Galaxy {
     this.generatedPlanet = new GeneratedPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
 
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
-      {...e8.global.planetDistribution}
-    );
+      {...e8.global.planetDistribution})
 
 
     this.#planetDistributionArray =  pseudoRandomClusteredDistribution["clustersArray"];
@@ -52,7 +51,7 @@ class Galaxy {
     })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
-    console.log("this.#planetMap:",  this.#planetMap);
+    //console.log("this.#planetMap:",  this.#planetMap);
     
     e8.global.gameLoop.subscribe(this);
   }
@@ -143,11 +142,8 @@ class Galaxy {
 
 
   #createPlanet = async (coordinates) => {
-    console.log("obj:", coordinates);
     let planetData = this.#planetMap[coordinates];
-    console.log("planetData:", planetData);
     let planetObject = await this.generatedPlanet.create(planetData);
-    console.log("planetObject", planetObject);
     let relativePlanetPositionX = e8.global.screenWidth// - ((PlayerShip.coordinates-coordinates) * planetObject.posZFixed);
     planetObject.posX = relativePlanetPositionX;
 
@@ -172,28 +168,38 @@ class Galaxy {
    */
   createPlanetMap = (distribution) =>{
     let planetMap = {};
-
+    let radius;
     let planetSizeCounter = 1
+
     for (const coordinate of distribution){
-      if (planetSizeCounter >= 5) {
+      if (planetSizeCounter > 6) {
         planetSizeCounter = 1;
+      }
+      if (planetSizeCounter >= 2 && planetSizeCounter <= 5) {
+        radius = Math.floor(Util.createNumericHash(coordinate,3) / 4);
+      } else if (planetSizeCounter < 2) {
+        radius = Math.floor(Util.createNumericHash(coordinate,3) / 0.7);
+      } else {
+        radius = Math.floor(Util.createNumericHash(coordinate,3) / 2);
       }
 
       const oneDigit = Util.createNumericHash(coordinate,1);
       const twoDigits = Util.createNumericHash(coordinate,2);
-      const threeDigits = Util.createNumericHash(coordinate,3);
+      const threeDigits = Util.getLastNDigits(coordinate,3);
 
       let r = parseInt(threeDigits % 120);
       let g = parseInt(threeDigits % 142);
       let b = parseInt(threeDigits % 109);
-      let q = parseInt(threeDigits % 10);
+      let q = parseInt(threeDigits % 100);
 
+
+      //console.log("rgbq:", r,g,b,q);
        // let stripeFactor = lastDigit / 7+1;
 
-      let stripeFactor = oneDigit;
-      if (oneDigit > 4 ) stripeFactor = coordinate % 20;
-
-      let radius = Math.floor(Util.createNumericHash(coordinate,3) / 4);
+      let stripeFactor = twoDigits / Util.createPseudoRandomNumber({seed:32783827,length:2})+0.5
+      if (oneDigit > 8 ) {
+        stripeFactor = twoDigits*Util.createPseudoRandomNumber({seed:32783827,length:3}) % 522 / 5;
+      }
 
       planetMap[coordinate]= {
         type : "generated",
@@ -213,9 +219,6 @@ class Galaxy {
       //console.log("rgbq:", r,g,b,q);
       planetSizeCounter++;
     }
-
-
-    console.log("planetMap:", planetMap);
     return planetMap;
   }
 }

@@ -316,18 +316,11 @@ class PlayerShip extends GameObject {
 
       //control down
       if (this.controls.down && this.velY < this.maxVelY) {
-        if (this.currentFrame < 16) {
-          this.currentFrame = this.currentFrame + 1;
-        }
         this.velY += this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
       //control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
-        if (this.currentFrame > 0 ) {
-          this.currentFrame = this.currentFrame - 1;
-        }
-
         this.velY -= this.accY;
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
@@ -335,12 +328,6 @@ class PlayerShip extends GameObject {
       else if (this.controls.right) {
         this.viewPortVelX += this.accX;
         this.dependencies[0].isActive = true; // propulsion on
-        if (this.currentFrame < 10) {
-          this.currentFrame++;
-        }
-        if (this.currentFrame > 10) {
-          this.currentFrame--;
-        }
         if (this.posX < this.upperBoundX) {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
         }
@@ -352,12 +339,7 @@ class PlayerShip extends GameObject {
         }
         //control left
       } else if (this.controls.left) {
-        if (this.currentFrame < 10) {
-          this.currentFrame++;
-        }
-        if (this.currentFrame > 10) {
-          this.currentFrame--;
-        }
+       
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
         this.viewPortVelX -= this.accX;
@@ -367,12 +349,6 @@ class PlayerShip extends GameObject {
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       } else {
         this.dependencies[0].isActive = false; // propulsion off
-        if (this.currentFrame < 10) {
-          this.currentFrame++;
-        }
-        if (this.currentFrame > 10) {
-          this.currentFrame--;
-        }
       }
     }
 

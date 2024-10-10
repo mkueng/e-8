@@ -23,7 +23,6 @@ class GeneratedPlanet {
     })
     return new Promise((resolve) => {
       this.#planetWorker.onmessage = async (event) => {
-        console.log("planetWorker event", event);
         const dataFromWorker = event.data;
         const planetObject = this.createPlanetObjectFromData(dataFromWorker).then((planetObject) => {
           resolve(planetObject);
@@ -45,7 +44,7 @@ class GeneratedPlanet {
       img.onload = () => {
         let posY = e8.global.screenHeight - 10 * planetData.r;
         let posZFixed = -1 * planetData.radius / (Math.floor(0.5 * 70000 + 25000));
-        console.log("planetData radius", planetData.radius);
+
         //console.log("posZFixed", posZFixed);
         //console.log("posY", posY);
         if (posY >= e8.global.screenHeight) {

@@ -6,7 +6,7 @@ class CollisionDetector {
   /**
    *
    */
-  performCollisionCheck = () => {
+  performCollisionChecks = () => {
     const gameObjects = GameObjectsHandler.gameObjects;
     const len = gameObjects.length;
 

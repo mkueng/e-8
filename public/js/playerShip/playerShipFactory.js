@@ -96,14 +96,14 @@ class PlayerShipFactory {
       spriteSheetColumns: 1,
       spriteSheetRows: 17,
       animationLoop: false,
-      currentFrame: 1,
+      currentFrame: 11,
       coordinates : 0
     });
   };
 
   #createHud = async () =>{
-    await new HudLeft().init();
-    await new HudRight().init();
+    //await new HudLeft().init();
+    //await new HudRight().init();
   }
 
   #createRadar = async ()=>{
