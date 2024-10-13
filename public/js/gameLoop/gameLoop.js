@@ -1,16 +1,23 @@
 'use strict'
 class GameLoop {
 
-  #fpsTarget= 10;
-  #renderTargetInterval;
-  #gameSpeedFactor = 0.1;
+  #fpsTarget= 1;
+  #renderTargetInterval =1000 / this.#fpsTarget;
+  #fixedTimeStep = 1000 / 100; // Fixed time step for update (16.67ms for 60 FPS)
+  #accumulatedTime = 0;
+  #gameSpeedFactor = 0.5;
   #subscribers = [];
   #animationId = null;
   #frameCounter = 0;
   #deltaTime = 0;
-  #oldTime = 0;
-  #then = 0;
+  #previousTimestamp = 0;
+  #lastRenderTimestamp = 0;
   #ticker = 0;
+#timeSinceLastRender = 0;
+  #fps = 60;
+  #msPerFrame = 1000 /  this.#fpsTarget;
+
+
 
   constructor(){
   }
@@ -66,39 +73,35 @@ class GameLoop {
 
   /**
    *
-   * @param newTime
+   * @param currentTimestamp
    */
-  #animate = (newTime) => {
-    //console.log("ANIMATE");
-    const elapsedTime =  newTime - this.#then;
-    const deltaTime = newTime - this.#oldTime;
-    this.#oldTime = newTime;
+  #animate = (currentTimestamp) => {
 
-    this.#update(deltaTime * this.#gameSpeedFactor);
 
-    if (elapsedTime > this.#renderTargetInterval) {
-      //console.log("RENDER")
-      //console.log("this.#renderTargetInterval:",this.#renderTargetInterval)
-      //console.log("elapsedTime: ", elapsedTime);
-      //console.log("newTime: ", newTime);
-      //console.log("this.#then: ", this.#then);
-      //this.#then = newTime;
-      this.#then = newTime  - (elapsedTime % this.#renderTargetInterval);
+
+
+
+
+
+
+    this.#deltaTime =  currentTimestamp -  this.#previousTimestamp;
+    this.#lastRenderTimestamp =  currentTimestamp - this.#timeSinceLastRender ;
+    this.#deltaTime  = Math.min(  this.#deltaTime );
+    this.#previousTimestamp = currentTimestamp;
+    //console.log(timeSinceLastRender);
+    //this.#lastRenderTimestamp = currentTimestamp;
+    console.log("UPDATE");
+
+    this.#update(  this.#deltaTime /100);
+
+
+    if (   this.#lastRenderTimestamp   > this.#renderTargetInterval) {
+      console.log("RENDER")
+    const excessTime = this.#timeSinceLastRender - this.#msPerFrame;
+      this.#timeSinceLastRender  = currentTimestamp  - excessTime;
       this.#render();
-      this.#frameCounter++;
-    }
-
-    this.#ticker++;
-    if (this.#ticker >= 60) {
-      this.#ticker = 0;
-      this.#subscribers.forEach(subscriber => {
-        subscriber.updateFromGameLoop({
-          "frameTime:": this.#frameCounter
-        })
-      })
-      this.#frameCounter = 0;
-    }
-
+      //this.#frameCounter++;ds
+   }
     this.#animationId = requestAnimationFrame(this.#animate);
   }
 
@@ -108,8 +111,6 @@ class GameLoop {
   init = () =>{
     this.#renderTargetInterval = 1000 / this.#fpsTarget; // 16.667ms at 60 frames per second
     this.#deltaTime = 0;
-    this.#oldTime = performance.now();
-    this.#then = performance.now();
   }
 
   /**
@@ -117,7 +118,11 @@ class GameLoop {
    */
   start = () => {
     this.init();
-    this.#animate(performance.now());
+    const now = performance.now();
+    this.#previousTimestamp = now;
+    this.#lastRenderTimestamp = now;
+    this.#timeSinceLastRender = now;
+    this.#animate(now);
   }
 
   /**

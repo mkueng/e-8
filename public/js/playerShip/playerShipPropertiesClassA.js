@@ -17,10 +17,10 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX: 4000,
-    maxVelY: 10,
-    accX: 100.15,
-    accY: 0.17,
+    maxVelX: 30,
+    maxVelY: 30,
+    accX: 1,
+    accY: 1.5,
   }
 
   static cargo = {
@@ -33,8 +33,8 @@ class PlayerShipPropertiesClassA {
 
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
-    posDX : -40,
-    posDY :53
+    posDX : -20,
+    posDY :40
   }
 
   static propulsion = {
@@ -59,8 +59,8 @@ class PlayerShipPropertiesClassA {
 
   static shield = {
     type: ShieldFactory.SHIELD_TYPES.shieldA,
-    posDX: -90,
-    posDY: -90,
+    posDX: -100,
+    posDY: -100,
     width: 350,
     height: 300
   }
@@ -92,8 +92,8 @@ class PlayerShipPropertiesClassA {
       controlAssignment : "Space",
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
       amount: 2000,
-      posDX: 70,
-      posDY: 50
+      posDX: 50,
+      posDY: 45
     },
 
     FaF : {
@@ -109,7 +109,7 @@ class PlayerShipPropertiesClassA {
       type : WeaponFactory.WEAPON_TYPES.laser,
       amount: 100,
       posDX : 72,
-      posDY : 47
+      posDY : 35
     }
   }
 }

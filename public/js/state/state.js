@@ -29,11 +29,11 @@ class State {
   }
 
   enter() {
-    console.log(`Entering state: ${this.#name}`);
+    console.log(`%centering state: ${this.#name}`, 'color: lightblue;');
   }
 
   exit() {
-    console.log(`Exiting state: ${this.#name}`);
+    console.log(`%cexiting state: ${this.#name}`, 'color: lightblue;');
   }
 }
 

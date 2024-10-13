@@ -311,6 +311,7 @@ class PlayerShip extends GameObject {
    * @param deltaTime
    */
   update = (deltaTime) =>{
+
     //check fuel
     if (this.fuel.amount > 0 ) {
 
@@ -326,7 +327,7 @@ class PlayerShip extends GameObject {
       }
       //control right
       else if (this.controls.right) {
-        this.viewPortVelX += this.accX;
+
         this.dependencies[0].isActive = true; // propulsion on
         if (this.posX < this.upperBoundX) {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
@@ -338,12 +339,12 @@ class PlayerShip extends GameObject {
           // this.dependencies[0].isActive = false; // propulsion off
         }
         //control left
-      } else if (this.controls.left) {
+      } else if (this.controls.left ) {
        
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
-        this.viewPortVelX -= this.accX;
-        if (this.velX > 0 && this.posX === this.lowerBoundX) {
+
+        if (this.velX > -this.maxVelX && this.posX > this.lowerBoundX) {
           this.velX -= this.accX;
         }
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
@@ -369,7 +370,7 @@ class PlayerShip extends GameObject {
 
     // position
     this.posY = this.posY + (this.velY * deltaTime);
-    this.posX = this.posX + (this.viewPortVelX * deltaTime);
+    this.posX = this.posX + (this.velX * deltaTime);
 
     if (this.posX >= this.upperBoundX) {
       this.viewPortVelX = 0;

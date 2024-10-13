@@ -75,7 +75,8 @@ class Weapon extends GameObject {
   }
 
   update = (dt) =>{
-    this.posX = (this.posX < e8.global.screenWidth && this.posX > 0) ? this.posX + (this.velX * dt) : this.destroy();
+    console.log(dt);
+    this.posX = (this.posX < e8.global.screenWidth && this.posX > 0) ? this.posX += (this.velX * dt) : this.destroy();
     this.posY = this.posY + (this.velY);
   }
 
