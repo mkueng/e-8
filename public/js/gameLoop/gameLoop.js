@@ -1,7 +1,7 @@
 'use strict'
 class GameLoop {
 
-  #fpsTarget= 1;
+  #fpsTarget= 60;
   #renderTargetInterval =1000 / this.#fpsTarget;
   #fixedTimeStep = 1000 / 100; // Fixed time step for update (16.67ms for 60 FPS)
   #accumulatedTime = 0;
@@ -10,11 +10,12 @@ class GameLoop {
   #animationId = null;
   #frameCounter = 0;
   #deltaTime = 0;
-  #previousTimestamp = 0;
+  #previousTimeSinceLastRender = 0;
   #lastRenderTimestamp = 0;
   #ticker = 0;
 #timeSinceLastRender = 0;
   #fps = 60;
+  #previousTimeStamp = 0;
   #msPerFrame = 1000 /  this.#fpsTarget;
 
 
@@ -73,35 +74,20 @@ class GameLoop {
 
   /**
    *
-   * @param currentTimestamp
+   * @param timeStamp
    */
-  #animate = (currentTimestamp) => {
+  #animate = (timeStamp) => {
 
+    const deltaTime = timeStamp - this.#previousTimeStamp;
+    this.#previousTimeStamp = timeStamp;
+    this.#update(deltaTime*0.5);
 
-
-
-
-
-
-
-    this.#deltaTime =  currentTimestamp -  this.#previousTimestamp;
-    this.#lastRenderTimestamp =  currentTimestamp - this.#timeSinceLastRender ;
-    this.#deltaTime  = Math.min(  this.#deltaTime );
-    this.#previousTimestamp = currentTimestamp;
-    //console.log(timeSinceLastRender);
-    //this.#lastRenderTimestamp = currentTimestamp;
-    console.log("UPDATE");
-
-    this.#update(  this.#deltaTime /100);
-
-
-    if (   this.#lastRenderTimestamp   > this.#renderTargetInterval) {
-      console.log("RENDER")
-    const excessTime = this.#timeSinceLastRender - this.#msPerFrame;
-      this.#timeSinceLastRender  = currentTimestamp  - excessTime;
+    const elapsedTimeSinceLastRender = timeStamp - this.#previousTimeSinceLastRender;
+    if (elapsedTimeSinceLastRender > this.#renderTargetInterval) {
+      this.#previousTimeSinceLastRender = timeStamp -(elapsedTimeSinceLastRender % this.#renderTargetInterval);
       this.#render();
-      //this.#frameCounter++;ds
-   }
+    }
+
     this.#animationId = requestAnimationFrame(this.#animate);
   }
 
@@ -119,9 +105,10 @@ class GameLoop {
   start = () => {
     this.init();
     const now = performance.now();
-    this.#previousTimestamp = now;
+    this.#previousTimeSinceLastRender = now;
     this.#lastRenderTimestamp = now;
     this.#timeSinceLastRender = now;
+    this.#previousTimeStamp = now;
     this.#animate(now);
   }
 
