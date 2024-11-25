@@ -1,129 +1,137 @@
-'use strict'
+'use strict';
+
 class GameLoop {
 
-  #fpsTarget= 60;
-  #renderTargetInterval =1000 / this.#fpsTarget;
-  #fixedTimeStep = 1000 / 100; // Fixed time step for update (16.67ms for 60 FPS)
-  #accumulatedTime = 0;
-  #gameSpeedFactor = 0.5;
+  static frameCount = 0;
+
+  #simulationFps = 60 // Fixed simulation rate
   #subscribers = [];
   #animationId = null;
-  #frameCounter = 0;
-  #deltaTime = 0;
-  #previousTimeSinceLastRender = 0;
-  #lastRenderTimestamp = 0;
-  #ticker = 0;
-#timeSinceLastRender = 0;
-  #fps = 60;
   #previousTimeStamp = 0;
-  #msPerFrame = 1000 /  this.#fpsTarget;
+  #accumulator = 0;
+  #fixedDeltaTime = 1000 / this.#simulationFps; // Fixed simulation step
+  #maxDeltaTime = this.#fixedDeltaTime * 3;
 
-
-
-  constructor(){
+  constructor() {
+    new GameTelemetry().startTracking();
   }
 
+
   /**
-   *
+   * animate
+   * @param timeStamp
+   */
+  #animate = (timeStamp) => {
+    let deltaTime = timeStamp - this.#previousTimeStamp;
+    this.#previousTimeStamp = timeStamp;
+
+    // clamp the frame time to avoid huge jumps
+    if (deltaTime > this.#maxDeltaTime) {
+      deltaTime = this.#maxDeltaTime;
+    }
+
+    this.#accumulator += deltaTime;
+
+    // update game logic with fixed time step and ensure this is done 60 times per second
+    while (this.#accumulator >= this.#fixedDeltaTime) {
+      this.#update(this.#fixedDeltaTime);
+      this.#accumulator -= this.#fixedDeltaTime;
+    }
+
+    // calculate interpolation factor for rendering
+    const interpolation = this.#accumulator / this.#fixedDeltaTime;
+    this.#render(interpolation);
+
+    // Increment frame counter for FPS calculation
+    GameLoop.frameCount++;
+
+    this.#animationId = requestAnimationFrame(this.#animate);
+  };
+
+
+
+  /**
+   * subscribe
    * @param subscriber
    */
   subscribe = (subscriber) => {
     this.#subscribers.push(subscriber);
-  }
+  };
 
   /**
-   *
+   * unsubscribe
    * @param subscriber
    */
   unsubscribe = (subscriber) => {
     const index = this.#subscribers.indexOf(subscriber);
-    this.#subscribers.splice(index, 1);
-  }
+    if (index !== -1) {
+      this.#subscribers.splice(index, 1);
+    }
+  };
 
   /**
-   *
+   * update
    * @param deltaTime
    */
   #update = (deltaTime) => {
-    //console.log("update");
     CollisionDetector.instance.performCollisionChecks();
     GameObjectsHandler.instance.removeGameObjects();
 
-    // update game objects
+    // Update game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++) {
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
-  }
+  };
 
   /**
-   *
+   * render
+   * @param interpolation
    */
-  #render = () => {
-    //console.log("render");
-    //clear contexts
-    for (let context in GameObjectsHandler.contexts){
-      GameObjectsHandler.contexts[context].clearRect(0,0,e8.global.screenWidth, e8.global.screenHeight);
+  #render = (interpolation) => {
+    // Clear contexts
+    for (let context in GameObjectsHandler.contexts) {
+      GameObjectsHandler.contexts[context]
+        .clearRect(0, 0, e8.global.screenWidth, e8.global.screenHeight);
     }
-    //render game objects
+
+    // Render game objects
     const len = GameObjectsHandler.gameObjects.length;
-    for (let i = 0; i < len; i++){
-      GameObjectsHandler.gameObjects[i].render();
+    for (let i = 0; i < len; i++) {
+      GameObjectsHandler.gameObjects[i].render(interpolation);
     }
-  }
+  };
+
+
 
   /**
-   *
-   * @param timeStamp
+   * init
    */
-  #animate = (timeStamp) => {
-
-    const deltaTime = timeStamp - this.#previousTimeStamp;
-    this.#previousTimeStamp = timeStamp;
-    this.#update(deltaTime*0.5);
-
-    const elapsedTimeSinceLastRender = timeStamp - this.#previousTimeSinceLastRender;
-    if (elapsedTimeSinceLastRender > this.#renderTargetInterval) {
-      this.#previousTimeSinceLastRender = timeStamp -(elapsedTimeSinceLastRender % this.#renderTargetInterval);
-      this.#render();
-    }
-
-    this.#animationId = requestAnimationFrame(this.#animate);
-  }
+  init = () => {
+    // Only reset previousTimeStamp in init
+    this.#previousTimeStamp = performance.now();
+  };
 
   /**
-   *
-   */
-  init = () =>{
-    this.#renderTargetInterval = 1000 / this.#fpsTarget; // 16.667ms at 60 frames per second
-    this.#deltaTime = 0;
-  }
-
-  /**
-   *
+   * start
    */
   start = () => {
     this.init();
-    const now = performance.now();
-    this.#previousTimeSinceLastRender = now;
-    this.#lastRenderTimestamp = now;
-    this.#timeSinceLastRender = now;
-    this.#previousTimeStamp = now;
-    this.#animate(now);
-  }
+    this.#animate(performance.now());
+  };
 
   /**
-   *
+   * pause
    */
   pause = () => {
     cancelAnimationFrame(this.#animationId);
-  }
+  };
 
   /**
-   *
+   * restart
    */
   restart = () => {
     this.init();
     this.#animate(performance.now());
-  }
+  };
 }

@@ -200,6 +200,7 @@ class Scripts {
     // game
     await ScriptLoader.loadScript("js/gameController.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/game.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/util/gameTelemetry.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/gameLoop/gameLoop.js?v="+Scripts.version);
 
   }

@@ -44,7 +44,7 @@ class Propulsion extends GameObject {
                 efficiency,
                 fuelType,
                 isActive,
-    animationLoop
+                animationLoop
               }) {
     super({
       isActive: isActive || false,

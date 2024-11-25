@@ -3,24 +3,24 @@ class PlayerShipPropertiesClassA {
   static imageResourceObjects = {
     "initial" : {
       name : "ship01ClassA",
-      filename : "playerShip",
+      filename : "ship_05",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/playerShip/"
+      resourcePath : "/resources/ships/ship_05/images/"
     },
 
     "eagle" : {
       name : "ship_02",
-      filename : "playerShip",
+      filename : "ship_05",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/playerShip/"
+      resourcePath : "/resources/ships/ship_05/images/"
     }
   }
 
   static generic = {
-    maxVelX: 3,
-    maxVelY: 3,
-    accX: 0.1,
-    accY: 0.15,
+    maxVelX: 0.5,
+    maxVelY: 0.5,
+    accX: 0.02,
+    accY: 0.015,
   }
 
   static cargo = {
@@ -33,14 +33,14 @@ class PlayerShipPropertiesClassA {
 
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
-    posDX : -20,
-    posDY :40
+    posDX : -25,
+    posDY : 22
   }
 
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
-    posDX: -25,
-    posDY: 25,
+    posDX: 5,
+    posDY: 20,
     isActive : false
   }
 
@@ -93,7 +93,7 @@ class PlayerShipPropertiesClassA {
       type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
       amount: 2000,
       posDX: 50,
-      posDY: 45
+      posDY: 20
     },
 
     FaF : {
@@ -109,7 +109,7 @@ class PlayerShipPropertiesClassA {
       type : WeaponFactory.WEAPON_TYPES.laser,
       amount: 100,
       posDX : 72,
-      posDY : 35
+      posDY : 15
     }
   }
 }

@@ -49,5 +49,6 @@ class GameObjectsHandler {
     }
     GameObjectsHandler.gameObjectsToRemove.clear();
 
+
   }
 }

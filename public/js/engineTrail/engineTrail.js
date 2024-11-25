@@ -8,10 +8,12 @@ class EngineTrail {
   imageResource;
 
   constructor({
-                fadeTime
+                fadeTime,
+                velX
               }){
     Object.assign(this, {
-      fadeTime
+      fadeTime,
+      velX
     });
   }
 
@@ -39,12 +41,12 @@ class EngineTrail {
       width: this.imageResource.image.width,
       height: this.imageResource.image.height,
       posX: posX,
+      velX: this.velX,
       posY: posY,
       posDX: this.posDX,
       posDY: this.posDY,
       fadeTime : this.fadeTime
     })
-
     GameObjectsHandler.instance.addGameObject(engineTrailParticle);
   }
 }

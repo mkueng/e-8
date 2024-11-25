@@ -95,7 +95,7 @@ class PlayerShip extends GameObject {
       identification: "playerShip",
       currentFrame,
       animationLoop,
-      spriteSheet,
+      image,
       stride,
       spriteSheetColumns,
       spriteSheetRows,
@@ -148,6 +148,7 @@ class PlayerShip extends GameObject {
     this.viewPortVelX = 0;
     this.status = "green";
     this.coordinates = 0;
+    this.posZ = null;
     PlayerShip.weapons = this.weapons;
 
     this.controls = {
@@ -289,21 +290,19 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
-  render = () => {
-    const frame = this.currentFrame;
-    const column = frame % this.spriteSheetColumns;
-    const row = Math.floor(frame / this.spriteSheetColumns);
+  render = (interpolation) => {
+    //ecalculate Full Interpolation Based on Acceleration
+    //const interpolatedX = this.posX + (this.velX * interpolation) - (0.5 * this.accX * interpolation * interpolation);
+    //const interpolatedY = this.posY+ (this.velY * interpolation) - (0.5 * this.accY * interpolation * interpolation);
+
+    // linear interpolation
+    const interpolatedX = this.posX + (this.velX * interpolation);
+    const interpolatedY = this.posY + (this.velY * interpolation);
 
     this.context.drawImage(
-      this.spriteSheet,
-      column * this.strideX,
-      row * this.strideY,
-      this.strideX,
-      this.strideY,
-      this.posX,
-      this.posY,
-      this.width,
-      this.height
+      this.image,
+      interpolatedX,
+      interpolatedY
     );
   }
   /**
@@ -318,11 +317,13 @@ class PlayerShip extends GameObject {
       //control down
       if (this.controls.down && this.velY < this.maxVelY) {
         this.velY += this.accY;
+
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
       //control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
         this.velY -= this.accY;
+
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       }
       //control right
@@ -334,6 +335,7 @@ class PlayerShip extends GameObject {
         }
         if (this.velX < this.maxVelX) {
           this.velX += this.accX;
+
           this.fuel.amount = this.fuel.amount - this.fuelConsumption;
         } else {
           // this.dependencies[0].isActive = false; // propulsion off
@@ -346,6 +348,7 @@ class PlayerShip extends GameObject {
 
         if (this.velX > -this.maxVelX && this.posX > this.lowerBoundX) {
           this.velX -= this.accX;
+         
         }
         this.fuel.amount = this.fuel.amount - this.fuelConsumption;
       } else {
@@ -369,8 +372,9 @@ class PlayerShip extends GameObject {
     }
 
     // position
-    this.posY = this.posY + (this.velY * deltaTime);
-    this.posX = this.posX + (this.velX * deltaTime);
+    this.posY = this.posY + (this.velY * deltaTime );
+    this.posX = this.posX + (this.velX * deltaTime );
+
 
     if (this.posX >= this.upperBoundX) {
       this.viewPortVelX = 0;
@@ -381,7 +385,7 @@ class PlayerShip extends GameObject {
     }
 
     //coordinates
-    this.coordinates = this.coordinates + (this.velX * deltaTime / 5);
+    //this.coordinates = this.coordinates + (this.velX * deltaTime / 5);
     PlayerShip.coordinates = this.coordinates;
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;

@@ -8,6 +8,7 @@ class EngineTrailParticle extends GameObject {
     posY,
     posDX,
     posDY,
+    velX,
     width,
     height,
     fadeTime
@@ -20,20 +21,21 @@ class EngineTrailParticle extends GameObject {
       posY,
       posDX,
       posDY,
-      velX : -1  ,
+      velX : velX,
       width,
       height,
       alpha: 1,
     });
 
     Object.assign(this, {
-      fadeTime
+      fadeTime,
+      velX
     });
   }
 
   update = ()=>{
     this.alpha -= this.alpha * this.fadeTime;
-    this.posX = this.posX-PlayerShip.velX/2;
+    this.posX = this.posX-PlayerShip.velX/2-this.velX;
     if (this.alpha <= 0.05) {
       this.destroy();
     }

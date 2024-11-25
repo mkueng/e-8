@@ -101,6 +101,8 @@ class GameObject {
     this.posDX = posDX || 0;
     this.posDY = posDY || 0;
     this.posX = posX || 0;
+    this.previousPosX = posX || 0;
+    this.previousPosY = posY || 0;
     this.posY = posY || 0;
     this.posZ = posZ;
     this.sound = sound || null;
@@ -119,7 +121,6 @@ class GameObject {
     this.rotation = rotation || 0;
     this.coordinates = coordinates || null;
     this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
-
 
     if (canvas) {
       this.context = canvas.getContext("2d");
@@ -174,7 +175,7 @@ class GameObject {
     }
   }
 
-  render() {
+  render(interpolation) {
     if (!this.isActive) return;
 
     // Only update alpha if it's different to minimize context state changes.
@@ -183,14 +184,18 @@ class GameObject {
       this.context.globalAlpha = newAlpha;
     }
 
-    const posX = this.posX + this.posDX, posY = this.posY + this.posDY;
+   // console.log("this.posX",this.posX);
+    //console.log("this.previousPosX",this.previousPosX);
+    const interpolatedX = this.previousPosX + interpolation * (this.posX - this.previousPosX);
+    //console.log("interpolatedX",interpolatedX);
+    const interpolatedY = this.previousPosY + interpolation * (this.posY - this.previousPosY);
 
     // Direct path for static images.
     if (this.image && !this.spriteSheet) {
       this.context.drawImage(
         this.image,
-        posX,
-        posY,
+        interpolatedX + this.posDX,
+        interpolatedY + this.posDY,
         this.width,
         this.height
       );
@@ -214,8 +219,8 @@ class GameObject {
         row * this.strideY,
         this.strideX,
         this.strideY,
-        posX,
-        posY,
+        interpolatedX + this.posDX,
+        interpolatedY+ this.posDY,
         this.width,
         this.height
       );
@@ -233,12 +238,22 @@ class GameObject {
   update(deltaTime) {
     if (!this.isActive) return;
 
-    if (this.posX + this.posDX <= 0 - this.width) {
+    if (this.posX + this.posDX <= 0 - this.width || this.posX+this.posDX > e8.global.screenWidth ) {
       this.destroy();
       this.dependencies.forEach(dependency => dependency.destroy());
     } else {
-      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZ;
-      this.posY += PlayerShip.velY * this.posZ * deltaTime;
+
+      this.previousPosX = this.posX;
+      this.previousPosY = this.posY;
+
+      //console.log("UPDATE previousPosX",this.previousPosX);
+      //console.log("UPDATE previousPosY",this.previousPosY);
+
+      this.posX += (this.velX * deltaTime);//+ PlayerShip.velX * this.posZ;
+      this.posY += (this.velY * deltaTime) ;//+ PlayerShip.velY * this.posZ;
+
+      //console.log("UPDATE posX",this.posX);
+      //console.log("UPDATE posY",this.posY);
       this.dependencies.forEach(dependency => {
         dependency.posX = this.posX;
         dependency.posY = this.posY;
