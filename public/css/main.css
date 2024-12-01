@@ -16,10 +16,11 @@ body {
     font-family: brunoAce;
 }
 #fps {
+    font-family: 'courier', cursive;
     position: fixed;
     bottom: 30px;
     left: 50px;
-    font-size: 12px;
+    font-size: 15px;
     color: deepskyblue;
     z-index: 1999;
 }
@@ -33,11 +34,23 @@ body {
     color: deepskyblue;
     z-index: 1999;
 }
+
+#properties {
+    font-family: 'courier', cursive;
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+
 #gameObjects {
+    font-family: 'courier', cursive;
     position: fixed;
     bottom: 50px;
     left: 50px;
-    font-size: 12px;
+    font-size: 15px;
     color: deepskyblue;
     z-index: 1999;
 }

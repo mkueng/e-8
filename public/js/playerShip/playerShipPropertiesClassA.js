@@ -17,7 +17,7 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX: 0.5,
+    maxVelX: 10,
     maxVelY: 0.5,
     accX: 0.02,
     accY: 0.015,

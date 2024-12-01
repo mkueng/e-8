@@ -3,7 +3,7 @@
 class Console {
 
   static consoleElement = document.querySelector("#console");
-
+  static propertiesElement = document.querySelector("#properties");
 
   static log(message) {
     Console.consoleElement.innerText += message + "\n";
@@ -12,4 +12,13 @@ class Console {
   static clear() {
     Console.consoleElement.innerText = "";
   }
+
+  static logProperty(message) {
+    Console.propertiesElement.innerText += message + "\n";
+  }
+
+  static clearProperty() {
+    Console.propertiesElement.innerText = "";
+  }
+
 }

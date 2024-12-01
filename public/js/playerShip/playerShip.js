@@ -1,9 +1,9 @@
 'use strict'
 class PlayerShip extends GameObject {
-
+  static instance;
 
   /**
-   * 
+   *
    * @param accX
    * @param accY
    * @param animationLoop
@@ -22,14 +22,13 @@ class PlayerShip extends GameObject {
    * @param inputHandler
    * @param maxVelX
    * @param maxVelY
+   * @param playerShipHandler
    * @param posDX
    * @param posDY
    * @param posX
    * @param posY
    * @param posZ
-   * @param playerShipHandler
    * @param propulsion
-   * @param shipStatus
    * @param shield
    * @param spriteSheet
    * @param spriteSheetColumns
@@ -62,14 +61,13 @@ class PlayerShip extends GameObject {
                 inputHandler,
                 maxVelX,
                 maxVelY,
+                playerShipHandler,
                 posDX,
                 posDY,
                 posX,
                 posY,
                 posZ,
-                playerShipHandler,
                 propulsion,
-                shipStatus,
                 shield,
                 spriteSheet,
                 spriteSheetColumns,
@@ -81,7 +79,7 @@ class PlayerShip extends GameObject {
                 velX,
                 velY,
                 weapons,
-                width
+                width,
               }) {
     super({
       isActive: true,
@@ -115,6 +113,11 @@ class PlayerShip extends GameObject {
       coordinates
     })
 
+    if (PlayerShip.instance) {
+      console.warn("Replacing existing PlayerShip instance.");
+    }
+    PlayerShip.instance = this;
+
     Object.assign(this, {
       weapons,
       features,
@@ -127,7 +130,6 @@ class PlayerShip extends GameObject {
       playerShipHandler,
       propulsion,
       fuel,
-      shipStatus,
       fuelConsumption
     });
 
@@ -139,10 +141,10 @@ class PlayerShip extends GameObject {
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
+    this.shipStatus = "green";
     this.coordinates = 0;
     this.posZ = 1;
-
-
+    
     this.controls = {
       down: false,
       up: false,
@@ -158,6 +160,38 @@ class PlayerShip extends GameObject {
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
     this.addDependencies();
+  }
+
+  static get weapons() {
+    return PlayerShip.instance?.weapons;
+  }
+
+  static get coordinates(){
+    return PlayerShip.instance?.coordinates;
+  }
+
+  static get fuel() {
+    return PlayerShip.instance?.fuel.amount;
+  }
+
+  static get posX() {
+    return PlayerShip.instance?.posX;
+  }
+
+  static get posY() {
+    return PlayerShip.instance?.posY;
+  }
+
+  static get velX() {
+    return PlayerShip.instance?.velX;
+  }
+
+  static get velY() {
+    return PlayerShip.instance?.velY;
+  }
+
+  static get shipStatus() {
+    return PlayerShip.instance?.shipStatus;
   }
 
   /**
@@ -331,6 +365,7 @@ class PlayerShip extends GameObject {
     //check fuel
     if (this.fuel.amount > 0 ) {
       let fuelConsumed = false;
+
       //control down
       if (this.controls.down && this.velY < this.maxVelY) {
         this.dependencies[0].isActive = false;
@@ -350,9 +385,9 @@ class PlayerShip extends GameObject {
         this.dependencies[1].isActive = false; // throttle off
         this.dependencies[0].isActive = true; // propulsion on
         if (this.posX < this.upperBoundX) {
-          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
         }
         if (this.velX < this.maxVelX) {
+          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.velX += this.accX*1/this.posZ;
           fuelConsumed = true;
         }
@@ -376,9 +411,9 @@ class PlayerShip extends GameObject {
     }
 
     if (this.fuel.amount < 30 || this.shield.strength < 30) {
-      this.shipStatus = "red"
+      PlayerShip.status = "red"
     } else {
-      this.shipStatus = "green"
+      PlayerShip.status = "green"
     }
 
     // bounds
@@ -394,8 +429,10 @@ class PlayerShip extends GameObject {
     this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
     this.posX = (this.posX + (this.velX * deltaTime * (1/this.posZ)));
 
-    Console.log("posX: "+ this.posX.toFixed(2));
-    Console.log("posY: "+ this.posY.toFixed(2));
+    Console.logProperty("posX: "+ this.posX.toFixed(2));
+    Console.logProperty("posY: "+ this.posY.toFixed(2));
+    Console.logProperty("velX: "+ this.velX.toFixed(2));
+    Console.logProperty("velY: "+ this.velY.toFixed(2));
 
     if (this.posX >= this.upperBoundX) {
       this.viewPortVelX = 0;
