@@ -362,6 +362,10 @@ class PlayerShip extends GameObject {
    */
   update = (deltaTime) =>{
 
+    // Save previous position
+    this.previousPosX = this.posX;
+    this.previousPosY = this.posY;
+
     //check fuel
     if (this.fuel.amount > 0 ) {
       let fuelConsumed = false;
@@ -384,8 +388,7 @@ class PlayerShip extends GameObject {
       else if (this.controls.right) {
         this.dependencies[1].isActive = false; // throttle off
         this.dependencies[0].isActive = true; // propulsion on
-        if (this.posX < this.upperBoundX) {
-        }
+
         if (this.velX < this.maxVelX) {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
           this.velX += this.accX*1/this.posZ;
@@ -396,7 +399,7 @@ class PlayerShip extends GameObject {
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
 
-        if (this.velX > -this.maxVelX && this.posX > this.lowerBoundX) {
+        if (this.posX > 0) {
           this.velX -= this.accX*1/this.posZ;
         }
         fuelConsumed = true;
@@ -429,18 +432,17 @@ class PlayerShip extends GameObject {
     this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
     this.posX = (this.posX + (this.velX * deltaTime * (1/this.posZ)));
 
+    if (this.posX > this.upperBoundX) {
+
+      this.posX = this.previousPosX;
+    }
+
+
     Console.logProperty("posX: "+ this.posX.toFixed(2));
     Console.logProperty("posY: "+ this.posY.toFixed(2));
     Console.logProperty("velX: "+ this.velX.toFixed(2));
     Console.logProperty("velY: "+ this.velY.toFixed(2));
 
-    if (this.posX >= this.upperBoundX) {
-      this.viewPortVelX = 0;
-      this.posX = this.upperBoundX;
-    } else if (this.posX <= this.lowerBoundX) {
-      this.viewPortVelX = 0;
-      this.posX = this.lowerBoundX;
-    }
 
 
     //update posY of affected gameObjects based on this.posY
