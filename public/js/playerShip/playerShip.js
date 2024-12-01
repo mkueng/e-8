@@ -1,14 +1,7 @@
 'use strict'
 class PlayerShip extends GameObject {
 
-  static posX;
-  static posY;
-  static velY;
-  static velX;
-  static coordinates;
-  static fuel;
-  static shipStatus;
-  static weapons;
+  static instance;
 
   /**
    *
@@ -121,6 +114,11 @@ class PlayerShip extends GameObject {
       coordinates
     })
 
+    if (PlayerShip.instance) {
+      console.warn("Replacing existing PlayerShip instance.");
+    }
+    PlayerShip.instance = this;
+
     Object.assign(this, {
       weapons,
       features,
@@ -147,14 +145,7 @@ class PlayerShip extends GameObject {
     this.shipStatus = "green";
     this.coordinates = 0;
     this.posZ = 1;
-    PlayerShip.weapons = this.weapons;
-    PlayerShip.fuel = this.fuel.amount;
-    PlayerShip.shipStatus = this.shipStatus;
-    PlayerShip.posX = this.posX;
-    PlayerShip.posY = this.posY;
-    PlayerShip.velY = this.velY;
-    PlayerShip.velX = this.velX;
-
+    
     this.controls = {
       down: false,
       up: false,
@@ -170,6 +161,34 @@ class PlayerShip extends GameObject {
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
     this.addDependencies();
+  }
+
+  static get weapons() {
+    return PlayerShip.instance?.weapons;
+  }
+
+  static get fuel() {
+    return PlayerShip.instance?.fuel.amount;
+  }
+
+  static get posX() {
+    return PlayerShip.instance?.posX;
+  }
+
+  static get posY() {
+    return PlayerShip.instance?.posY;
+  }
+
+  static get velX() {
+    return PlayerShip.instance?.velX;
+  }
+
+  static get velY() {
+    return PlayerShip.instance?.velY;
+  }
+
+  static get shipStatus() {
+    return PlayerShip.instance?.shipStatus;
   }
 
   /**
@@ -417,10 +436,6 @@ class PlayerShip extends GameObject {
       this.posX = this.lowerBoundX;
     }
 
-    PlayerShip.velY = this.velY;
-    PlayerShip.velX = this.velX;
-    PlayerShip.fuel = this.fuel.amount;
-    PlayerShip.shield = this.shield.strength;
 
     //update posY of affected gameObjects based on this.posY
     /*
