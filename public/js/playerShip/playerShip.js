@@ -1,93 +1,87 @@
 'use strict'
 class PlayerShip extends GameObject {
 
-  static posX;
-  static posY;
-  static velY;
-  static velX;
-  static coordinates;
-  static fuel;
-  static shipStatus;
-  static weapons;
 
   /**
-   *
-   * @param image
-   * @param spriteSheet
-   * @param spriteSheetRows
-   * @param spriteSheetColumns
-   * @param strideX
-   * @param strideY
+   * 
+   * @param accX
+   * @param accY
    * @param animationLoop
+   * @param canvas
+   * @param cargo
+   * @param coordinates
    * @param currentFrame
-   * @param stride
-   * @param width
+   * @param dependencies
+   * @param engineTrail
+   * @param features
+   * @param fuel
+   * @param fuelConsumption
    * @param height
+   * @param hudHandler
+   * @param image
+   * @param inputHandler
+   * @param maxVelX
+   * @param maxVelY
+   * @param posDX
+   * @param posDY
    * @param posX
    * @param posY
    * @param posZ
-   * @param posDX
-   * @param posDY
+   * @param playerShipHandler
+   * @param propulsion
+   * @param shipStatus
+   * @param shield
+   * @param spriteSheet
+   * @param spriteSheetColumns
+   * @param spriteSheetRows
+   * @param stride
+   * @param strideX
+   * @param strideY
+   * @param terminationSequence
    * @param velX
    * @param velY
-   * @param maxVelX
-   * @param maxVelY
-   * @param accX
-   * @param accY
-   * @param canvas
-   * @param dependencies
-   * @param propulsion
    * @param weapons
-   * @param features
-   * @param shield
-   * @param cargo
-   * @param fuel
-   * @param fuelConsumption
-   * @param terminationSequence
-   * @param engineTrail
-   * @param playerShipHandler
-   * @param inputHandler
-   * @param hudHandler
-   * @param coordinates
+   * @param width
    */
   constructor({
-                image,
-                spriteSheet,
-                spriteSheetRows,
-                spriteSheetColumns,
-                strideX,
-                strideY,
+                accX,
+                accY,
                 animationLoop,
+                canvas,
+                cargo,
+                coordinates,
                 currentFrame,
-                stride,
-                width,
+                dependencies,
+                engineTrail,
+                features,
+                fuel,
+                fuelConsumption,
                 height,
+                hudHandler,
+                image,
+                inputHandler,
+                maxVelX,
+                maxVelY,
+                posDX,
+                posDY,
                 posX,
                 posY,
                 posZ,
-                posDX,
-                posDY,
+                playerShipHandler,
+                propulsion,
+                shipStatus,
+                shield,
+                spriteSheet,
+                spriteSheetColumns,
+                spriteSheetRows,
+                stride,
+                strideX,
+                strideY,
+                terminationSequence,
                 velX,
                 velY,
-                maxVelX,
-                maxVelY,
-                accX,
-                accY,
-                canvas,
-                dependencies,
-                propulsion,
                 weapons,
-                features,
-                shield,
-                cargo,
-                fuel,
-                fuelConsumption,
-                terminationSequence,
-                engineTrail,
-                playerShipHandler,
-                inputHandler,
-                hudHandler,
-                coordinates
+                width
               }) {
     super({
       isActive: true,
@@ -133,6 +127,7 @@ class PlayerShip extends GameObject {
       playerShipHandler,
       propulsion,
       fuel,
+      shipStatus,
       fuelConsumption
     });
 
@@ -144,16 +139,9 @@ class PlayerShip extends GameObject {
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
-    this.shipStatus = "green";
     this.coordinates = 0;
     this.posZ = 1;
-    PlayerShip.weapons = this.weapons;
-    PlayerShip.fuel = this.fuel.amount;
-    PlayerShip.shipStatus = this.shipStatus;
-    PlayerShip.posX = this.posX;
-    PlayerShip.posY = this.posY;
-    PlayerShip.velY = this.velY;
-    PlayerShip.velX = this.velX;
+
 
     this.controls = {
       down: false,
@@ -388,9 +376,9 @@ class PlayerShip extends GameObject {
     }
 
     if (this.fuel.amount < 30 || this.shield.strength < 30) {
-      PlayerShip.status = "red"
+      this.shipStatus = "red"
     } else {
-      PlayerShip.status = "green"
+      this.shipStatus = "green"
     }
 
     // bounds
@@ -417,10 +405,6 @@ class PlayerShip extends GameObject {
       this.posX = this.lowerBoundX;
     }
 
-    PlayerShip.velY = this.velY;
-    PlayerShip.velX = this.velX;
-    PlayerShip.fuel = this.fuel.amount;
-    PlayerShip.shield = this.shield.strength;
 
     //update posY of affected gameObjects based on this.posY
     /*
