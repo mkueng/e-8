@@ -1,86 +1,85 @@
 'use strict'
 class PlayerShip extends GameObject {
-
   static instance;
 
   /**
    *
-   * @param image
-   * @param spriteSheet
-   * @param spriteSheetRows
-   * @param spriteSheetColumns
-   * @param strideX
-   * @param strideY
+   * @param accX
+   * @param accY
    * @param animationLoop
+   * @param canvas
+   * @param cargo
+   * @param coordinates
    * @param currentFrame
-   * @param stride
-   * @param width
+   * @param dependencies
+   * @param engineTrail
+   * @param features
+   * @param fuel
+   * @param fuelConsumption
    * @param height
+   * @param hudHandler
+   * @param image
+   * @param inputHandler
+   * @param maxVelX
+   * @param maxVelY
+   * @param playerShipHandler
+   * @param posDX
+   * @param posDY
    * @param posX
    * @param posY
    * @param posZ
-   * @param posDX
-   * @param posDY
+   * @param propulsion
+   * @param shield
+   * @param spriteSheet
+   * @param spriteSheetColumns
+   * @param spriteSheetRows
+   * @param stride
+   * @param strideX
+   * @param strideY
+   * @param terminationSequence
    * @param velX
    * @param velY
-   * @param maxVelX
-   * @param maxVelY
-   * @param accX
-   * @param accY
-   * @param canvas
-   * @param dependencies
-   * @param propulsion
    * @param weapons
-   * @param features
-   * @param shield
-   * @param cargo
-   * @param fuel
-   * @param fuelConsumption
-   * @param terminationSequence
-   * @param engineTrail
-   * @param playerShipHandler
-   * @param inputHandler
-   * @param hudHandler
-   * @param coordinates
+   * @param width
    */
   constructor({
-                image,
-                spriteSheet,
-                spriteSheetRows,
-                spriteSheetColumns,
-                strideX,
-                strideY,
+                accX,
+                accY,
                 animationLoop,
+                canvas,
+                cargo,
+                coordinates,
                 currentFrame,
-                stride,
-                width,
+                dependencies,
+                engineTrail,
+                features,
+                fuel,
+                fuelConsumption,
                 height,
+                hudHandler,
+                image,
+                inputHandler,
+                maxVelX,
+                maxVelY,
+                playerShipHandler,
+                posDX,
+                posDY,
                 posX,
                 posY,
                 posZ,
-                posDX,
-                posDY,
+                propulsion,
+                shield,
+                spriteSheet,
+                spriteSheetColumns,
+                spriteSheetRows,
+                stride,
+                strideX,
+                strideY,
+                terminationSequence,
                 velX,
                 velY,
-                maxVelX,
-                maxVelY,
-                accX,
-                accY,
-                canvas,
-                dependencies,
-                propulsion,
                 weapons,
-                features,
-                shield,
-                cargo,
-                fuel,
-                fuelConsumption,
-                terminationSequence,
-                engineTrail,
-                playerShipHandler,
-                inputHandler,
-                hudHandler,
-                coordinates
+                width,
               }) {
     super({
       isActive: true,
@@ -165,6 +164,10 @@ class PlayerShip extends GameObject {
 
   static get weapons() {
     return PlayerShip.instance?.weapons;
+  }
+
+  static get coordinates(){
+    return PlayerShip.instance?.coordinates;
   }
 
   static get fuel() {
