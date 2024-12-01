@@ -108,8 +108,8 @@ class PlayerShipPropertiesClassA {
       controlAssignment : "KeyF",
       type : WeaponFactory.WEAPON_TYPES.laser,
       amount: 100,
-      posDX : 72,
-      posDY : 15
+      posDX : 92,
+      posDY : 25
     }
   }
 }

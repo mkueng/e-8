@@ -37,13 +37,13 @@ class Laser extends Weapon {
               }){
     super({
       identification: "weaponPlayer",
-      controlAssignment,
+      controlAssignment: controlAssignment,
       canvas: canvas,
       spriteSheet:  Laser.imageResource.image,
       spriteSheetRows: 3,
       spriteSheetColumns: 1,
       width: e8.global.screenWidth,
-      height: 16,
+      height: Laser.imageResource.image.height / 3,
       frames: 3,
       currentFrame: 0,
       sound: Laser.soundResource,
@@ -70,6 +70,8 @@ class Laser extends Weapon {
   update = () => {
     this.posX = this.dependency.posX;
     this.posY = this.dependency.posY;
+    this.previousPosX = this.posX;
+    this.previousPosY = this.posY;
     this.timer+= 1;
     if (this.timer > this.shootTime) {
       this.destroy();

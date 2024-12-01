@@ -9,6 +9,7 @@ class GameObject {
    * @param animationLoop
    * @param canDestroy
    * @param canvas
+   * @param coordinates
    * @param currentFrame
    * @param dependencies
    * @param frames
@@ -17,6 +18,7 @@ class GameObject {
    * @param identification
    * @param image
    * @param isActive
+   * @param isContextPreventedOfBeingCleared
    * @param isHittable
    * @param isDestroyable
    * @param maxVelX
@@ -26,6 +28,7 @@ class GameObject {
    * @param posX
    * @param posY
    * @param posZ
+   * @param rotation
    * @param sound
    * @param spriteSheet
    * @param spriteSheetColumns
@@ -37,9 +40,6 @@ class GameObject {
    * @param velX
    * @param velY
    * @param width
-   * @param rotation
-   * @param coordinates
-   * @param contextClear
    */
   constructor({
                 accX,
@@ -48,6 +48,7 @@ class GameObject {
                 animationLoop,
                 canDestroy,
                 canvas,
+                coordinates,
                 currentFrame,
                 dependencies,
                 frames,
@@ -56,6 +57,7 @@ class GameObject {
                 identification,
                 image,
                 isActive,
+                isContextPreventedOfBeingCleared,
                 isHittable,
                 isDestroyable,
                 maxVelX,
@@ -65,6 +67,7 @@ class GameObject {
                 posX,
                 posY,
                 posZ,
+                rotation,
                 sound,
                 spriteSheet,
                 spriteSheetColumns,
@@ -76,9 +79,6 @@ class GameObject {
                 velX,
                 velY,
                 width,
-                rotation,
-                coordinates,
-                isContextPreventedOfBeingCleared
               }) {
     this.accX = accX || 0;
     this.accY = accY || 0;
@@ -86,14 +86,18 @@ class GameObject {
     this.animationLoop = animationLoop || null;
     this.canDestroy = canDestroy || false;
     this.canvas = canvas || null;
+    this.context = null;
+    this.coordinates = coordinates || null;
     this.currentFrame = currentFrame || 0;
     this.dependencies = dependencies || [];
     this.frames = frames || 1;
     this.height = height || 0;
     this.hitWidth = hitWidth || width;
+    this.id = crypto.randomUUID();
     this.identification = identification || "";
     this.image = image;
     this.isActive = isActive || false;
+    this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
     this.isDestroyable = isDestroyable || false;
     this.isHittable = isHittable || false;
     this.maxVelX = maxVelX || 0;
@@ -105,6 +109,7 @@ class GameObject {
     this.previousPosY = posY || 0;
     this.posY = posY || 0;
     this.posZ = posZ;
+    this.rotation = rotation || 0;
     this.sound = sound || null;
     this.spriteSheet = spriteSheet || null;
     this.spriteSheetColumns = spriteSheetColumns || null;
@@ -116,34 +121,40 @@ class GameObject {
     this.velX = velX || 0;
     this.velY = velY || 0;
     this.width = width;
-    this.id = crypto.randomUUID();
-    this.context = null;
-    this.rotation = rotation || 0;
-    this.coordinates = coordinates || null;
-    this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
 
     if (canvas) {
       this.context = canvas.getContext("2d");
     }
+
+    if (this.spriteSheet) this.render = this.renderSpriteSheet;
+    if (this.image) this.render = this.renderImage;
   }
 
+  /**
+   * @name addDependencies
+   */
   addDependencies(){
     this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
   /**
-   *
+   * @name subscribe
    * @param subscriber
    */
   subscribe(subscriber){
     this.subscriber = subscriber;
   }
 
+  /**
+   * @name unsubscribe
+   */
   unsubscribe(){
     this.subscriber = null;
   }
 
-
+  /**
+   * @name activate
+   */
   activate(){
     this.isActive = true;
     GameObjectsHandler.instance.addGameObject(this);
@@ -153,29 +164,41 @@ class GameObject {
     });
   };
 
+  /**
+   * @name deactivate
+   */
   deactivate(){};
 
   /**
-   *
+   * @name hit
    * @param hitBy
    */
   hit (hitBy){};
 
+  /**
+   * @name destroy
+   */
   destroy(){
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     if (this.dependencies) {
       this.destroyDependencies();
     }
-
   };
 
+  /**
+   * @name destroyDependencies
+   */
   destroyDependencies(){
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
   }
 
-  render(interpolation) {
+  /**
+   * @name renderImage
+   * @param interpolation
+   */
+  renderImage (interpolation) {
     if (!this.isActive) return;
 
     // Only update alpha if it's different to minimize context state changes.
@@ -184,43 +207,15 @@ class GameObject {
       this.context.globalAlpha = newAlpha;
     }
 
-   // console.log("this.posX",this.posX);
-    //console.log("this.previousPosX",this.previousPosX);
     const interpolatedX = this.previousPosX + interpolation * (this.posX - this.previousPosX);
-    //console.log("interpolatedX",interpolatedX);
     const interpolatedY = this.previousPosY + interpolation * (this.posY - this.previousPosY);
 
-    // Direct path for static images.
+    // image
     if (this.image && !this.spriteSheet) {
       this.context.drawImage(
         this.image,
         interpolatedX + this.posDX,
         interpolatedY + this.posDY,
-        this.width,
-        this.height
-      );
-    }
-    // Path for sprite sheets.
-    else if (this.spriteSheet) {
-      // Optimized frame calculation.
-      let frame = this.currentFrame;
-      if (this.animationLoop) {
-        frame = (frame + 1) % this.frames;
-      } else {
-        frame = frame + 1 < this.frames ? frame + 1 : 0;
-        this.isActive = frame !== 0;
-      }
-      this.currentFrame = frame;
-      const column = frame % this.spriteSheetColumns;
-      const row = Math.floor(frame / this.spriteSheetColumns);
-      this.context.drawImage(
-        this.spriteSheet,
-        column * this.strideX,
-        row * this.strideY,
-        this.strideX,
-        this.strideY,
-        interpolatedX + this.posDX,
-        interpolatedY+ this.posDY,
         this.width,
         this.height
       );
@@ -232,32 +227,82 @@ class GameObject {
   }
 
   /**
-   *
+   * @name renderSpriteSheet
+   * @param interpolation
+   */
+  renderSpriteSheet(interpolation) {
+    if (!this.isActive) return;
+    const newAlpha = this.alpha || 1;
+    if (this.context.globalAlpha !== newAlpha) {
+      this.context.globalAlpha = newAlpha;
+    }
+
+    const interpolatedX = this.previousPosX + interpolation * (this.posX - this.previousPosX);
+    const interpolatedY = this.previousPosY + interpolation * (this.posY - this.previousPosY);
+
+    if (this.animationLoop || this.currentFrame + 1 < this.frames) {
+      this.currentFrame = (this.currentFrame + 1) % this.frames;
+
+      if (!this.animationLoop) {
+        this.isActive = this.currentFrame !== 0;
+      }
+    }
+
+    // Pre-compute sprite sheet frame position.
+    const column = this.currentFrame % this.spriteSheetColumns;
+    const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
+    const sourceX = column * this.strideX;
+    const sourceY = row * this.strideY;
+
+    // Render the sprite sheet frame.
+    this.context.drawImage(
+      this.spriteSheet,
+      sourceX,
+      sourceY,
+      this.strideX,
+      this.strideY,
+      interpolatedX + this.posDX,
+      interpolatedY + this.posDY,
+      this.width,
+      this.height
+    );
+    // Reset alpha to default if it was changed.
+    if (newAlpha !== 1) {
+      this.context.globalAlpha = 1;
+    }
+  }
+
+  /**
+   * @name update
    * @param deltaTime
    */
   update(deltaTime) {
     if (!this.isActive) return;
 
-    if (this.posX + this.posDX <= 0 - this.width || this.posX+this.posDX > e8.global.screenWidth ) {
+    // Check if out of bounds
+    if (this.posX + this.posDX <= 0 - this.width || this.posX+this.posDX > e8.global.screenWidth) {
       this.destroy();
       this.dependencies.forEach(dependency => dependency.destroy());
-    } else {
-
-      this.previousPosX = this.posX;
-      this.previousPosY = this.posY;
-
-      //console.log("UPDATE previousPosX",this.previousPosX);
-      //console.log("UPDATE previousPosY",this.previousPosY);
-
-      this.posX += (this.velX * deltaTime);//+ PlayerShip.velX * this.posZ;
-      this.posY += (this.velY * deltaTime) ;//+ PlayerShip.velY * this.posZ;
-
-      //console.log("UPDATE posX",this.posX);
-      //console.log("UPDATE posY",this.posY);
-      this.dependencies.forEach(dependency => {
-        dependency.posX = this.posX;
-        dependency.posY = this.posY;
-      });
+      return
     }
+
+    // Save previous position
+    this.previousPosX = this.posX;
+    this.previousPosY = this.posY;
+
+    // Update velocity with scaling based on posZ
+    const zScale = (this.posZ > 0) ? 1 / this.posZ : 1;
+    this.velX += this.accX * zScale;
+    this.velY += this.accY * zScale;
+
+    // Update position
+    this.posX += this.velX * deltaTime;
+    this.posY += this.velY * deltaTime;
+
+    // Sync dependencies
+    this.dependencies.forEach(dependency => {
+      dependency.posX = this.posX;
+      dependency.posY = this.posY;
+    });
   }
 }

@@ -17,7 +17,7 @@ class PropulsionTypes {
         imageResource: null,
         spriteSheetRows: 17,
         spriteSheetColumns: 1,
-        animationLoop: false,
+        animationLoop: true,
         frames: 17,
         efficiency: 0.5,
         fuelType: FuelFactory.FUEL_TYPES.xenon,

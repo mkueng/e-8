@@ -23,6 +23,16 @@ body {
     color: deepskyblue;
     z-index: 1999;
 }
+
+#console {
+    font-family: 'courier', cursive;
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
 #gameObjects {
     position: fixed;
     bottom: 50px;

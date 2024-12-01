@@ -1,14 +1,13 @@
 'use strict'
 class PlayerShip extends GameObject {
 
-
   static posX;
   static posY;
   static velY;
   static velX;
   static coordinates;
   static fuel;
-  static status;
+  static shipStatus;
   static weapons;
 
   /**
@@ -54,11 +53,11 @@ class PlayerShip extends GameObject {
   constructor({
                 image,
                 spriteSheet,
-    spriteSheetRows,
-    spriteSheetColumns,
-    strideX,
-    strideY,
-    animationLoop,
+                spriteSheetRows,
+                spriteSheetColumns,
+                strideX,
+                strideY,
+                animationLoop,
                 currentFrame,
                 stride,
                 width,
@@ -95,6 +94,7 @@ class PlayerShip extends GameObject {
       identification: "playerShip",
       currentFrame,
       animationLoop,
+      dependencies,
       image,
       stride,
       spriteSheetColumns,
@@ -122,7 +122,6 @@ class PlayerShip extends GameObject {
     })
 
     Object.assign(this, {
-      dependencies,
       weapons,
       features,
       shield,
@@ -145,11 +144,16 @@ class PlayerShip extends GameObject {
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
-    this.viewPortVelX = 0;
-    this.status = "green";
+    this.shipStatus = "green";
     this.coordinates = 0;
-    this.posZ = null;
+    this.posZ = 1;
     PlayerShip.weapons = this.weapons;
+    PlayerShip.fuel = this.fuel.amount;
+    PlayerShip.shipStatus = this.shipStatus;
+    PlayerShip.posX = this.posX;
+    PlayerShip.posY = this.posY;
+    PlayerShip.velY = this.velY;
+    PlayerShip.velX = this.velX;
 
     this.controls = {
       down: false,
@@ -162,7 +166,6 @@ class PlayerShip extends GameObject {
     this.initializeWeapons();
     this.initializeFeatures();
     this.initializeShield();
-
 
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -178,6 +181,9 @@ class PlayerShip extends GameObject {
     this.keyEvents[key] = execute;
   }
 
+  /**
+   * @name initializeFeatures
+   */
   initializeFeatures = () => {
     for (const feature in this.features){
       const {controlAssignment, type} = this.features[feature];
@@ -190,6 +196,9 @@ class PlayerShip extends GameObject {
     }
   }
 
+  /**
+   * @name initializeWeapons
+   */
   initializeWeapons = () => {
     for (const weapon in this.weapons) {
       const { controlAssignment, units } = this.weapons[weapon];
@@ -212,7 +221,7 @@ class PlayerShip extends GameObject {
 
 
   /**
-   *x
+   * @name updateFromGameObjectsHandler
    * @param message
    * @param obj
    */
@@ -222,7 +231,7 @@ class PlayerShip extends GameObject {
   }
 
   /**
-   *
+   * @name loadCargo
    * @param key
    */
   loadCargo = (key) => {
@@ -233,9 +242,15 @@ class PlayerShip extends GameObject {
     }
   }
 
+  /**
+   * @name unloadCargo
+   */
   unloadCargo = () => {
   }
 
+  /**
+   * @name initializeShield
+   */
   initializeShield = () => {
     Object.assign(this.shield, {
       posX: this.posX,
@@ -244,6 +259,9 @@ class PlayerShip extends GameObject {
     GameObjectsHandler.instance.addGameObject(this.shield);
   }
 
+  /**
+   * @name activateShield
+   */
   activateShield = () =>{
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
@@ -252,6 +270,9 @@ class PlayerShip extends GameObject {
     this.shield.strength = Math.max(this.shield.strength - 10, 0);
   }
 
+  /**
+   * @name invokeTerminationSequence
+   */
   invokeTerminationSequence = () => {
     Object.assign(this.terminationSequence, {
       posX: this.posX,
@@ -266,10 +287,13 @@ class PlayerShip extends GameObject {
     this.playerShipHandler.shipDestroyed(this);
   }
 
+  /**
+   * @name destroyDependencies
+   */
   destroyDependencies = () => this.dependencies.forEach(dependency => dependency.destroy());
 
   /**
-   *
+   * @name hit
    * @param hitBy
    */
   hit = (hitBy) => {
@@ -290,14 +314,19 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
+  /**
+   * @name render
+   * @param interpolation
+   */
   render = (interpolation) => {
-    //ecalculate Full Interpolation Based on Acceleration
-    //const interpolatedX = this.posX + (this.velX * interpolation) - (0.5 * this.accX * interpolation * interpolation);
-    //const interpolatedY = this.posY+ (this.velY * interpolation) - (0.5 * this.accY * interpolation * interpolation);
 
     // linear interpolation
-    const interpolatedX = this.posX + (this.velX * interpolation);
-    const interpolatedY = this.posY + (this.velY * interpolation);
+    let interpolatedX = this.posX + (this.velX * interpolation);
+    let interpolatedY = this.posY + (this.velY * interpolation);
+
+    Console.log("interpolatedX: "+interpolatedX.toFixed(2));
+    Console.log("interpolatedY: "+interpolatedY.toFixed(2));
+
 
     this.context.drawImage(
       this.image,
@@ -306,53 +335,55 @@ class PlayerShip extends GameObject {
     );
   }
   /**
-   *
+   * @name update
    * @param deltaTime
    */
   update = (deltaTime) =>{
 
     //check fuel
     if (this.fuel.amount > 0 ) {
-
+      let fuelConsumed = false;
       //control down
       if (this.controls.down && this.velY < this.maxVelY) {
-        this.velY += this.accY;
-
-        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        this.dependencies[0].isActive = false;
+        this.dependencies[1].isActive = false;
+        this.velY += this.accY*1/this.posZ;
+        fuelConsumed = true;
       }
       //control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
-        this.velY -= this.accY;
-
-        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        this.dependencies[0].isActive = false;
+        this.dependencies[1].isActive = false;
+        this.velY -= this.accY*1/this.posZ;
+        fuelConsumed = true;
       }
       //control right
       else if (this.controls.right) {
-
+        this.dependencies[1].isActive = false; // throttle off
         this.dependencies[0].isActive = true; // propulsion on
         if (this.posX < this.upperBoundX) {
           this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
         }
         if (this.velX < this.maxVelX) {
-          this.velX += this.accX;
-
-          this.fuel.amount = this.fuel.amount - this.fuelConsumption;
-        } else {
-          // this.dependencies[0].isActive = false; // propulsion off
+          this.velX += this.accX*1/this.posZ;
+          fuelConsumed = true;
         }
         //control left
       } else if (this.controls.left ) {
-       
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
 
         if (this.velX > -this.maxVelX && this.posX > this.lowerBoundX) {
-          this.velX -= this.accX;
-         
+          this.velX -= this.accX*1/this.posZ;
         }
-        this.fuel.amount = this.fuel.amount - this.fuelConsumption;
+        fuelConsumed = true;
       } else {
         this.dependencies[0].isActive = false; // propulsion off
+        this.dependencies[1].isActive = false; // throttle off
+      }
+      // Deduct fuel if consumed
+      if (fuelConsumed) {
+        this.fuel.amount -= this.fuelConsumption;
       }
     }
 
@@ -372,9 +403,11 @@ class PlayerShip extends GameObject {
     }
 
     // position
-    this.posY = this.posY + (this.velY * deltaTime );
-    this.posX = this.posX + (this.velX * deltaTime );
+    this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
+    this.posX = (this.posX + (this.velX * deltaTime * (1/this.posZ)));
 
+    Console.log("posX: "+ this.posX.toFixed(2));
+    Console.log("posY: "+ this.posY.toFixed(2));
 
     if (this.posX >= this.upperBoundX) {
       this.viewPortVelX = 0;
@@ -384,21 +417,20 @@ class PlayerShip extends GameObject {
       this.posX = this.lowerBoundX;
     }
 
-    //coordinates
-    //this.coordinates = this.coordinates + (this.velX * deltaTime / 5);
-    PlayerShip.coordinates = this.coordinates;
     PlayerShip.velY = this.velY;
     PlayerShip.velX = this.velX;
     PlayerShip.fuel = this.fuel.amount;
     PlayerShip.shield = this.shield.strength;
 
     //update posY of affected gameObjects based on this.posY
+    /*
+
     GameObjectsHandler.gameObjects.forEach(obj => {
       if (obj.posZ) {
         obj.posY = obj.posY - (this.velY * deltaTime * obj.posZ / 2);
       }
     })
-
+*/
     // position dependencies
     for (const dependency of this.dependencies){
       dependency.posX = this.posX;
@@ -418,7 +450,7 @@ class PlayerShip extends GameObject {
   }
 
   /**
-   * 
+   * @name mouseEvent
    * @param event
    */
   mouseEvent = (event)=>{
@@ -436,7 +468,7 @@ class PlayerShip extends GameObject {
   }
 
   /**
-   *
+   * @name keyEvent
    * @param event
    * @param isKeyDown
    */
@@ -449,19 +481,15 @@ class PlayerShip extends GameObject {
       switch (event) {
         case "KeyS":
           this.controls.down = isKeyDown;
-          this.controlsEvent = isKeyDown;
           break;
         case "KeyW":
           this.controls.up = isKeyDown;
-          this.controlsEvent = isKeyDown;
           break;
         case "KeyA":
           this.controls.left = isKeyDown;
-          this.controlsEvent = isKeyDown;
           break;
         case "KeyD":
           this.controls.right = isKeyDown;
-          this.controlsEvent = isKeyDown;
           break;
       }
     }
