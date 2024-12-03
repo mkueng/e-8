@@ -358,67 +358,122 @@ class PlayerShip extends GameObject {
       interpolatedY
     );
   }
-  
+
+  applyControl = (direction) =>{
+    const controlActions = {
+      down: () => {
+        this.velY += this.accY * (1 / this.posZ);
+        this.deactivateControls();
+      },
+      up: () => {
+        this.velY -= this.accY * (1 / this.posZ);
+        this.deactivateControls();
+      },
+      right: () => {
+        this.viewPortVelX += this.accX * (1 / this.posZ);
+        this.velX += this.accX * (1 / this.posZ);
+        this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
+        this.activateControl(0, 1);
+      },
+      left: () => {
+        this.viewPortVelX -= this.accX * (1 / this.posZ);
+        if (this.velX > 0) {
+          this.velX -= this.accX * (1 / this.posZ);
+        }
+        this.activateControl(1, 0);
+      }
+    };
+
+    controlActions[direction]();
+  }
+
+  deactivateControls = () => {
+    this.dependencies[0].isActive = false; // Propulsion off
+    this.dependencies[1].isActive = false; // Throttle off
+  }
+
+  activateControl = (propulsionIndex, throttleIndex) => {
+    this.dependencies[propulsionIndex].isActive = true;
+    this.dependencies[throttleIndex].isActive = false;
+  }
+
+
+// Check if the position is within bounds
+  checkBounds = () => {
+    if (this.posY > this.upperBoundY) {
+      this.posY = this.upperBoundY;
+      this.velY = 0;
+    } else if (this.posY < 0) {
+      this.posY = 0;
+      this.velY = 0;
+    }
+
+    if (this.posX > this.upperBoundX) {
+      this.posX = this.upperBoundX;
+      this.viewPortVelX = 0;
+    } else if (this.posX < this.lowerBoundX) {
+      this.posX = this.lowerBoundX;
+      this.viewPortVelX = 0;
+    }
+  }
+
+  // Log properties
+  logProperties = () => {
+    Console.logProperty("viewPortVelX: ", this.viewPortVelX.toFixed(2));
+    Console.logProperty("posX: ", this.posX.toFixed(2));
+    Console.logProperty("posY: ", this.posY.toFixed(2));
+    Console.logProperty("velX: ", this.velX.toFixed(2));
+    Console.logProperty("velY: ", this.velY.toFixed(2));
+    Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
+  }
+
+  // Recharge shield
+  _rechargeShield = () => {
+    if (this.shield.strength < 100) {
+      this.shield.strength += 0.04;
+
+      if (this.shield.strength > 60 && !this.shieldInfoRecharged) {
+        this.shieldInfoRecharged = true;
+        this.shieldInfoCritical = false;
+        SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged);
+      }
+    }
+  }
+
   /**
    * @name update
    * @param deltaTime
    */
-  update = (deltaTime) =>{
-
+  update = (deltaTime) => {
     // Save previous position
     this.previousPosX = this.posX;
     this.previousPosY = this.posY;
 
-    // Check fuel first
-    if (this.fuel.amount > 0 ) {
+    // Check if there's fuel
+    if (this.fuel.amount > 0) {
       let fuelConsumed = false;
 
       // Control down
       if (this.controls.down && this.velY < this.maxVelY) {
-        this.dependencies[0].isActive = false;
-        this.dependencies[1].isActive = false;
-
-        this.velY += this.accY*1/this.posZ;
-
+        this.applyControl('down');
         fuelConsumed = true;
       }
-
       // Control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
-        this.dependencies[0].isActive = false;
-        this.dependencies[1].isActive = false;
-
-        this.velY -= this.accY*1/this.posZ;
-
+        this.applyControl('up');
         fuelConsumed = true;
       }
-
       // Control right
       else if (this.controls.right && this.velX < this.maxVelX) {
-        this.dependencies[1].isActive = false; // throttle off
-        this.dependencies[0].isActive = true; // propulsion on
-
-        this.viewPortVelX += this.accX*1/this.posZ;
-        this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
-        this.velX += this.accX*1/this.posZ;
-
+        this.applyControl('right');
         fuelConsumed = true;
       }
-
       // Control left
       else if (this.controls.left) {
-        this.dependencies[0].isActive = false; // propulsion off
-        this.dependencies[1].isActive = true; // throttle on
-
-        this.viewPortVelX -= this.accX*1/this.posZ;
-        if (this.velX > 0) {
-          this.velX -= this.accX*1/this.posZ;
-        }
-
+        this.applyControl('left');
         fuelConsumed = true;
       } else {
-        this.dependencies[0].isActive = false; // propulsion off
-        this.dependencies[1].isActive = false; // throttle off
+        this.deactivateControls();
       }
 
       // Deduct fuel if consumed
@@ -427,68 +482,27 @@ class PlayerShip extends GameObject {
       }
     }
 
-    if (this.fuel.amount < 30 || this.shield.strength < 30) {
-      PlayerShip.status = "red"
-    } else {
-      PlayerShip.status = "green"
-    }
+    // Update status based on fuel or shield levels
+    PlayerShip.status = (this.fuel.amount < 30 || this.shield.strength < 30) ? "red" : "green";
 
-    // Bounds
-    if (this.posY > this.upperBoundY) {
-      this.posY = this.upperBoundY ;
-      this.velY = 0;
-    } else if (this.posY < 0 ) {
-      this.posY = 0 ;
-      this.velY = 0;
-    }
+    // Boundaries check
+    this.checkBounds();
 
-    if (this.posX > this.upperBoundX) {
-      this.posX = this.upperBoundX;
-      this.viewPortVelX = 0;
-    }
-    if (this.posX < this.lowerBoundX) {
-      this.posX = this.lowerBoundX;
-      this.viewPortVelX = 0;
-    }
+    // Update position based on velocity
+    this.posX += (this.viewPortVelX * deltaTime * (1 / this.posZ));
+    this.posY += (this.velY * deltaTime * (1 / this.posZ));
 
-    // Position
-    this.posX = (this.posX + (this.viewPortVelX * deltaTime * (1/this.posZ)));
-    this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
+    // Log properties
+    this.logProperties();
 
-    Console.logProperty("viewPortVelX: ", this.viewPortVelX.toFixed(2));
-    Console.logProperty("posX: ", this.posX.toFixed(2));
-    Console.logProperty("posY: ", this.posY.toFixed(2));
-    Console.logProperty("velX: ", this.velX.toFixed(2));
-    Console.logProperty("velY: ", this.velY.toFixed(2));
-    Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
+    // Update dependencies' positions
+    this.dependencies.forEach(dep => {
+      dep.posX = this.posX;
+      dep.posY = this.posY;
+    });
 
-
-
-    //update posY of affected gameObjects based on this.posY
-    /*
-
-    GameObjectsHandler.gameObjects.forEach(obj => {
-      if (obj.posZ) {
-        obj.posY = obj.posY - (this.velY * deltaTime * obj.posZ / 2);
-      }
-    })
-*/
-    // position dependencies
-    for (const dependency of this.dependencies){
-      dependency.posX = this.posX;
-      dependency.posY = this.posY;
-    }
-
-    // shield
-    if (this.shield.strength < 100) {
-      this.shield.strength+= 0.04;
-
-      if (this.shield.strength > 60 && this.shieldInfoRecharged === false){
-        this.shieldInfoRecharged = true;
-        this.shieldInfoCritical = false;
-        SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged)
-      }
-    }
+    // Recharge shield
+    this._rechargeShield();
   }
 
   /**
