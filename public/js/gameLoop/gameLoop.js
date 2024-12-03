@@ -30,6 +30,7 @@ class GameLoop {
 
       Console.clear();
       Console.clearProperty();
+
       Console.log("fixedDeltaTime: " + this.#fixedDeltaTime.toFixed(2));
       Console.log("timeStamp: " + timeStamp.toFixed(2));
 

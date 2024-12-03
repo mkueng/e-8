@@ -358,6 +358,7 @@ class PlayerShip extends GameObject {
       interpolatedY
     );
   }
+  
   /**
    * @name update
    * @param deltaTime
@@ -376,7 +377,9 @@ class PlayerShip extends GameObject {
       if (this.controls.down && this.velY < this.maxVelY) {
         this.dependencies[0].isActive = false;
         this.dependencies[1].isActive = false;
+
         this.velY += this.accY*1/this.posZ;
+
         fuelConsumed = true;
       }
 
@@ -386,6 +389,7 @@ class PlayerShip extends GameObject {
         this.dependencies[1].isActive = false;
 
         this.velY -= this.accY*1/this.posZ;
+
         fuelConsumed = true;
       }
 
@@ -410,7 +414,6 @@ class PlayerShip extends GameObject {
         if (this.velX > 0) {
           this.velX -= this.accX*1/this.posZ;
         }
-
 
         fuelConsumed = true;
       } else {
@@ -452,12 +455,12 @@ class PlayerShip extends GameObject {
     this.posX = (this.posX + (this.viewPortVelX * deltaTime * (1/this.posZ)));
     this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
 
-    Console.logProperty("viewPortVelX: "+ this.viewPortVelX.toFixed(2));
-    Console.logProperty("posX: "+ this.posX.toFixed(2));
-    Console.logProperty("posY: "+ this.posY.toFixed(2));
-    Console.logProperty("velX: "+ this.velX.toFixed(2));
-    Console.logProperty("velY: "+ this.velY.toFixed(2));
-    Console.logProperty("fuel: "+ this.fuel.amount.toFixed(2));
+    Console.logProperty("viewPortVelX: ", this.viewPortVelX.toFixed(2));
+    Console.logProperty("posX: ", this.posX.toFixed(2));
+    Console.logProperty("posY: ", this.posY.toFixed(2));
+    Console.logProperty("velX: ", this.velX.toFixed(2));
+    Console.logProperty("velY: ", this.velY.toFixed(2));
+    Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
 
 
 
