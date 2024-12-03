@@ -402,12 +402,15 @@ class PlayerShip extends GameObject {
       }
 
       // Control left
-      else if (this.controls.left && this.velX > 0) {
+      else if (this.controls.left) {
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
 
         this.viewPortVelX -= this.accX*1/this.posZ;
-        this.velX -= this.accX*1/this.posZ;
+        if (this.velX > 0) {
+          this.velX -= this.accX*1/this.posZ;
+        }
+
 
         fuelConsumed = true;
       } else {
