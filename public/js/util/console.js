@@ -13,7 +13,7 @@ class Console {
     Console.consoleElement.innerText = "";
   }
 
-  static logProperty(message) {
+  static logProperty(message, value) {
     Console.propertiesElement.innerText += message + "\n";
   }
 

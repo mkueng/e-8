@@ -143,8 +143,8 @@ class PlayerShip extends GameObject {
     this.shieldInfoRecharged = true;
     this.shipStatus = "green";
     this.coordinates = 0;
-    this.viewPortX = 0;
-    this.viewPortY = 0;
+    this.viewPortVelX = 0;
+    this.viewPortVelY = 0;
     this.posZ = 1;
     
     this.controls = {
@@ -345,7 +345,7 @@ class PlayerShip extends GameObject {
   render = (interpolation) => {
 
     // linear interpolation
-    let interpolatedX = this.posX + (this.velX * interpolation);
+    let interpolatedX = this.posX + (this.viewPortVelX * interpolation);
     let interpolatedY = this.posY + (this.velY * interpolation);
 
     Console.log("interpolatedX: "+interpolatedX.toFixed(2));
@@ -368,47 +368,53 @@ class PlayerShip extends GameObject {
     this.previousPosX = this.posX;
     this.previousPosY = this.posY;
 
-    //check fuel
+    // Check fuel first
     if (this.fuel.amount > 0 ) {
       let fuelConsumed = false;
 
-      //control down
+      // Control down
       if (this.controls.down && this.velY < this.maxVelY) {
         this.dependencies[0].isActive = false;
         this.dependencies[1].isActive = false;
         this.velY += this.accY*1/this.posZ;
         fuelConsumed = true;
       }
-      //control up
+
+      // Control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
         this.dependencies[0].isActive = false;
         this.dependencies[1].isActive = false;
+
         this.velY -= this.accY*1/this.posZ;
         fuelConsumed = true;
       }
-      //control right
-      else if (this.controls.right) {
+
+      // Control right
+      else if (this.controls.right && this.velX < this.maxVelX) {
         this.dependencies[1].isActive = false; // throttle off
         this.dependencies[0].isActive = true; // propulsion on
 
-        if (this.velX < this.maxVelX) {
-          this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
-          this.velX += this.accX*1/this.posZ;
-          fuelConsumed = true;
-        }
-        //control left
-      } else if (this.controls.left ) {
+        this.viewPortVelX += this.accX*1/this.posZ;
+        this.engineTrail.createParticle({posX: this.posX, posY: this.posY}); // show engine trail
+        this.velX += this.accX*1/this.posZ;
+
+        fuelConsumed = true;
+      }
+
+      // Control left
+      else if (this.controls.left && this.velX > 0) {
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = true; // throttle on
 
-        if (this.posX > 0) {
-          this.velX -= this.accX*1/this.posZ;
-        }
+        this.viewPortVelX -= this.accX*1/this.posZ;
+        this.velX -= this.accX*1/this.posZ;
+
         fuelConsumed = true;
       } else {
         this.dependencies[0].isActive = false; // propulsion off
         this.dependencies[1].isActive = false; // throttle off
       }
+
       // Deduct fuel if consumed
       if (fuelConsumed) {
         this.fuel.amount -= this.fuelConsumption;
@@ -421,7 +427,7 @@ class PlayerShip extends GameObject {
       PlayerShip.status = "green"
     }
 
-    // bounds
+    // Bounds
     if (this.posY > this.upperBoundY) {
       this.posY = this.upperBoundY ;
       this.velY = 0;
@@ -430,20 +436,25 @@ class PlayerShip extends GameObject {
       this.velY = 0;
     }
 
-    // position
-    this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
-    this.posX = (this.posX + (this.velX * deltaTime * (1/this.posZ)));
-
     if (this.posX > this.upperBoundX) {
-
-      this.posX = this.previousPosX;
+      this.posX = this.upperBoundX;
+      this.viewPortVelX = 0;
+    }
+    if (this.posX < this.lowerBoundX) {
+      this.posX = this.lowerBoundX;
+      this.viewPortVelX = 0;
     }
 
+    // Position
+    this.posX = (this.posX + (this.viewPortVelX * deltaTime * (1/this.posZ)));
+    this.posY = (this.posY + (this.velY * deltaTime * (1/this.posZ)));
 
+    Console.logProperty("viewPortVelX: "+ this.viewPortVelX.toFixed(2));
     Console.logProperty("posX: "+ this.posX.toFixed(2));
     Console.logProperty("posY: "+ this.posY.toFixed(2));
     Console.logProperty("velX: "+ this.velX.toFixed(2));
     Console.logProperty("velY: "+ this.velY.toFixed(2));
+    Console.logProperty("fuel: "+ this.fuel.amount.toFixed(2));
 
 
 
