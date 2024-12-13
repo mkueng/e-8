@@ -173,7 +173,7 @@ class GameObject {
    * @name hit
    * @param hitBy
    */
-  hit (hitBy){};
+  hit(hitBy){};
 
   /**
    * @name destroy
@@ -198,7 +198,7 @@ class GameObject {
    * @name renderImage
    * @param interpolation
    */
-  renderImage (interpolation) {
+  renderImage(interpolation) {
 
     const interpolatedX = (this.previousPosX + (this.posX - this.previousPosX) * interpolation) + this.posDX;
     const interpolatedY = (this.previousPosY + (this.posY - this.previousPosY) * interpolation) + this.posDY;
@@ -228,7 +228,6 @@ class GameObject {
     if (newAlpha !== 1) {
       this.context.globalAlpha = 1;
     }
-
   }
 
   /**

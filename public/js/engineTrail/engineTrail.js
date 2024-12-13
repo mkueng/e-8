@@ -1,12 +1,11 @@
+'use strict'
 class EngineTrail {
 
-  width;
-  height;
-  canvas;
-  posDX;
-  posDY;
-  imageResource;
-
+  /**
+   *
+   * @param fadeTime
+   * @param velX
+   */
   constructor({
                 fadeTime,
                 velX
@@ -19,6 +18,7 @@ class EngineTrail {
 
   /**
    *
+   * @name invoke
    * @param resourceHandler
    * @param resourceObject
    * @returns {Promise<void>}
@@ -31,22 +31,24 @@ class EngineTrail {
 
   /**
    *
+   * @name createParticle
    * @param posX
    * @param posY
    */
   createParticle = ({posX, posY}) => {
     const engineTrailParticle = new EngineTrailParticle({
-      image: this.imageResource.image,
       canvas: this.canvas,
-      width: this.imageResource.image.width,
+      fadeTime: this.fadeTime,
       height: this.imageResource.image.height,
-      posX: posX,
-      velX: this.velX,
-      posY: posY,
+      image: this.imageResource.image,
       posDX: this.posDX,
       posDY: this.posDY,
-      fadeTime : this.fadeTime
+      posX: posX,
+      posY: posY,
+      velX: this.velX,
+      width: this.imageResource.image.width
     })
+
     GameObjectsHandler.instance.addGameObject(engineTrailParticle);
   }
 }

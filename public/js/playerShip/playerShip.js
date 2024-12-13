@@ -155,9 +155,9 @@ class PlayerShip extends GameObject {
     }
 
     e8.global.inputHandler.subscribe(this);
-    this.initializeWeapons();
-    this.initializeFeatures();
-    this.initializeShield();
+    this.#initializeWeapons();
+    this.#initializeFeatures();
+    this.#initializeShield();
 
     // register playerShip and dependencies with GameObjectsHandler
     GameObjectsHandler.instance.addGameObject(this);
@@ -196,120 +196,6 @@ class PlayerShip extends GameObject {
     return PlayerShip.instance?.shipStatus;
   }
 
-  /**
-   *
-   * @param key
-   * @param execute
-   */
-  addKeyEvent = ({key, execute}) => {
-    this.keyEvents[key] = execute;
-  }
-
-  /**
-   * @name initializeFeatures
-   */
-  initializeFeatures = () => {
-    for (const feature in this.features){
-      const {controlAssignment, type} = this.features[feature];
-      this.addKeyEvent({
-        key: controlAssignment,
-        execute: () => {
-          type.activate({dependency: this})
-        }
-      })
-    }
-  }
-
-  /**
-   * @name initializeWeapons
-   */
-  initializeWeapons = () => {
-    for (const weapon in this.weapons) {
-      const { controlAssignment, units } = this.weapons[weapon];
-      this.addKeyEvent({
-        key: controlAssignment,
-        execute: () => {
-          if (units.length > 0) {
-            const unit = units.pop();
-            if (unit.ready === true) {
-              unit.activate({posX: this.posX, posY: this.posY, dependency: this});
-            } else {
-              units.unshift(unit);
-            }
-          }
-        }
-      });
-      units.forEach(unit => unit.subscribe(this));
-    }
-  };
-
-
-  /**
-   * @name updateFromGameObjectsHandler
-   * @param message
-   * @param obj
-   */
-  updateFromGameObjectsHandler = (message,obj) => {
-    //this.weapons[obj.uniqueIdentifier].units.unshift(obj);
-    //console.log("updateFromGameObjectsHandler", obj);
-  }
-
-  /**
-   * @name loadCargo
-   * @param key
-   */
-  loadCargo = (key) => {
-    //this.cargo[key] = (this.cargo[key] || {key: {amount:0, max:}});
-
-    if (this.cargo[key] >= 100) {
-      this.cargo[key] = 100;
-    }
-  }
-
-  /**
-   * @name unloadCargo
-   */
-  unloadCargo = () => {
-  }
-
-  /**
-   * @name initializeShield
-   */
-  initializeShield = () => {
-    Object.assign(this.shield, {
-      posX: this.posX,
-      posY: this.posY
-    });
-    GameObjectsHandler.instance.addGameObject(this.shield);
-  }
-
-  /**
-   * @name activateShield
-   */
-  activateShield = () =>{
-    this.shield.posX = this.posX;
-    this.shield.posY = this.posY;
-    this.shield.isActive = true;
-    SoundHandler.playFX(this.shield.sound);
-    this.shield.strength = Math.max(this.shield.strength - 10, 0);
-  }
-
-  /**
-   * @name invokeTerminationSequence
-   */
-  invokeTerminationSequence = () => {
-    Object.assign(this.terminationSequence, {
-      posX: this.posX,
-      posY: this.posY,
-      velX: this.velX,
-      velY: this.velY
-    });
-    GameObjectsHandler.instance.addGameObject(this.terminationSequence);
-    this.destroy();
-    this.destroyDependencies();
-    e8.global.inputHandler.unsubscribe(this);
-    this.playerShipHandler.shipDestroyed(this);
-  }
 
   /**
    * @name destroyDependencies
@@ -324,7 +210,7 @@ class PlayerShip extends GameObject {
     if (hitBy.identification === "weaponPlayer") {
       return; // Ignore hits from player's own weapon
     }
-    this.activateShield();
+    this.#activateShield();
 
     if (this.shield.strength < 30 && this.shieldInfoCritical === false) {
       SpeechHandler.playStatement(SpeechHandler.statements.shieldCritical)
@@ -333,97 +219,16 @@ class PlayerShip extends GameObject {
     }
 
     if (this.shield.strength <= 1){
-      this.invokeTerminationSequence();
+      this.#invokeTerminationSequence();
     }
     hitBy.object.destroy();
-  }
-
-  applyControl = (direction, deltaTime) =>{
-    const controlActions = {
-      down: () => {
-        this.velY += this.accY * (deltaTime / 10);
-        this.deactivateControls();
-      },
-      up: () => {
-        this.velY -= this.accY * (deltaTime / 10);
-        this.deactivateControls();
-      },
-      right: () => {
-        this.viewPortVelX += this.accX * (deltaTime / 10);
-        this.velX += this.accX * (deltaTime / 10);
-        //this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
-        this.activateControl(0, 1);
-      },
-      left: () => {
-        this.viewPortVelX -= this.accX * (deltaTime / 10);
-        if (this.velX > 0) {
-          this.velX -= this.accX * (deltaTime / 10);
-        }
-        this.activateControl(1, 0);
-      }
-    };
-
-    controlActions[direction]();
-  }
-
-  deactivateControls = () => {
-    this.dependencies[0].isActive = false; // Propulsion off
-    this.dependencies[1].isActive = false; // Throttle off
-  }
-
-  activateControl = (propulsionIndex, throttleIndex) => {
-    this.dependencies[propulsionIndex].isActive = true;
-    this.dependencies[throttleIndex].isActive = false;
-  }
-
-
-// Check if the position is within bounds
-  checkBounds = () => {
-    if (this.posY > this.upperBoundY) {
-      this.posY = this.upperBoundY;
-      this.velY = 0;
-    } else if (this.posY < 0) {
-      this.posY = 0;
-      this.velY = 0;
-    }
-
-    if (this.posX > this.upperBoundX) {
-      this.posX = this.upperBoundX;
-      this.viewPortVelX = 0;
-    } else if (this.posX < this.lowerBoundX) {
-      this.posX = this.lowerBoundX;
-      this.viewPortVelX = 0;
-    }
-  }
-
-  // Log properties
-  logProperties = () => {
-    Console.logProperty("viewPortVelX: ", this.viewPortVelX.toFixed(2));
-    Console.logProperty("posX: ", this.posX.toFixed(2));
-    Console.logProperty("posY: ", this.posY.toFixed(2));
-    Console.logProperty("velX: ", this.velX.toFixed(2));
-    Console.logProperty("velY: ", this.velY.toFixed(2));
-    Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
-  }
-
-  // Recharge shield
-  _rechargeShield = () => {
-    if (this.shield.strength < 100) {
-      this.shield.strength += 0.04;
-
-      if (this.shield.strength > 60 && !this.shieldInfoRecharged) {
-        this.shieldInfoRecharged = true;
-        this.shieldInfoCritical = false;
-        SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged);
-      }
-    }
   }
 
   /**
    * @name update
    * @param deltaTime
    */
-    update = (deltaTime) => {
+  update = (deltaTime) => {
     // Save previous position
 
     // Check if there's fuel
@@ -432,25 +237,25 @@ class PlayerShip extends GameObject {
 
       // Control down
       if (this.controls.down && this.velY < this.maxVelY) {
-        this.applyControl('down', deltaTime);
+        this.#applyControl('down', deltaTime);
         fuelConsumed = true;
       }
       // Control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
-        this.applyControl('up', deltaTime);
+        this.#applyControl('up', deltaTime);
         fuelConsumed = true;
       }
       // Control right
       else if (this.controls.right && this.velX < this.maxVelX) {
-        this.applyControl('right', deltaTime);
+        this.#applyControl('right', deltaTime);
         fuelConsumed = true;
       }
       // Control left
       else if (this.controls.left) {
-        this.applyControl('left', deltaTime);
+        this.#applyControl('left', deltaTime);
         fuelConsumed = true;
       } else {
-        this.deactivateControls();
+        this.#deactivateControls();
       }
 
       // Deduct fuel if consumed
@@ -463,7 +268,7 @@ class PlayerShip extends GameObject {
     PlayerShip.status = (this.fuel.amount < 30 || this.shield.strength < 30) ? "red" : "green";
 
     // Boundaries check
-    this.checkBounds();
+    this.#checkBounds();
 
     // Update position based on velocity
     this.posX += (this.viewPortVelX * (1 / this.posZ));
@@ -471,7 +276,7 @@ class PlayerShip extends GameObject {
 
 
     // Log properties
-    //this.logProperties();
+    this.#logProperties();
 
     // Update dependencies' positions
     this.dependencies.forEach(dep => {
@@ -483,7 +288,7 @@ class PlayerShip extends GameObject {
     });
 
     // Recharge shield
-    this._rechargeShield();
+    this.#rechargeShield();
   }
 
   /**
@@ -531,4 +336,237 @@ class PlayerShip extends GameObject {
       }
     }
   }
+
+  /**
+   * @name updateFromGameObjectsHandler
+   * @param message
+   * @param obj
+   */
+  updateFromGameObjectsHandler = (message,obj) => {
+    //this.weapons[obj.uniqueIdentifier].units.unshift(obj);
+    //console.log("updateFromGameObjectsHandler", obj);
+  }
+
+
+  /**
+   * @name #addKeyEvent
+   * @private
+   * @param key
+   * @param execute
+   */
+  #addKeyEvent = ({key, execute}) => {
+    this.keyEvents[key] = execute;
+  }
+
+  /**
+   * @name #initializeFeatures
+   * @private
+   */
+  #initializeFeatures = () => {
+    for (const feature in this.features){
+      const {controlAssignment, type} = this.features[feature];
+      this.#addKeyEvent({
+        key: controlAssignment,
+        execute: () => {
+          type.activate({dependency: this})
+        }
+      })
+    }
+  }
+
+  /**
+   * @name #initializeWeapons
+   * @private
+   */
+  #initializeWeapons = () => {
+    for (const weapon in this.weapons) {
+      const { controlAssignment, units } = this.weapons[weapon];
+      this.#addKeyEvent({
+        key: controlAssignment,
+        execute: () => {
+          if (units.length > 0) {
+            const unit = units.pop();
+            if (unit.ready === true) {
+              unit.activate({posX: this.posX, posY: this.posY, dependency: this});
+            } else {
+              units.unshift(unit);
+            }
+          }
+        }
+      });
+      units.forEach(unit => unit.subscribe(this));
+    }
+  };
+
+  /**
+   * @name #loadCargo
+   * @private
+   * @param key
+   */
+  #loadCargo = (key) => {
+    //this.cargo[key] = (this.cargo[key] || {key: {amount:0, max:}});
+
+    if (this.cargo[key] >= 100) {
+      this.cargo[key] = 100;
+    }
+  }
+
+  /**
+   * @name #unloadCargo
+   * @private
+   */
+  #unloadCargo = () => {
+  }
+
+  /**
+   * @name #initializeShield
+   * @private
+   */
+  #initializeShield = () => {
+    Object.assign(this.shield, {
+      posX: this.posX,
+      posY: this.posY
+    });
+    GameObjectsHandler.instance.addGameObject(this.shield);
+  }
+
+  /**
+   * @name #activateShield
+   * @private
+   */
+  #activateShield = () =>{
+    this.shield.posX = this.posX;
+    this.shield.posY = this.posY;
+    this.shield.isActive = true;
+    SoundHandler.playFX(this.shield.sound);
+    this.shield.strength = Math.max(this.shield.strength - 10, 0);
+  }
+
+  /**
+   * @name #invokeTerminationSequence
+   * @private
+   */
+  #invokeTerminationSequence = () => {
+    Object.assign(this.terminationSequence, {
+      posX: this.posX,
+      posY: this.posY,
+      velX: this.velX,
+      velY: this.velY
+    });
+    GameObjectsHandler.instance.addGameObject(this.terminationSequence);
+    this.destroy();
+    this.destroyDependencies();
+    e8.global.inputHandler.unsubscribe(this);
+    this.playerShipHandler.shipDestroyed(this);
+  }
+
+  /**
+   * @name #applyControl
+   * @private
+   * @param direction
+   * @param deltaTime
+   */
+  #applyControl = (direction, deltaTime) =>{
+    const controlActions = {
+      down: () => {
+        this.velY += this.accY * (deltaTime / 10);
+        this.#deactivateControls();
+      },
+      up: () => {
+        this.velY -= this.accY * (deltaTime / 10);
+        this.#deactivateControls();
+      },
+      right: () => {
+        this.viewPortVelX += this.accX * (deltaTime / 10);
+        this.velX += this.accX * (deltaTime / 10);
+        this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
+        this.#activateControl(0, 1);
+      },
+      left: () => {
+        this.viewPortVelX -= this.accX * (deltaTime / 10);
+        if (this.velX > 0) {
+          this.velX -= this.accX * (deltaTime / 10);
+        }
+        this.#activateControl(1, 0);
+      }
+    };
+
+    controlActions[direction]();
+  }
+
+  /**
+   * @name #deactivateControls
+   * @private
+   */
+  #deactivateControls = () => {
+    this.dependencies[0].isActive = false; // Propulsion off
+    this.dependencies[1].isActive = false; // Throttle off
+  }
+
+  /**
+   * @name #activateControl
+   * @private
+   * @param propulsionIndex
+   * @param throttleIndex
+   */
+  #activateControl = (propulsionIndex, throttleIndex) => {
+    this.dependencies[propulsionIndex].isActive = true;
+    this.dependencies[throttleIndex].isActive = false;
+  }
+
+
+  /**
+   * @name checkBounds
+   * @private
+   */
+  #checkBounds = () => {
+    if (this.posY > this.upperBoundY) {
+      this.posY = this.upperBoundY;
+      this.velY = 0;
+    } else if (this.posY < 0) {
+      this.posY = 0;
+      this.velY = 0;
+    }
+
+    if (this.posX > this.upperBoundX) {
+      this.posX = this.upperBoundX;
+      this.viewPortVelX = 0;
+    } else if (this.posX < this.lowerBoundX) {
+      this.posX = this.lowerBoundX;
+      this.viewPortVelX = 0;
+    }
+  }
+
+  /**
+   * @name #logProperties
+   * @private
+   */
+  #logProperties = () => {
+    Console.clearProperty();
+    Console.logProperty("viewPortVelX: ", this.viewPortVelX.toFixed(2));
+    Console.logProperty("posX: ", this.posX.toFixed(2));
+    Console.logProperty("posY: ", this.posY.toFixed(2));
+    Console.logProperty("velX: ", this.velX.toFixed(2));
+    Console.logProperty("velY: ", this.velY.toFixed(2));
+    Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
+  }
+
+  /**
+   * @name rechargeShield
+   * @private
+   */
+  #rechargeShield = () => {
+    if (this.shield.strength < 100) {
+      this.shield.strength += 0.04;
+
+      if (this.shield.strength > 60 && !this.shieldInfoRecharged) {
+        this.shieldInfoRecharged = true;
+        this.shieldInfoCritical = false;
+        SpeechHandler.playStatement(SpeechHandler.statements.shieldRecharged);
+      }
+    }
+  }
+
+
+
 }

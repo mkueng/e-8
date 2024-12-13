@@ -2,29 +2,29 @@
 class EngineTrailParticle extends GameObject {
 
   constructor({
-    image,
-    canvas,
-    posX,
-    posY,
-    posDX,
-    posDY,
-    velX,
-    width,
-    height,
-    fadeTime
+                canvas,
+                fadeTime,
+                height,
+                image,
+                posDX,
+                posDY,
+                posX,
+                posY,
+                velX,
+                width
               }){
     super({
-      isActive: true,
-      image,
+      alpha: 1,
       canvas,
-      posX,
-      posY,
+      height,
+      image,
+      isActive: true,
       posDX,
       posDY,
-      velX : velX,
-      width,
-      height,
-      alpha: 1,
+      posX,
+      posY,
+      velX: velX,
+      width
     });
 
     Object.assign(this, {
@@ -33,6 +33,9 @@ class EngineTrailParticle extends GameObject {
     });
   }
 
+  /**
+   * @name update
+   */
   update = ()=>{
     this.alpha -= this.alpha * this.fadeTime;
     this.posX = this.posX-PlayerShip.velX/2-this.velX;

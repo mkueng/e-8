@@ -10,7 +10,6 @@ class GameLoop {
   #accumulator = 0;
   #fixedDeltaTime = 1000 / this.#simulationFps; // Fixed simulation step
   #maxDeltaTime = this.#fixedDeltaTime * 3;
-  #ms
 
   constructor() {
     new GameTelemetry().startTracking();
@@ -22,43 +21,36 @@ class GameLoop {
    * @param timeStamp
    */
   #animate = (timeStamp) => {
+    let deltaTime = timeStamp - this.#previousTimeStamp;
+    this.#previousTimeStamp = timeStamp;
 
-      let deltaTime = timeStamp - this.#previousTimeStamp;
-      this.#previousTimeStamp = timeStamp;
+    // Clamp the frame time to avoid huge jumps
+    if (deltaTime > this.#maxDeltaTime) {
+      deltaTime = this.#maxDeltaTime;
+    }
 
-      // Clamp the frame time to avoid huge jumps
-      if (deltaTime > this.#maxDeltaTime) {
-        deltaTime = this.#maxDeltaTime;
-      }
+    this.#accumulator += deltaTime;
 
-      this.#accumulator += deltaTime;
+    // Update game logic with fixed time step and ensure this is done 60 times per second
+    while (this.#accumulator >= this.#fixedDeltaTime) {
+      this.#update(this.#fixedDeltaTime);
+      this.#accumulator -= this.#fixedDeltaTime;
+    }
 
-      // Update game logic with fixed time step and ensure this is done 60 times per second
-      while (this.#accumulator >= this.#fixedDeltaTime) {
-        //Console.log("accumulator: " + this.#accumulator.toFixed(2));
-        this.#update(this.#fixedDeltaTime);
-        this.#accumulator -= this.#fixedDeltaTime;
-      }
+    // Calculate interpolation factor for rendering
+    const interpolation = this.#accumulator / this.#fixedDeltaTime;
 
-      // Calculate interpolation factor for rendering
-      const interpolation = this.#accumulator / this.#fixedDeltaTime;
+    if (GameLoop.frameCount % 10 === 0) {
+      Console.clear();
+      Console.log("deltaTime: " + deltaTime.toFixed(2)+"ms");
+      Console.log("fixedDeltaTime: " + this.#fixedDeltaTime.toFixed(2)+"ms");
+      Console.log("timeStamp: " + timeStamp.toFixed(2)+"ms");
+      Console.log("accumulator: " + this.#accumulator.toFixed(2));
+      Console.log("interpolation: " + interpolation.toFixed(2));
+    }
 
-      if (GameLoop.frameCount % 5 === 0) {
-        /*
-        Console.clear();
-        Console.clearProperty();
-        Console.log("deltaTime: " + deltaTime.toFixed(2)+"ms");
-        Console.log("fixedDeltaTime: " + this.#fixedDeltaTime.toFixed(2)+"ms");
-        Console.log("timeStamp: " + timeStamp.toFixed(2)+"ms");
-        //Console.log("accumulator: " + this.#accumulator.toFixed(2));
-        Console.log("interpolation: " + interpolation.toFixed(2));
-*/
-      }
-
-      this.#render(interpolation);
-
-      // Increment frame counter for FPS calculation
-      GameLoop.frameCount++;
+    this.#render(interpolation);
+    GameLoop.frameCount++;
 
     this.#animationId = requestAnimationFrame(this.#animate);
   };

@@ -15,6 +15,7 @@ class EngineTrailFactory {
 
   /**
    *
+   * @name createEngineTrail
    * @param type
    * @param canvas
    * @param posDX
