@@ -199,6 +199,13 @@ class GameObject {
    * @param interpolation
    */
   renderImage (interpolation) {
+
+    const interpolatedX = (this.previousPosX + (this.posX - this.previousPosX) * interpolation) + this.posDX;
+    const interpolatedY = (this.previousPosY + (this.posY - this.previousPosY) * interpolation) + this.posDY;
+
+    this.previousPosX = this.posX;
+    this.previousPosY = this.posY;
+
     if (!this.isActive) return;
 
     // Only update alpha if it's different to minimize context state changes.
@@ -207,15 +214,12 @@ class GameObject {
       this.context.globalAlpha = newAlpha;
     }
 
-    const interpolatedX = this.previousPosX + interpolation * (this.posX - this.previousPosX);
-    const interpolatedY = this.previousPosY + interpolation * (this.posY - this.previousPosY);
-
     // image
-    if (this.image && !this.spriteSheet) {
+    if (this.image) {
       this.context.drawImage(
         this.image,
-        interpolatedX + this.posDX,
-        interpolatedY + this.posDY,
+        interpolatedX,
+        interpolatedY,
         this.width,
         this.height
       );
@@ -224,6 +228,7 @@ class GameObject {
     if (newAlpha !== 1) {
       this.context.globalAlpha = 1;
     }
+
   }
 
   /**
@@ -231,14 +236,21 @@ class GameObject {
    * @param interpolation
    */
   renderSpriteSheet(interpolation) {
+
+    const interpolatedX = (this.previousPosX + (this.posX - this.previousPosX) * interpolation) + this.posDX;
+    const interpolatedY = (this.previousPosY + (this.posY - this.previousPosY) * interpolation) + this.posDY;
+
+    this.previousPosX = this.posX;
+    this.previousPosY = this.posY;
+
+    // Only update alpha if it's different to minimize context state changes.
     if (!this.isActive) return;
+
     const newAlpha = this.alpha || 1;
+
     if (this.context.globalAlpha !== newAlpha) {
       this.context.globalAlpha = newAlpha;
     }
-
-    const interpolatedX = this.previousPosX + interpolation * (this.posX - this.previousPosX);
-    const interpolatedY = this.previousPosY + interpolation * (this.posY - this.previousPosY);
 
     if (this.animationLoop || this.currentFrame + 1 < this.frames) {
       this.currentFrame = (this.currentFrame + 1) % this.frames;
@@ -261,8 +273,8 @@ class GameObject {
       sourceY,
       this.strideX,
       this.strideY,
-      interpolatedX + this.posDX,
-      interpolatedY + this.posDY,
+      interpolatedX,
+      interpolatedY,
       this.width,
       this.height
     );
@@ -286,14 +298,10 @@ class GameObject {
       return
     }
 
-    // Save previous position
-    this.previousPosX = this.posX;
-    this.previousPosY = this.posY;
-
     // Update velocity with scaling based on posZ
     const zScale = (this.posZ > 0) ? 1 / this.posZ : 1;
-    this.velX += this.accX * zScale;
-    this.velY += this.accY * zScale;
+    this.velX += this.accX * (deltaTime / 10);
+    this.velY += this.accY * (deltaTime / 10);
 
     // Update position
     this.posX += this.velX * deltaTime;

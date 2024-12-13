@@ -23,6 +23,7 @@ class GameObjectsHandler {
        console.error(e);
     }
     GameObjectsHandler.gameObjects.push(gameObject);
+    // console.log(GameObjectsHandler.gameObjects)
   }
 
   /**

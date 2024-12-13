@@ -53,6 +53,7 @@ class PropulsionFactory {
       stride: PropulsionTypes[type].imageResource.image.height / PropulsionTypes[type].spriteSheetRows,
       width: PropulsionTypes[type].imageResource.image.width,
       spriteSheet: PropulsionTypes[type].imageResource.image,
+      image:  null,
       animationLoop: PropulsionTypes[type].animationLoop
     })
   }

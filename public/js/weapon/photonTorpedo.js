@@ -36,21 +36,23 @@ class PhotonTorpedo extends Weapon{
                  controlAssignment
   }) {
     super({
-      identification: "weaponPlayer",
-      controlAssignment,
+      animationLoop: false,
       canvas: canvas,
-      image: PhotonTorpedo.imageResource.image,
-      sound: PhotonTorpedo.soundResource,
-      width: PhotonTorpedo.imageResource.image.width,
+      category: "playerWeapon",
+      controlAssignment,
       height: PhotonTorpedo.imageResource.image.height,
-      posX: 0,
-      posY: 0,
+      identification: "weaponPlayer",
+      image: PhotonTorpedo.imageResource.image,
+      isDestroyable: false,
+      isHittable: false,
       posDX: posDX,
       posDY: posDY,
+      posX: 0,
+      posY: 0,
+      sound: PhotonTorpedo.soundResource,
       velX: 2,
       velY: 0,
-      isHittable: false,
-      isDestroyable: false
+      width: PhotonTorpedo.imageResource.image.width
     })
 
     this.uniqueIdentifier = this.constructor.name;

@@ -18,22 +18,22 @@ class WeaponFactory {
   }
 
   createWeapon({
-                 type,
-                 controlAssignment,
                  amount,
                  canvas,
+                 controlAssignment,
                  posDX,
-                 posDY
+                 posDY,
+                 type
   }) {
     /**
      * Creates weapon instances
      */
     const createWeaponInstances  = (type) => {
       return Array.from({ length: amount }, () => new type({
+        canvas,
         controlAssignment,
         posDX,
-        posDY,
-        canvas
+        posDY
       }));
     };
 

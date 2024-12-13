@@ -2,70 +2,77 @@
 class Weapon extends GameObject {
 
   constructor({
-                identification,
-                controlAssignment,
-                image,
-                spriteSheet,
+                animationLoop,
                 canvas,
-                spriteSheetRows,
-                spriteSheetColumns,
-                frames,
+                controlAssignment,
                 currentFrame,
+                frames,
+                height,
+                identification,
+                image,
+                isDestroyable,
+                isHittable,
+                posDX,
+                posDY,
+                rechargeTime,
+                sound,
+                spriteSheet,
+                spriteSheetColumns,
+                spriteSheetRows,
                 stride,
                 strideX,
                 strideY,
-                width,
-                height,
-                posDX,
-                posDY,
                 velX,
                 velY,
-                sound,
-                activeOnKeyHold,
-                animationLoop,
-                rechargeTime,
-                isDestroyable,
-                isHittable
+                width
               })
   {
     super({
-      isActive: true,
-      identification,
+      animationLoop,
       canvas,
-      spriteSheet,
-      spriteSheetRows,
-      spriteSheetColumns,
-      image,
-      sound,
-      width,
-      height,
-      frames,
+      canDestroy: true,
       currentFrame,
-      strideX,
-      strideY,
-      stride,
+      frames,
+      height,
+      identification,
+      image,
+      isActive: true,
+      isDestroyable,
+      isHittable,
       posDX,
       posDY,
+      sound,
+      spriteSheet,
+      spriteSheetColumns,
+      spriteSheetRows,
+      stride,
+      strideX,
+      strideY,
       velX,
       velY,
-      animationLoop,
-      isHittable,
-      isDestroyable,
-      canDestroy: true
+      width
     });
 
     this.controlAssignment = controlAssignment;
     this.rechargeTime = rechargeTime;
-    this.activeOnKeyHold = activeOnKeyHold;
   }
 
+  /**
+   * @name activate
+   * @param posX
+   * @param posY
+   */
   activate ({posX, posY}) {
-    this.posX = posX;
-    this.posY = posY;
+    this.posX = this.previousPosX = posX;
+    this.posY = this.previousPosY = posY;
+
     GameObjectsHandler.instance.addGameObject(this);
     SoundHandler.playFX(this.sound);
   };
 
+  /**
+   * @name recharge
+   */
   recharge = () =>{
     setTimeout(()=>{
       SpeechHandler.playStatement(SpeechHandler.statements.weaponRecharged);

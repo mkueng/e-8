@@ -31,47 +31,53 @@ class Laser extends Weapon {
 
   constructor({
                 canvas,
+                controlAssignment,
                 posDX,
-                posDY,
-                controlAssignment
+                posDY
               }){
     super({
-      identification: "weaponPlayer",
-      controlAssignment: controlAssignment,
+      animationLoop: true,
       canvas: canvas,
-      spriteSheet:  Laser.imageResource.image,
-      spriteSheetRows: 3,
-      spriteSheetColumns: 1,
-      width: e8.global.screenWidth,
-      height: Laser.imageResource.image.height / 3,
-      frames: 3,
+      controlAssignment: controlAssignment,
       currentFrame: 0,
-      sound: Laser.soundResource,
-      strideX: Laser.imageResource.image.width / 1,
-      strideY: Laser.imageResource.image.height / 3,
-      stride: Laser.imageResource.image.height / 3,
+      frames: 3,
+      height: Laser.imageResource.image.height / 3,
+      identification: "weaponPlayer",
+      isDestroyable: false,
+      isHittable: false,
       posDX: posDX,
       posDY: posDY,
-      animationLoop: true,
       rechargeTime: 5000,
-      isHittable: false,
-      isDestroyable: false
+      sound: Laser.soundResource,
+      spriteSheet: Laser.imageResource.image,
+      spriteSheetColumns: 1,
+      spriteSheetRows: 3,
+      stride: Laser.imageResource.image.height / 3,
+      strideX: Laser.imageResource.image.width / 1,
+      strideY: Laser.imageResource.image.height / 3,
+      width: e8.global.screenWidth
     });
 
-    this.uniqueIdentifier = this.constructor.name;
     this.currentLoad = 0;
+    this.loadIncrement = 10;
     this.loadIncrement = 10;
     this.overLoad = 100;
     this.ready = true;
+    this.shootTime = 100;
     this.timer = 0;
+    this.uniqueIdentifier = this.constructor.name;
+
+
+    this.overLoad = 100;
+
+
     this.shootTime = 100;
   }
 
   update = () => {
     this.posX = this.dependency.posX;
     this.posY = this.dependency.posY;
-    this.previousPosX = this.posX;
-    this.previousPosY = this.posY;
+
     this.timer+= 1;
     if (this.timer > this.shootTime) {
       this.destroy();
@@ -87,6 +93,8 @@ class Laser extends Weapon {
     if (this.ready) {
       this.posX = posX;
       this.posY = posY;
+      this.previousPosX = this.posX;
+      this.previousPosY = this.posY;
       GameObjectsHandler.instance.addGameObject(this);
       SoundHandler.playFX(this.sound);
       this.currentLoad += this.loadIncrement;

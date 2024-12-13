@@ -27,6 +27,7 @@ class Propulsion extends GameObject {
    */
   constructor({
                 spriteSheet,
+                image,
                 spriteSheetRows,
                 spriteSheetColumns,
                 width,
@@ -46,9 +47,11 @@ class Propulsion extends GameObject {
                 isActive,
                 animationLoop
               }) {
+    console.log("image", image);
     super({
       isActive: isActive || false,
       spriteSheet,
+      image,
       spriteSheetRows,
       spriteSheetColumns,
       width,
@@ -63,11 +66,15 @@ class Propulsion extends GameObject {
       posDX,
       posDY,
       canvas,
+      identification: "propulsion",
       isHittable: false,
       animationLoop: animationLoop || false
     })
 
     this.efficiency = efficiency;
     this.fuelType = fuelType;
+  }
+
+  update = (deltaTime)=>{
   }
 }

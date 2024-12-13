@@ -136,7 +136,7 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth/1.5 - this.width;
+    this.upperBoundX = e8.global.screenWidth/1.1 - this.width;
     this.lowerBoundX = 10;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
@@ -145,7 +145,7 @@ class PlayerShip extends GameObject {
     this.coordinates = 0;
     this.viewPortVelX = 0;
     this.viewPortVelY = 0;
-    this.posZ = 1;
+    this.posZ = 0.5;
     
     this.controls = {
       down: false,
@@ -338,47 +338,26 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
-  /**
-   * @name render
-   * @param interpolation
-   */
-  render = (interpolation) => {
-
-    // linear interpolation
-    let interpolatedX = this.posX + (this.viewPortVelX * interpolation);
-    let interpolatedY = this.posY + (this.velY * interpolation);
-
-    Console.log("interpolatedX: "+interpolatedX.toFixed(2));
-    Console.log("interpolatedY: "+interpolatedY.toFixed(2));
-
-
-    this.context.drawImage(
-      this.image,
-      interpolatedX,
-      interpolatedY
-    );
-  }
-
-  applyControl = (direction) =>{
+  applyControl = (direction, deltaTime) =>{
     const controlActions = {
       down: () => {
-        this.velY += this.accY * (1 / this.posZ);
+        this.velY += this.accY * (deltaTime / 10);
         this.deactivateControls();
       },
       up: () => {
-        this.velY -= this.accY * (1 / this.posZ);
+        this.velY -= this.accY * (deltaTime / 10);
         this.deactivateControls();
       },
       right: () => {
-        this.viewPortVelX += this.accX * (1 / this.posZ);
-        this.velX += this.accX * (1 / this.posZ);
-        this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
+        this.viewPortVelX += this.accX * (deltaTime / 10);
+        this.velX += this.accX * (deltaTime / 10);
+        //this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
         this.activateControl(0, 1);
       },
       left: () => {
-        this.viewPortVelX -= this.accX * (1 / this.posZ);
+        this.viewPortVelX -= this.accX * (deltaTime / 10);
         if (this.velX > 0) {
-          this.velX -= this.accX * (1 / this.posZ);
+          this.velX -= this.accX * (deltaTime / 10);
         }
         this.activateControl(1, 0);
       }
@@ -444,10 +423,8 @@ class PlayerShip extends GameObject {
    * @name update
    * @param deltaTime
    */
-  update = (deltaTime) => {
+    update = (deltaTime) => {
     // Save previous position
-    this.previousPosX = this.posX;
-    this.previousPosY = this.posY;
 
     // Check if there's fuel
     if (this.fuel.amount > 0) {
@@ -455,22 +432,22 @@ class PlayerShip extends GameObject {
 
       // Control down
       if (this.controls.down && this.velY < this.maxVelY) {
-        this.applyControl('down');
+        this.applyControl('down', deltaTime);
         fuelConsumed = true;
       }
       // Control up
       else if (this.controls.up && this.velY > -this.maxVelY) {
-        this.applyControl('up');
+        this.applyControl('up', deltaTime);
         fuelConsumed = true;
       }
       // Control right
       else if (this.controls.right && this.velX < this.maxVelX) {
-        this.applyControl('right');
+        this.applyControl('right', deltaTime);
         fuelConsumed = true;
       }
       // Control left
       else if (this.controls.left) {
-        this.applyControl('left');
+        this.applyControl('left', deltaTime);
         fuelConsumed = true;
       } else {
         this.deactivateControls();
@@ -489,16 +466,20 @@ class PlayerShip extends GameObject {
     this.checkBounds();
 
     // Update position based on velocity
-    this.posX += (this.viewPortVelX * deltaTime * (1 / this.posZ));
-    this.posY += (this.velY * deltaTime * (1 / this.posZ));
+    this.posX += (this.viewPortVelX * (1 / this.posZ));
+    this.posY += (this.velY * (1 / this.posZ));
+
 
     // Log properties
-    this.logProperties();
+    //this.logProperties();
 
     // Update dependencies' positions
     this.dependencies.forEach(dep => {
       dep.posX = this.posX;
       dep.posY = this.posY;
+      //dep.update(deltaTime);
+      //dep.posX = this.posX;
+      //dep.posY = this.posY;
     });
 
     // Recharge shield
