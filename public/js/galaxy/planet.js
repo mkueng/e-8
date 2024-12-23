@@ -9,7 +9,6 @@ class Planet extends GameObject {
                 posX,
                 posY,
                 posZ,
-                posZFixed,
                 posDX,
                 posDY,
                 velX,
@@ -25,6 +24,7 @@ class Planet extends GameObject {
       height,
       posX,
       posY,
+      posYisFixed : true,
       posZ,
       posDX,
       posDY,
@@ -33,16 +33,5 @@ class Planet extends GameObject {
       canvas,
       isDestroyable: false
     })
-    this.posZfixed = posZFixed;
-  }
-
-   update(deltaTime) {
-    if (!this.isActive) return;
-
-    if (this.posX + this.posDX <= 0 - this.width) {
-      this.destroy();
-    } else {
-      this.posX += this.velX * deltaTime + PlayerShip.velX * this.posZfixed;
-    }
   }
 }

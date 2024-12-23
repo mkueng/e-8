@@ -3,7 +3,7 @@ class ProceduralPlanetGallery {
 
   constructor() {
 
-    this.galaxy = new Galaxy({scale: 600});
+    this.galaxy = new Galaxy({scale: 8000});
     this.psuedoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution({...e8.global.planetDistribution});
     this.planetDistribution =  this.psuedoRandomClusteredDistribution["clustersArray"];
     console.log("this.planetDistribution", this.planetDistribution);
@@ -19,7 +19,7 @@ class ProceduralPlanetGallery {
 
     this.x = this.y = this.i = 0;
     this.previousPlanetRadius = 0;
-    this.i = 300;
+    this.i = 0;
 
     setInterval(() => {
       let planetData = this.planetMap[this.planetDistribution[this.i]];
@@ -28,7 +28,7 @@ class ProceduralPlanetGallery {
         this.createPlanet(planetData);
       }
       this.i++;
-    }, 1000)
+    }, 2000)
   }
 
   drawImage = (img) => {

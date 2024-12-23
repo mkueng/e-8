@@ -41,15 +41,15 @@ class GeneratedPlanet {
     return new Promise((resolve) => {
       let img = new Image();
       let planetData = data.planetData;
-      img.onload = () => {
-        let posY = e8.global.screenHeight - 10 * planetData.r;
-        let posZFixed = -1 * planetData.radius / (Math.floor(0.5 * 70000 + 25000));
+      console.log("planetData", planetData);
 
-        //console.log("posZFixed", posZFixed);
-        //console.log("posY", posY);
+      img.onload = () => {
+        let posY = (planetData.coordinates % e8.global.screenHeight) - planetData.radius / 2;
         if (posY >= e8.global.screenHeight) {
           posY = 500;//e8.global.screenHeight - img.height / 2;
         }
+
+        let posZ = Math.sqrt(1 / planetData.radius) * 4000;
 
         let planetObject = new Planet({
           coordinates: planetData.coordinates,
@@ -57,11 +57,11 @@ class GeneratedPlanet {
           width: img.width,
           height: img.height,
           posX: null,
-          posY: 500,
+          posY: posY,
           posDX: 0,
           posDY: 0,
           velX: 0,
-          posZFixed: posZFixed,
+          posZ: posZ,
           velY: 0,
           canvas: this.canvas
         })

@@ -60,10 +60,10 @@ class ProceduralPlanet {
     this.#drawMap(r,g,b,q, width, height,this.#mapContext);
     //return this.#mapCanvas.convertToBlob();
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
-    this.#addAtmosphere(r,g,b,radius, this.#offScreenContext);
+    this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
     //shadow
-    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar);
-    this.#addGradient(radius, this.#offScreenContext, "overlay", inFrontOfStar);
+    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,g,b);
+    //this.#addGradient(radius, this.#offScreenContext, "overlay", inFrontOfStar);
 
     // only draw image where mask is
     this.#offScreenContext.globalCompositeOperation = 'destination-in';
@@ -74,7 +74,7 @@ class ProceduralPlanet {
     this.#offScreenContext.arc(
       radius + 40, // x
       radius + 40, // y
-      radius + (radius / 30), // radius
+      radius + (radius / 50), // radius
       0.5, // start angle
       2.5* Math.PI // end angle
     );
@@ -202,7 +202,7 @@ class ProceduralPlanet {
    * @param offScreenCtx
    */
   #addAtmosphere =(r, g, b, radius, offScreenCtx)=>{
-    offScreenCtx.globalAlpha = 1;
+    offScreenCtx.globalAlpha = 0.3;
     const gradient = this.#offScreenContext.createRadialGradient(
       radius+40, radius+40, 20,
       radius+40, radius+40, radius+20
@@ -210,7 +210,7 @@ class ProceduralPlanet {
 
     gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
     gradient.addColorStop(0.96, "rgba("+r+","+ g+"," +b+", 0.9)");
-    gradient.addColorStop(1, "rgba("+r+15+","+ g+15+"," +b+15+", 1)");
+    gradient.addColorStop(1, "rgba("+r+15+","+ g+15+"," +b+15+", 0.9)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
@@ -224,7 +224,7 @@ class ProceduralPlanet {
    * @param offScreenCtx
    * @param compositionOperation
    */
-  #addGradient = (radius, offScreenCtx, compositionOperation, inFrontOfStar)=>{
+  #addGradient = (radius, offScreenCtx, compositionOperation, inFrontOfStar, r,g,b)=>{
     offScreenCtx.beginPath();
     offScreenCtx.strokeStyle = "transparent";
     offScreenCtx.globalCompositeOperation = compositionOperation;
@@ -237,14 +237,14 @@ class ProceduralPlanet {
       gradient.addColorStop(1, 'rgba(155, 155, 155, 0.1)');
     } else {
       gradient = this.#offScreenContext.createLinearGradient(0,0,radius*2+40,0);
-      gradient.addColorStop(0, "rgba(1, 1, 1, 0.6)");
-      gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.6)");
-      gradient.addColorStop(1, "rgba(255, 255, 255, 0.5)");
+      gradient.addColorStop(0, "rgba(1, 1, 1, 1)");
+      gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.9)");
+      gradient.addColorStop(1, `rgba(${r+100},${g+100},${b+100}, 0.6)`);
     }
 
     offScreenCtx.globalAlpha = 1;
     offScreenCtx.fillStyle = gradient;
-    offScreenCtx.fillRect(20,20,  radius*2+40,radius*2+40);
+    offScreenCtx.fillRect(30,30,  radius*2+30,radius*2+30);
     offScreenCtx.closePath();
   }
 }

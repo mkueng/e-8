@@ -2,7 +2,6 @@
 class HazeHandler {
 
   #resourcePaths =[ "/resources/hazes/haze_01.png", "/resources/hazes/haze_02.png"];
-  #ticker = 0;
   #upcoming = 0;
   #canvases = {};
 
@@ -14,14 +13,14 @@ class HazeHandler {
     this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
     this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFarthest).canvas;
     this.resizeImageWorker = e8.global.resizeImageWorker;
-    this.#upcoming =2;
+    this.#upcoming = 100;
 
     e8.global.gameLoop.subscribe(this);
 
     e8.global.resizeImageWorker.onmessage = ({data}) =>{
+      console.log("creating haze");
       this.createHaze(data);
     }
-
   }
 
   createHaze = (data) =>{
@@ -43,7 +42,7 @@ class HazeHandler {
         height: img.height,
         posX: e8.global.screenWidth,
         posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/5),
-        posZ: 0.05* velocity,
+        posZ: Math.floor(Math.random()*7+10),
         posDX: 0,
         posDY: 0,
         velX: 0,
@@ -67,11 +66,11 @@ class HazeHandler {
     let height = Math.floor(Math.random()*1200+275)
 
     let randomIndex = Math.floor(Math.random() * this.#resourcePaths.length);
-    let randomResourcePath = this.#resourcePaths[randomIndex];
+    let resourcePath = this.#resourcePaths[randomIndex];
 
     this.resizeImageWorker.postMessage({
       payload: {
-        url : randomResourcePath,
+        url : resourcePath,
         requiredWidth: width,
         requiredHeight : height
       }
@@ -82,11 +81,9 @@ class HazeHandler {
    *
    * @param data
    */
-  updateFromGameLoop = (data) => {
-    this.#ticker++;
-    if (this.#ticker > this.#upcoming){
-      this.#ticker = 0;
-      this.#upcoming = Math.floor(Math.random()*20+20);
+  heartBeat = (data) => {
+    if (PlayerShip.coordinates > this.#upcoming) {
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*30000+30000);
       this.invokeHaze();
     }
   }

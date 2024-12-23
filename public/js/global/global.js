@@ -11,8 +11,8 @@ e8.global.planetDistribution = {
   //seed: 726391,
   seed: 72891782182,
   amountOfClusters: 1000,
-  range: 800000000,
-  rangeWithinCluster: 10000000
+  range: 1000000000,
+  rangeWithinCluster: 50000000
 }
 
 e8.global.maxWidth = 3700;

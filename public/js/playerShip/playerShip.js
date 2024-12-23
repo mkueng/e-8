@@ -142,7 +142,7 @@ class PlayerShip extends GameObject {
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
     this.shipStatus = "green";
-    this.coordinates = 0;
+    this.coordinates = 1;
     this.viewPortVelX = 0;
     this.viewPortVelY = 0;
     this.posZ = 0.5;
@@ -169,7 +169,7 @@ class PlayerShip extends GameObject {
   }
 
   static get coordinates(){
-    return PlayerShip.instance?.coordinates;
+    return parseInt(PlayerShip.instance?.coordinates.toFixed(0));
   }
 
   static get fuel() {
@@ -190,6 +190,10 @@ class PlayerShip extends GameObject {
 
   static get velY() {
     return PlayerShip.instance?.velY;
+  }
+
+  static get viewPortVelX() {
+    return PlayerShip.instance?.viewPortVelX;
   }
 
   static get shipStatus() {
@@ -273,7 +277,7 @@ class PlayerShip extends GameObject {
     // Update position based on velocity
     this.posX += (this.viewPortVelX * (1 / this.posZ));
     this.posY += (this.velY * (1 / this.posZ));
-
+    this.coordinates += this.velX;
 
     // Log properties
     this.#logProperties();
@@ -479,6 +483,7 @@ class PlayerShip extends GameObject {
       right: () => {
         this.viewPortVelX += this.accX * (deltaTime / 10);
         this.velX += this.accX * (deltaTime / 10);
+
         this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
         this.#activateControl(0, 1);
       },
@@ -486,6 +491,7 @@ class PlayerShip extends GameObject {
         this.viewPortVelX -= this.accX * (deltaTime / 10);
         if (this.velX > 0) {
           this.velX -= this.accX * (deltaTime / 10);
+
         }
         this.#activateControl(1, 0);
       }
@@ -549,6 +555,7 @@ class PlayerShip extends GameObject {
     Console.logProperty("velX: ", this.velX.toFixed(2));
     Console.logProperty("velY: ", this.velY.toFixed(2));
     Console.logProperty("fuel: ", this.fuel.amount.toFixed(2));
+    Console.logProperty("coordinates: ", this.coordinates.toFixed(0));
   }
 
   /**

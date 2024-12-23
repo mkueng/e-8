@@ -24,17 +24,11 @@ class DustParticles  {
       } else {
         if (PlayerShip.velX) {
           particle.posX = particle.posX + particle.velX*dt+(PlayerShip.velX*particle.posZ);
-
         }
 
         if (PlayerShip.velY) {
             particle.posY = particle.posY + PlayerShip.velY*particle.posZ;
-
-
         }
-        //console.log(PlayerShip.velY);
-        //particle.posY = particle.posY + PlayerShip.velY;
-       // console.log(particle.posY);
       }
     }
   }

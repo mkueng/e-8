@@ -28,44 +28,21 @@ class AsteroidHandler {
     for (const asteroidResourceObject of asteroidResourceObjects) {
       const width = asteroidResourceObject.image.width;
       const height = asteroidResourceObject.image.height;
-      const size = width * height;
-      let velX = -1*size/30000;
-      if (velX < -4) {
-        velX = -4;
-      }
-      let canvas= null;
 
-      switch (true) {
-        case (velX > -1.5) : {
-          canvas = this. #canvases["far"]; break
-        }
-        case (velX >= -2.5 && velX < -1.5) : {
-         canvas = this.#canvases['middle']; break
-        }
-        case (velX <= -2.5) : {
-          canvas = this.#canvases['front']; break
-        }
-      }
-
-      let zPosition =  velX/6;
-     // if (zPosition > 1) zPosition = 1;
-
-      const asteroid = new GameObject({
-        canvas: canvas,
+      const asteroid = new Asteroid({
+        canvas: null,
         height: height,
-        identification: "asteroid",
         image: asteroidResourceObject.image,
         posDX: 0,
         posDY: 0,
-        posX: e8.global.screenWidth,
-        posY: Math.random()*e8.global.screenHeight,
-        posZ: zPosition,
+        posX: null,
+        posY: null,
+        posZ: null,
         subscriber: this,
         velX: 0,
         velY: 0,
         width: width,
         rotation : 5,
-        isActive: true,
       })
       this.#asteroids.push(asteroid);
     }
@@ -92,19 +69,21 @@ class AsteroidHandler {
       let currentInterval = setInterval(() => {
         if (this.#asteroids.length > 0) {
           const asteroid = this.#asteroids.splice(Math.floor(Math.random() * this.#asteroids.length), 1)[0];
-
-          asteroid.posX = e8.global.screenWidth;
-          asteroid.posY = Math.random() * (e8.global.screenHeight - 200);
-          asteroid.posZ = -1*Math.random()-0.05;
-          //console.log("asteroid.posZ:", asteroid.posZ);
-
+          asteroid.posX = asteroid.previousPosX = e8.global.screenWidth;
+          asteroid.posY = asteroid.previousPosY = Math.random() * (e8.global.screenHeight - 200);
+          asteroid.posZ = Math.random()*6;
+          asteroid.canvas = asteroid.posZ > 3 ? this.#canvases['far']
+            : asteroid.posZ > 1 ? this.#canvases['middle']
+              : this.#canvases['front'];
+          asteroid.context = asteroid.canvas.getContext('2d');
+          asteroid.isActive = true;
           GameObjectsHandler.instance.addGameObject(asteroid);
           clearInterval(currentInterval);
           ticker++;
           if (ticker < amount) {
             createBatch(Math.floor(Math.random()*1000))
           } else {
-            this.invokeAsteroids(Math.floor(Math.random()*10000+10000),Math.floor(Math.random()*10)+10)
+            this.invokeAsteroids(Math.floor(Math.random()*5000+5000),Math.floor(Math.random()*10)+10)
           }
 
         }

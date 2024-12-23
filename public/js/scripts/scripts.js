@@ -84,6 +84,7 @@ class Scripts {
     await ScriptLoader.loadScript("js/particles/particleGenerator.js?v="+Scripts.version);
 
     //asteroid
+    await ScriptLoader.loadScript("js/asteroid/asteroid.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/asteroid/asteroidHandler.js?v="+Scripts.version);
 
     // shield

@@ -50,7 +50,8 @@ class PhotonTorpedo extends Weapon{
       posX: 0,
       posY: 0,
       sound: PhotonTorpedo.soundResource,
-      velX: 2,
+      vector: 1,
+      velX: 40,
       velY: 0,
       width: PhotonTorpedo.imageResource.image.width
     })

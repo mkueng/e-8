@@ -10,6 +10,7 @@ class GameLoop {
   #accumulator = 0;
   #fixedDeltaTime = 1000 / this.#simulationFps; // Fixed simulation step
   #maxDeltaTime = this.#fixedDeltaTime * 3;
+  #heartBeat = 0;
 
   constructor() {
     new GameTelemetry().startTracking();
@@ -88,6 +89,14 @@ class GameLoop {
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
 
+    this.#heartBeat++;
+    if (this.#heartBeat % 60 === 0) {
+      for (let subscriber of this.#subscribers) {
+        subscriber.heartBeat();
+      }
+    }
+
+
   };
 
   /**
@@ -97,8 +106,11 @@ class GameLoop {
   #render = (interpolation) => {
     // Clear contexts
     for (let context in GameObjectsHandler.contexts) {
+
       GameObjectsHandler.contexts[context]
         .clearRect(0, 0, e8.global.screenWidth, e8.global.screenHeight);
+
+
     }
 
     // Render game objects

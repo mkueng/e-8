@@ -22,6 +22,7 @@ class Weapon extends GameObject {
                 stride,
                 strideX,
                 strideY,
+                vector,
                 velX,
                 velY,
                 width
@@ -48,6 +49,7 @@ class Weapon extends GameObject {
       stride,
       strideX,
       strideY,
+      vector,
       velX,
       velY,
       width

@@ -52,6 +52,7 @@ class GameObject {
                 currentFrame,
                 dependencies,
                 frames,
+                hasMass,
                 height,
                 hitWidth,
                 identification,
@@ -66,6 +67,7 @@ class GameObject {
                 posDY,
                 posX,
                 posY,
+                posYisFixed,
                 posZ,
                 rotation,
                 sound,
@@ -76,6 +78,7 @@ class GameObject {
                 strideX,
                 strideY,
                 subscriber,
+                vector,
                 velX,
                 velY,
                 width,
@@ -91,6 +94,7 @@ class GameObject {
     this.currentFrame = currentFrame || 0;
     this.dependencies = dependencies || [];
     this.frames = frames || 1;
+    this.hasMass = hasMass || true;
     this.height = height || 0;
     this.hitWidth = hitWidth || width;
     this.id = crypto.randomUUID();
@@ -108,7 +112,8 @@ class GameObject {
     this.previousPosX = posX || 0;
     this.previousPosY = posY || 0;
     this.posY = posY || 0;
-    this.posZ = posZ;
+    this.posYisFixed = posYisFixed || false;
+    this.posZ = posZ || 1;
     this.rotation = rotation || 0;
     this.sound = sound || null;
     this.spriteSheet = spriteSheet || null;
@@ -118,16 +123,16 @@ class GameObject {
     this.strideX = strideX || null;
     this.strideY = strideY;
     this.subscriber = subscriber;
+    this.vector = vector || -1;
     this.velX = velX || 0;
     this.velY = velY || 0;
+    this.viewPortVelX = 0;
+    this.viewPortVelY = 0;
     this.width = width;
 
     if (canvas) {
       this.context = canvas.getContext("2d");
     }
-
-    if (this.spriteSheet) this.render = this.renderSpriteSheet;
-    if (this.image) this.render = this.renderImage;
   }
 
   /**
@@ -179,6 +184,7 @@ class GameObject {
    * @name destroy
    */
   destroy(){
+    this.isActive = false;
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     if (this.dependencies) {
       this.destroyDependencies();
@@ -195,11 +201,10 @@ class GameObject {
   }
 
   /**
-   * @name renderImage
+   * @name render
    * @param interpolation
    */
-  renderImage(interpolation) {
-
+  render(interpolation) {
     const interpolatedX = (this.previousPosX + (this.posX - this.previousPosX) * interpolation) + this.posDX;
     const interpolatedY = (this.previousPosY + (this.posY - this.previousPosY) * interpolation) + this.posDY;
 
@@ -208,14 +213,39 @@ class GameObject {
 
     if (!this.isActive) return;
 
-    // Only update alpha if it's different to minimize context state changes.
     const newAlpha = this.alpha || 1;
     if (this.context.globalAlpha !== newAlpha) {
       this.context.globalAlpha = newAlpha;
     }
 
-    // image
-    if (this.image) {
+    // SpriteSheet
+    if (this.spriteSheet) {
+      if (this.animationLoop || this.currentFrame + 1 < this.frames) {
+        this.currentFrame = (this.currentFrame + 1) % this.frames;
+        if (!this.animationLoop) {
+          this.isActive = this.currentFrame !== 0;
+        }
+      }
+
+      const column = this.currentFrame % this.spriteSheetColumns;
+      const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
+      const sourceX = column * this.strideX;
+      const sourceY = row * this.strideY;
+
+      this.context.drawImage(
+        this.spriteSheet,
+        sourceX,
+        sourceY,
+        this.strideX,
+        this.strideY,
+        interpolatedX,
+        interpolatedY,
+        this.width,
+        this.height
+      );
+
+    // Image
+    } else if (this.image) {
       this.context.drawImage(
         this.image,
         interpolatedX,
@@ -224,60 +254,7 @@ class GameObject {
         this.height
       );
     }
-    // Reset alpha to default if it was changed.
-    if (newAlpha !== 1) {
-      this.context.globalAlpha = 1;
-    }
-  }
 
-  /**
-   * @name renderSpriteSheet
-   * @param interpolation
-   */
-  renderSpriteSheet(interpolation) {
-
-    const interpolatedX = (this.previousPosX + (this.posX - this.previousPosX) * interpolation) + this.posDX;
-    const interpolatedY = (this.previousPosY + (this.posY - this.previousPosY) * interpolation) + this.posDY;
-
-    this.previousPosX = this.posX;
-    this.previousPosY = this.posY;
-
-    // Only update alpha if it's different to minimize context state changes.
-    if (!this.isActive) return;
-
-    const newAlpha = this.alpha || 1;
-
-    if (this.context.globalAlpha !== newAlpha) {
-      this.context.globalAlpha = newAlpha;
-    }
-
-    if (this.animationLoop || this.currentFrame + 1 < this.frames) {
-      this.currentFrame = (this.currentFrame + 1) % this.frames;
-
-      if (!this.animationLoop) {
-        this.isActive = this.currentFrame !== 0;
-      }
-    }
-
-    // Pre-compute sprite sheet frame position.
-    const column = this.currentFrame % this.spriteSheetColumns;
-    const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
-    const sourceX = column * this.strideX;
-    const sourceY = row * this.strideY;
-
-    // Render the sprite sheet frame.
-    this.context.drawImage(
-      this.spriteSheet,
-      sourceX,
-      sourceY,
-      this.strideX,
-      this.strideY,
-      interpolatedX,
-      interpolatedY,
-      this.width,
-      this.height
-    );
-    // Reset alpha to default if it was changed.
     if (newAlpha !== 1) {
       this.context.globalAlpha = 1;
     }
@@ -287,29 +264,30 @@ class GameObject {
    * @name update
    * @param deltaTime
    */
-  update(deltaTime) {
+  update = (deltaTime) => {
     if (!this.isActive) return;
 
-    // Check if out of bounds
-    if (this.posX + this.posDX <= 0 - this.width || this.posX+this.posDX > e8.global.screenWidth) {
+    const outOfBounds = this.posX + this.posDX <= -this.width || this.posX + this.posDX > e8.global.screenWidth + this.width;
+    if (outOfBounds) {
       this.destroy();
-      this.dependencies.forEach(dependency => dependency.destroy());
-      return
+      this.dependencies.forEach(dep => dep.destroy());
+      return;
     }
 
-    // Update velocity with scaling based on posZ
-    const zScale = (this.posZ > 0) ? 1 / this.posZ : 1;
+    const zScale = this.posZ > 0 ? 1 / this.posZ : 1;
     this.velX += this.accX * (deltaTime / 10);
     this.velY += this.accY * (deltaTime / 10);
 
-    // Update position
-    this.posX += this.velX * deltaTime;
-    this.posY += this.velY * deltaTime;
+    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale : this.velX * this.vector;
 
-    // Sync dependencies
-    this.dependencies.forEach(dependency => {
-      dependency.posX = this.posX;
-      dependency.posY = this.posY;
+    this.posX += this.viewPortVelX;
+    if (!this.posYisFixed) {
+      this.posY = this.posY + PlayerShip.velY * zScale * this.vector;
+    }
+
+    this.dependencies.forEach(dep => {
+      dep.posX = this.posX;
+      dep.posY = this.posY;
     });
   }
 }

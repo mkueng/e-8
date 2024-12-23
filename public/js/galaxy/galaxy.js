@@ -51,7 +51,7 @@ class Galaxy {
     })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
-    //console.log("this.#planetMap:",  this.#planetMap);
+    console.log("this.#planetMap:",  this.#planetMap);
     
     e8.global.gameLoop.subscribe(this);
   }
@@ -72,12 +72,14 @@ class Galaxy {
    *
    * @param data
    */
-  updateFromGameLoop = async (data)=>{
+  heartBeat = async (data)=>{
     //console.log("this.#planetObjects:", this.#planetObjects);
     //console.log("this.#clonedPlanetDistribution", this.#clonedPlanetDistribution[this.#planetIndex]);
 
-    let playerShipSnapCoordinates = PlayerShip.coordinates - (PlayerShip.coordinates % 10000);
-    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates-1000000 && key <= playerShipSnapCoordinates+1000000);
+    let playerShipSnapCoordinates = PlayerShip.coordinates;
+
+
+    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates+1000000);
     const setObj = new Set(filteredKeys);
     for(const obj of setObj) {
       if (!this.#visiblePlanets.has(obj)) {
@@ -142,12 +144,11 @@ class Galaxy {
 
 
   #createPlanet = async (coordinates) => {
+    console.log("Creating PLANET");
     let planetData = this.#planetMap[coordinates];
     let planetObject = await this.generatedPlanet.create(planetData);
-    let relativePlanetPositionX = e8.global.screenWidth// - ((PlayerShip.coordinates-coordinates) * planetObject.posZFixed);
-    planetObject.posX = relativePlanetPositionX;
+    planetObject.posX = e8.global.screenWidth;
 
-    //let positionZFixed = this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]].posZfixed;
     this.#planetObjects[planetObject.coordinates] = planetObject;
     GameObjectsHandler.instance.addGameObject(planetObject);
 
@@ -158,7 +159,6 @@ class Galaxy {
         console.error(e);
       }
     });
-
   }
 
   /**
@@ -171,16 +171,18 @@ class Galaxy {
     let radius;
     let planetSizeCounter = 1
 
-    for (const coordinate of distribution){
+    for (const coordinate of distribution) {
       if (planetSizeCounter > 6) {
-        planetSizeCounter = 1;
+        planetSizeCounter = 0;
       }
-      if (planetSizeCounter >= 2 && planetSizeCounter <= 5) {
-        radius = Math.floor(Util.createNumericHash(coordinate,3) / 4);
-      } else if (planetSizeCounter < 2) {
-        radius = Math.floor(Util.createNumericHash(coordinate,3) / 0.7);
+      if (planetSizeCounter >= 2 && planetSizeCounter <= 4) {
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 15);
+      } else if (planetSizeCounter < 2 && planetSizeCounter > 1) {
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 4.6);
+      } else if (planetSizeCounter > 4 && planetSizeCounter < 6) {
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 10);
       } else {
-        radius = Math.floor(Util.createNumericHash(coordinate,3) / 2);
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 1.7);
       }
 
       const oneDigit = Util.createNumericHash(coordinate,1);
@@ -191,10 +193,6 @@ class Galaxy {
       let g = parseInt(threeDigits % 142);
       let b = parseInt(threeDigits % 109);
       let q = parseInt(threeDigits % 100);
-
-
-      //console.log("rgbq:", r,g,b,q);
-       // let stripeFactor = lastDigit / 7+1;
 
       let stripeFactor = twoDigits / Util.createPseudoRandomNumber({seed:32783827,length:2})+0.5
       if (oneDigit > 8 ) {
@@ -216,7 +214,6 @@ class Galaxy {
         b: b,
         q: q
       }
-      //console.log("rgbq:", r,g,b,q);
       planetSizeCounter++;
     }
     return planetMap;

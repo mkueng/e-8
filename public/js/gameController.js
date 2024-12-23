@@ -16,23 +16,24 @@ class GameController {
         // galaxy
         this.#galaxy = new Galaxy({scale:8000});
         this.#galaxy.init();
-        /*
+
 
         // dust
 
         await e8.global.dustHandler.init();
         e8.global.dustHandler.invokeDust();
 
+
         // asteroids
         await e8.global.asteroidHandler.init();
         e8.global.asteroidHandler.invokeAsteroids(1000,10);
 
         // haze
-        await e8.global.hazeHandler.init();
-        e8.global.hazeHandler.invokeHaze();
 
 
-        */
+         await e8.global.hazeHandler.init();
+         //e8.global.hazeHandler.invokeHaze();
+
 
         // player ship
         this.#playerShipHandler = new PlayerShipHandler();
