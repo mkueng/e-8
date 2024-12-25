@@ -3,7 +3,6 @@ class Galaxy {
 
   #planetDistributionArray = [];
   #planetDistributionObject ={};
-  #clonedPlanetDistribution = [];
   #planetDistributionObjectKeys = [];
   #planetMap = {};
   #planetIndex = 0;
@@ -45,9 +44,9 @@ class Galaxy {
 
     this.#sunDistribution = Util.pseudoRandomNumbersWithinRange({
       min: 1,
-      max: 1000000000,
-      amount: 500,
-      seed: 1289821937
+      max: 3700000000,
+      amount: 300,
+      seed: 72891782182
     })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
@@ -73,12 +72,7 @@ class Galaxy {
    * @param data
    */
   heartBeat = async (data)=>{
-    //console.log("this.#planetObjects:", this.#planetObjects);
-    //console.log("this.#clonedPlanetDistribution", this.#clonedPlanetDistribution[this.#planetIndex]);
-
     let playerShipSnapCoordinates = PlayerShip.coordinates;
-
-
     const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates+1000000);
     const setObj = new Set(filteredKeys);
     for(const obj of setObj) {
@@ -89,47 +83,23 @@ class Galaxy {
     }
 
     if (PlayerShip.coordinates > this.#sunDistribution[0]) {
-      //this.#createSun();
+      this.#createSun();
     }
-
-
-/*
-    if (PlayerShip.coordinates > this.#upcomingPlanetCoordinates) {
-      console.log("SHOWING PLANET");
-      let positionZFixed = this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]].posZfixed;
-      console.log("positionZFixed:", positionZFixed);
-      console.log("PlayerShip.coordinates:", PlayerShip.coordinates);
-      console.log("this.#upcomingPlanetCoordinates:", this.#upcomingPlanetCoordinates);
-      let relativePlanetPositionX = e8.global.screenWidth - ((PlayerShip.coordinates-this.#upcomingPlanetCoordinates) * positionZFixed);
-      console.log("relativePlanetPositionX:", relativePlanetPositionX);
-      try {
-        this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]].posX = relativePlanetPositionX;
-        GameObjectsHandler.instance.addGameObject(this.#planetObjects[this.#clonedPlanetDistribution[this.#planetIndex]]);
-      } catch(e){console.error(e)}
-
-      //this.#clonedPlanetDistribution.shift();
-      this.#planetIndex++;
-      this.#upcomingPlanetCoordinates = this.#clonedPlanetDistribution[this.#planetIndex];
-      this.#createPlanet().then(() => {
-        console.log("planet created")
-      });
-
-
-    } */
   }
 
   #createSun = () =>{
     console.log("Creating SUN");
     const distributionEntry = this.#sunDistribution[this.#sunIndex];
     this.#sunDistribution.shift()
-    let size = Math.max(Util.getLastNDigits(distributionEntry, 2) * 3, 200);
+    let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 150);
+    if (size < 50) size = 50;
     console.log("sun distributionEntry:", distributionEntry);
     console.log("sun size: ", size);
     const sun = new Sun({
       width: size,
       height: size,
       posX:  e8.global.screenWidth + size,
-      posY: e8.global.screenHeight / Util.getLastNDigits(distributionEntry, 1)
+      posY: e8.global.screenHeight / Util.getLastNDigits(distributionEntry, 1)+size,
     })
 
     GameObjectsHandler.instance.addGameObject(sun);
@@ -148,6 +118,7 @@ class Galaxy {
     let planetData = this.#planetMap[coordinates];
     let planetObject = await this.generatedPlanet.create(planetData);
     planetObject.posX = e8.global.screenWidth;
+    planetObject.previousPosX = e8.global.screenWidth;
 
     this.#planetObjects[planetObject.coordinates] = planetObject;
     GameObjectsHandler.instance.addGameObject(planetObject);
@@ -182,7 +153,7 @@ class Galaxy {
       } else if (planetSizeCounter > 4 && planetSizeCounter < 6) {
         radius = Math.floor(Util.createNumericHash(coordinate, 3) / 10);
       } else {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 1.7);
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 1.8);
       }
 
       const oneDigit = Util.createNumericHash(coordinate,1);

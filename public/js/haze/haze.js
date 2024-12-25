@@ -12,6 +12,7 @@ class Haze extends GameObject{
     velY
               }){
     super({
+      alpha: 0.5,
       isActive: true,
       canvas,
       image,

@@ -42,7 +42,7 @@ class HazeHandler {
         height: img.height,
         posX: e8.global.screenWidth,
         posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/5),
-        posZ: Math.floor(Math.random()*7+10),
+        posZ: Math.floor(Math.random()*15+10),
         posDX: 0,
         posDY: 0,
         velX: 0,
@@ -83,7 +83,7 @@ class HazeHandler {
    */
   heartBeat = (data) => {
     if (PlayerShip.coordinates > this.#upcoming) {
-      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*30000+30000);
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*30000+10000);
       this.invokeHaze();
     }
   }
