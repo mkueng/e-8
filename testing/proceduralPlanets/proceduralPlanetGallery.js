@@ -4,7 +4,9 @@ class ProceduralPlanetGallery {
   constructor() {
 
     this.galaxy = new Galaxy({scale: 8000});
-    this.psuedoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution({...e8.global.planetDistribution});
+    this.psuedoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
+      {...e8.global.planetDistribution}
+    );
     this.planetDistribution =  this.psuedoRandomClusteredDistribution["clustersArray"];
     console.log("this.planetDistribution", this.planetDistribution);
     this.planetMap = this.galaxy.createPlanetMap(this.planetDistribution);
@@ -16,37 +18,43 @@ class ProceduralPlanetGallery {
     this.canvas.width = e8.global.screenWidth-20;
     this.canvas.height = 10000
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.font = "15px sans-serif";
+    this.ctx.fillStyle = "white";
 
-    this.x = this.y = this.i = 0;
+
+    this.i = 0;
+    this.x = 10;
+    this.y = 100
     this.previousPlanetRadius = 0;
     this.i = 0;
 
-    setInterval(() => {
-      let planetData = this.planetMap[this.planetDistribution[this.i]];
-      if ( this.i < 400 && planetData.type !=="preRendered") {
-        console.log("planetData", planetData.radius);
-        this.createPlanet(planetData);
-      }
-      this.i++;
-    }, 2000)
+    this.createPlanet(this.planetMap[this.planetDistribution[this.i]])
   }
 
   drawImage = (img) => {
     this.ctx.drawImage(img, this.x,this.y);
+    this.ctx.fillText(this.i, this.x+img.width/2, this.y+img.height/2);
+    this.ctx.fillText("coord: "+ this.planetMap[this.planetDistribution[this.i]].coordinates, this.x+img.width/2-50, this.y+img.height/2+20);
+    this.ctx.fillText("rad: "+ this.planetMap[this.planetDistribution[this.i]].radius, this.x+img.width/2-50, this.y+img.height/2+40);
+
     this.previousPlanetRadius = img.width;
     this.x+=this.previousPlanetRadius;
-
-    if (this.x > this.canvas.width -200) {
-      this.y += 300;
-      this.x = 0;
+    if (this.x > e8.global.screenWidth-100) {
+      this.x = 10;
+      this.y += this.previousPlanetRadius;
     }
+
   }
 
   createPlanet = (planetData) => {
 
     this.generatedPlanet.create(planetData).then(planetObject => {
+
       console.log("planetObject", planetObject);
       this.drawImage(planetObject.image);
+      this.i++;
+
+      this.createPlanet(this.planetMap[this.planetDistribution[this.i]])
     })
   }
 }

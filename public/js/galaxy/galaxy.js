@@ -35,7 +35,8 @@ class Galaxy {
     this.generatedPlanet = new GeneratedPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
 
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
-      {...e8.global.planetDistribution})
+      {...e8.global.planetDistribution}
+    )
 
 
     this.#planetDistributionArray =  pseudoRandomClusteredDistribution["clustersArray"];
@@ -147,27 +148,30 @@ class Galaxy {
         planetSizeCounter = 0;
       }
       if (planetSizeCounter >= 2 && planetSizeCounter <= 4) {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 15);
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 10);
       } else if (planetSizeCounter < 2 && planetSizeCounter > 1) {
         radius = Math.floor(Util.createNumericHash(coordinate, 3) / 4.6);
       } else if (planetSizeCounter > 4 && planetSizeCounter < 6) {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 10);
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 5);
       } else {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 1.8);
+        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 2);
       }
 
+      if (radius < 30) {
+        radius = 30;
+      }
       const oneDigit = Util.createNumericHash(coordinate,1);
       const twoDigits = Util.createNumericHash(coordinate,2);
       const threeDigits = Util.getLastNDigits(coordinate,3);
 
-      let r = parseInt(threeDigits % 120);
-      let g = parseInt(threeDigits % 142);
-      let b = parseInt(threeDigits % 109);
-      let q = parseInt(threeDigits % 100);
+      let r = parseInt(threeDigits % 140);
+      let g = parseInt(threeDigits % 170);
+      let b = parseInt(threeDigits % 198);
+      let q = parseInt(threeDigits % 98);
 
       let stripeFactor = twoDigits / Util.createPseudoRandomNumber({seed:32783827,length:2})+0.5
-      if (oneDigit > 8 ) {
-        stripeFactor = twoDigits*Util.createPseudoRandomNumber({seed:32783827,length:3}) % 522 / 5;
+      if (oneDigit > 6 ) {
+        stripeFactor = twoDigits*Util.createPseudoRandomNumber({seed:coordinate,length:3}) % 522 / 5;
       }
 
       planetMap[coordinate]= {

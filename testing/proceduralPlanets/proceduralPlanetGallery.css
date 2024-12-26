@@ -14,3 +14,18 @@ body{
 
 
 }
+
+.properties {
+    position: absolute;
+    margin-top:100px;
+    margin-left:50px;
+    width:300px;
+    font-size:27px;
+
+}
+.property {
+    height:30px;
+    border:solid;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+}

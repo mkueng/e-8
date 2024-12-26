@@ -186,6 +186,7 @@ class Util {
 
 
     distribution.forEach((cluster, index) => {
+      let previousCoordinates = 0;
       const amount = Util.pseudoRandomNumbersWithinRange({
         min: 1,
         max: 2,
@@ -203,9 +204,13 @@ class Util {
       clusterOffset.forEach((offset) => {
         let moduloCoordinates = (cluster + offset) % 12345;
         let snapCoordinates = (cluster + offset) - moduloCoordinates;
+        if (snapCoordinates !== previousCoordinates) {
+          clusters.push(snapCoordinates);
+          clustersObject[snapCoordinates] = snapCoordinates;
+        }
+        previousCoordinates = snapCoordinates;
 
-        clusters.push(snapCoordinates);
-        clustersObject[snapCoordinates] = snapCoordinates;
+
       })
     })
     return  {

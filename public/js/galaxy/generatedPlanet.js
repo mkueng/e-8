@@ -44,10 +44,8 @@ class GeneratedPlanet {
       console.log("planetData", planetData);
 
       img.onload = () => {
-        let posY = (planetData.coordinates % e8.global.screenHeight) - planetData.radius / 2;
-        if (posY >= e8.global.screenHeight) {
-          posY = 500;//e8.global.screenHeight - img.height / 2;
-        }
+        let posY = (planetData.coordinates % e8.global.screenHeight) - planetData.radius*1.7;
+
 
         let posZ = Math.sqrt(1 / planetData.radius) * 4000;
 

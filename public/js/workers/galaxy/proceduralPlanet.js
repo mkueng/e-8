@@ -51,19 +51,16 @@ class ProceduralPlanet {
       noiseRange: noiseRange,
       stripeFactor: stripeFactor,
       octavesRange: octavesRange,
-      lacunarityRange: 0.25,
+      lacunarityRange: 0.26,
       persistenceOffset: persistenceOffset,
       baseFrequencyOffset: baseFrequencyOffset
     });
 
     //2d map of the planet surface
-    this.#drawMap(r,g,b,q, width, height,this.#mapContext);
-    //return this.#mapCanvas.convertToBlob();
+    this.#drawMap(q,g,q,b, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
-    //shadow
-    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,g,b);
-    //this.#addGradient(radius, this.#offScreenContext, "overlay", inFrontOfStar);
+    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,r,b);
 
     // only draw image where mask is
     this.#offScreenContext.globalCompositeOperation = 'destination-in';
@@ -121,12 +118,10 @@ class ProceduralPlanet {
   })=> {
 
     const noise = new Noise(noiseRange);
-
     const octaves = (8);
     const lacunarity = (lacunarityRange);
     const persistence = persistenceOffset = 2.1;
-    const baseFrequency = baseFrequencyOffset*3;
-
+    const baseFrequency = baseFrequencyOffset*5;
 
     for (let y = 0; y < height; y+=2) {
       for (let x = 0; x < width; x+=2) {
@@ -164,10 +159,14 @@ class ProceduralPlanet {
         value = this.#valueVector[index];
 
         if (value < 1) {
-          ctx.fillStyle = `rgba(${Math.floor(q*3)}, ${Math.floor(value*g)}, ${Math.floor(value*b)}, 0.9)`; // Ocean
+
+          ctx.fillStyle = `rgba(${Math.floor(value*r*1)}, ${Math.floor(value*g*3)}, ${Math.floor(value*b*4)}, 1)`; // Ocean
+        } else if (value < 2) {
+          ctx.fillStyle = `rgba(${Math.floor(value*r*7)}, ${Math.floor(value*g*7)}, ${Math.floor(value*b*7)}, 1)`; // Ocean
+
         } else {
           //ctx.fillStyle = "#fac";
-          ctx.fillStyle = `rgba(${Math.floor(value * r)}, ${Math.floor(value * g)}, ${Math.floor(value * b)}, 1)`; // Land
+          ctx.fillStyle = `rgba(${Math.floor(value * b)}, ${Math.floor(value * r)}, ${Math.floor(value * g)}, 1)`; // Land
         }
 
         ctx.fillRect(x, y, 2, 2);
@@ -202,15 +201,15 @@ class ProceduralPlanet {
    * @param offScreenCtx
    */
   #addAtmosphere =(r, g, b, radius, offScreenCtx)=>{
-    offScreenCtx.globalAlpha = 0.3;
+    offScreenCtx.globalAlpha = 0.7;
     const gradient = this.#offScreenContext.createRadialGradient(
       radius+40, radius+40, 20,
       radius+40, radius+40, radius+20
     );
 
-    gradient.addColorStop(0.2, "rgba("+r+","+ g+"," +b+", 0.6)");
-    gradient.addColorStop(0.96, "rgba("+r+","+ g+"," +b+", 0.9)");
-    gradient.addColorStop(1, "rgba("+r+15+","+ g+15+"," +b+15+", 0.9)");
+    gradient.addColorStop(0.0, "rgba("+(r-45)+","+(g-45)+","+(b-45)+", 0.5)");
+    gradient.addColorStop(0.45, "rgba("+(r-15)+","+ (g-15)+"," +(b-15)+", 0.8)");
+    gradient.addColorStop(1, "rgba("+r+15+","+ g+15+"," +b+15+", 1)");
 
     offScreenCtx.fillStyle = gradient;
     offScreenCtx.globalCompositeOperation = "source-over";
