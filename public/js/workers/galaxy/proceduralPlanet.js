@@ -39,6 +39,7 @@ class ProceduralPlanet {
                   r,g,b,q
   })=>{
 
+    console.log("stripeFactor", stripeFactor);
     const width = 7 * radius;
     const height = 7 * radius;
 
@@ -60,6 +61,7 @@ class ProceduralPlanet {
     this.#drawMap(q,g,q,b, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
+    this.#addCloudLayer(width, height, this.#offScreenContext,stripeFactor/8);
     this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,r,b);
 
     // only draw image where mask is
@@ -246,4 +248,49 @@ class ProceduralPlanet {
     offScreenCtx.fillRect(30,30,  radius*2+30,radius*2+30);
     offScreenCtx.closePath();
   }
+
+  /**
+   *
+   * @param width
+   * @param height
+   * @param ctx
+   * @param threshold
+   */
+  #addCloudLayer = (width, height, ctx, threshold) => {
+    const cloudNoise = new Noise(0.5); // Initialize cloud noise with a different range
+    const cloudFrequency = 0.005; // Frequency for clouds
+    const cloudPersistence = 0.7; // Smoothness of clouds
+    const cloudThreshold = threshold; // Noise value above which clouds are drawn
+
+    ctx.globalAlpha = 0.9; // Semi-transparent clouds
+    ctx.globalCompositeOperation = "lighter"; // Blend clouds softly
+
+    for (let y = 0; y < height; y += 2) {
+      for (let x = 0; x < width; x += 2) {
+        let value = 0;
+        let frequency = cloudFrequency;
+        let amplitude = 1;
+
+        // Multi-octave Perlin noise for clouds
+        for (let i = 0; i < 4; i++) {
+          value += amplitude * cloudNoise.perlin2(x * frequency, y * frequency);
+          frequency *= 2; // Increase frequency
+          amplitude *= cloudPersistence; // Reduce amplitude
+        }
+
+        value = (value + 1) / 2; // Normalize to range [0, 1]
+
+        if (value > cloudThreshold) {
+          // Draw cloud pixel
+          const alpha = (value - cloudThreshold) * 2; // Opacity increases with noise value
+          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+          ctx.fillRect(x, y, 2, 2);
+        }
+      }
+    }
+
+    ctx.globalAlpha = 1; // Reset alpha
+    ctx.globalCompositeOperation = "source-over"; // Reset blending mode
+  };
+
 }

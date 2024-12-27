@@ -27,7 +27,6 @@ class GeneratedPlanet {
         const planetObject = this.createPlanetObjectFromData(dataFromWorker).then((planetObject) => {
           resolve(planetObject);
         });
-
       };
     });
   }

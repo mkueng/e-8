@@ -69,12 +69,13 @@ class Galaxy {
   }
 
   /**
-   *
+   * @name heartBeat
    * @param data
+   * @returns {Promise<void>}
    */
   heartBeat = async (data)=>{
     let playerShipSnapCoordinates = PlayerShip.coordinates;
-    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates+1000000);
+    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 1000000);
     const setObj = new Set(filteredKeys);
     for(const obj of setObj) {
       if (!this.#visiblePlanets.has(obj)) {
