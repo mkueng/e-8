@@ -32,7 +32,7 @@ class Galaxy {
 
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
     this.planetWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
-    this.generatedPlanet = new GeneratedPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
+    this.generatedPlanet = new ProceduralPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
 
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}

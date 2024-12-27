@@ -1,5 +1,5 @@
 'use strict'
-class GeneratedPlanet {
+class ProceduralPlanet {
 
   #planetWorker = null;
 

@@ -1,5 +1,5 @@
 body{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'courier', sans-serif;
     color: white;
     background-color: black;
 }
@@ -11,8 +11,6 @@ body{
     z-index: -1;
     padding:0;
     margin:0;
-
-
 }
 
 .properties {
@@ -21,7 +19,6 @@ body{
     margin-left:50px;
     width:300px;
     font-size:27px;
-
 }
 .property {
     height:30px;
