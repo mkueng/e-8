@@ -6,7 +6,7 @@ onmessage = (evt)=>{
 
     case "init" : {
       //console.log(evt.data.payload);
-      importScripts('proceduralPlanet.js');
+      importScripts('proceduralPlanetWorker.js');
       importScripts('sphereImageLib.js');
       importScripts('noise.js');
 
@@ -22,7 +22,7 @@ onmessage = (evt)=>{
         radius: planetData.radius,
         noiseRange : planetData.noiseRange,
         octavesRange : planetData.octavesRange,
-        lacunarityRange : planetData.lacunarityRange,
+        lacunarityRange : 0.5,
         persistenceOffset : 0,
         stripeFactor: planetData.stripeFactor,
         baseFrequencyOffset : planetData.baseFrequencyOffset,

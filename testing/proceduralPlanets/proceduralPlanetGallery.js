@@ -12,8 +12,8 @@ class ProceduralPlanetGallery {
     console.log("this.planetMap", this.planetMap);
 
     this.canvas = document.getElementById("canvas");
-    this.planetWorker = new Worker("../../public/js/workers/galaxy/planetWorker.js");
-    this.generatedPlanet = new GeneratedPlanet({canvas: this.canvas,planetWorker: this.planetWorker});
+    this.galaxyWorker = new Worker("../../public/js/workers/galaxy/galaxyWorker.js");
+    this.generatedPlanet = new GeneratedPlanet({canvas: this.canvas,planetWorker: this.galaxyWorker});
     this.canvas.width = e8.global.screenWidth-20;
     this.canvas.height = 10000
     this.ctx = this.canvas.getContext("2d");
