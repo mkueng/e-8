@@ -1,5 +1,4 @@
 'use strict'
-
 class Asteroid extends GameObject{
 
   /**
@@ -34,23 +33,25 @@ class Asteroid extends GameObject{
                 rotation
               }) {
   super({
-        canvas,
-        hasMass: true,
-        height,
-        identification: "asteroid",
-        image,
-        posDX,
-        posDY,
-        posX,
-        posY,
-        posZ,
-        subscriber,
-        velX,
-        velY,
-        width,
-        rotation,
-        vector: -1,
-        isActive: false
-      });
+      canvas,
+      doNotCheckOutOfBoundsLeft : false,
+      doNotCheckOutOfBoundsRight : true,
+      hasMass: true,
+      height,
+      identification: "asteroid",
+      image,
+      posDX,
+      posDY,
+      posX,
+      posY,
+      posZ,
+      subscriber,
+      velX,
+      velY,
+      width,
+      rotation,
+      vector: -1,
+      isActive: false
+    });
   }
 }

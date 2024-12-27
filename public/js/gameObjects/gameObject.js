@@ -9,10 +9,13 @@ class GameObject {
    * @param animationLoop
    * @param canDestroy
    * @param canvas
+   * @param doNotCheckOutOfBoundsLeft
+   * @param doNotCheckOutOfBoundsRight
    * @param coordinates
    * @param currentFrame
    * @param dependencies
    * @param frames
+   * @param hasMass
    * @param height
    * @param hitWidth
    * @param identification
@@ -27,6 +30,7 @@ class GameObject {
    * @param posDY
    * @param posX
    * @param posY
+   * @param posYisFixed
    * @param posZ
    * @param rotation
    * @param sound
@@ -37,6 +41,7 @@ class GameObject {
    * @param strideX
    * @param strideY
    * @param subscriber
+   * @param vector
    * @param velX
    * @param velY
    * @param width
@@ -51,6 +56,8 @@ class GameObject {
                 coordinates,
                 currentFrame,
                 dependencies,
+                doNotCheckOutOfBoundsLeft,
+                doNotCheckOutOfBoundsRight,
                 frames,
                 hasMass,
                 height,
@@ -89,12 +96,14 @@ class GameObject {
     this.animationLoop = animationLoop || null;
     this.canDestroy = canDestroy || false;
     this.canvas = canvas || null;
+    this.doNotCheckOutOfBoundsLeft = doNotCheckOutOfBoundsLeft || false;
+    this.doNotCheckOutOfBoundsRight = doNotCheckOutOfBoundsRight || false;
     this.context = null;
     this.coordinates = coordinates || null;
     this.currentFrame = currentFrame || 0;
     this.dependencies = dependencies || [];
     this.frames = frames || 1;
-    this.hasMass = hasMass || true;
+    this.hasMass = hasMass || false;
     this.height = height || 0;
     this.hitWidth = hitWidth || width;
     this.id = crypto.randomUUID();
@@ -267,11 +276,20 @@ class GameObject {
   update = (deltaTime) => {
     if (!this.isActive) return;
 
-    const outOfBounds = this.posX + this.posDX <= -this.width || this.posX + this.posDX > e8.global.screenWidth + this.width;
-    if (outOfBounds) {
-      this.destroy();
-      this.dependencies.forEach(dep => dep.destroy());
-      return;
+    if (this.doNotCheckOutOfBoundsLeft === false) {
+      if (this.posX + this.posDX <= -this.width) {
+        this.destroy();
+        this.dependencies.forEach(dep => dep.destroy());
+        return;
+      }
+    }
+
+    if (this.doNotCheckOutOfBoundsRight === false) {
+      if (this.posX + this.posDX > e8.global.screenWidth + this.width) {
+        this.destroy();
+        this.dependencies.forEach(dep => dep.destroy());
+        return;
+      }
     }
 
     const zScale = this.posZ > 0 ? 1 / this.posZ : 1;
@@ -279,8 +297,8 @@ class GameObject {
     this.velY += this.accY * (deltaTime / 10);
 
     this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale : this.velX * this.vector;
-
     this.posX += this.viewPortVelX;
+
     if (!this.posYisFixed) {
       this.posY = this.posY + PlayerShip.velY * zScale * this.vector;
     }

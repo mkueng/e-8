@@ -13,7 +13,7 @@ class ProceduralPlanetGallery {
 
     this.canvas = document.getElementById("canvas");
     this.galaxyWorker = new Worker("../../public/js/workers/galaxy/galaxyWorker.js");
-    this.generatedPlanet = new ProceduralPlanet({canvas: this.canvas,planetWorker: this.galaxyWorker});
+    this.proceduralPlanet = new ProceduralPlanet({canvas: this.canvas, galaxyWorker : this.galaxyWorker});
     this.canvas.width = e8.global.screenWidth-20;
     this.canvas.height = 10000
     this.ctx = this.canvas.getContext("2d");
@@ -43,8 +43,7 @@ class ProceduralPlanetGallery {
   }
 
   createPlanet = (planetData) => {
-    this.generatedPlanet.create(planetData).then(planetObject => {
-      console.log("planetObject", planetObject);
+    this.proceduralPlanet.create({planetData : planetData}).then(planetObject => {
       this.drawImage(planetObject.image);
       this.i++;
       this.createPlanet(this.planetMap[this.planetDistribution[this.i]])

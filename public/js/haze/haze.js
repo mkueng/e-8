@@ -14,8 +14,10 @@ class Haze extends GameObject{
     super({
       alpha: Math.random()+0.4,
       isActive: true,
+      identification: "haze",
       canvas,
       image,
+      hasMass: true,
       width,
       height,
       posX,

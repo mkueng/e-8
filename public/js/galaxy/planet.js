@@ -21,6 +21,7 @@ class Planet extends GameObject {
       coordinates,
       image,
       width,
+      hasMass: true,
       height,
       posX,
       posY,

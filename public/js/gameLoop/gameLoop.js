@@ -90,6 +90,7 @@ class GameLoop {
     }
 
     this.#heartBeat++;
+
     if (this.#heartBeat % 60 === 0) {
       for (let subscriber of this.#subscribers) {
         subscriber.heartBeat();

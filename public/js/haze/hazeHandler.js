@@ -83,7 +83,7 @@ class HazeHandler {
    */
   heartBeat = (data) => {
     if (PlayerShip.coordinates > this.#upcoming) {
-      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*30000+10000);
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*50000+20000);
       this.invokeHaze();
     }
   }

@@ -26,7 +26,6 @@ class GameController {
 
         // asteroids
         await e8.global.asteroidHandler.init();
-        e8.global.asteroidHandler.invokeAsteroids(1000,10);
 
         // haze
 

@@ -1,13 +1,18 @@
 'use strict'
 
+/**
+ * @name AsteroidHandler
+ */
 class AsteroidHandler {
   #asteroids = [];
   #canvases = {};
+  #contexts = {};
+  #upcoming = 10000;
 
   constructor(){}
 
   /**
-   *
+   * @name init
    * @returns {Promise<void>}
    */
   init = async ()=>{
@@ -15,6 +20,10 @@ class AsteroidHandler {
     this.#canvases['far'] = e8.global.canvasHandler.getCanvas("backgroundFar").canvas;
     this.#canvases['middle'] = e8.global.canvasHandler.getCanvas("backgroundMiddle").canvas;
     this.#canvases['front'] = e8.global.canvasHandler.getCanvas("backgroundFace").canvas;
+
+    this.#contexts['far'] = this.#canvases['far'].getContext('2d');
+    this.#contexts['middle'] = this.#canvases['middle'].getContext('2d');
+    this.#contexts['front'] = this.#canvases['front'].getContext('2d');
 
     const asteroidResourceObjects = await e8.global.resourceHandler.fetchResourceBatch({
       category: "asteroid",
@@ -45,11 +54,22 @@ class AsteroidHandler {
         rotation : 5,
       })
       this.#asteroids.push(asteroid);
+      e8.global.gameLoop.subscribe(this);
     }
   }
 
   /**
-   *
+   * @name heartBeat
+   */
+  heartBeat = () => {
+    if (PlayerShip.coordinates > this.#upcoming) {
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*50000+10000);
+      this.invokeAsteroids(Math.floor(Math.random()*10+10));
+    }
+  }
+
+  /**
+   * @name updateFromGameObjectsHandler
    * @param message
    * @param asteroid
    */
@@ -58,37 +78,26 @@ class AsteroidHandler {
   }
 
   /**
-   *
-   * @param interval
+   * @name invokeAsteroids
    * @param amount
    */
-  invokeAsteroids = (interval, amount) => {
-    let ticker = 0;
+  invokeAsteroids = (amount) => {
+    let counter = 0;
+    for (let i = 0; i < amount && this.#asteroids.length > 0; i++) {
+      const asteroidIndex = Math.floor(Math.random() * this.#asteroids.length);
+      const asteroid = this.#asteroids.splice(asteroidIndex, 1)[0];
+      asteroid.posX = asteroid.previousPosX = e8.global.screenWidth+Math.floor(Math.random()*2000);
+      asteroid.posY = asteroid.previousPosY = Math.random() * (e8.global.screenHeight - asteroid.width);
+      asteroid.posZ = Math.random() * 5+1;
 
-    const createBatch = (interval) => {
-      let currentInterval = setInterval(() => {
-        if (this.#asteroids.length > 0) {
-          const asteroid = this.#asteroids.splice(Math.floor(Math.random() * this.#asteroids.length), 1)[0];
-          asteroid.posX = asteroid.previousPosX = e8.global.screenWidth;
-          asteroid.posY = asteroid.previousPosY = Math.random() * (e8.global.screenHeight - 200);
-          asteroid.posZ = Math.random()*6;
-          asteroid.canvas = asteroid.posZ > 3 ? this.#canvases['far']
-            : asteroid.posZ > 1 ? this.#canvases['middle']
-              : this.#canvases['front'];
-          asteroid.context = asteroid.canvas.getContext('2d');
-          asteroid.isActive = true;
-          GameObjectsHandler.instance.addGameObject(asteroid);
-          clearInterval(currentInterval);
-          ticker++;
-          if (ticker < amount) {
-            createBatch(Math.floor(Math.random()*1000))
-          } else {
-            this.invokeAsteroids(Math.floor(Math.random()*5000+5000),Math.floor(Math.random()*10)+10)
-          }
+      const canvasLayer = asteroid.posZ > 3 ? 'far'
+        : asteroid.posZ > 1 ? 'middle'
+          : 'front';
 
-        }
-      }, interval);
+      asteroid.canvas = this.#canvases[canvasLayer];
+      asteroid.context = this.#contexts[canvasLayer];
+      asteroid.isActive = true;
+      GameObjectsHandler.instance.addGameObject(asteroid);
     }
-   createBatch(interval);
   }
 }

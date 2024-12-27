@@ -39,10 +39,10 @@ class DustHandler {
         color: this.#getRandomGrayscaleColor(),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
-        posZ : 0.1* velocity,
+        posZ : 0.03* velocity,
         velX: 0,
-        width: Math.floor(Math.random()*3+1),
-        height: Math.floor(Math.random()*3+1)
+        width: Math.floor(Math.random()*2+1),
+        height: Math.floor(Math.random()*2+1)
       })
     }
     return particles;

@@ -1,5 +1,5 @@
 
-let proceduralPlanet;
+let proceduralPlanetWorker;
 
 onmessage = (evt)=>{
   switch (evt.data.type) {
@@ -11,13 +11,13 @@ onmessage = (evt)=>{
       importScripts('noise.js');
 
 
-      proceduralPlanet = new ProceduralPlanet();
+      proceduralPlanetWorker = new ProceduralPlanetWorker();
       break;
     }
 
-    case "create" : {
+    case "createPlanet" : {
       const planetData = evt.data.payload;
-      proceduralPlanet.createPlanet({
+      proceduralPlanetWorker.createPlanet({
         coordinates: planetData.coordinates,
         radius: planetData.radius,
         noiseRange : planetData.noiseRange,

@@ -1,12 +1,12 @@
 'use strict'
 class ProceduralPlanet {
 
-  #planetWorker = null;
+  #galaxyWorker = null;
 
-  constructor({canvas, planetWorker}) {
+  constructor({canvas, galaxyWorker: galaxyWorker}) {
     this.canvas = canvas;
-    this.#planetWorker = planetWorker;
-    this.#planetWorker.postMessage({
+    this.#galaxyWorker = galaxyWorker;
+    this.#galaxyWorker.postMessage({
       type : "init"
     })
   }
@@ -16,13 +16,13 @@ class ProceduralPlanet {
    * @param planetData
    * @returns {Promise<unknown>}
    */
-  create = async (planetData) => {
-    this.#planetWorker.postMessage({
-      type : "create",
+  create = async ({planetData: planetData}) => {
+    this.#galaxyWorker.postMessage({
+      type : "createPlanet",
       payload : planetData
     })
     return new Promise((resolve) => {
-      this.#planetWorker.onmessage = async (event) => {
+      this.#galaxyWorker.onmessage = async (event) => {
         const dataFromWorker = event.data;
         const planetObject = this.createPlanetObjectFromData(dataFromWorker).then((planetObject) => {
           resolve(planetObject);
@@ -40,14 +40,10 @@ class ProceduralPlanet {
     return new Promise((resolve) => {
       let img = new Image();
       let planetData = data.planetData;
-      console.log("planetData", planetData);
 
       img.onload = () => {
         let posY = (planetData.coordinates % e8.global.screenHeight) - planetData.radius*1.7;
-
-
         let posZ = Math.sqrt(1 / planetData.radius) * 4000;
-
         let planetObject = new Planet({
           coordinates: planetData.coordinates,
           image: img,

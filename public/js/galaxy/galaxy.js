@@ -31,13 +31,12 @@ class Galaxy {
   init = async () =>{
 
     this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
-    this.planetWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
-    this.generatedPlanet = new ProceduralPlanet({canvas:this.canvas, planetWorker:this.planetWorker});
+    this.galaxyWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
+    this.proceduralPlanet = new ProceduralPlanet({canvas:this.canvas, galaxyWorker:this.galaxyWorker});
 
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}
     )
-
 
     this.#planetDistributionArray =  pseudoRandomClusteredDistribution["clustersArray"];
     this.#planetDistributionObject = pseudoRandomClusteredDistribution["clustersObject"];
@@ -65,7 +64,6 @@ class Galaxy {
   }
 
   checkForPlanetInFOW = (coordinates) => {
-
   }
 
   /**
@@ -73,14 +71,17 @@ class Galaxy {
    * @param data
    * @returns {Promise<void>}
    */
-  heartBeat = async (data)=>{
+  heartBeat =  (data)=>{
     let playerShipSnapCoordinates = PlayerShip.coordinates;
-    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 1000000);
+    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 100000);
     const setObj = new Set(filteredKeys);
     for(const obj of setObj) {
+      console.log("obj", obj);
       if (!this.#visiblePlanets.has(obj)) {
         this.#visiblePlanets.add(obj);
-        await this.#createPlanet(obj);
+        this.#createPlanet(obj).then(() => {
+          console.log("Planet created");
+        });
       }
     }
 
@@ -114,11 +115,9 @@ class Galaxy {
     })
   }
 
-
   #createPlanet = async (coordinates) => {
-    console.log("Creating PLANET");
-    let planetData = this.#planetMap[coordinates];
-    let planetObject = await this.generatedPlanet.create(planetData);
+    console.log("creating planet");
+    let planetObject = await this.proceduralPlanet.create({planetData: this.#planetMap[coordinates]});
     planetObject.posX = e8.global.screenWidth;
     planetObject.previousPosX = e8.global.screenWidth;
 

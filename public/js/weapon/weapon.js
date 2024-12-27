@@ -34,6 +34,7 @@ class Weapon extends GameObject {
       canDestroy: true,
       currentFrame,
       frames,
+      hasMass: false,
       height,
       identification,
       image,

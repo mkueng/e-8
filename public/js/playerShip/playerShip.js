@@ -136,7 +136,7 @@ class PlayerShip extends GameObject {
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth/1.1 - this.width;
+    this.upperBoundX = e8.global.screenWidth/1.8 - this.width;
     this.lowerBoundX = 10;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;

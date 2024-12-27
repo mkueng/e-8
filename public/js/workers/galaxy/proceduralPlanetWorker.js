@@ -1,5 +1,5 @@
 'use strict'
-class ProceduralPlanet {
+class ProceduralPlanetWorker {
 
   #offScreenContext;
   #offScreenCanvas;
@@ -11,7 +11,6 @@ class ProceduralPlanet {
 
   constructor(){
   }
-
 
   /**
    *
@@ -39,7 +38,6 @@ class ProceduralPlanet {
                   r,g,b,q
   })=>{
 
-    console.log("stripeFactor", stripeFactor);
     const width = 7 * radius;
     const height = 7 * radius;
 
