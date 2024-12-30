@@ -59,7 +59,7 @@ class ProceduralPlanetWorker {
     this.#drawMap(q,g,q,b, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
-    this.#addCloudLayer(width, height, this.#offScreenContext,stripeFactor/8);
+    this.#addCloudLayer(width, height, this.#offScreenContext,stripeFactor/7);
     this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,r,b);
 
     // only draw image where mask is
@@ -257,10 +257,10 @@ class ProceduralPlanetWorker {
   #addCloudLayer = (width, height, ctx, threshold) => {
     const cloudNoise = new Noise(0.5); // Initialize cloud noise with a different range
     const cloudFrequency = 0.005; // Frequency for clouds
-    const cloudPersistence = 0.7; // Smoothness of clouds
+    const cloudPersistence = 0.6; // Smoothness of clouds
     const cloudThreshold = threshold; // Noise value above which clouds are drawn
 
-    ctx.globalAlpha = 0.9; // Semi-transparent clouds
+    ctx.globalAlpha = 0.8; // Semi-transparent clouds
     ctx.globalCompositeOperation = "lighter"; // Blend clouds softly
 
     for (let y = 0; y < height; y += 2) {
@@ -272,7 +272,7 @@ class ProceduralPlanetWorker {
         // Multi-octave Perlin noise for clouds
         for (let i = 0; i < 4; i++) {
           value += amplitude * cloudNoise.perlin2(x * frequency, y * frequency);
-          frequency *= 2; // Increase frequency
+          frequency *= 1.9; // Increase frequency
           amplitude *= cloudPersistence; // Reduce amplitude
         }
 
