@@ -1,16 +1,43 @@
-.sun{
-    background: #e7e4d4;
-    width: 0;
-    height: 0;
+.sun {
+    background: radial-gradient(circle, #ffcc70 20%, #ff9d7f 60%, #ff5e00 100%);
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     position: absolute;
-    top:0;
-    right: 0;
+    top: 50px;
+    right: 50px;
     margin: 0;
-    filter: blur(1px) contrast(15);
-    box-shadow: 0 0 30px white, 0 0 40px white, 0 0 50px antiquewhite, 0 0 60px antiquewhite, 0 0 70px antiquewhite;
+    filter: blur(1px) contrast(1.2);
+    box-shadow:
+            0 0 30px white,
+            0 0 50px #ffcc70,
+            0 0 80px #ff9d7f,
+            0 0 120px #ff5e00;
     z-index: 1;
+    background-blend-mode: screen;
+    animation: sunPulse 5s infinite alternate;
 }
+
+/* Optional Sun Pulse Animation */
+@keyframes sunPulse {
+    0% {
+        box-shadow:
+                0 0 30px white,
+                0 0 50px #ffcc70,
+                0 0 80px #ff9d7f,
+                0 0 120px #ff5e00;
+        transform: scale(1);
+    }
+    100% {
+        box-shadow:
+                0 0 40px white,
+                0 0 60px #ffcc70,
+                0 0 100px #ff9d7f,
+                0 0 140px #ff5e00;
+        transform: scale(1.05);
+    }
+}
+
 
 /*
 

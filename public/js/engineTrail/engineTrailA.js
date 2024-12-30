@@ -15,8 +15,8 @@ class EngineTrailA extends EngineTrail {
 
   constructor() {
     super({
-      fadeTime : 0.35,
-      velX: 17
+      fadeTime : 0.45,
+      velX: 15
     });
   }
 }

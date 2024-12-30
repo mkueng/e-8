@@ -1,0 +1,90 @@
+.fullscreenCanvas{
+    padding: 0;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.backdropCanvas {
+    z-index: 0;
+}
+
+.planetsCanvas {
+    z-index: 2;
+}
+
+.backgroundFarthestCanvas {
+    z-index: 5;
+}
+
+.backgroundFarCanvas {
+    z-index: 10;
+}
+.dustCanvas {
+    z-index: 15;
+}
+.backgroundMiddleFarCanvas {
+    z-index: 20;
+}
+
+.backgroundMiddleCanvas {
+    z-index: 35;
+}
+
+.playerShipCanvas {
+    z-index: 30;
+}
+.weaponCanvas {
+    z-index: 30;
+}
+
+.backgroundFrontCanvas {
+    z-index: 40;
+}
+
+.backgroundFaceCanvas {
+    z-index: 50;
+}
+
+.terminalCanvas {
+    z-index: 900;
+    display: block;
+}
+
+.terminalContentCanvas {
+    z-index: 910;
+    display: block;
+}
+.settingsCanvas {
+    z-index: 999;
+}
+
+.sectionCanvasBottom {
+    position: absolute;
+    display: block;
+    z-index: 500;
+
+}
+.sectionCanvasLeft {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    z-index: 500;
+}
+
+.sectionCanvasMiddle {
+    position: absolute;
+    display: block;
+    z-index: 500;
+}
+
+.sectionCanvasRight {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    z-index: 500;
+}

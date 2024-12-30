@@ -4,36 +4,39 @@ class HazeHandler {
   #resourcePaths =[ "/resources/hazes/haze_01.png", "/resources/hazes/haze_02.png"];
   #upcoming = 0;
   #canvases = {};
+  #colorKeys = [];
 
   constructor(){
   }
 
   init = async () =>{
-    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundMiddleFar).canvas;
+    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
     this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
     this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFarthest).canvas;
     this.resizeImageWorker = e8.global.resizeImageWorker;
     this.#upcoming = 100;
+    this.#colorKeys = Object.keys(e8.global.colors);
 
-    e8.global.gameLoop.subscribe(this);
+
+    this.heartBeat();
 
     e8.global.resizeImageWorker.onmessage = ({data}) =>{
-      console.log("creating haze");
-      this.createHaze(data);
+      this.#createHaze(data);
     }
   }
 
-  createHaze = (data) =>{
+  #createHaze = (data) =>{
     let canvas;
     let img = new Image();
 
     img.onload =()=>{
       const size = img.width;
-      const velocity = -1 * (size * 0.0003);
+      const posZ = Math.floor(Math.random()*75+5);
 
-      if (velocity >= 0.7 ) canvas = this.#canvases[0];
-      if (velocity > 0.5 && velocity < 0.7) canvas = this.#canvases[1];
-      if (velocity <= 0.5) canvas = this.#canvases[2];
+      if (posZ >= 60 ) canvas = this.#canvases[2];
+      else  if (posZ >= 10 && posZ < 60) canvas = this.#canvases[1];
+      else canvas = this.#canvases[0];
+
 
       let haze = new Haze({
         canvas: canvas,
@@ -41,8 +44,8 @@ class HazeHandler {
         width: img.width,
         height: img.height,
         posX: e8.global.screenWidth,
-        posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/5),
-        posZ: Math.floor(Math.random()*15+10),
+        posY: Math.floor(Math.random()* e8.global.screenHeight-img.height/3),
+        posZ: posZ,
         posDX: 0,
         posDY: 0,
         velX: 0,
@@ -61,9 +64,10 @@ class HazeHandler {
 
 
 
-  invokeHaze = () => {
-    let width = Math.floor(Math.random()*3570+1455)
-    let height = Math.floor(Math.random()*1200+275)
+  #invokeHaze = () => {
+    let width = Math.floor(Math.random()*4570+2455);
+    let height = Math.floor(Math.random()*2200+375);
+    let color = e8.global.colors[this.#colorKeys[Math.floor(Math.random()*this.#colorKeys.length)]];
 
     let randomIndex = Math.floor(Math.random() * this.#resourcePaths.length);
     let resourcePath = this.#resourcePaths[randomIndex];
@@ -72,7 +76,8 @@ class HazeHandler {
       payload: {
         url : resourcePath,
         requiredWidth: width,
-        requiredHeight : height
+        requiredHeight : height,
+        color : color
       }
     })
   }
@@ -82,9 +87,13 @@ class HazeHandler {
    * @param data
    */
   heartBeat = (data) => {
-    if (PlayerShip.coordinates > this.#upcoming) {
-      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*50000+20000);
-      this.invokeHaze();
-    }
+    setInterval(() => {
+      if (PlayerShip.coordinates > this.#upcoming) {
+        this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*105000+100000);
+        this.#invokeHaze();
+      }
+    },1000)
+
   }
+
 }

@@ -43,6 +43,8 @@ e8.global.tabIsActive = true;
 e8.global.screenWidth = Math.max(e8.global.minWidth, Math.min(e8.global.currentWidth, e8.global.maxWidth));
 e8.global.screenHeight = Math.max(e8.global.minHeight, Math.min(e8.global.currentHeight, e8.global.maxHeight));
 
+
+
 // color palette
 e8.global.colors = {
   richBlack: "#461D2D",
@@ -60,3 +62,10 @@ e8.global.colors = {
   lightVanilla: "#e3d8bf"
 }
 
+e8.global.sunColors = {
+  yellow: "#fff3c1",
+  orange: "#ffeece",
+  red: "#ffc8b6",
+  white: "#ffffff",
+  blue: "#ceeffb"
+}

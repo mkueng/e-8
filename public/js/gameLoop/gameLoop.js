@@ -9,11 +9,11 @@ class GameLoop {
   #previousTimeStamp = 0;
   #accumulator = 0;
   #fixedDeltaTime = 1000 / this.#simulationFps; // Fixed simulation step
-  #maxDeltaTime = this.#fixedDeltaTime * 3;
+  #maxDeltaTime = this.#fixedDeltaTime*3;
   #heartBeat = 0;
 
   constructor() {
-    new GameTelemetry().startTracking();
+    //new GameTelemetry().startTracking();
     new Console();
   }
 
@@ -26,6 +26,7 @@ class GameLoop {
     this.#previousTimeStamp = timeStamp;
 
     // Clamp the frame time to avoid huge jumps
+
     if (deltaTime > this.#maxDeltaTime) {
       deltaTime = this.#maxDeltaTime;
     }
@@ -40,6 +41,7 @@ class GameLoop {
 
     // Calculate interpolation factor for rendering
     const interpolation = this.#accumulator / this.#fixedDeltaTime;
+
 
     if (GameLoop.frameCount % 10 === 0) {
       Console.clear();
@@ -88,16 +90,6 @@ class GameLoop {
     for (let i = 0; i < len; i++) {
       GameObjectsHandler.gameObjects[i].update(deltaTime);
     }
-
-    this.#heartBeat++;
-
-    if (this.#heartBeat % 60 === 0) {
-      for (let subscriber of this.#subscribers) {
-        subscriber.heartBeat();
-      }
-    }
-
-
   };
 
   /**

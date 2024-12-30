@@ -3,24 +3,24 @@ class PlayerShipPropertiesClassA {
   static imageResourceObjects = {
     "initial" : {
       name : "ship01ClassA",
-      filename : "ship_05",
+      filename : "SpaceShip3D-2D",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/ship_05/images/"
+      resourcePath : "/resources/ships/ship_01/images/"
     },
 
     "eagle" : {
-      name : "ship_02",
-      filename : "ship_05",
+      name : "ship01ClassA",
+      filename : "SpaceShip3D-2D",
       type : ResourceObject.TYPES.png,
-      resourcePath : "/resources/ships/ship_05/images/"
+      resourcePath : "/resources/ships/ship_01/images/"
     }
   }
 
   static generic = {
     maxVelX: 4000,
     maxVelY: 10,
-    accX: 0.155,
-    accY: 0.055,
+    accX: 0.065,
+    accY: 0.065,
   }
 
   static cargo = {
@@ -33,14 +33,14 @@ class PlayerShipPropertiesClassA {
 
   static engineTrail = {
     type: EngineTrailFactory.ENGINE_TRAIL_TYPES.engineTrailA,
-    posDX : -25,
+    posDX : -30,
     posDY : 22
   }
 
   static propulsion = {
     type : PropulsionFactory.PROPULSION_TYPES.ionA,
-    posDX: 5,
-    posDY: 20,
+    posDX: -10,
+    posDY: 19,
     isActive : false
   }
 

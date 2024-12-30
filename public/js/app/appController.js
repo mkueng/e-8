@@ -97,8 +97,6 @@ class AppController {
     await e8.global.poiHandler.init();
     await e8.global.terminal.init();
     await e8.global.spaceStationHandler.init();
-
-
   }
 
   /**

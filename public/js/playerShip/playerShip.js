@@ -130,19 +130,19 @@ class PlayerShip extends GameObject {
       playerShipHandler,
       propulsion,
       fuel,
-      fuelConsumption
+      fuelConsumption,
+      coordinates
     });
 
     // Initialize properties
     this.keyEvents = {};
     this.upperBoundY = e8.global.screenHeight - this.height;
-    this.upperBoundX = e8.global.screenWidth/1.8 - this.width;
+    this.upperBoundX = e8.global.screenWidth/1.6 - this.width;
     this.lowerBoundX = 10;
     this.shield.relatedShip = this;
     this.shieldInfoCritical = false;
     this.shieldInfoRecharged = true;
     this.shipStatus = "green";
-    this.coordinates = 1;
     this.viewPortVelX = 0;
     this.viewPortVelY = 0;
     this.posZ = 0.5;

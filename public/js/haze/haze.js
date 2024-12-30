@@ -12,7 +12,7 @@ class Haze extends GameObject{
     velY
               }){
     super({
-      alpha: Math.random()+0.4,
+      alpha: Math.random()+0.3+0.1,
       isActive: true,
       identification: "haze",
       canvas,

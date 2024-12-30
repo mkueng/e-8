@@ -15,6 +15,7 @@ class Galaxy {
   #planetQueueBufferSize;
   #upcomingPlanetCoordinates
   #visiblePlanets = new Set();
+  #sunColorKeys = [];
 
   get distribution() {
     return this.#planetDistributionArray;
@@ -42,6 +43,7 @@ class Galaxy {
     this.#planetDistributionObject = pseudoRandomClusteredDistribution["clustersObject"];
     this.#planetDistributionObjectKeys = Object.keys(this.#planetDistributionObject).map(Number);
 
+    this.#sunColorKeys = Object.keys(e8.global.sunColors);
     this.#sunDistribution = Util.pseudoRandomNumbersWithinRange({
       min: 1,
       max: 3700000000,
@@ -52,7 +54,7 @@ class Galaxy {
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
     console.log("this.#planetMap:",  this.#planetMap);
     
-    e8.global.gameLoop.subscribe(this);
+    await this.heartBeat();
   }
 
   /**
@@ -71,38 +73,40 @@ class Galaxy {
    * @param data
    * @returns {Promise<void>}
    */
-  heartBeat =  (data)=>{
-    let playerShipSnapCoordinates = PlayerShip.coordinates;
-    const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 100000);
-    const setObj = new Set(filteredKeys);
-    for(const obj of setObj) {
-      console.log("obj", obj);
-      if (!this.#visiblePlanets.has(obj)) {
-        this.#visiblePlanets.add(obj);
-        this.#createPlanet(obj).then(() => {
-          console.log("Planet created");
-        });
+  heartBeat =  ()=>{
+    setInterval(() => {
+      let playerShipSnapCoordinates = PlayerShip.coordinates;
+      const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 100000);
+      const setObj = new Set(filteredKeys);
+      for(const obj of setObj) {
+        console.log("obj", obj);
+        if (!this.#visiblePlanets.has(obj)) {
+          this.#visiblePlanets.add(obj);
+          this.#createPlanet(obj).then(() => {
+            console.log("Planet created");
+          });
+        }
       }
-    }
 
-    if (PlayerShip.coordinates > this.#sunDistribution[0]) {
-      this.#createSun();
-    }
+      if (PlayerShip.coordinates > this.#sunDistribution[0]) {
+        this.#createSun();
+      }
+    },1000)
+
   }
 
   #createSun = () =>{
     console.log("Creating SUN");
     const distributionEntry = this.#sunDistribution[this.#sunIndex];
     this.#sunDistribution.shift()
-    let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 150);
+    let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 450);
     if (size < 50) size = 50;
-    console.log("sun distributionEntry:", distributionEntry);
-    console.log("sun size: ", size);
     const sun = new Sun({
       width: size,
       height: size,
       posX:  e8.global.screenWidth + size,
       posY: e8.global.screenHeight / Util.getLastNDigits(distributionEntry, 1)+size,
+      color: e8.global.sunColors[this.#sunColorKeys[Math.floor(Math.random()*this.#sunColorKeys.length)]],
     })
 
     GameObjectsHandler.instance.addGameObject(sun);
