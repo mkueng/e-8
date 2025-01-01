@@ -67,6 +67,11 @@ class InputHandler {
       //this.publishMouseClick(event)
     });
 
+    document.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      this.publishEvent('mouseEvent', event);
+    });
+
 
     //check for key down
     document.addEventListener('keydown', (event) => {

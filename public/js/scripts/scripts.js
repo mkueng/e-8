@@ -114,6 +114,7 @@ class Scripts {
 
     // galaxy
     await ScriptLoader.loadScript("js/galaxy/proceduralPlanet.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/galaxy/galaxyMap/galaxyMap.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/galaxy/galaxy.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/galaxy/planet.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/workers/galaxy/galaxyWorker.js?v="+Scripts.version);

@@ -20,8 +20,6 @@ class Sun extends GameObject{
       canDestroy: false
     })
 
-    console.log("sun color", color);
-
     this.posV = -0.00003 / (10 / width);
     const sunDiv = document.createElement("div");
     sunDiv.id = this.id;
@@ -35,7 +33,6 @@ class Sun extends GameObject{
     this.sun.style.top = this.posY - this.height / 2 + "px";
     this.sun.style.background = color
   }
-
 
   render=()=>{
   }

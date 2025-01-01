@@ -16,6 +16,7 @@ class Galaxy {
   #upcomingPlanetCoordinates
   #visiblePlanets = new Set();
   #sunColorKeys = [];
+  #galaxyMap = null;
 
   get distribution() {
     return this.#planetDistributionArray;
@@ -35,6 +36,7 @@ class Galaxy {
     this.galaxyWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
     this.proceduralPlanet = new ProceduralPlanet({canvas:this.canvas, galaxyWorker:this.galaxyWorker});
 
+
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}
     )
@@ -52,6 +54,7 @@ class Galaxy {
     })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
+    this.#galaxyMap = new GalaxyMap({planetMap: this.#planetMap});
     console.log("this.#planetMap:",  this.#planetMap);
     
     await this.heartBeat();
