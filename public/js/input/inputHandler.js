@@ -68,7 +68,6 @@ class InputHandler {
     });
 
     document.addEventListener('wheel', (event) => {
-      event.preventDefault();
       this.publishEvent('mouseEvent', event);
     });
 

@@ -102,8 +102,6 @@ class GameLoop {
 
       GameObjectsHandler.contexts[context]
         .clearRect(0, 0, e8.global.screenWidth, e8.global.screenHeight);
-
-
     }
 
     // Render game objects
@@ -133,6 +131,7 @@ class GameLoop {
    * pause
    */
   pause = () => {
+    console.log("pause");
     cancelAnimationFrame(this.#animationId);
   };
 

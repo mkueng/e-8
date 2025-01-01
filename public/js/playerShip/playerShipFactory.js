@@ -85,7 +85,7 @@ class PlayerShipFactory {
       posY: e8.global.screenHeight / 2,
       shield: shieldInstance,
       terminationSequence: terminationSequenceInstance,
-      velX: 1020,
+      velX: 2020,
       velY: 0,
       weapons: weaponsInstances,
       width: imageResource.image.width,

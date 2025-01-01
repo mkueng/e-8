@@ -54,7 +54,7 @@ class Galaxy {
     })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
-    this.#galaxyMap = new GalaxyMap({planetMap: this.#planetMap});
+    this.#galaxyMap = new GalaxyMap({planetMap: this.#planetMap, sunMap: this.#sunDistribution});
     console.log("this.#planetMap:",  this.#planetMap);
     
     await this.heartBeat();

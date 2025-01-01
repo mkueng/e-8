@@ -284,7 +284,7 @@ class CanvasHandler {
   blurCanvases = () =>{
     for (const canvas in this.#canvases) {
       if (canvas !== "settings") {
-        this.#canvases[canvas].context.filter = ("blur(20px)");
+        this.#canvases[canvas].context.filter = ("blur(5px)");
       }
     }
     //this.#canvases["settings"].context.filter = ("none");
