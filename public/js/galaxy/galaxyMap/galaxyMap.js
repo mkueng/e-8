@@ -269,8 +269,6 @@ class GalaxyMap {
     const width = e8.global.screenWidth;
     const coordinates = PlayerShip.coordinates + coordinatesOffset * this.#range / 5000 || coordinatesOffset * this.#range / 50000;
 
-
-
     const filteredKeys = this.#planetMapKeys.filter(
       (key) => key >= coordinates && key <= coordinates + this.#range
     );
