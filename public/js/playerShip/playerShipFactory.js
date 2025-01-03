@@ -97,7 +97,7 @@ class PlayerShipFactory {
       spriteSheetRows: 17,
       animationLoop: false,
       currentFrame: 11,
-      coordinates : 10
+      coordinates : 30000000
     });
   };
 

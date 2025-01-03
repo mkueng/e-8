@@ -156,6 +156,7 @@ class Util {
       const randomNumber = Math.floor((currentSeed / 233280) * (rangeSize + 1)) + min; // Scale and shift to fit the range
       randomNumbers.push(randomNumber);
     }
+    //console.log("pseudoRandomNumbersWithinRange", randomNumbers);
     return randomNumbers.sort((a, b) => a - b);
   }
 
@@ -167,13 +168,7 @@ class Util {
    * @param seed
    * @returns {*[]}
    */
-  static pseudoRandomClusteredDistribution (
-    {
-      range,
-      amountOfClusters,
-      rangeWithinCluster,
-      seed
-    }) {
+  static pseudoRandomClusteredDistribution({ range, amountOfClusters, rangeWithinCluster, seed }) {
     let clusters = [];
     let clustersObject = {};
     let distribution = Util.pseudoRandomNumbersWithinRange({
@@ -183,37 +178,33 @@ class Util {
       seed: seed
     });
 
-
-
     distribution.forEach((cluster, index) => {
       let previousCoordinates = 0;
-      const amount = Util.pseudoRandomNumbersWithinRange({
-        min: 1,
-        max: 2,
-        amount: 1,
-        seed: seed+index
-      })
+
+      const amountOfPlanetsWithinCluster = Util.createPseudoRandomNumber({
+        seed: seed + index,
+        length: 1
+      }) % 5 + 3;
+
 
       const clusterOffset = Util.pseudoRandomNumbersWithinRange({
-        min: 50000,
-        max: 100000,
-        amount: amount[0],
+        min: 1,
+        max: rangeWithinCluster,
+        amount: amountOfPlanetsWithinCluster,
         seed: seed + index
-      })
+      });
 
       clusterOffset.forEach((offset) => {
-        let moduloCoordinates = (cluster + offset) % 12345;
-        let snapCoordinates = (cluster + offset) - moduloCoordinates;
+        let snapCoordinates = cluster + offset;
         if (snapCoordinates !== previousCoordinates) {
           clusters.push(snapCoordinates);
           clustersObject[snapCoordinates] = snapCoordinates;
         }
         previousCoordinates = snapCoordinates;
+      });
+    });
 
-
-      })
-    })
-    return  {
+    return {
       clustersObject: clustersObject,
       clustersArray: clusters.sort((a, b) => a - b)
     };

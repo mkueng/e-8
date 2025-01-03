@@ -8,11 +8,14 @@ class GalaxyMap {
   #sunMap;
   #galaxyMap;
   #planetMapKeys;
-  #playerShipCoordinates;
   #canvas;
+  #isDragging = false;
+  #currentOffsetX  = -0;
+  #startX; // Start position of mouse
   #ctx;
-  #range = 40000000;
+  #range = 3000000000;
   #interval = null;
+  #galaxyToScreenScaleFactor = 0;
 
   /**
    * @Name constructor
@@ -20,14 +23,18 @@ class GalaxyMap {
    * @param sunMap
    */
   constructor({ planetMap, sunMap }) {
+    this.#galaxyToScreenScaleFactor = e8.global.scaleOfGalaxy / e8.global.screenWidth;
+
     this.#planetMap = planetMap;
     this.#sunMap = sunMap;
-    console.log("sunMap", sunMap);
     this.#planetMapKeys = Object.keys(planetMap);
 
     this.#initializeGalaxyMap();
-    this.filterPlanetMap();
-    this.filterSunMap(this.#range);
+    const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
+    console.log("filteredPlanetMap:", filteredPlanetMap);
+
+    // const filteredSunMap = this.filterSunMap(this.#range);
+    this.drawPlanetMap(filteredPlanetMap, []);
 
     e8.global.inputHandler.subscribe(this);
   }
@@ -39,7 +46,7 @@ class GalaxyMap {
     this.#addGalaxyMapCSS();
     const galaxyMapDiv = document.createElement("div");
     galaxyMapDiv.id = "galaxyMap";
-    galaxyMapDiv.style.visibility = "hidden";
+    //galaxyMapDiv.style.visibility = "hidden";
     galaxyMapDiv.classList.add("galaxyMap");
     document.getElementById("game").append(galaxyMapDiv);
     this.#addCanvasToGalaxyMap(galaxyMapDiv);
@@ -79,20 +86,43 @@ class GalaxyMap {
     this.#ctx.globalAlpha = 1;
   }
 
-
-
   /**
    * @name moueEvent
    * @param event
    */
   mouseEvent = (event) => {
 
+    if (event.type === "mousedown") {
+      this.#isDragging = true;
+      this.#startX = event.clientX;
+    }
+
+    if (event.type === "mouseup") {
+      this.#isDragging = false;
+    }
+
+    if (event.type === "mousemove") {
+      if (this.#isDragging)  {
+        const deltaX = event.clientX - this.#startX;
+
+        if (this.#currentOffsetX < -99) {
+          this.#currentOffsetX += deltaX;
+        } else{
+          this.#currentOffsetX = -100;
+        }
+        this.#startX = event.clientX;
+        const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
+        const filteredSunMap = this.filterSunMap(this.#range);
+        this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+      }
+    }
+
     if (event.type === "wheel") {
       this.#range = Math.max(
-        8000000,
-        this.#range + (event.deltaY < 0 ? 10000000 : -10000000)
+        1000000000,
+        this.#range + (event.deltaY < 0 ? 100000000 : -100000000)
       );
-      const filteredPlanetMap = this.filterPlanetMap();
+     const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
       const filteredSunMap = this.filterSunMap(this.#range);
       this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
 
@@ -113,12 +143,12 @@ class GalaxyMap {
       switch (event) {
         case "KeyM":
           if (this.#galaxyMap.style.visibility === "hidden") {
-            filteredPlanetMap = this.filterPlanetMap();
+            filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
             filteredSunMap = this.filterSunMap(this.#range);
             this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
             this.#galaxyMap.style.visibility = "visible";
             this.#interval = setInterval(() => {
-              filteredPlanetMap = this.filterPlanetMap();
+              filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
               filteredSunMap = this.filterSunMap(this.#range);
               this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
 
@@ -157,10 +187,10 @@ class GalaxyMap {
   drawPlanetMap = ([planetMapKeys, scaleFactor, xOffset], [sunMapKeys]) => {
     const { width, height } = this.#canvas;
     this.#ctx.clearRect(0, 0, width, height);
-    this.#ctx.font = "18px courier, sans-serif";
+    this.#ctx.font = "14px courier, sans-serif";
     this.#ctx.lineWidth = 1;
 
-    let previousX = 100;
+    let previousX = scaleFactor + xOffset;
     let previousY = e8.global.screenHeight / 2;
 
     this.#ctx.beginPath();
@@ -169,34 +199,16 @@ class GalaxyMap {
     this.#ctx.fillRect(previousX - 15, previousY - 15, 30, 30); // Draw filled square
     this.#ctx.strokeRect(previousX - 15, previousY - 15, 30, 30); // Draw square border
     this.#ctx.fillStyle = "rgba(255, 200, 200, 1)";
-    this.#ctx.fillText("" + PlayerShip.coordinates, previousX - 29, previousY + 40);
+
+    const formattedCoordinates = PlayerShip.coordinates.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '-');
+    this.#ctx.fillText("" + formattedCoordinates, previousX - 29, previousY + 40);
     this.#ctx.closePath();
-
-    sunMapKeys.forEach((key) => {
-      const radius = 40
-      const x = scaleFactor * key + xOffset;
-      const y = (key % (e8.global.screenHeight*0.8)+e8.global.screenHeight*0.1);
-      const color = `rgba(${255}, ${255}, ${220},`;
-
-      // Create Inner Glow using Radial Gradient
-      const gradient = this.#ctx.createRadialGradient(x, y, radius * 0.3, x, y, radius);
-      gradient.addColorStop(0, `${color} 1)`); // Center color (solid)
-      gradient.addColorStop(0.7, `${color} 0.6)`); // Middle (semi-transparent)
-      gradient.addColorStop(1, `rgba(0, 0, 0, 0)`); // Edge (transparent)
-
-      // Sun with Inner Glow
-      this.#ctx.beginPath();
-      this.#ctx.arc(x, y, radius, 0, 2 * Math.PI);
-      this.#ctx.fillStyle = gradient;
-      this.#ctx.fill();
-
-    })
 
     planetMapKeys.forEach((key) => {
       const planet = this.#planetMap[key];
       const radius = planet.radius / 15;
       const x = scaleFactor * key + xOffset;
-      const y = (planet.coordinates % (e8.global.screenHeight*0.8)+e8.global.screenHeight*0.1);
+      const y = (planet.coordinates % (e8.global.screenHeight * 0.8) + e8.global.screenHeight * 0.1);
       const color = `rgba(${planet.r * 3}, ${planet.g * 3}, ${planet.b * 3},`;
 
       // Create Inner Glow using Radial Gradient
@@ -216,8 +228,9 @@ class GalaxyMap {
       this.#ctx.stroke();
 
       // Text
-      this.#ctx.fillStyle = "white"; // Reset fill style for text
-      this.#ctx.fillText(planet.coordinates, x + 10, y - radius);
+      this.#ctx.fillStyle = `${color} 1)`; // Reset fill style for text
+      const formattedCoordinates = planet.coordinates.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '-');
+      this.#ctx.fillText(formattedCoordinates, x + 10, y - radius);
 
       // Connection Line
       this.#ctx.strokeStyle = `${color} 0.7)`;
@@ -228,7 +241,6 @@ class GalaxyMap {
       [previousX, previousY] = [x, y];
     });
   };
-
 
   filterSunMap = (range) =>{
     const { width } = this.#canvas;
@@ -252,12 +264,15 @@ class GalaxyMap {
   /**
    * @name filterPlanetMap
    */
-  filterPlanetMap = () => {
-    const { width } = this.#canvas;
-    const playerShipCoordinates = PlayerShip.coordinates;
+  filterPlanetMap = ({coordinatesOffset}) => {
+    console.log("range", this.#range);
+    const width = e8.global.screenWidth;
+    const coordinates = PlayerShip.coordinates + coordinatesOffset * this.#range / 5000 || coordinatesOffset * this.#range / 50000;
+
+
 
     const filteredKeys = this.#planetMapKeys.filter(
-      (key) => key >= playerShipCoordinates && key <= playerShipCoordinates + this.#range
+      (key) => key >= coordinates && key <= coordinates + this.#range
     );
 
     if (filteredKeys.length === 0) return;
@@ -268,7 +283,5 @@ class GalaxyMap {
     const xOffset = 200 - scaleFactor * firstKey;
 
     return [filteredKeys, scaleFactor, xOffset];
-
-
   };
 }

@@ -10,10 +10,7 @@ class Galaxy {
   #subscribers = [];
   #scale;
   #planetObjects = {};
-  #sunObjects = {};
   #sunDistribution = [];
-  #planetQueueBufferSize;
-  #upcomingPlanetCoordinates
   #visiblePlanets = new Set();
   #sunColorKeys = [];
   #galaxyMap = null;

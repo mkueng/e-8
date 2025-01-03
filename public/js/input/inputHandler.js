@@ -11,7 +11,11 @@ class InputHandler {
   }
 
   publishMouseClick(event) {
-    this.publishEvent('mouseEvent', event.button);
+    this.publishEvent('mouseEvent', event);
+  }
+
+  publishMouseMove(event) {
+    this.publishEvent('mouseEvent', event);
   }
 
   subscribe(subscriber) {
@@ -63,8 +67,13 @@ class InputHandler {
     });
 
     document.addEventListener('mouseup', (event) => {
-      event.preventDefault();
-      //this.publishMouseClick(event)
+      //event.preventDefault();
+      this.publishMouseClick(event)
+    });
+
+    document.addEventListener('mousemove', (event) => {
+      //event.preventDefault();
+      this.publishMouseMove(event)
     });
 
     document.addEventListener('wheel', (event) => {
