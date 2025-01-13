@@ -9,11 +9,13 @@ class GameObject {
    * @param animationLoop
    * @param canDestroy
    * @param canvas
-   * @param doNotCheckOutOfBoundsLeft
-   * @param doNotCheckOutOfBoundsRight
    * @param coordinates
    * @param currentFrame
    * @param dependencies
+   * @param doNotCheckOutOfBoundsLeft
+   * @param doNotCheckOutOfBoundsRight
+   * @param isFadeIn
+   * @param isFadeOut
    * @param frames
    * @param hasMass
    * @param height
@@ -58,6 +60,8 @@ class GameObject {
                 dependencies,
                 doNotCheckOutOfBoundsLeft,
                 doNotCheckOutOfBoundsRight,
+                isFadeIn,
+                isFadeOut,
                 frames,
                 hasMass,
                 height,
@@ -102,6 +106,8 @@ class GameObject {
     this.coordinates = coordinates || null;
     this.currentFrame = currentFrame || 0;
     this.dependencies = dependencies || [];
+    this.isFadeIn = isFadeIn || false;
+    this.isFadeOut = isFadeOut || false;
     this.frames = frames || 1;
     this.hasMass = hasMass || false;
     this.height = height || 0;
@@ -178,6 +184,29 @@ class GameObject {
     });
   };
 
+  fadeIn = () => {
+    this.alpha = this.alpha + 0.1;
+    if (this.alpha >= 1) {
+      this.alpha = 1;
+      this.isActive = true;
+      this.hasFadeIn = false;
+    }
+  }
+
+  fadeOut = () => {
+    console.log("fade out");
+    this.update = this.fadeOutUpdate;
+  }
+
+  fadeOutUpdate = () => {
+
+    this.alpha = this.alpha - 0.05;
+    if (this.alpha <= 0) {
+      this.alpha = 0;
+      this.destroy();
+    }
+  }
+
   /**
    * @name deactivate
    */
@@ -194,6 +223,7 @@ class GameObject {
    */
   destroy(){
     this.isActive = false;
+    console.log("destroying", this.identification);
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     if (this.dependencies) {
       this.destroyDependencies();
@@ -274,7 +304,9 @@ class GameObject {
    * @param deltaTime
    */
   update = (deltaTime) => {
+
     if (!this.isActive) return;
+   // if (this.isFadeOut) this.fadeOut();
 
     if (this.doNotCheckOutOfBoundsLeft === false) {
       if (this.posX + this.posDX <= -this.width) {

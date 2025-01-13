@@ -57,7 +57,7 @@ class ProceduralPlanetWorker {
     });
 
     // 2D map of the planet surface
-    this.#drawMap(q,g,q,b, width, height,this.#mapContext);
+    this.#drawMap(r,g,b,q, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
     this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
     this.#addCloudLayer(width, height, this.#offScreenContext,stripeFactor/7);

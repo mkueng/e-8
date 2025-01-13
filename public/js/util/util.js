@@ -166,9 +166,11 @@ class Util {
    * @param amountOfClusters
    * @param rangeWithinCluster
    * @param seed
-   * @returns {*[]}
+   * @param minAmountWithinCluster
+   * @param maxAmountWithinCluster
+   * @returns {{clustersArray: *[], clustersObject: {}}}
    */
-  static pseudoRandomClusteredDistribution({ range, amountOfClusters, rangeWithinCluster, seed }) {
+  static pseudoRandomClusteredDistribution({ range, amountOfClusters, rangeWithinCluster, seed, minAmountWithinCluster, maxAmountWithinCluster }) {
     let clusters = [];
     let clustersObject = {};
     let distribution = Util.pseudoRandomNumbersWithinRange({
@@ -184,7 +186,7 @@ class Util {
       const amountOfPlanetsWithinCluster = Util.createPseudoRandomNumber({
         seed: seed + index,
         length: 1
-      }) % 5 + 3;
+      }) % maxAmountWithinCluster + minAmountWithinCluster;
 
 
       const clusterOffset = Util.pseudoRandomNumbersWithinRange({

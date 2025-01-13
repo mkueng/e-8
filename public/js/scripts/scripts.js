@@ -33,6 +33,9 @@ class Scripts {
     // screen
     await ScriptLoader.loadScript("js/screen/screen.js?v="+Scripts.version);
 
+    //handler
+    await ScriptLoader.loadScript("js/handler/handler.js?v="+Scripts.version);
+
     // fsm
     await ScriptLoader.loadScript("js/state/state.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/state/states.js?v="+Scripts.version);
@@ -154,6 +157,7 @@ class Scripts {
     // features
     await ScriptLoader.loadScript("js/tractor/tractor.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/probe/probe.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ftl/ftl.js?v="+Scripts.version);
 
     // playerShip
     await ScriptLoader.loadScript("js/playerShip/playerShipPropertiesClassA.js?v="+Scripts.version);

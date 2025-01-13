@@ -1,6 +1,9 @@
 class FiniteStateMachine {
 
-  constructor(){
+  #stateHandler;
+
+  constructor(stateHandler){
+    this.#stateHandler = stateHandler;
     this.states = {};
     this.currentState = null;
   }
@@ -23,10 +26,13 @@ class FiniteStateMachine {
     if (this.states[name]) {
       if (this.currentState) {
         this.currentState.exit();
+        this.#stateHandler.publish(this.currentState);
       }
 
       this.currentState = this.states[name];
       this.currentState.enter();
+      this.#stateHandler.publish(this.currentState);
+
     } else {
       console.error(`State "${name}" not found.`);
     }

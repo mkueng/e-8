@@ -29,28 +29,17 @@ class GalaxyMap {
     this.#sunMap = sunMap;
     this.#planetMapKeys = Object.keys(planetMap);
 
-    this.#initializeGalaxyMap();
     const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-    console.log("filteredPlanetMap:", filteredPlanetMap);
+    const filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
 
-    // const filteredSunMap = this.filterSunMap(this.#range);
-    this.drawPlanetMap(filteredPlanetMap, []);
-
-    e8.global.inputHandler.subscribe(this);
-  }
-
-  /**
-   * @Name initializeGalaxyMap
-   */
-  #initializeGalaxyMap() {
     this.#addGalaxyMapCSS();
-    const galaxyMapDiv = document.createElement("div");
-    galaxyMapDiv.id = "galaxyMap";
-    //galaxyMapDiv.style.visibility = "hidden";
-    galaxyMapDiv.classList.add("galaxyMap");
-    document.getElementById("game").append(galaxyMapDiv);
-    this.#addCanvasToGalaxyMap(galaxyMapDiv);
-    this.#galaxyMap = document.getElementById("galaxyMap");
+    this.#initializeGalaxyMap();
+    this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+
+    e8.global.inputHandler.subscribe(this,
+      [InputHandler.eventTypes.keyEvent
+      ]
+    );
   }
 
   /**
@@ -73,6 +62,19 @@ class GalaxyMap {
   }
 
   /**
+   * @Name initializeGalaxyMap
+   */
+  #initializeGalaxyMap() {
+    const galaxyMapDiv = document.createElement("div");
+    galaxyMapDiv.id = "galaxyMap";
+    galaxyMapDiv.style.visibility = "hidden";
+    galaxyMapDiv.classList.add("galaxyMap");
+    document.getElementById("game").append(galaxyMapDiv);
+    this.#addCanvasToGalaxyMap(galaxyMapDiv);
+    this.#galaxyMap = galaxyMapDiv
+  }
+
+  /**
    * @Name addCanvasToGalaxyMap
    * @param galaxyMapDiv
    */
@@ -90,7 +92,8 @@ class GalaxyMap {
    * @name moueEvent
    * @param event
    */
-  mouseEvent = (event) => {
+  mouseClickEvent = (event) => {
+    if (this.#galaxyMap.style.visibility === "hidden") return;
 
     if (event.type === "mousedown") {
       this.#isDragging = true;
@@ -100,33 +103,39 @@ class GalaxyMap {
     if (event.type === "mouseup") {
       this.#isDragging = false;
     }
+  }
 
-    if (event.type === "mousemove") {
-      if (this.#isDragging)  {
-        const deltaX = event.clientX - this.#startX;
+  mouseMoveEvent = (event) => {
+    //if (event.type === "mousemove") {
+    if (this.#isDragging) {
+      const deltaX = event.clientX - this.#startX;
 
-        if (this.#currentOffsetX < -99) {
-          this.#currentOffsetX += deltaX;
-        } else{
-          this.#currentOffsetX = -100;
-        }
-        this.#startX = event.clientX;
-        const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-        const filteredSunMap = this.filterSunMap(this.#range);
-        this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+      if (this.#currentOffsetX < -99) {
+        this.#currentOffsetX += deltaX;
+      } else {
+        this.#currentOffsetX = -100;
       }
+      this.#startX = event.clientX;
+      const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX * -1)});
+      const filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX * -1)});
+      this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
     }
+    //}
+  }
 
-    if (event.type === "wheel") {
+  mouseWheelEvent = (event) => {
+
+
+    //if (event.type === "wheel") {
       this.#range = Math.max(
         1000000000,
         this.#range + (event.deltaY < 0 ? 100000000 : -100000000)
       );
      const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-      const filteredSunMap = this.filterSunMap(this.#range);
+      const filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
       this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
 
-    }
+    //}
   };
 
   /**
@@ -143,35 +152,52 @@ class GalaxyMap {
       switch (event) {
         case "KeyM":
           if (this.#galaxyMap.style.visibility === "hidden") {
+
+            e8.global.inputHandler.subscribe(this,
+              [InputHandler.eventTypes.mouseClick,
+                InputHandler.eventTypes.mouseMove,
+                InputHandler.eventTypes.mouseWheel
+              ]
+            );
+
             filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-            filteredSunMap = this.filterSunMap(this.#range);
+            filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
             this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
             this.#galaxyMap.style.visibility = "visible";
             this.#interval = setInterval(() => {
               filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-              filteredSunMap = this.filterSunMap(this.#range);
+              filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
               this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
 
-            }, 500);
+            }, 1000);
           } else {
             this.#galaxyMap.style.visibility = "hidden";
+            e8.global.inputHandler.unsubscribe(this,
+              [InputHandler.eventTypes.mouseClick,
+                InputHandler.eventTypes.mouseMove,
+                InputHandler.eventTypes.mouseWheel
+              ]
+            );
             clearInterval(this.#interval);
-            e8.global.canvasHandler.unblurCanvases();
+
           }
           break;
         case "ArrowDown":
-          this.#range += 10000000;
-          filteredPlanetMap = this.filterPlanetMap();
-          filteredSunMap = this.filterSunMap(this.#range);
-          this.drawPlanetMap(filteredPlanetMap,filteredSunMap);
-
+          if (this.#galaxyMap.style.visibility === "visible") {
+            this.#range += 10000000;
+            filteredPlanetMap = this.filterPlanetMap();
+            filteredSunMap = this.filterSunMap(this.#range);
+            this.drawPlanetMap(filteredPlanetMap,filteredSunMap);
+          }
           break;
 
         case "ArrowUp":
-          this.#range = Math.max(8000000, this.#range - 10000000);
-          filteredPlanetMap = this.filterPlanetMap();
-          filteredSunMap = this.filterSunMap(this.#range);
-          this.drawPlanetMap(filteredPlanetMap,filteredSunMap);
+          if (this.#galaxyMap.style.visibility === "visible") {
+            this.#range = Math.max(8000000, this.#range - 10000000);
+            filteredPlanetMap = this.filterPlanetMap();
+            filteredSunMap = this.filterSunMap(this.#range);
+            this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+          }
 
           break;
       }
@@ -183,8 +209,9 @@ class GalaxyMap {
    * @param planetMapKeys
    * @param scaleFactor
    * @param xOffset
+   * @param sunMapKeys
    */
-  drawPlanetMap = ([planetMapKeys, scaleFactor, xOffset], [sunMapKeys]) => {
+  drawPlanetMap = ([planetMapKeys, scaleFactor, xOffset], sunMapKeys) => {
     const { width, height } = this.#canvas;
     this.#ctx.clearRect(0, 0, width, height);
     this.#ctx.font = "14px courier, sans-serif";
@@ -204,6 +231,27 @@ class GalaxyMap {
     this.#ctx.fillText("" + formattedCoordinates, previousX - 29, previousY + 40);
     this.#ctx.closePath();
 
+    // show suns
+    sunMapKeys.forEach((key) => {
+      const radius = 40
+      const x = scaleFactor * key + xOffset;
+      const y = (key % (e8.global.screenHeight*0.8)+e8.global.screenHeight*0.1);
+      const color = `rgba(${255}, ${255}, ${220},`;
+
+      // Create Inner Glow using Radial Gradient
+      const gradient = this.#ctx.createRadialGradient(x, y, radius * 0.3, x, y, radius);
+      gradient.addColorStop(0, `${color} 1)`); // Center color (solid)
+      gradient.addColorStop(0.7, `${color} 0.6)`); // Middle (semi-transparent)
+      gradient.addColorStop(1, `rgba(0, 0, 0, 0)`); // Edge (transparent)
+
+      // Sun with Inner Glow
+      this.#ctx.beginPath();
+      this.#ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      this.#ctx.fillStyle = gradient;
+      this.#ctx.fill();
+    })
+
+    // show planets
     planetMapKeys.forEach((key) => {
       const planet = this.#planetMap[key];
       const radius = planet.radius / 15;
@@ -242,13 +290,17 @@ class GalaxyMap {
     });
   };
 
-  filterSunMap = (range) =>{
-    const { width } = this.#canvas;
-    const playerShipCoordinates = PlayerShip.coordinates;
-    const rangeEnd = playerShipCoordinates + range
+  /**
+   * @name filterSunMap
+   * @param coordinatesOffset
+   * @returns {*}
+   */
+  filterSunMap = ({coordinatesOffset}) =>{
+    const width = e8.global.screenWidth;
+    const coordinates = PlayerShip.coordinates + coordinatesOffset * this.#range / 5000 || coordinatesOffset * this.#range / 50000;
 
     const filteredKeys = this.#sunMap.filter(
-      (key) => key >= playerShipCoordinates && key <= rangeEnd
+      (key) => key >= coordinates && key <= coordinates + this.#range
     );
 
     if (filteredKeys.length === 0) return;
@@ -258,14 +310,15 @@ class GalaxyMap {
     const scaleFactor = width / keyRange;
     const xOffset = 200 - scaleFactor * firstKey;
 
-    return[filteredKeys];
+    return filteredKeys
   }
 
   /**
    * @name filterPlanetMap
+   * @param coordinatesOffset
+   * @returns {[*,number,number]}
    */
   filterPlanetMap = ({coordinatesOffset}) => {
-    console.log("range", this.#range);
     const width = e8.global.screenWidth;
     const coordinates = PlayerShip.coordinates + coordinatesOffset * this.#range / 5000 || coordinatesOffset * this.#range / 50000;
 

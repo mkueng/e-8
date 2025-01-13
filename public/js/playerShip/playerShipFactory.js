@@ -85,7 +85,7 @@ class PlayerShipFactory {
       posY: e8.global.screenHeight / 2,
       shield: shieldInstance,
       terminationSequence: terminationSequenceInstance,
-      velX: 8020,
+      velX: 0,
       velY: 0,
       weapons: weaponsInstances,
       width: imageResource.image.width,
@@ -97,7 +97,7 @@ class PlayerShipFactory {
       spriteSheetRows: 17,
       animationLoop: false,
       currentFrame: 11,
-      coordinates : 215000000
+      coordinates : 62390000
     });
   };
 

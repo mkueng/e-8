@@ -6,7 +6,6 @@ class Galaxy {
   #planetDistributionObjectKeys = [];
   #planetMap = {};
   #planetIndex = 0;
-  #sunIndex = 0;
   #subscribers = [];
   #scale;
   #planetObjects = {};
@@ -33,7 +32,6 @@ class Galaxy {
     this.galaxyWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
     this.proceduralPlanet = new ProceduralPlanet({canvas:this.canvas, galaxyWorker:this.galaxyWorker});
 
-
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}
     )
@@ -42,18 +40,15 @@ class Galaxy {
     this.#planetDistributionObject = pseudoRandomClusteredDistribution["clustersObject"];
     this.#planetDistributionObjectKeys = Object.keys(this.#planetDistributionObject).map(Number);
 
+    let pseudoRandomClusteredDistributionSun = Util.pseudoRandomClusteredDistribution(
+      {...e8.global.sunDistribution}
+    )
+    this.#sunDistribution = pseudoRandomClusteredDistributionSun["clustersArray"];
     this.#sunColorKeys = Object.keys(e8.global.sunColors);
-    this.#sunDistribution = Util.pseudoRandomNumbersWithinRange({
-      min: 1,
-      max: 3700000000,
-      amount: 300,
-      seed: 72891782182
-    })
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
     this.#galaxyMap = new GalaxyMap({planetMap: this.#planetMap, sunMap: this.#sunDistribution});
-    console.log("this.#planetMap:",  this.#planetMap);
-    
+
     await this.heartBeat();
   }
 
@@ -95,9 +90,12 @@ class Galaxy {
 
   }
 
+  /**
+   * @name createSun
+   */
   #createSun = () =>{
     console.log("Creating SUN");
-    const distributionEntry = this.#sunDistribution[this.#sunIndex];
+    const distributionEntry = this.#sunDistribution[0];
     this.#sunDistribution.shift()
     let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 450);
     if (size < 50) size = 50;
@@ -119,6 +117,11 @@ class Galaxy {
     })
   }
 
+  /**
+   * @name createPlanet
+   * @param coordinates
+   * @returns {Promise<void>}
+   */
   #createPlanet = async (coordinates) => {
     console.log("creating planet");
     let planetObject = await this.proceduralPlanet.create({planetData: this.#planetMap[coordinates]});
@@ -143,35 +146,34 @@ class Galaxy {
    * @returns {{}}
    */
   createPlanetMap = (distribution) =>{
+
     let planetMap = {};
     let radius;
     let planetSizeCounter = 1
 
-    for (const coordinate of distribution) {
-      if (planetSizeCounter > 6) {
-        planetSizeCounter = 0;
-      }
-      if (planetSizeCounter >= 2 && planetSizeCounter <= 4) {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 10);
-      } else if (planetSizeCounter < 2 && planetSizeCounter > 1) {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 4.6);
-      } else if (planetSizeCounter > 4 && planetSizeCounter < 6) {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 5);
-      } else {
-        radius = Math.floor(Util.createNumericHash(coordinate, 3) / 2);
-      }
+    const divisors = {
+      0: 2,
+      1: 4.6,
+      2: 2.5,
+      3: 4,
+      4: 3,
+      5: 5
+    };
 
-      if (radius < 30) {
-        radius = 30;
-      }
+    for (const coordinate of distribution) {
+      planetSizeCounter = (planetSizeCounter + 1) % 7;
+
+      const divisor = divisors[planetSizeCounter] || 2;
+      radius = Math.max(Math.floor(Util.createNumericHash(coordinate, 3) / divisor), 30);
+
       const oneDigit = Util.createNumericHash(coordinate,1);
       const twoDigits = Util.createNumericHash(coordinate,2);
       const threeDigits = Util.getLastNDigits(coordinate,3);
 
-      let r = parseInt(threeDigits % 140);
-      let g = parseInt(threeDigits % 170);
-      let b = parseInt(threeDigits % 198);
-      let q = parseInt(threeDigits % 98);
+      let r = parseInt(threeDigits % Util.createPseudoRandomNumber({seed:coordinate % 23 ,length:3})) || 1;
+      let g = parseInt(threeDigits % Util.createPseudoRandomNumber({seed:coordinate % 131, length:3})) || 1;
+      let b = parseInt(threeDigits % Util.createPseudoRandomNumber({seed: coordinate % 157, length: 3})) || 1;
+      let q = parseInt(threeDigits % 100) || 1;
 
       let stripeFactor = twoDigits / Util.createPseudoRandomNumber({seed:32783827,length:2})+0.5
       if (oneDigit > 6 ) {
@@ -186,14 +188,13 @@ class Galaxy {
         octavesRange : oneDigit,
         lacunarityRange : 0.25,
         persistenceOffset : oneDigit / 5,
-        baseFrequencyOffset : threeDigits *4,
+        baseFrequencyOffset : threeDigits * 4,
         stripeFactor : stripeFactor,
         r: r,
         g: g,
         b: b,
         q: q
       }
-      planetSizeCounter++;
     }
     return planetMap;
   }

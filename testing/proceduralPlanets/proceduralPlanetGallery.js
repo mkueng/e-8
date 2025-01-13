@@ -15,7 +15,7 @@ class ProceduralPlanetGallery {
     this.galaxyWorker = new Worker("../../public/js/workers/galaxy/galaxyWorker.js");
     this.proceduralPlanet = new ProceduralPlanet({canvas: this.canvas, galaxyWorker : this.galaxyWorker});
     this.canvas.width = e8.global.screenWidth-20;
-    this.canvas.height = 10000
+    this.canvas.height = 5000
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "15px courier,sans-serif";
     this.ctx.fillStyle = "white";
@@ -39,6 +39,10 @@ class ProceduralPlanetGallery {
     if (this.x > e8.global.screenWidth-img.width) {
       this.x = 10;
       this.y += this.previousPlanetRadius;
+      if (this.y > this.ctx.canvas.height) {
+        this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+        this.y = 100;
+      }
     }
   }
 

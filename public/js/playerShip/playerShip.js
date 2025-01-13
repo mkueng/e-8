@@ -154,7 +154,8 @@ class PlayerShip extends GameObject {
       right: false
     }
 
-    e8.global.inputHandler.subscribe(this);
+    e8.global.inputHandler.subscribe(this, [InputHandler.eventTypes.keyEvent, InputHandler.eventTypes.mouseClick]);
+
     this.#initializeWeapons();
     this.#initializeFeatures();
     this.#initializeShield();
@@ -172,6 +173,10 @@ class PlayerShip extends GameObject {
     return parseInt(PlayerShip.instance?.coordinates.toFixed(0));
   }
 
+  static set coordinates(value) {
+    PlayerShip.instance.coordinates = value;
+  }
+
   static get fuel() {
     return PlayerShip.instance?.fuel.amount;
   }
@@ -186,6 +191,10 @@ class PlayerShip extends GameObject {
 
   static get velX() {
     return PlayerShip.instance?.velX;
+  }
+
+  static set velX(value) {
+    PlayerShip.instance.velX = value;
   }
 
   static get velY() {
@@ -296,20 +305,13 @@ class PlayerShip extends GameObject {
   }
 
   /**
-   * @name mouseEvent
+   * @name mouseClickEvent
    * @param event
    */
-  mouseEvent = (event)=>{
-    switch (event) {
-
-      case 0 : {
-        this.keyEvents["Space"]();
-        break;
-      }
-      case 2 : {
-        this.keyEvents["KeyK"]();
-        break;
-      }
+  mouseClickEvent = (event) => {
+    if (event.type === "mousedown") {
+      const key = event.button === 0 ? "Space" : event.button === 2 ? "KeyK" : null;
+      if (key) this.keyEvents[key]();
     }
   }
 
@@ -319,7 +321,6 @@ class PlayerShip extends GameObject {
    * @param isKeyDown
    */
   keyEvent = (event, isKeyDown) => {
-
     if (this.keyEvents[event] && isKeyDown){
       this.keyEvents[event]();
     } else {

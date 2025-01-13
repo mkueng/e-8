@@ -1,5 +1,5 @@
 'use strict'
-class HazeHandler {
+class HazeHandler extends Handler {
 
   #resourcePaths =[ "/resources/hazes/haze_01.png", "/resources/hazes/haze_02.png"];
   #upcoming = 0;
@@ -7,6 +7,7 @@ class HazeHandler {
   #colorKeys = [];
 
   constructor(){
+    super();
   }
 
   init = async () =>{

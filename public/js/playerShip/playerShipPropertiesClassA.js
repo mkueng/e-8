@@ -17,9 +17,9 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX: 4000,
+    maxVelX: 60,
     maxVelY: 10,
-    accX: 10.065,
+    accX: 0.065,
     accY: 0.065,
   }
 
@@ -82,6 +82,12 @@ class PlayerShipPropertiesClassA {
       Probe: {
         controlAssignment: "KeyP",
         type: Probe
+      }
+    },
+    {
+      FTL: {
+        controlAssignment: "KeyC",
+        type: FTL
       }
     }
   ]

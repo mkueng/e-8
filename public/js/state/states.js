@@ -1,3 +1,20 @@
+class FTLTravel extends State {
+  constructor(name, gameController) {
+    super(name, gameController);
+
+    this.addTransition('startFTLTravel', 'FTLTravelStarted');
+    this.addTransition('endFTLTravel', 'FTLTravelEnded');
+  }
+
+  enter() {
+    super.enter();
+  }
+
+  exit() {
+    super.exit();
+  }
+}
+
 class GameStarted extends State{
   constructor(name, gameController){
     super(name, gameController);
