@@ -316,27 +316,27 @@ class PlayerShip extends GameObject {
   }
 
   /**
-   * @name keyEvent
-   * @param event
-   * @param isKeyDown
+   *
+   * @param eventDetails
+   * @param options
    */
-  keyEvent = (event, isKeyDown) => {
-    if (this.keyEvents[event] && isKeyDown){
-      this.keyEvents[event]();
+  keyEvent = (eventDetails, options) => {
+    if (this.keyEvents[eventDetails.code] && options.keyDown){
+      this.keyEvents[eventDetails.code]();
     } else {
 
-      switch (event) {
+      switch (eventDetails.code) {
         case "KeyS":
-          this.controls.down = isKeyDown;
+          this.controls.down = options.keyDown;
           break;
         case "KeyW":
-          this.controls.up = isKeyDown;
+          this.controls.up = options.keyDown;
           break;
         case "KeyA":
-          this.controls.left = isKeyDown;
+          this.controls.left = options.keyDown;
           break;
         case "KeyD":
-          this.controls.right = isKeyDown;
+          this.controls.right = options.keyDown;
           break;
       }
     }

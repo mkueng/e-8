@@ -1,172 +1,117 @@
 class InputHandler {
-  #keyEvents = {};
+  #keyEvents = new Set();
 
   static eventTypes = {
     keyEvent: 'keyEvent',
     mouseClick: 'mouseClickEvent',
     mouseMove: 'mouseMoveEvent',
-    mouseWheel: 'mouseWheelEvent'
-  }
+    mouseWheel: 'mouseWheelEvent',
+  };
 
-  #keyEventSubscribers = [];
-  #mouseClickSubscribers = [];
-  #mouseMoveSubscribers = [];
-  #mouseWheelSubscribers = [];
+  #subscribers = new Map();
 
   constructor() {
-
-    //prevent contextmenu
-    document.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
+    // Initialize subscriber lists for each event type
+    Object.values(InputHandler.eventTypes).forEach(eventType => {
+      this.#subscribers.set(eventType, new Set());
     });
 
-    //mousedown
-    document.addEventListener('mousedown', (event) => {
-      this.#publishMouseClick(event)
-    });
-
-    //mouseup
-    document.addEventListener('mouseup', (event) => {
-      //event.preventDefault();
-      this.#publishMouseClick(event)
-    });
-
-    //mousemove
-    document.addEventListener('mousemove', (event) => {
-      //event.preventDefault();
-      this.#publishMouseMove(event)
-    });
-
-    //wheel
-    document.addEventListener('wheel', (event) => {
-      this.#publishMouseWheel(event);
-    });
-
-    //check for key down
-    document.addEventListener('keydown', (event) => {
-      if (!event.repeat && typeof this.#keyEvents[event.code] === 'undefined') {
-        this.#keyEvents[event.code] = true;
-        this.#publishKeyDown(event.code);
-      }
-    });
-
-    //check fo key up
-    document.addEventListener('keyup', (event) => {
-      if (this.#keyEvents[event.code] === true) {
-        delete this.#keyEvents[event.code];
-        this.#publishKeyUp(event.code);
-      }
-    });
-  }
-
-  get #subscriberMap() {
-    return {
-      [InputHandler.eventTypes.keyEvent]: this.#keyEventSubscribers,
-      [InputHandler.eventTypes.mouseClick]: this.#mouseClickSubscribers,
-      [InputHandler.eventTypes.mouseMove]: this.#mouseMoveSubscribers,
-    };
+    this.#registerEvents();
   }
 
   /**
-   * @name subscribe
-   * @param subscriber
-   * @param events
+   * Subscribe a listener to one or more events
+   * @param {Object} subscriber - Object implementing event handler methods
+   * @param {Array<string>} events - Array of event types
    */
-  subscribe(subscriber, events = []) {
-    events.forEach(event => {
-      const subscribers = this.#subscriberMap[event];
+  subscribe = (subscriber, events = []) => {
+    events.forEach(eventType => {
+      const subscribers = this.#subscribers.get(eventType);
       if (subscribers) {
-        subscribers.push(subscriber);
+        subscribers.add(subscriber);
+
       }
+      console.log("subscribers", this.#subscribers);
     });
-  }
+  };
 
   /**
-   * @name unsubscribe
-   * @param subscriber
-   * @param events
+   * Unsubscribe a listener from one or more events
+   * @param {Object} subscriber - Object implementing event handler methods
+   * @param {Array<string>} events - Array of event types
    */
-  unsubscribe(subscriber, events = []) {
-    events.forEach(event => {
-      const subscribers = this.#subscriberMap[event];
+  unsubscribe = (subscriber, events = []) => {
+    events.forEach(eventType => {
+      const subscribers = this.#subscribers.get(eventType);
       if (subscribers) {
-        const index = subscribers.indexOf(subscriber);
-        if (index !== -1) {
-          subscribers.splice(index, 1);
-        }
+        subscribers.delete(subscriber);
       }
     });
-  }
+  };
 
   /**
-   * @name #publishKeyUpEvent
-   * @param event
+   * Registers event listeners and maps them to notification methods
    */
-  #publishKeyUp(event) {
-    try {
-      for (const subscriber of this.#keyEventSubscribers) {
-        subscriber.keyEvent(event, false);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  #registerEvents = () => {
+    const eventMappings = [
+      { event: 'keydown', handler: this.#handleKeyDown },
+      { event: 'keyup', handler: this.#handleKeyUp },
+      { event: 'contextmenu', handler: e => e.preventDefault() },
+      { event: 'mousedown', handler: this.#createNotifyHandler(InputHandler.eventTypes.mouseClick) },
+      { event: 'mouseup', handler: this.#createNotifyHandler(InputHandler.eventTypes.mouseClick) },
+      { event: 'mousemove', handler: this.#createNotifyHandler(InputHandler.eventTypes.mouseMove) },
+      { event: 'wheel', handler: this.#createNotifyHandler(InputHandler.eventTypes.mouseWheel) },
+    ];
+
+    eventMappings.forEach(({ event, handler }) => {
+      document.addEventListener(event, handler);
+    });
+  };
 
   /**
-   * @name #publishKeyDownEvent
+   * Handles keydown events
    * @param event
    */
-  #publishKeyDown(event) {
-    try {
-      for (const subscriber of this.#keyEventSubscribers) {
-        subscriber.keyEvent(event, true);
-      }
-    } catch (e) {
-      console.error(e);
+  #handleKeyDown = (event) => {
+    if (!event.repeat && !this.#keyEvents.has(event.code)) {
+      this.#keyEvents.add(event.code);
+      this.#notifySubscribers(InputHandler.eventTypes.keyEvent, event, { keyDown: true });
     }
-  }
+  };
 
   /**
-   * @name publishMouseeClickEvent
+   * Handles keyup events
    * @param event
    */
-  #publishMouseClick(event) {
-    try {
-      for (const subscriber of this.#mouseClickSubscribers) {
-        subscriber.mouseClickEvent(event);
-      }
-    } catch(e) {
-      console.error(e);
+  #handleKeyUp = (event) => {
+    if (this.#keyEvents.has(event.code)) {
+      this.#keyEvents.delete(event.code);
+      this.#notifySubscribers(InputHandler.eventTypes.keyEvent, event, { keyDown: false });
     }
-  }
+  };
 
   /**
-   * @name publishMouseMoveEvent
-   * @param event
+   * Creates a reusable event handler for notifying subscribers
+   * @param {string} eventType
    */
-  #publishMouseMove(event) {
-    try {
-      for (const subscriber of this.#mouseMoveSubscribers) {
-        subscriber.mouseMoveEvent(event);
-      }
-    } catch(e) {
-      console.error(e);
-    }
-  }
+  #createNotifyHandler = (eventType) => (event) => {
+    this.#notifySubscribers(eventType, event);
+  };
 
   /**
-   * @name publishMouseWheelEvent
-   * @param event
+   * Notifies subscribers of an event
+   * @param {string} eventType
+   * @param {Event} eventDetails
+   * @param {Object} options
    */
-  #publishMouseWheel(event) {
-    try {
-      for (const subscriber of this.#mouseMoveSubscribers) {
-        subscriber.mouseWheelEvent(event);
+  #notifySubscribers = (eventType, eventDetails, options = {}) => {
+    const subscribers = this.#subscribers.get(eventType);
+    subscribers.forEach(subscriber => {
+      try {
+        subscriber[eventType](eventDetails, options);
+      } catch (e) {
+        console.error(e);
       }
-    } catch(e) {
-      console.error(e);
-    }
-  }
-
-
+    });
+  };
 }

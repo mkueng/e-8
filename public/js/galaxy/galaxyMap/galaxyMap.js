@@ -125,6 +125,7 @@ class GalaxyMap {
 
   mouseWheelEvent = (event) => {
 
+    console.log("event", event);
 
     //if (event.type === "wheel") {
       this.#range = Math.max(
@@ -139,64 +140,56 @@ class GalaxyMap {
   };
 
   /**
-   * @name keyEvent
-   * @param event
-   * @param keyDown
+   *
+   * @param eventDetails
+   * @param options
    */
-  keyEvent = (event, keyDown) => {
+  keyEvent = (eventDetails, options) => {
 
-    let filteredSunMap;
-    let filteredPlanetMap;
+    if (options.keyDown === true) {
 
-    if (keyDown) {
-      switch (event) {
+      switch (eventDetails.code) {
         case "KeyM":
-          if (this.#galaxyMap.style.visibility === "hidden") {
 
-            e8.global.inputHandler.subscribe(this,
-              [InputHandler.eventTypes.mouseClick,
-                InputHandler.eventTypes.mouseMove,
-                InputHandler.eventTypes.mouseWheel
-              ]
-            );
+          const isHidden = this.#galaxyMap.style.visibility === "hidden";
+          this.#galaxyMap.style.visibility = isHidden ? "visible" : "hidden";
 
-            filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-            filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-            this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
-            this.#galaxyMap.style.visibility = "visible";
+          const inputEvents = [
+            InputHandler.eventTypes.mouseClick,
+            InputHandler.eventTypes.mouseMove,
+            InputHandler.eventTypes.mouseWheel,
+          ];
+
+          if (isHidden) {
+
+            e8.global.inputHandler.subscribe(this, inputEvents);
+
             this.#interval = setInterval(() => {
-              filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-              filteredSunMap = this.filterSunMap({coordinatesOffset: (this.#currentOffsetX *-1)});
-              this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+              const offset = this.#currentOffsetX * -1;
+              this.drawPlanetMap(
+                this.filterPlanetMap({coordinatesOffset: offset}),
+                this.filterSunMap({coordinatesOffset: offset})
+              );
 
             }, 1000);
           } else {
-            this.#galaxyMap.style.visibility = "hidden";
-            e8.global.inputHandler.unsubscribe(this,
-              [InputHandler.eventTypes.mouseClick,
-                InputHandler.eventTypes.mouseMove,
-                InputHandler.eventTypes.mouseWheel
-              ]
-            );
+            e8.global.inputHandler.unsubscribe(this, inputEvents);
             clearInterval(this.#interval);
 
           }
           break;
         case "ArrowDown":
+
           if (this.#galaxyMap.style.visibility === "visible") {
             this.#range += 10000000;
-            filteredPlanetMap = this.filterPlanetMap();
-            filteredSunMap = this.filterSunMap(this.#range);
-            this.drawPlanetMap(filteredPlanetMap,filteredSunMap);
+            this.drawPlanetMap(this.filterPlanetMap(),this.filterSunMap(this.#range));
           }
           break;
 
         case "ArrowUp":
           if (this.#galaxyMap.style.visibility === "visible") {
             this.#range = Math.max(8000000, this.#range - 10000000);
-            filteredPlanetMap = this.filterPlanetMap();
-            filteredSunMap = this.filterSunMap(this.#range);
-            this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
+            this.drawPlanetMap(this.filterPlanetMap(), this.filterSunMap(this.#range));
           }
 
           break;
