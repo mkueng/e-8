@@ -19,7 +19,14 @@ class AppController {
     this.#initEventListeners();
     this.screen = new Screen();
     this.screen.init();
-    e8.global.gameLoop = new GameLoop();
+
+    e8.global.stateHandler.setState("AppInitialized");
+    await e8.global.stateHandler.trigger(StateHandler.actions.initializeGame);
+    await e8.global.stateHandler.trigger(StateHandler.actions.startGame);
+
+  }
+
+  initGame = async()=>{
   }
 
   startGame = async()=>{
@@ -134,6 +141,5 @@ class AppController {
     e8.global.particleGenerator = new ParticleGenerator();
     e8.global.backdrop = new Backdrop();
     e8.global.spaceStationHandler = new SpaceStationHandler();
-
   }
 }

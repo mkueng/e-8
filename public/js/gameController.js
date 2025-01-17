@@ -1,5 +1,6 @@
 class GameController {
 
+    #gameLoop;
     #game;
     #playerShipHandler;
     #enemyShipHandler;
@@ -17,29 +18,19 @@ class GameController {
         this.#galaxy = new Galaxy({scale:e8.global.scaleOfGalaxy});
         this.#galaxy.init();
 
-
         // dust
-
         await e8.global.dustHandler.init();
-        e8.global.dustHandler.invokeDust();
-
 
         // asteroids
         await e8.global.asteroidHandler.init();
 
         // haze
-
-
-         await e8.global.hazeHandler.init();
-         //e8.global.hazeHandler.invokeHaze();
-
+        await e8.global.hazeHandler.init();
 
         // player ship
         this.#playerShipHandler = new PlayerShipHandler();
         this.#playerShipHandler.init();
-        await this.#playerShipHandler.createShip();
 
-        /*
         //hud
         this.scanner = new Scanner({galaxy: this.#galaxy});
         await this.scanner.init();
@@ -47,18 +38,27 @@ class GameController {
         // enemy ships
         this.#enemyShipHandler = new EnemyShipHandler();
         await this.#enemyShipHandler.init();
-        this.#enemyShipHandler.startCreation(3000);
 
         // freighters
         this.freighterHandler = new FreighterHandler();
         await this.freighterHandler.init();
-        //await this.freighterHandler.create();
-        */
-        this.game = new Game({});
+
+
+        this.#gameLoop = new GameLoop();
+
+        this.game = new Game({
+            gameLoop: this.#gameLoop,
+            dustHandler: e8.global.dustHandler,
+            playerShipHandler: this.#playerShipHandler,
+            asteroidHandler: e8.global.asteroidHandler,
+            hazeHandler: e8.global.hazeHandler,
+            enemyShipHandler: this.#enemyShipHandler,
+            freighterHandler: this.freighterHandler
+        });
         document.querySelector("#game").style.display = "block";
     }
 
-    startGame =  ()=>{
-        this.game.start();
+    startGame = async ()=>{
+        await this.game.start();
     }
 }

@@ -2,8 +2,6 @@ class State {
 
   #transitions;
   #name;
-  #gameController;
-
 
   get name() {
     return this.#name;
@@ -13,13 +11,8 @@ class State {
     return this.#transitions;
   }
 
-  get gameController(){
-    return this.#gameController;
-  }
-
   constructor(name, gameController){
     this.#name = name;
-    this.#gameController = gameController;
     this.#transitions = {};
   }
 
@@ -29,11 +22,11 @@ class State {
   }
 
   enter() {
-    console.log(`%centering state: ${this.#name}`, 'color: lightblue;');
+    console.log(`%centering state: ${this.#name}`, 'color: lightgreen;');
   }
 
   exit() {
-    console.log(`%cexiting state: ${this.#name}`, 'color: lightblue;');
+    console.log(`%cexiting state: ${this.#name}`, 'color: green;');
   }
 }
 

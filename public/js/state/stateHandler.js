@@ -7,6 +7,8 @@ class StateHandler{
   #subscribers = [];
 
   static actions ={
+    initGame: "initGame",
+    initializeGame: "initializeGame",
     startGame: "startGame",
     pauseGame: "pauseGame",
     restartGame: "restartGame",
@@ -21,11 +23,13 @@ class StateHandler{
 
     this.#fsm = new FiniteStateMachine(this);
     this.#states = [
+      { name: 'AppInitialized', instance: new AppInitialized('AppInitialized') },
       { name: 'AppStarted', instance: new AppStarted('AppStarted', ) },
-      { name: 'GameStarted', instance: new GameStarted('GameStarted', e8.global.gameController) },
-      { name: 'GamePaused', instance: new GamePaused('GamePaused', e8.global.gameController) },
-      { name: 'GameRestarted', instance: new GameRestarted('GameRestarted', e8.global.gameController) },
-      {name:"FTLTravel", instance: new FTLTravel("FTLTravel", e8.global.gameController)},
+      { name: "GameInitialized", instance: new GameInitialized("GameInitialized")},
+      { name: 'GameStarted', instance: new GameStarted('GameStarted') },
+      { name: 'GamePaused', instance: new GamePaused('GamePaused') },
+      { name: 'GameRestarted', instance: new GameRestarted('GameRestarted') },
+      {name:"FTLTravel", instance: new FTLTravelStarted("FTLTravel")},
     ];
 
     this.#fsm.registerStates(this.#states);

@@ -3,13 +3,15 @@
 /**
  * @name AsteroidHandler
  */
-class AsteroidHandler {
+class AsteroidHandler extends Handler{
   #asteroids = [];
   #canvases = {};
   #contexts = {};
   #upcoming = 10000;
 
-  constructor(){}
+  constructor(){
+    super ()
+  }
 
   /**
    * @name init
@@ -54,21 +56,20 @@ class AsteroidHandler {
         rotation : 5,
       })
       this.#asteroids.push(asteroid);
-      //e8.global.gameLoop.subscribe(this);
-      this.heartBeat();
+
+      this.heartBeat.timeout = 1000;
+      this.heartBeat.callback = this.heartBeatCallback
     }
   }
 
   /**
    * @name heartBeat
    */
-  heartBeat = () => {
-    setInterval(() => {
-      if (PlayerShip.coordinates > this.#upcoming) {
-        this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*50000+10000);
-        this.invokeAsteroids(Math.floor(Math.random()*10+10));
-      }
-    },1000)
+  heartBeatCallback = () => {
+    if (PlayerShip.coordinates > this.#upcoming) {
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random() * 50000 + 10000);
+      this.invokeAsteroids(Math.floor(Math.random() * 10 + 10));
+    }
   }
 
   /**

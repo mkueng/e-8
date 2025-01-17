@@ -29,9 +29,7 @@ class InputHandler {
       const subscribers = this.#subscribers.get(eventType);
       if (subscribers) {
         subscribers.add(subscriber);
-
       }
-      console.log("subscribers", this.#subscribers);
     });
   };
 

@@ -295,9 +295,6 @@ class PlayerShip extends GameObject {
     this.dependencies.forEach(dep => {
       dep.posX = this.posX;
       dep.posY = this.posY;
-      //dep.update(deltaTime);
-      //dep.posX = this.posX;
-      //dep.posY = this.posY;
     });
 
     // Recharge shield

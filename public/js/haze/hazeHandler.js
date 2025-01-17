@@ -19,7 +19,8 @@ class HazeHandler extends Handler {
     this.#colorKeys = Object.keys(e8.global.colors);
 
 
-    this.heartBeat();
+    this.heartBeat.timeout=1000;
+    this.heartBeat.callback = this.heartBeatCallBack;
 
     e8.global.resizeImageWorker.onmessage = ({data}) =>{
       this.#createHaze(data);
@@ -87,14 +88,12 @@ class HazeHandler extends Handler {
    *
    * @param data
    */
-  heartBeat = (data) => {
-    setInterval(() => {
-      if (PlayerShip.coordinates > this.#upcoming) {
-        this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*105000+100000);
-        this.#invokeHaze();
-      }
-    },1000)
+  heartBeatCallBack = (data) => {
 
+    if (PlayerShip.coordinates > this.#upcoming) {
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*105000+100000);
+      this.#invokeHaze();
+    }
   }
 
 }

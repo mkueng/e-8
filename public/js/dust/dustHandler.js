@@ -1,5 +1,5 @@
 'use strict'
-class DustHandler {
+class DustHandler extends Handler {
 
   #canvas;
   #context;
@@ -7,6 +7,7 @@ class DustHandler {
   #dustParticles = [];
 
   constructor(){
+    super();
     this.#canvas =  e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
     this.#context = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
   }
@@ -40,7 +41,7 @@ class DustHandler {
         color: this.#getRandomGrayscaleColor(velocity),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
-        posZ : 0.03* velocity,
+        posZ: 0.03 * velocity,
         velX: 0,
         width: Math.floor(Math.random()*3+2),
         height: Math.floor(Math.random()*2+1)
@@ -50,10 +51,7 @@ class DustHandler {
   }
 
   #getRandomGrayscaleColor(velocity) {
-    // Generate a random value between 0 and 255 for the grayscale component
     const grayscaleValue = Math.floor(Math.random() * (velocity*-1)*6+110);
-
-    // Create an RGB color with same values for red, green, and blue
     return `rgb(${grayscaleValue}, ${grayscaleValue}, ${grayscaleValue})`;
   }
 }
