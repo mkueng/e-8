@@ -6,7 +6,7 @@ class Game {
   #playerShipHandler
   #asteroidHandler
   #enemyShipHandler
-#freighterHandler
+  #freighterHandler
 
   constructor({
                 gameLoop,
@@ -14,8 +14,8 @@ class Game {
                 playerShipHandler,
                 asteroidHandler,
                 hazeHandler,
-    enemyShipHandler,
-    freighterHandler
+                enemyShipHandler,
+                freighterHandler
   }) {
     this.#gameLoop = gameLoop;
     this.#dustHandler = dustHandler;
@@ -32,9 +32,8 @@ class Game {
     this.#dustHandler.invokeDust();
     this.#asteroidHandler.startHeartBeat();
     this.#hazeHandler.startHeartBeat();
-    this.#enemyShipHandler.startCreation(3000);
+    this.#enemyShipHandler.startCreation(1000);
     await this.#freighterHandler.create();
-
+    document.querySelector("#game").style.display = "block";
   }
-
 }

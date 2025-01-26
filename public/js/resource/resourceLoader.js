@@ -2,8 +2,11 @@
 class ResourceLoader {
 
   #resourceWorker;
+  #resourcesBasePath;
 
-  constructor(){
+  constructor({resourcesBasePath}){
+    this.#resourcesBasePath = resourcesBasePath;
+
     //this.#resourceWorker = new Worker('js/workers/fetchResourcesWorker.js');
   }
 
@@ -14,7 +17,12 @@ class ResourceLoader {
    */
   #loadImage = (resourceObject) => {
     return new Promise((resolve, reject) => {
-      const resourcePath = resourceObject.resourcePath+resourceObject.filename+"."+resourceObject.type;
+      const resourcePath = this.#resourcesBasePath  +
+        resourceObject.resourcePath+resourceObject.filename +
+        "." +
+        resourceObject.type;
+
+      console.log("resourcePath:", resourcePath);
       resourceObject.image = new Image();
       resourceObject.image.src = resourcePath;
       resourceObject.image.onload = () => resolve(resourceObject);

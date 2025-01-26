@@ -275,7 +275,7 @@ class Util {
    * @param rgb
    * @returns {*}
    */
-  static createRandomRGB = (rgb)=>{
+  static createRandomRGB = (rgb,range)=>{
     // Check if the input array has at least 3 elements
     if (rgb && rgb.length >= 3) {
       return rgb; // If yes, return the input array
@@ -284,8 +284,8 @@ class Util {
       if (!rgb) {
         rgb = []; // Initialize the array if it doesn't exist
       }
-      rgb.push(Util.randomIntInRange(256)); // Random value between 0 and 255
-      return this.createRandomRGB(rgb); // Recursively call the function with the updated array
+      rgb.push(Util.randomIntInRange(range)); // Random value between 0 and 255
+      return this.createRandomRGB(rgb, range); // Recursively call the function with the updated array
     }
   }
 }

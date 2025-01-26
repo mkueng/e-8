@@ -6,10 +6,7 @@ class GameController {
     #enemyShipHandler;
     #galaxy;
 
-
     constructor() {
-
-        //this.stateHandler.trigger(StateHandler.actions.startGame);
     }
 
     init = async () =>{
@@ -43,10 +40,10 @@ class GameController {
         this.freighterHandler = new FreighterHandler();
         await this.freighterHandler.init();
 
-
+        // game loop
         this.#gameLoop = new GameLoop();
 
-        this.game = new Game({
+        this.#game = new Game({
             gameLoop: this.#gameLoop,
             dustHandler: e8.global.dustHandler,
             playerShipHandler: this.#playerShipHandler,
@@ -55,10 +52,10 @@ class GameController {
             enemyShipHandler: this.#enemyShipHandler,
             freighterHandler: this.freighterHandler
         });
-        document.querySelector("#game").style.display = "block";
+
     }
 
     startGame = async ()=>{
-        await this.game.start();
+        await this.#game.start();
     }
 }

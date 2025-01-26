@@ -3,7 +3,8 @@
 class ProceduralEnemyShipFactory {
 
   static shipTypes = {
-    EnemyShipType1: ProceduralEnemyShipType1
+    EnemyShipType1: ProceduralEnemyShipType1,
+    EnemyShipType2: ProceduralEnemyShipType2
   }
 
   /**
@@ -16,7 +17,8 @@ class ProceduralEnemyShipFactory {
     this.particlesContext = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
     this.particlesCanvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
     this.enemyShipHandler = enemyShipHandler;
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1()
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1();
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2();
   }
 
   /**
@@ -25,6 +27,7 @@ class ProceduralEnemyShipFactory {
    */
   invoke = async () =>{
     await ProceduralEnemyShipFactory.shipTypes.EnemyShipType1.invoke();
+    await ProceduralEnemyShipFactory.shipTypes.EnemyShipType2.invoke();
   }
 
   /**
@@ -77,7 +80,7 @@ class ProceduralEnemyShipFactory {
 
       //create ship instance once ship image is loaded
       img.onload = () => {
-        const velX = -1 * ((Math.random()*4*(1/shipSize))+3);
+        const velX = -1 * ((Math.random()*4*(1/shipSize))+3) /10;
      
         let shipObject = new EnemyShip({
           canvas: canvas,

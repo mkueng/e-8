@@ -1,11 +1,11 @@
-class ProceduralEnemyShipType1 {
+class ProceduralEnemyShipType2 {
 
-  #proceduralEnemyShipType1Image;
+  #proceduralEnemyShipType2Image;
   #particleGenerator;
 
   static shipTypeVariations = {
     0: {
-      shipSize: 1,
+      shipSize: 3,
       scale: 0.6,
       weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       propulsion:  {
@@ -30,7 +30,7 @@ class ProceduralEnemyShipType1 {
       },
     },
     1: {
-      shipSize: 3,
+      shipSize: 5,
       scale: 0.7,
       particles: [],
       playerShipTracking : true,
@@ -55,7 +55,7 @@ class ProceduralEnemyShipType1 {
       },
     },
     2: {
-      shipSize: 5,
+      shipSize: 7,
       scale: 0.8,
       particles: [],
       playerShipTracking : false,
@@ -80,8 +80,8 @@ class ProceduralEnemyShipType1 {
       },
     },
     3: {
-      shipSize: 7,
-      scale: 0.9,
+      shipSize: 9,
+      scale: 1,
       particles: [],
       playerShipTracking : false,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
@@ -109,16 +109,16 @@ class ProceduralEnemyShipType1 {
   constructor({particleGenerator}){
     console.log("particleGenerator", particleGenerator);
     this.#particleGenerator = particleGenerator;
-    this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()
+    this.#proceduralEnemyShipType2Image = new ProceduralEnemyShipImageType2()
   }
 
   invoke = async () =>{
 
-    await this.#proceduralEnemyShipType1Image.invoke();
+    await this.#proceduralEnemyShipType2Image.invoke();
     console.log("INVOKE ProceduralEnemyShipType1");
     await this.#createParticlesForAllShipTypeVariations({
-      shipType: this.#proceduralEnemyShipType1Image,
-      shipTypeVariations: ProceduralEnemyShipType1.shipTypeVariations
+      shipType: this.#proceduralEnemyShipType2Image,
+      shipTypeVariations: ProceduralEnemyShipType2.shipTypeVariations
     })
   }
 
@@ -129,8 +129,8 @@ class ProceduralEnemyShipType1 {
    */
   createImage = async ({shipTypeVariation}) =>{
     console.log("shipTypeVariation:", shipTypeVariation);
-    console.log("this.#proceduralEnemyShipType1Image:", this.#proceduralEnemyShipType1Image)
-    return await this.#proceduralEnemyShipType1Image.create({
+    console.log("this.#proceduralEnemyShipType1Image:", this.#proceduralEnemyShipType2Image)
+    return await this.#proceduralEnemyShipType2Image.create({
       shipSize: shipTypeVariation.shipSize,
       scale: shipTypeVariation.scale
     });

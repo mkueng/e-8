@@ -3,7 +3,7 @@ class DustHandler extends Handler {
 
   #canvas;
   #context;
-  #amountOfParticles = 50;
+  #amountOfParticles = 30;
   #dustParticles = [];
 
   constructor(){

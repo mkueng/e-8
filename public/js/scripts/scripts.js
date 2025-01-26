@@ -169,7 +169,9 @@ class Scripts {
     // enemyShip
     await ScriptLoader.loadScript("js/procedural/ships/proceduralShipImage.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipImageType1.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipImageType2.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipType1.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipType2.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/enemyShip/enemyShipHandler.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/enemyShip/proceduralEnemyShipFactory.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/enemyShip/enemyShip.js?v="+Scripts.version);

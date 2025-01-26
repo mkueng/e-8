@@ -4,13 +4,16 @@ class ResourceHandler {
 
   #resourcePool = {};
   #soundResourcePool = {};
+  #resourcesBasePath = null;
 
   /**
    *
    * @returns {ResourceHandler}
    */
-  constructor() {
-    this.resourceLoader = new ResourceLoader();
+  constructor({resourcesBasePath}){
+    this.#resourcesBasePath = resourcesBasePath;
+    console.log("resourcesBasePath:", resourcesBasePath);
+    this.resourceLoader = new ResourceLoader({resourcesBasePath});
   }
 
   /**

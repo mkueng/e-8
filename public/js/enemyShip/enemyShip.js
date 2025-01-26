@@ -65,9 +65,15 @@ class EnemyShip extends GameObject {
       playerShipTracking
     });
 
-    this.activeWeapon = this.weapons[PhotonTorpedoEnemy]
-    this.shield.relatedShip = this;
-    this.initializeShield();
+    if (this.weapons) {
+      this.activeWeapon = this.weapons[PhotonTorpedoEnemy];
+    }
+
+    if (this.shield) {
+      this.shield.relatedShip = this;
+      this.initializeShield();
+    }
+
   }
 
   fireWeapon = () => {

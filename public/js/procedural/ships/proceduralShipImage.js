@@ -56,10 +56,7 @@ class ProceduralShipImage {
 
       const fetchedResourceObjects = await Promise.all(promises);
       fetchedResourceObjects.forEach(resourceObject => {
-
-
           resourceObjects[type][resourceObject.fileName] = resourceObject;
-
       });
     }
 
@@ -151,7 +148,7 @@ class ProceduralShipImage {
                 offset,
                 alpha
   })=>{
-    const rgb = Util.createRandomRGB();
+    const rgb = Util.createRandomRGB([], 150);
     const gradient = this.ctx.createLinearGradient(0,0,((shipSize+2)*offset),offset)
     this.ctx.globalAlpha = alpha;
     this.ctx.strokeStyle = "transparent";
@@ -159,9 +156,9 @@ class ProceduralShipImage {
     this.ctx.fillStyle = gradient;
 
     this.ctx.beginPath();
-    gradient.addColorStop(0.3, `rgba(1, 1, 1, 1)`);
-    gradient.addColorStop(0.6, `rgba(${rgb.join()}, 0.3)`);
-    gradient.addColorStop(1, 'rgba(100, 100, 100, 0.9)');
+    gradient.addColorStop(0.3, `rgba(1, 1, 1, 0.9)`);
+    gradient.addColorStop(0.8, `rgba(${rgb.join()}, 0.6)`);
+    gradient.addColorStop(0.96, 'rgba(255, 255, 255, 1)');
     this.ctx.fillRect(0,0,((shipSize+2)*offset),offset);
     this.ctx.closePath();
     this.ctx.globalAlpha = 1;

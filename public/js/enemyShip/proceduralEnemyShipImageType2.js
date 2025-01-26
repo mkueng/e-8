@@ -1,18 +1,16 @@
 'use strict'
-class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
+class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
 
   #tiles = new Map([
-    ["feature", 3],
-    ["pattern", 3],
-    ["gadget" ,7],
-    ["front", 10],
-    ["middle", 10],
-    ["back", 10]
+    ["back", 3],
+    ["front", 3],
+    ["gadget" ,4],
+    ["middle", 5]
   ])
 
-  #resourcePath =  "/procedural/enemyShips/";
-  #filePrefix = "enemy_ship";
-  #tileSize = 64;
+  #resourcePath =  "/procedural/enemyShips/shipType2/";
+  #filePrefix = "";
+  #tileSize = 48;
   #orientation = false;
   #tilesResourceObjects;
 
@@ -26,7 +24,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
    * @returns {Promise<void>}
    */
   invoke = async () => {
-    console.log("invoke ProceduralEnemyShipImageType1");
+    console.log("invoke ProceduralEnemyShipImageType2");
     this.#tilesResourceObjects = await this.fetchResources({
       tiles : this.#tiles,
       filePrefix : this.#filePrefix,
@@ -63,74 +61,61 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       orientation : this.#orientation
     })
 
-    this.addDecoration({
-      resourceObjects : this.#tilesResourceObjects["feature"],
-       category : "feature",
-       startTile : 1,
-       endTile : shipSize-1,
-       offset : offset,
-       filePrefix : this.#filePrefix,
-       alpha : 1,
-       globalCompositionType : "source-atop"
-     })
-
-     this.addDecoration({
-       resourceObjects : this.#tilesResourceObjects["pattern"],
-       category : "pattern",
-       startTile : 0,
-       endTile : shipSize,
-       offset : offset,
-       filePrefix : this.#filePrefix,
-       alpha : 1,
-       globalCompositionType : "source-atop"
-     })
-
-    this.addColor({
-        shipSize : shipSize,
-        offset : offset,
-        alpha : 0
-      })
-
-    this.addDecoration({
-       resourceObjects : this.#tilesResourceObjects["gadget"],
-       category : "gadget",
-       startTile : 1,
-       endTile : shipSize-1,
-       offset : offset,
-       filePrefix : this.#filePrefix,
-       alpha : 1,
-       globalCompositionType : "source-over"
-     })
-
-
-     this.addColor({
-       shipSize : shipSize,
-       offset : offset,
-       alpha : 0.4
-     })
-
-
-     this.addColor({
-       shipSize : shipSize,
-       offset : offset,
-       alpha : 0.3
-     })
 
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
       category : "gadget",
-      startTile : 2,
-      endTile : shipSize,
+      startTile : 1,
+      endTile : shipSize-1,
       offset : offset,
       filePrefix : this.#filePrefix,
       alpha : 1,
       globalCompositionType : "source-over"
     })
+
+
+
     this.addColor({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.6
+      alpha : 0.5
     })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 1,
+      endTile : shipSize-1,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 0.3,
+      globalCompositionType : "source-over"
+    })
+
+    this.addColor({
+      shipSize : shipSize,
+      offset : offset,
+      alpha : 0.3
+    })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 2,
+      endTile : shipSize-2,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 1,
+      globalCompositionType : "source-over"
+    })
+
+    this.addColor({
+      shipSize : shipSize,
+      offset : offset,
+      alpha : 0.3
+    })
+
+
 
 
 
