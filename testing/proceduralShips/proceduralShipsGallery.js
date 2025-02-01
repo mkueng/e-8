@@ -15,7 +15,7 @@ class ProceduralShipsGallery {
     e8.global.canvasHandler = new CanvasHandler();
     e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
 
-    this.enemyShipType1  = new ProceduralEnemyShipType2({ particleGenerator: this.particleGenerator })
+    this.enemyShipType1  = new ProceduralEnemyShipType1({ particleGenerator: this.particleGenerator })
 
     this.variation = 0;
     this.x = 50;
@@ -34,6 +34,10 @@ class ProceduralShipsGallery {
     });
   }
 
+  createShips = async ({shipTypes}) => {
+
+  }
+
   createShip = async ({ shipType}) => {
 
     //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
@@ -46,7 +50,6 @@ class ProceduralShipsGallery {
     img.src = URL.createObjectURL(shipImageData.blob);
     img.onload = () => {
       this.ctx.drawImage(img, this.x, this.y);
-      console.log("img.width:", img.width);
       this.x = this.x + img.width+20;
       if (this.x > this.canvas.width - 100) {
         this.x = 50;

@@ -2,15 +2,15 @@
 class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
 
   #tiles = new Map([
-    ["back", 3],
-    ["front", 3],
-    ["gadget" ,4],
-    ["middle", 5]
+    ["back", 2],
+    ["front", 2],
+    ["gadget" ,3],
+    ["middle", 3]
   ])
 
   #resourcePath =  "/procedural/enemyShips/shipType2/";
   #filePrefix = "";
-  #tileSize = 48;
+  #tileSize = 100 ;
   #orientation = false;
   #tilesResourceObjects;
 
@@ -70,7 +70,7 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       offset : offset,
       filePrefix : this.#filePrefix,
       alpha : 1,
-      globalCompositionType : "source-over"
+      globalCompositionType : "source-atop"
     })
 
 
@@ -88,31 +88,21 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       endTile : shipSize-1,
       offset : offset,
       filePrefix : this.#filePrefix,
-      alpha : 0.3,
+      alpha : 0.9,
       globalCompositionType : "source-over"
     })
+
 
     this.addColor({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.3
+      alpha : 0.7
     })
 
-    this.addDecoration({
-      resourceObjects : this.#tilesResourceObjects["gadget"],
-      category : "gadget",
-      startTile : 2,
-      endTile : shipSize-2,
-      offset : offset,
-      filePrefix : this.#filePrefix,
-      alpha : 1,
-      globalCompositionType : "source-over"
-    })
-
-    this.addColor({
+    this.addGradient({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.3
+      alpha : 0.8
     })
 
 

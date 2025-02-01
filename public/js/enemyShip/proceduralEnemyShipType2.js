@@ -5,8 +5,8 @@ class ProceduralEnemyShipType2 {
 
   static shipTypeVariations = {
     0: {
-      shipSize: 3,
-      scale: 0.6,
+      shipSize: 2,
+      scale: 1,
       weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
@@ -30,8 +30,8 @@ class ProceduralEnemyShipType2 {
       },
     },
     1: {
-      shipSize: 5,
-      scale: 0.7,
+      shipSize: 3,
+      scale: 1,
       particles: [],
       playerShipTracking : true,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
@@ -55,8 +55,8 @@ class ProceduralEnemyShipType2 {
       },
     },
     2: {
-      shipSize: 7,
-      scale: 0.8,
+      shipSize: 4,
+      scale: 1,
       particles: [],
       playerShipTracking : false,
       weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
@@ -80,7 +80,7 @@ class ProceduralEnemyShipType2 {
       },
     },
     3: {
-      shipSize: 9,
+      shipSize: 5,
       scale: 1,
       particles: [],
       playerShipTracking : false,

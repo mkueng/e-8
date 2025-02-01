@@ -137,6 +137,28 @@ class ProceduralShipImage {
   }
 
 
+  addGradient = ({
+    shipSize,
+    offset,
+    alpha
+  }) => {
+    const gradient = this.ctx.createLinearGradient(0,0,((shipSize+2)*offset),offset)
+    this.ctx.globalAlpha = alpha;
+    this.ctx.strokeStyle = "transparent";
+    this.ctx.globalCompositeOperation = 'source-atop';
+    this.ctx.fillStyle = gradient;
+
+    this.ctx.beginPath();
+    gradient.addColorStop(0.3, `rgba(1, 1, 1, 0.7)`);
+    gradient.addColorStop(0.8, `rgba(175, 175, 175, 0.8)`);
+    gradient.addColorStop(0.9, 'rgba(255, 255, 255, 1)');
+    this.ctx.fillRect(0,0,((shipSize+2)*offset),offset);
+    this.ctx.closePath();
+    this.ctx.globalAlpha = 1;
+
+  }
+
+
   /**
    *
    * @param shipSize
@@ -156,9 +178,9 @@ class ProceduralShipImage {
     this.ctx.fillStyle = gradient;
 
     this.ctx.beginPath();
-    gradient.addColorStop(0.3, `rgba(1, 1, 1, 0.9)`);
+    gradient.addColorStop(0.0, `rgba(${rgb.join()}, 0.6)`);
     gradient.addColorStop(0.8, `rgba(${rgb.join()}, 0.6)`);
-    gradient.addColorStop(0.96, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(1, `rgba(${rgb.join()}, 0.6)`);
     this.ctx.fillRect(0,0,((shipSize+2)*offset),offset);
     this.ctx.closePath();
     this.ctx.globalAlpha = 1;
