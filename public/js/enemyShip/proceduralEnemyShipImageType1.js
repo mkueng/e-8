@@ -12,7 +12,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
 
   #resourcePath =  "/procedural/enemyShips/shipType1/";
   #filePrefix = "";
-  #tileSize = 64;
+  #tileSize = 56;
   #orientation = false;
   #tilesResourceObjects;
 
@@ -67,7 +67,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       resourceObjects : this.#tilesResourceObjects["feature"],
        category : "feature",
        startTile : 1,
-       endTile : shipSize-1,
+       endTile : shipSize,
        offset : offset,
        filePrefix : this.#filePrefix,
        alpha : 1,
@@ -85,17 +85,12 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
        globalCompositionType : "source-atop"
      })
 
-    this.addColor({
-        shipSize : shipSize,
-        offset : offset,
-        alpha : 0
-      })
 
     this.addDecoration({
        resourceObjects : this.#tilesResourceObjects["gadget"],
        category : "gadget",
        startTile : 1,
-       endTile : shipSize-1,
+       endTile : shipSize,
        offset : offset,
        filePrefix : this.#filePrefix,
        alpha : 1,
@@ -106,31 +101,32 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
      this.addColor({
        shipSize : shipSize,
        offset : offset,
-       alpha : 0.4
+       alpha : 0.7
      })
 
+      this.addGradient({
+          shipSize : shipSize,
+          offset : offset,
+          alpha : 0.5
+      })
 
-     this.addColor({
-       shipSize : shipSize,
-       offset : offset,
-       alpha : 0.3
-     })
 
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
       category : "gadget",
       startTile : 2,
-      endTile : shipSize,
+      endTile : shipSize+1,
       offset : offset,
       filePrefix : this.#filePrefix,
       alpha : 1,
       globalCompositionType : "source-over"
     })
-    this.addColor({
-      shipSize : shipSize,
-      offset : offset,
-      alpha : 0.6
-    })
+
+      this.addGradient({
+          shipSize : shipSize,
+          offset : offset,
+          alpha : 0.5
+      })
 
 
 

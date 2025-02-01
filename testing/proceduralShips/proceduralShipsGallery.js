@@ -16,6 +16,7 @@ class ProceduralShipsGallery {
     e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
 
     this.enemyShipType1  = new ProceduralEnemyShipType1({ particleGenerator: this.particleGenerator })
+    this.enemyShipType2 = new ProceduralEnemyShipType2({ particleGenerator: this.particleGenerator })
 
     this.variation = 0;
     this.x = 50;
@@ -28,14 +29,21 @@ class ProceduralShipsGallery {
 
   init = async () => {
     await this.enemyShipType1.invoke();
-    this. variationKeys = Object.keys(ProceduralEnemyShipType2.shipTypeVariations);
-    await this.createShip({
-      shipType: this.enemyShipType1
+    await this.enemyShipType2.invoke();
+    this.variationKeys1 = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
+    this.variationKeys2 = Object.keys(ProceduralEnemyShipType2.shipTypeVariations);
+    await this.createShips({
+      shipType1: this.enemyShipType1,
+      shipType2: this.enemyShipType2
     });
   }
 
-  createShips = async ({shipTypes}) => {
-
+  createShips = async ({shipTypes={}}) => {
+    for (const shipType in shipTypes) {
+      for (let i = 0; i < 6; i++) {
+        await this.createShip(shipType)
+      }
+    }
   }
 
   createShip = async ({ shipType}) => {
