@@ -33,21 +33,24 @@ class ProceduralShipsGallery {
     this.variationKeys1 = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
     this.variationKeys2 = Object.keys(ProceduralEnemyShipType2.shipTypeVariations);
     await this.createShips({
-      shipType1: this.enemyShipType1,
-      shipType2: this.enemyShipType2
+      shipTypes: {
+        shipType1: this.enemyShipType1,
+        shipType2: this.enemyShipType2
+      }
     });
   }
 
-  createShips = async ({shipTypes={}}) => {
+  createShips = async ({shipTypes}) => {
+    console.log("shipTypes:", shipTypes);
     for (const shipType in shipTypes) {
       for (let i = 0; i < 6; i++) {
-        await this.createShip(shipType)
+        await this.createShip({shipType: shipTypes[shipType]})
       }
     }
   }
 
   createShip = async ({ shipType}) => {
-
+    console.log("shipType:", shipType);
     //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
     const shipImageData = await shipType.createImage({
 
