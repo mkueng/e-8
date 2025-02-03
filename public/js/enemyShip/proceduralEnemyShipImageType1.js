@@ -33,7 +33,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       resourcePath : this.#resourcePath
     })
 
-    console.log("this.#tilesResourceObjects:", this.#tilesResourceObjects);
+    //console.log("this.#tilesResourceObjects:", this.#tilesResourceObjects);
   }
 
   /**
@@ -43,7 +43,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
    * @returns {Promise<ImageData>}
    */
   create = async ({ shipSize, scale })=>{
-    console.log("shipSize:", shipSize, "scale:", scale);
+    //console.log("shipSize:", shipSize, "scale:", scale);
     if (typeof shipSize !== 'number' || typeof scale !== 'number' || shipSize <= 0 || scale <= 0) {
       throw new Error('Invalid parameters: shipSize and scale must be positive numbers.');
     }
@@ -53,8 +53,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       offset : offset
     })
 
-    console.log("this.#tilesResourceObjects:", this.#tilesResourceObjects);
-
+    //
     this.createShape({
       resourceObjects : this.#tilesResourceObjects,
       offset : offset,

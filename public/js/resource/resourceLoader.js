@@ -22,7 +22,7 @@ class ResourceLoader {
         "." +
         resourceObject.type;
 
-      console.log("resourcePath:", resourcePath);
+      //console.log("resourcePath:", resourcePath);
       resourceObject.image = new Image();
       resourceObject.image.src = resourcePath;
       resourceObject.image.onload = () => resolve(resourceObject);
