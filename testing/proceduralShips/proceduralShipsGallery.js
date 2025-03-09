@@ -9,7 +9,8 @@ class ProceduralShipsGallery {
     this.ctx.fillStyle = "white";
 
     this.particleGenerator = new ParticleGenerator();
-    console.log("this.particleGenerator", this.particleGenerator);
+    for (const shipType in ProceduralEnemyShipFactory.shipTypes)
+
     this.proceduralEnemyShipType2 = new ProceduralEnemyShipType1({ particleGenerator: this.particleGenerator });
 
     e8.global.canvasHandler = new CanvasHandler();
