@@ -31,17 +31,34 @@ class ProceduralShipsGallery {
   }
 
   init = async () => {
-    await this.enemyShipType1.invoke();
-    await this.enemyShipType2.invoke();
-    this.variationKeys1 = Object.keys(ProceduralEnemyShipType1.shipTypeVariations);
-    this.variationKeys2 = Object.keys(ProceduralEnemyShipType2.shipTypeVariations);
+    for (const ship in this.enemyShips) {
+      await this.enemyShips[ship].instance.invoke()
+    }
+
+   // await Promise.all(Object.values(this.enemyShips).map(ship => ship.instance.invoke()));
+
+
+    /*
     await this.createShips({
       shipTypes: {
         shipType1: this.enemyShipType1,
         shipType2: this.enemyShipType2
       }
-    });
+    });*/
   }
+
+  createEnemyShips() {
+    return Object.fromEntries(
+        Object.entries(ProceduralEnemyShipFactory.shipTypes).map(([shipType, ShipClass]) => [
+          shipType,
+          {
+            instance: new ShipClass({ particleGenerator: this.particleGenerator }),
+            variations: ShipClass.shipTypeVariations
+          }
+        ])
+    );
+  }
+
 
   createShips = async ({shipTypes}) => {
     console.log("shipTypes:", shipTypes);
