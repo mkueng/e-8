@@ -7,19 +7,21 @@ class ProceduralShipsGallery {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "15px courier,sans-serif";
     this.ctx.fillStyle = "white";
+    this.enemyShips = {};
 
     this.particleGenerator = new ParticleGenerator();
-    for (const shipType in ProceduralEnemyShipFactory.shipTypes)
+    for (const shipType in ProceduralEnemyShipFactory.shipTypes) {
+      this.enemyShips[shipType] = {};
+      this.enemyShips[shipType]["instance"] = new ProceduralEnemyShipFactory.shipTypes[shipType]({particleGenerator: this.particleGenerator });
+      this.enemyShips[shipType]["variations"]=   ProceduralEnemyShipFactory.shipTypes[shipType].shipTypeVariations;
+    }
 
-    this.proceduralEnemyShipType2 = new ProceduralEnemyShipType1({ particleGenerator: this.particleGenerator });
+    console.log("this.enemyShips:", this.enemyShips);
+
 
     e8.global.canvasHandler = new CanvasHandler();
     e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
-
-    this.enemyShipType1  = new ProceduralEnemyShipType1({ particleGenerator: this.particleGenerator })
-    this.enemyShipType2 = new ProceduralEnemyShipType2({ particleGenerator: this.particleGenerator })
-
-    this.variation = 0;
+    
     this.x = 50;
     this.y = 100;
 
@@ -51,7 +53,7 @@ class ProceduralShipsGallery {
   }
 
   createShip = async ({ shipType}) => {
-    console.log("shipType:", shipType);
+    //console.log("shipType:", shipType);
     //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
     const shipImageData = await shipType.createImage({
 
