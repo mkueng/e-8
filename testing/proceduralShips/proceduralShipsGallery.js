@@ -1,6 +1,8 @@
 class ProceduralShipsGallery {
 
   constructor() {
+    e8.global.canvasHandler = new CanvasHandler();
+    e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
     this.canvas = document.getElementById("canvas");
     this.canvas.width = e8.global.screenWidth - 20;
     this.canvas.height = e8.global.screenHeight -20;
@@ -10,17 +12,9 @@ class ProceduralShipsGallery {
     this.enemyShips = {};
 
     this.particleGenerator = new ParticleGenerator();
-    for (const shipType in ProceduralEnemyShipFactory.shipTypes) {
-      this.enemyShips[shipType] = {};
-      this.enemyShips[shipType]["instance"] = new ProceduralEnemyShipFactory.shipTypes[shipType]({particleGenerator: this.particleGenerator });
-      this.enemyShips[shipType]["variations"]=   ProceduralEnemyShipFactory.shipTypes[shipType].shipTypeVariations;
-    }
+    this.enemyShips = this.createEnemyShips({particleGenerator: this.particleGenerator, shipTypes:ProceduralEnemyShipFactory.shipTypes});
 
     console.log("this.enemyShips:", this.enemyShips);
-
-
-    e8.global.canvasHandler = new CanvasHandler();
-    e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
     
     this.x = 50;
     this.y = 100;
@@ -47,12 +41,12 @@ class ProceduralShipsGallery {
     });*/
   }
 
-  createEnemyShips() {
+  createEnemyShips({particleGenerator,shipTypes}) {
     return Object.fromEntries(
-        Object.entries(ProceduralEnemyShipFactory.shipTypes).map(([shipType, ShipClass]) => [
+        Object.entries(shipTypes).map(([shipType, ShipClass]) => [
           shipType,
           {
-            instance: new ShipClass({ particleGenerator: this.particleGenerator }),
+            instance: new ShipClass({ particleGenerator }),
             variations: ShipClass.shipTypeVariations
           }
         ])
