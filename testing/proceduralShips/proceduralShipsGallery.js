@@ -25,11 +25,7 @@ class ProceduralShipsGallery {
   }
 
   init = async () => {
-    for (const ship in this.enemyShips) {
-      await this.enemyShips[ship].instance.invoke()
-    }
-
-   // await Promise.all(Object.values(this.enemyShips).map(ship => ship.instance.invoke()));
+    await Promise.all(Object.values(this.enemyShips).map(ship => ship.instance.invoke()));
 
 
     /*
@@ -63,12 +59,12 @@ class ProceduralShipsGallery {
     }
   }
 
-  createShip = async ({ shipType}) => {
+  createShip = async ({ shipType, variation}) => {
     //console.log("shipType:", shipType);
     //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
     const shipImageData = await shipType.createImage({
 
-      shipTypeVariation: ProceduralEnemyShipType2.shipTypeVariations[""+this.variation]
+      shipTypeVariation: variation
 
     });
     const img = new Image();
@@ -80,6 +76,7 @@ class ProceduralShipsGallery {
         this.x = 50;
         this.y =this.y + img.height+50;
       }
+      /*
       if (this.variation < this.variationKeys.length-1) {
         this.variation++;
       } else {
@@ -87,7 +84,7 @@ class ProceduralShipsGallery {
       }
       if (this.y < this.canvas.height - 100) {
         this.createShip({shipType: this.enemyShipType1})
-      }
+      }*/
     }
 
 
