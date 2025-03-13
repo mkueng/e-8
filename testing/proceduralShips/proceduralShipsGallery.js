@@ -12,8 +12,10 @@ class ProceduralShipsGallery {
     this.enemyShips = {};
 
     this.particleGenerator = new ParticleGenerator();
-    this.enemyShips = this.createEnemyShips({particleGenerator: this.particleGenerator, shipTypes:ProceduralEnemyShipFactory.shipTypes});
-
+    this.enemyShips = this.createEnemyShipObjects({
+      particleGenerator: this.particleGenerator,
+      shipTypes:ProceduralEnemyShipFactory.shipTypes
+    });
     console.log("this.enemyShips:", this.enemyShips);
     
     this.x = 50;
@@ -21,23 +23,17 @@ class ProceduralShipsGallery {
 
     this.init().then(() => {
       console.log("init complete");
+      for (const enemyShip in this.enemyShips) {
+        
+      }
     });
   }
 
   init = async () => {
     await Promise.all(Object.values(this.enemyShips).map(ship => ship.instance.invoke()));
-
-
-    /*
-    await this.createShips({
-      shipTypes: {
-        shipType1: this.enemyShipType1,
-        shipType2: this.enemyShipType2
-      }
-    });*/
   }
 
-  createEnemyShips({particleGenerator,shipTypes}) {
+  createEnemyShipObjects({particleGenerator,shipTypes}) {
     return Object.fromEntries(
         Object.entries(shipTypes).map(([shipType, ShipClass]) => [
           shipType,
@@ -59,14 +55,7 @@ class ProceduralShipsGallery {
     }
   }
 
-  createShip = async ({ shipType, variation}) => {
-    //console.log("shipType:", shipType);
-    //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
-    const shipImageData = await shipType.createImage({
-
-      shipTypeVariation: variation
-
-    });
+  drawShip ({shipImageData}) {
     const img = new Image();
     img.src = URL.createObjectURL(shipImageData.blob);
     img.onload = () => {
@@ -86,7 +75,13 @@ class ProceduralShipsGallery {
         this.createShip({shipType: this.enemyShipType1})
       }*/
     }
+  }
 
-
+  createShip = async ({ shipType, variation}) => {
+    //console.log("shipType:", shipType);
+    //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
+    return await shipType.createImage({
+      shipTypeVariation: variation
+    });
   }
 }
