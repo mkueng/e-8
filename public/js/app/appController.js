@@ -124,7 +124,7 @@ class AppController {
   #createGlobalHandlers = ()=>{
     e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
     e8.global.stateHandler = new StateHandler();
-    e8.global.resourceHandler = new ResourceHandler();
+    e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "" });
     e8.global.canvasHandler = new CanvasHandler();
     e8.global.localStorageHandler = new LocalStorageHandler();
     e8.global.fontHandler = new FontHandler();

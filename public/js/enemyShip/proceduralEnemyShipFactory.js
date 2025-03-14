@@ -17,8 +17,8 @@ class ProceduralEnemyShipFactory {
     this.particlesContext = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
     this.particlesCanvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
     this.enemyShipHandler = enemyShipHandler;
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1();
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2();
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1(e8.global.particleGenerator);
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2(e8.global.particleGenerator);
   }
 
   /**

@@ -107,6 +107,7 @@ class ProceduralEnemyShipType1 {
   }
 
   constructor({particleGenerator}){
+    console.log("particleGenerator: ", particleGenerator);
     this.type = "EnemyShipType1";
     this.#particleGenerator = particleGenerator;
     this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()

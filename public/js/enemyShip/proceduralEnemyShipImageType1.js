@@ -10,7 +10,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
     ["back", 10]
   ])
 
-  #resourcePath =  "/procedural/enemyShips/shipType1/";
+  #resourcePath =  "resources/procedural/enemyShips/shipType1/";
   #filePrefix = "";
   #tileSize = 56;
   #orientation = false;
