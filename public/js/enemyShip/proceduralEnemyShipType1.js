@@ -107,7 +107,7 @@ class ProceduralEnemyShipType1 {
   }
 
   constructor({particleGenerator}){
-    console.log("particleGenerator", particleGenerator);
+    this.type = "EnemyShipType1";
     this.#particleGenerator = particleGenerator;
     this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()
   }
@@ -115,7 +115,6 @@ class ProceduralEnemyShipType1 {
   invoke = async () =>{
 
     await this.#proceduralEnemyShipType1Image.invoke();
-    console.log("INVOKE ProceduralEnemyShipType1");
     await this.#createParticlesForAllShipTypeVariations({
       shipType: this.#proceduralEnemyShipType1Image,
       shipTypeVariations: ProceduralEnemyShipType1.shipTypeVariations
@@ -128,8 +127,6 @@ class ProceduralEnemyShipType1 {
    * @returns {Promise<*>}
    */
   createImage = async ({shipTypeVariation}) =>{
-    console.log("shipTypeVariation:", shipTypeVariation);
-    console.log("this.#proceduralEnemyShipType1Image:", this.#proceduralEnemyShipType1Image)
     return await this.#proceduralEnemyShipType1Image.create({
       shipSize: shipTypeVariation.shipSize,
       scale: shipTypeVariation.scale

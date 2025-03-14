@@ -5,7 +5,7 @@ class ProceduralShipsGallery {
     e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
     this.canvas = document.getElementById("canvas");
     this.canvas.width = e8.global.screenWidth - 20;
-    this.canvas.height = e8.global.screenHeight -20;
+    this.canvas.height = 5000;
     this.ctx = this.canvas.getContext("2d");
     this.ctx.font = "15px courier,sans-serif";
     this.ctx.fillStyle = "white";
@@ -19,13 +19,21 @@ class ProceduralShipsGallery {
     console.log("this.enemyShips:", this.enemyShips);
     
     this.x = 50;
-    this.y = 100;
+    this.y = 50;
 
     this.init().then(() => {
       console.log("init complete");
-      for (const enemyShip in this.enemyShips) {
-        
-      }
+      Promise.all(
+        Object.values(this.enemyShips).flatMap(({ instance, variations }) =>
+          Object.values(variations).flatMap(variation =>
+            Array.from({ length: 3 }, () =>
+              this.createShip({ shipType: instance, variation }).then(shipImageData =>
+                this.drawShip({ shipImageData:shipImageData, shipType:instance.type, variation:variation})
+              )
+            )
+          )
+        )
+      );
     });
   }
 
@@ -45,41 +53,25 @@ class ProceduralShipsGallery {
     );
   }
 
-
-  createShips = async ({shipTypes}) => {
-    console.log("shipTypes:", shipTypes);
-    for (const shipType in shipTypes) {
-      for (let i = 0; i < 6; i++) {
-        await this.createShip({shipType: shipTypes[shipType]})
-      }
-    }
-  }
-
-  drawShip ({shipImageData}) {
+  drawShip ({shipImageData, shipType, variation}) {
     const img = new Image();
     img.src = URL.createObjectURL(shipImageData.blob);
     img.onload = () => {
-      this.ctx.drawImage(img, this.x, this.y);
-      this.x = this.x + img.width+20;
-      if (this.x > this.canvas.width - 100) {
-        this.x = 50;
-        this.y =this.y + img.height+50;
-      }
-      /*
-      if (this.variation < this.variationKeys.length-1) {
-        this.variation++;
-      } else {
-        this.variation = 0;
-      }
-      if (this.y < this.canvas.height - 100) {
-        this.createShip({shipType: this.enemyShipType1})
-      }*/
+      this.y =this.y + img.height+50;
+      this.ctx.fillText(
+        shipType+" | " +
+        "Size: " + variation.shipSize +  " | " +
+       "Scale: " + variation.scale + " | " +
+        "Shield: " + variation.shield.type + " | " +
+        "Propulsion: " + variation.propulsion.type + " | " +
+        "Weapons: " + variation.weapons.map(type => type.resourceObject.name).join(", "),
+        this.x, this.y);
+
+      this.ctx.drawImage(img, this.x, this.y+20);
     }
   }
 
   createShip = async ({ shipType, variation}) => {
-    //console.log("shipType:", shipType);
-    //const { shipSize, shield, propulsion, spinner, playerShipTracking } = shipTypeVariation;
     return await shipType.createImage({
       shipTypeVariation: variation
     });
