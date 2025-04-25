@@ -1,12 +1,17 @@
 class Radar extends GameObject {
 
   #ticker = 0;
-  constructor() {
+  constructor({
+    canvasHandler
+              }) {
 
     super({
-      canvas: e8.global.canvasHandler.getCanvas("hudDynamicMiddle").canvas,
+      canvas: canvasHandler.getCanvas("hudDynamicMiddle").canvas,
       isContextPreventedOfBeingCleared: true
     });
+    Object.assign(this,{
+      canvasHandler
+    })
 
   }
 

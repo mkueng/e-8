@@ -9,16 +9,46 @@ class ProceduralEnemyShipFactory {
 
   /**
    *
+   * @param canvasHandler
    * @param enemyShipHandler
+   * @param shieldFactory
+   * @param propulsionFactory
+   * @param explosionFactory
+   * @param weaponFactory
+   * @param particleGenerator
+   * @param resourceHandler
    */
   constructor({
-    enemyShipHandler
+                canvasHandler,
+                enemyShipHandler,
+                shieldFactory,
+                propulsionFactory,
+                explosionFactory,
+                weaponFactory,
+                particleGenerator,
+                resourceHandler
   }){
-    this.particlesContext = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
-    this.particlesCanvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
+
+    Object.assign(this, {
+      canvasHandler,
+      propulsionFactory,
+      shieldFactory,
+      explosionFactory,
+      weaponFactory
+    })
+    this.particlesContext = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
+    this.particlesCanvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
     this.enemyShipHandler = enemyShipHandler;
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1(e8.global.particleGenerator);
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2(e8.global.particleGenerator);
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1({
+      particleGenerator,
+      resourceHandler,
+      canvasHandler
+    });
+    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2({
+      particleGenerator,
+      resourceHandler,
+      canvasHandler
+    });
   }
 
   /**
@@ -41,13 +71,13 @@ class ProceduralEnemyShipFactory {
     const {shipSize, shield, propulsion, spinner, playerShipTracking} = shipTypeVariation;
 
     return new Promise(async (resolve) => {
-      const shieldInstance = e8.global.shieldFactory.createShield({ ...shield, canvas });
-      const propulsionInstance = e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
-      const spinnerInstance = e8.global.propulsionFactory.createPropulsion({ ...spinner, canvas });
+      const shieldInstance = this.shieldFactory.createShield({ ...shield, canvas });
+      const propulsionInstance = this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+      const spinnerInstance = this.propulsionFactory.createPropulsion({ ...spinner, canvas });
 
       let terminationSequence = [];
       for (let i=0; i < shipSize; i++){
-        const explosion = e8.global.explosionFactory.createExplosion({
+        const explosion = this.explosionFactory.createExplosion({
           type: ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion,
           canvas: canvas,
           posDX: (i*(Math.random()*50+20))-50,
@@ -57,7 +87,7 @@ class ProceduralEnemyShipFactory {
       }
 
       let weapons = {
-        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: e8.global.weaponFactory.createWeapon({
+        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: this.weaponFactory.createWeapon({
           type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
           amount: 1,
           canvas: canvas,

@@ -23,7 +23,10 @@ class EngineTrail {
    * @param resourceObject
    * @returns {Promise<void>}
    */
-  invoke = async (resourceHandler, resourceObject) => {
+  invoke = async ({
+                    resourceHandler,
+                    resourceObject
+                  }) => {
     this.imageResource =  await resourceHandler.fetchImageResource({
       resourceObject: resourceObject
     });

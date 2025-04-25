@@ -4,6 +4,10 @@ class ClassAPlayerShipExplosion extends Explosion {
   static imageResource;
   static soundResource;
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static imageResourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.explosion,
     name : "classAPlayerShipExplosionImage",
@@ -12,6 +16,10 @@ class ClassAPlayerShipExplosion extends Explosion {
     resourcePath : "/resources/explosions/explosion_02/images/"
   })
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static soundResourceObject = new ResourceObject({
     category: ResourceObject.CATEGORIES.explosion,
     name: "classAPlayerShipExplosionSound",
@@ -20,11 +28,18 @@ class ClassAPlayerShipExplosion extends Explosion {
     resourcePath: "/resources/sounds/explosion.wav"
   })
 
-  static async invoke(resourceHandler){
-    ClassAPlayerShipExplosion.imageResource = await e8.global.resourceHandler.fetchImageResource({
+  /**
+   *
+   * @param resourceHandler
+   * @returns {Promise<void>}
+   */
+  static async init({
+                      resourceHandler
+  }){
+    ClassAPlayerShipExplosion.imageResource = await resourceHandler.fetchImageResource({
       resourceObject: ClassAPlayerShipExplosion.imageResourceObject
     });
-    ClassAPlayerShipExplosion.soundResource = await e8.global.resourceHandler.fetchSoundResource({
+    ClassAPlayerShipExplosion.soundResource = await resourceHandler.fetchSoundResource({
       resourceObject: ClassAPlayerShipExplosion.soundResourceObject});
 
   }

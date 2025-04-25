@@ -1,23 +1,23 @@
 'use strict'
-
 class PlayerShipHandler {
 
   #canvas = {};
   static activeShip = null;
 
-  constructor(){}
+  constructor({
+    inputHandler,
+    canvasHandler,
+    playerShipFactory
+              }){
+    Object.assign(this, {
+      inputHandler,
+      canvasHandler,
+      playerShipFactory
+    });
+  }
 
   init = async () =>{
-    this.#canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
-
-
-    this.playerShipFactory = new PlayerShipFactory({
-      playerShipHandler: this,
-      hudHandler: e8.global.hudHandler
-    });
-
-
-    e8.global.inputHandler.subscribe(this);
+    this.#canvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip).canvas;
   }
 
   shipDestroyed =()=>{
@@ -27,7 +27,8 @@ class PlayerShipHandler {
     PlayerShipHandler.activeShip = await this.playerShipFactory.createShip({
       shipType: PlayerShipFactory.SHIP_TYPES.classA,
       shipImageIdentifier: "eagle",
-      canvas: this.#canvas
+      canvas: this.#canvas,
+      inputHandler : this.inputHandler
     })
     //this.playerShipFactory.create3DShip();
   }

@@ -20,11 +20,13 @@ class Laser extends Weapon {
     resourcePath : "/resources/sounds/laser.wav"
   })
 
-  static async invoke(){
-    Laser.imageResource = await e8.global.resourceHandler.fetchImageResource({
+  static async invoke({
+                        resourceHandler
+  }){
+    Laser.imageResource = await resourceHandler.fetchImageResource({
       resourceObject : Laser.imageResourceObject
     });
-    Laser.soundResource = await e8.global.resourceHandler.fetchSoundResource({
+    Laser.soundResource = await resourceHandler.fetchSoundResource({
       resourceObject:Laser.soundResourceObject
     });
   }
@@ -66,11 +68,7 @@ class Laser extends Weapon {
     this.shootTime = 100;
     this.timer = 0;
     this.uniqueIdentifier = this.constructor.name;
-
-
     this.overLoad = 100;
-
-
     this.shootTime = 100;
   }
 

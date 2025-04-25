@@ -9,15 +9,27 @@ class PropulsionFactory {
     spinner: "spinner"
   }
 
-  constructor(){
+  /**
+   *
+   * @param resourceHandler
+   */
+  constructor({
+                resourceHandler
+  }){
+    Object.assign(this, {
+      resourceHandler
+    });
   }
 
-  fetchResources = async () => {
+  /**
+   *
+   * @returns {Promise<void>}
+   */
+  init = async () => {
     for (let type in PropulsionFactory.PROPULSION_TYPES) {
-      PropulsionTypes[type].imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: PropulsionTypes[type].imageResourceObject});
+      PropulsionTypes[type].imageResource = await this.resourceHandler.fetchImageResource({resourceObject: PropulsionTypes[type].imageResourceObject});
     }
   }
-
 
   /**
    *

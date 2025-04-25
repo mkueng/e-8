@@ -2,17 +2,29 @@
 class ExplosionFactory {
 
   static EXPLOSION_TYPES = {
-    classAPlayerShipExplosion: ClassAPlayerShipExplosion,
-    classAEnemyShipExplosion: ClassAEnemyShipExplosion
+    classAPlayerShipExplosion : ClassAPlayerShipExplosion,
+    classAEnemyShipExplosion : ClassAEnemyShipExplosion
   }
 
-  constructor(){
+  constructor({
+    resourceHandler
+              }){
+    Object.assign(this, {
+      resourceHandler
+    })
   }
 
-  invoke = async ()=>{
-
-    await ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion.invoke();
-    await ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion.invoke();
+  /**
+   *
+   * @returns {Promise<void>}
+   */
+  init = async ()=>{
+    await ExplosionFactory.EXPLOSION_TYPES.classAEnemyShipExplosion.init({
+      resourceHandler: this.resourceHandler
+    });
+    await ExplosionFactory.EXPLOSION_TYPES.classAPlayerShipExplosion.init({
+      resourceHandler: this.resourceHandler
+    });
   }
 
   createExplosion = ({

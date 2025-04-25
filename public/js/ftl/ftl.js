@@ -1,9 +1,16 @@
+'use strict'
 class FTL {
-  constructor() {
+
+  constructor({
+                canvasHandler
+  }) {
+    Object.assign(this, {
+      canvasHandler
+    })
     this.isActive = false;
-    this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
+    this.canvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
     this.context = this.canvas.getContext("2d");
-    this.backDropCanvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backdrop).canvas;
+    this.backDropCanvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backdrop).canvas;
     this.backDropContext = this.backDropCanvas.getContext("2d");
 
     this.stars = []; // Array to hold star objects
@@ -12,7 +19,6 @@ class FTL {
     this.starMaxSpeed = 400; // Maximum speed for stars
     this.coordinates = 0;
     this.id = crypto.randomUUID();
-
 
     this.dots=[{}];
     this.mx = 0;

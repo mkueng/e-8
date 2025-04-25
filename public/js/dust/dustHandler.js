@@ -6,10 +6,12 @@ class DustHandler extends Handler {
   #amountOfParticles = 30;
   #dustParticles = [];
 
-  constructor(){
+  constructor({
+    canvasHandler
+              }){
     super();
-    this.#canvas =  e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
-    this.#context = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
+    this.#canvas =  canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).canvas;
+    this.#context = canvasHandler.getCanvas(CanvasHandler.canvasTypes.dust).context;
   }
 
   init = async ()=>{

@@ -5,13 +5,18 @@ class Scanner extends GameObject {
   #ticker = -1;
   #planets = {};
 
-  constructor({galaxy}){
-
-  super({
-      canvas: e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planetScanner).canvas,
+  constructor({
+                galaxy,
+                canvasHandler
+  }){
+    super({
+      canvas: canvasHandler.getCanvas(CanvasHandler.canvasTypes.planetScanner).canvas,
       isContextPreventedOfBeingCleared: true
     });
-    this.galaxy = galaxy;
+    Object.assign(this, {
+      galaxy,
+      canvasHandler
+    })
   }
 
   init = async()=>{

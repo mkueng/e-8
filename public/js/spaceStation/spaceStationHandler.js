@@ -18,18 +18,24 @@ class SpaceStationHandler {
 
   static imageResource;
 
-  #galaxy;
-  #resourceHandler;
-  #poiHandler;
+  constructor({
+    resourceHandler,
+    canvasHandler,
+    poiHandler,
+    inputHandler
+              }){
+    Object.assign(this, {
+      resourceHandler,
+      canvasHandler,
+      inputHandler,
+      poiHandler
 
-  constructor(){
+    });
 
-    this.#resourceHandler = e8.global.resourceHandler;
-    this.#poiHandler = e8.global.poiHandler;
-    this.canvas = e8.global.canvasHandler.getCanvas("backgroundFarthest").canvas;
+
+    this.canvas = this.canvasHandler.getCanvas("backgroundFarthest").canvas;
     this.poiInstance = null;
-
-    e8.global.inputHandler.subscribe(this);
+    this.inputHandler.subscribe(this);
   }
 
 
@@ -38,7 +44,7 @@ class SpaceStationHandler {
   }
 
   init =async ()=>{
-    SpaceStationHandler.imageResource = await this.#resourceHandler.fetchImageResource({
+    SpaceStationHandler.imageResource = await this.resourceHandler.fetchImageResource({
       resourceObject: SpaceStationHandler.imageResourceObject
     });
   }
@@ -51,7 +57,7 @@ class SpaceStationHandler {
   }
 
   create = async ({planetObject})=>{
-    this.poiInstance = await this.#poiHandler.createPOI({poi: SpaceStationHandler.poi, canvas:this.canvas})
+    this.poiInstance = await this.poiHandler.createPOI({poi: SpaceStationHandler.poi, canvas:this.canvas})
     return new GameObject({
       isActive: true,
       identification: "spaceStation",

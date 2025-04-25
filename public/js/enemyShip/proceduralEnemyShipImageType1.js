@@ -16,8 +16,13 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
   #orientation = false;
   #tilesResourceObjects;
 
-  constructor(){
+  constructor({
+                resourceHandler,
+                canvasHandler
+              }){
     super({
+      resourceHandler,
+      canvasHandler
     });
   }
 
@@ -32,8 +37,6 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       filePrefix : this.#filePrefix,
       resourcePath : this.#resourcePath
     })
-
-    //console.log("this.#tilesResourceObjects:", this.#tilesResourceObjects);
   }
 
   /**

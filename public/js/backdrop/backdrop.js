@@ -1,9 +1,14 @@
 'use strict'
 class Backdrop {
 
-  constructor(){
-    this.canvas = e8.global.canvasHandler.getCanvas("backdrop").canvas;
-    this.context = e8.global.canvasHandler.getCanvas("backdrop").context;
+  constructor({
+    canvasHandler
+              }){
+    Object.assign(this, {
+      canvasHandler
+    })
+    this.canvas = this.canvasHandler.getCanvas("backdrop").canvas;
+    this.context = this.canvasHandler.getCanvas("backdrop").context;
 
     this.amountOfStars = 5000;
     this.sizeRange = 1;

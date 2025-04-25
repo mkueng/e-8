@@ -9,9 +9,15 @@ class Terminal {
 
     static imageResource;
 
-    constructor(){
-        this.resourceHandler = e8.global.resourceHandler;
-        this.canvasHandler = e8.global.canvasHandler;
+    constructor({
+      resourceHandler,
+      canvasHandler,
+
+                }){
+        Object.assign(this,{
+            resourceHandler,
+            canvasHandler
+        })
         this.terminalCanvas = this.canvasHandler.getCanvas("terminal").canvas;
         this.terminalContext = this.canvasHandler.getCanvas("terminal").context;
         //this.terminalContext.globalAlpha= 0.2;

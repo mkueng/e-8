@@ -9,20 +9,41 @@ class PlayerShipFactory {
 
   /**
    *
-   * @param playerShipHandler
-   * @param hudHandler
+   * @param resourceHandler
+   * @param canvasHandler
+   * @param engineTrailFactory
+   * @param propulsionFactory
+   * @param explosionFactory
+   * @param weaponFactory
+   * @param shieldFactory
+   * @param fuelFactory
    */
   constructor({
-                playerShipHandler,
-                hudHandler
+                resourceHandler,
+                canvasHandler,
+                engineTrailFactory,
+                propulsionFactory,
+                explosionFactory,
+                weaponFactory,
+                shieldFactory,
+                fuelFactory
   }){
-
-    Object.assign(this,{
-      playerShipHandler,
-      hudHandler
+    Object.assign(this, {
+      resourceHandler,
+      canvasHandler,
+      engineTrailFactory,
+      propulsionFactory,
+      explosionFactory,
+      weaponFactory,
+      shieldFactory,
+      fuelFactory
     })
   }
 
+  /**
+   *
+   * @returns {PlayerShip3D}
+   */
   create3DShip = ()=>{
     return new PlayerShip3D()
   }
@@ -34,7 +55,12 @@ class PlayerShipFactory {
    * @param canvass  w
    * @returns {Promise<PlayerShip>}
    */
-  createShip = async ({ shipType, shipImageIdentifier, canvas }) => {
+  createShip = async ({
+                        shipType,
+                        shipImageIdentifier,
+                        canvas,
+                        inputHandler
+  }) => {
     const {
       engineTrail,
       propulsion,
@@ -48,7 +74,7 @@ class PlayerShipFactory {
       cargo
     } = shipType;
 
-    const imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
+    const imageResource = await this.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
     const engineTrailInstance = await this.#createEngineTrail({engineTrail, canvas})
     const propulsionInstance = await this.#createPropulsion({propulsion, canvas});
     const throttleInstance = await this.#createThrottle({propulsion: throttle, canvas});
@@ -59,7 +85,6 @@ class PlayerShipFactory {
     const fuelInstance = this.#createFuel({fuel});
     await this.#createRadar();
     await this.#createHud();
-
 
     return new PlayerShip({
       accX: generic.accX,
@@ -72,12 +97,10 @@ class PlayerShipFactory {
       engineTrail : engineTrailInstance,
       features: featureInstances,
       cargo: cargo,
-      height: imageResource.image.height ,
-      hudHandler: this.hudHandler,
-      inputHandler: this.inputHandler,
+      height: imageResource.image.height,
+      inputHandler: inputHandler,
       maxVelX: generic.maxVelX,
       maxVelY: generic.maxVelY,
-      playerShipHandler: this.playerShipHandler,
       posDX: 0,
       posDY: 0,
       posX: 400,
@@ -101,13 +124,23 @@ class PlayerShipFactory {
     });
   };
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   #createHud = async () =>{
     //await new HudLeft().init();
     //await new HudRight().init();
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   #createRadar = async ()=>{
-    return await new Radar().init();
+    return await new Radar({
+      canvasHandler: this.canvasHandler
+    }).init();
   }
 
   /**
@@ -117,7 +150,7 @@ class PlayerShipFactory {
    * @returns {Promise<Shield>}
    */
   #createShield = async ({shield, canvas})=>{
-    return e8.global.shieldFactory.createShield({...shield, canvas});
+    return this.shieldFactory.createShield({...shield, canvas});
   }
 
   /**
@@ -127,7 +160,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createPropulsion = async ({propulsion, canvas}) => {
-    return e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+    return this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
   }
 
   /**
@@ -137,7 +170,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createThrottle = async ({propulsion, canvas}) => {
-    return e8.global.propulsionFactory.createPropulsion({ ...propulsion, canvas });
+    return this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
   }
 
   /**
@@ -147,7 +180,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createEngineTrail = async({engineTrail, canvas}) => {
-    return e8.global.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
+    return this.engineTrailFactory.createEngineTrail({...engineTrail, canvas})
   }
 
   /**
@@ -157,7 +190,7 @@ class PlayerShipFactory {
    * @returns {Promise<*>}
    */
   #createTerminationSequence = async({terminationSequence, canvas}) =>{
-    return e8.global.explosionFactory.createExplosion({ ...terminationSequence, canvas });
+    return this.explosionFactory.createExplosion({ ...terminationSequence, canvas });
   }
 
   /**
@@ -191,7 +224,7 @@ class PlayerShipFactory {
       const weaponProperties = weapons[weapon];
       weaponsInstances[weapon] = {
         controlAssignment: weaponProperties.controlAssignment,
-        units: e8.global.weaponFactory.createWeapon({
+        units: this.weaponFactory.createWeapon({
           canvas,
           type: weaponProperties.type,
           controlAssignment: weaponProperties.controlAssignment,
@@ -210,6 +243,6 @@ class PlayerShipFactory {
    * @returns {*}
    */
   #createFuel = ({fuel}) => {
-    return e8.global.fuelFactory.createFuel({fuelType: fuel.type, amount: fuel.amount, maximumAmount: fuel.max});
+    return this.fuelFactory.createFuel({fuelType: fuel.type, amount: fuel.amount, maximumAmount: fuel.max});
   }
 }

@@ -56,12 +56,10 @@ class PlayerShip extends GameObject {
                 fuel,
                 fuelConsumption,
                 height,
-                hudHandler,
                 image,
                 inputHandler,
                 maxVelX,
                 maxVelY,
-                playerShipHandler,
                 posDX,
                 posDY,
                 posX,
@@ -123,11 +121,9 @@ class PlayerShip extends GameObject {
       features,
       shield,
       cargo,
+      inputHandler,
       terminationSequence,
       engineTrail,
-      hudHandler,
-      inputHandler,
-      playerShipHandler,
       propulsion,
       fuel,
       fuelConsumption,
@@ -154,7 +150,7 @@ class PlayerShip extends GameObject {
       right: false
     }
 
-    e8.global.inputHandler.subscribe(this, [InputHandler.eventTypes.keyEvent, InputHandler.eventTypes.mouseClick]);
+    this.inputHandler.subscribe(this, [InputHandler.eventTypes.keyEvent, InputHandler.eventTypes.mouseClick]);
 
     this.#initializeWeapons();
     this.#initializeFeatures();

@@ -30,9 +30,6 @@ class Scripts {
     // font
     await ScriptLoader.loadScript("js/font/fontHandler.js?v="+Scripts.version);
 
-    // screen
-    await ScriptLoader.loadScript("js/screen/screen.js?v="+Scripts.version);
-
     //handler
     await ScriptLoader.loadScript("js/handler/handler.js?v="+Scripts.version);
 

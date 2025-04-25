@@ -8,14 +8,19 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
     ["middle", 3]
   ])
 
-  #resourcePath =  "/procedural/enemyShips/shipType2/";
+  #resourcePath =  "resources/procedural/enemyShips/shipType2/";
   #filePrefix = "";
   #tileSize = 100 ;
   #orientation = false;
   #tilesResourceObjects;
 
-  constructor(){
+  constructor({
+    resourceHandler,
+    canvasHandler
+              }){
     super({
+      resourceHandler,
+      canvasHandler
     });
   }
 

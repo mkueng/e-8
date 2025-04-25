@@ -83,12 +83,6 @@ class PlayerShipPropertiesClassA {
         controlAssignment: "KeyP",
         type: Probe
       }
-    },
-    {
-      FTL: {
-        controlAssignment: "KeyC",
-        type: FTL
-      }
     }
   ]
 

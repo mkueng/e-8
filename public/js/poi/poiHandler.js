@@ -23,9 +23,14 @@ class POIHandler {
     #activePOIs = [];
     #selectedPOI = null;
 
-    constructor() {
-        this.#poiFactory = new PoiFactory();
-        e8.global.inputHandler.subscribe(this);
+    constructor({
+      inputHandler,
+      poiFactory
+    }) {
+        Object.assign(this, {
+            inputHandler,
+            poiFactory
+        })
     }
 
     init = async () => {

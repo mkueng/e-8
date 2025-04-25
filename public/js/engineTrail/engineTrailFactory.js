@@ -10,7 +10,16 @@ class EngineTrailFactory {
     engineTrailB: EngineTrailB
   }
 
-  constructor() {
+  /**
+   *
+   * @param resourceHandler
+   */
+  constructor({
+                resourceHandler
+  }) {
+    Object.assign(this, {
+      resourceHandler
+    })
   }
 
   /**
@@ -24,7 +33,10 @@ class EngineTrailFactory {
    */
   createEngineTrail = async ({type, canvas, posDX, posDY}) => {
     const trailType = new type();
-    await trailType.invoke(e8.global.resourceHandler, type.resourceObject);
+    await trailType.invoke({
+        resourceHandler: this.resourceHandler,
+        resourceObject: type.resourceObject
+    });
     Object.assign(trailType, {canvas, posDX, posDY});
     return trailType;
   }

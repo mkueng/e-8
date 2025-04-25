@@ -6,12 +6,21 @@ class ShieldFactory {
     shieldB : "shieldB"
   }
 
-  constructor(){
+  /**
+   *
+   * @param resourceHandler
+   */
+  constructor({
+    resourceHandler
+              }){
+    Object.assign(this, {
+      resourceHandler
+    });
   };
 
-  fetchResources = async ()=>{
+  init = async ()=>{
     for (let type in ShieldFactory.SHIELD_TYPES) {
-      ShieldTypes[type].imageResource = await e8.global.resourceHandler.fetchImageResource({resourceObject: ShieldTypes[type].imageResourceObject});
+      ShieldTypes[type].imageResource = await this.resourceHandler.fetchImageResource({resourceObject: ShieldTypes[type].imageResourceObject});
     }
   }
 

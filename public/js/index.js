@@ -9,7 +9,6 @@ document.onreadystatechange = function() {
 
     const startApp = async () => {
       await e8.global.appController.init();
-      //await e8.global.app.startGame();
     };
 
     startApp().then(() => {

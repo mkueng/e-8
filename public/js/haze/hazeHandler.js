@@ -6,15 +6,21 @@ class HazeHandler extends Handler {
   #canvases = {};
   #colorKeys = [];
 
-  constructor(){
+  constructor({
+    canvasHandler,
+    resizeImageWorker
+              }){
     super();
+    Object.assign(this, {
+      canvasHandler,
+      resizeImageWorker
+    })
   }
 
   init = async () =>{
-    this.#canvases[0] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
-    this.#canvases[1] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
-    this.#canvases[2] = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFarthest).canvas;
-    this.resizeImageWorker = e8.global.resizeImageWorker;
+    this.#canvases[0] = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFace).canvas;
+    this.#canvases[1] = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFar).canvas;
+    this.#canvases[2] = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.backgroundFarthest).canvas;
     this.#upcoming = 100;
     this.#colorKeys = Object.keys(e8.global.colors);
 
@@ -22,7 +28,7 @@ class HazeHandler extends Handler {
     this.heartBeat.timeout=1000;
     this.heartBeat.callback = this.heartBeatCallBack;
 
-    e8.global.resizeImageWorker.onmessage = ({data}) =>{
+    this.resizeImageWorker.onmessage = ({data}) =>{
       this.#createHaze(data);
     }
   }

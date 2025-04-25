@@ -2,8 +2,6 @@ class SettingsHandler {
 
   #localStorageHandler;
   #inputHandler;
-  #stateHandler;
-  #canvasHandler;''
   #settingsAreShown = false;
 
   #settingValues = {
@@ -13,11 +11,13 @@ class SettingsHandler {
 
   #template;
 
-  constructor(){
-    this.#localStorageHandler = e8.global.localStorageHandler;
-    this.#inputHandler = e8.global.inputHandler;
-    this.#stateHandler = e8.global.stateHandler;
-    this.#canvasHandler = e8.global.canvasHandler;
+  constructor({
+    localStorageHandler,
+    inputHandler
+              }){
+    this.#localStorageHandler = localStorageHandler;
+    this.#inputHandler = inputHandler;
+
 
     this.initializeSettings();
     this.#inputHandler.subscribe(this);
@@ -28,10 +28,10 @@ class SettingsHandler {
     let overlayElement = document.getElementById("overlay");
     overlayElement.style.display="block";
 
-    this.#canvasHandler.blurCanvases();
+    te8.global.canvasHandler.blurCanvases();
     //delay pauseGame trigger to make sure all Canvases have been rendered
     setTimeout(()=>{
-      this.#stateHandler.trigger(StateHandler.actions.pauseGame);
+      e8.global.stateHandler.trigger(StateHandler.actions.pauseGame);
     },100)
   }
 
@@ -39,9 +39,9 @@ class SettingsHandler {
 
     let overlayElement = document.getElementById("overlay");
     overlayElement.style.display="none";
-    this.#canvasHandler.unblurCanvases();
+    e8.global.canvasHandler.unblurCanvases();
     setTimeout(()=>{
-      this.#stateHandler.trigger(StateHandler.actions.restartGame);
+      e8.global.stateHandler.trigger(StateHandler.actions.restartGame);
     },100)
   }
 

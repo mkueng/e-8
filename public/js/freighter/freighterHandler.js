@@ -9,12 +9,22 @@ class FreighterHandler {
     1: "classBFreighter"
   }
 
-  constructor(){
-    this.resourceHandler = e8.global.resourceHandler;
-    this.#canvasObject = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip);
-    this.propulsionFactory = e8.global.propulsionFactory;
-    this.engineTrailFactory = e8.global.engineTrailFactory;
+  constructor({
+    resourceHandler,
+    canvasHandler,
+    propulsionFactory,
+    engineTrailFactory
 
+
+
+              }){
+    Object.assign(this, {
+      resourceHandler,
+      canvasHandler,
+      propulsionFactory,
+      engineTrailFactory
+    })
+    this.#canvasObject = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.playerShip);
     this.#freighterFactory = new FreighterFactory({
       resourceHandler: this.resourceHandler,
       propulsionFactory: this.propulsionFactory,

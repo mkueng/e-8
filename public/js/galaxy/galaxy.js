@@ -22,13 +22,21 @@ class Galaxy {
     return this.#planetIndex;
   }
 
-  constructor({scale}){
-    this.#scale = scale;
+  constructor({
+                scale,
+                canvasHandler,
+                inputHandler
+  }){
+    Object.assign(this, {
+      canvasHandler,
+      scale,
+      inputHandler
+    })
   }
 
   init = async () =>{
 
-    this.canvas = e8.global.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
+    this.canvas = this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.planets).canvas;
     this.galaxyWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
     this.proceduralPlanet = new ProceduralPlanet({canvas:this.canvas, galaxyWorker:this.galaxyWorker});
 
@@ -47,7 +55,11 @@ class Galaxy {
     this.#sunColorKeys = Object.keys(e8.global.sunColors);
 
     this.#planetMap = this.createPlanetMap(this.#planetDistributionArray);
-    this.#galaxyMap = new GalaxyMap({planetMap: this.#planetMap, sunMap: this.#sunDistribution});
+    this.#galaxyMap = new GalaxyMap({
+      planetMap: this.#planetMap,
+      sunMap: this.#sunDistribution,
+      inputHandler: this.inputHandler
+    });
 
     await this.heartBeat();
   }

@@ -1,7 +1,7 @@
 'use strict'
 class AppController {
 
-  #gameController;
+  gameController;
   constructor() {
   }
 
@@ -12,40 +12,33 @@ class AppController {
 
     SoundHandler.setFXGain({percentage: 0});
     SoundHandler.setMusicGain({percentage: 0});
-    this.#createGlobalFactories();
-    this.#createGlobalHandlers();
-    await this.#initGlobalFactories();
-    await this.#initGlobalHandlers();
+
+    this.#createHandlers();
+    await this.#initHandlers();
+
     this.#initEventListeners();
-    this.screen = new Screen();
-    this.screen.init();
 
-    e8.global.stateHandler.setState("AppInitialized");
-    await e8.global.stateHandler.trigger(StateHandler.actions.initializeGame);
-    await e8.global.stateHandler.trigger(StateHandler.actions.startGame);
-
+    this.stateHandler.setState("AppInitialized");
+    await this.stateHandler.trigger(StateHandler.actions.initializeGame);
+    await this.stateHandler.trigger(StateHandler.actions.startGame);
   }
 
   initGame = async()=>{
   }
 
   startGame = async()=>{
-    this.#gameController = new GameController();
-    await this.#gameController.init();
-    await this.#gameController.startGame();
+    this.gameController = new GameController({
+      inputHandler: this.inputHandler,
+      resourceHandler: this.resourceHandler,
+      canvasHandler: this.canvasHandler,
+      resizeImageWorker: this.resizeImageWorker
+    });
+    await this.gameController.init();
+    await this.gameController.startGame();
+
     document.querySelector("#loading").style.display = "none";
     document.addEventListener("keydown", this.startMusic, true);
     document.addEventListener("mousedown", this.startMusic, true);
-  }
-
-  pauseGame = ()=>{
-    this.gameState = e8.global.stateHandler.getState().name;
-    e8.global.gameLoop.pause();
-  }
-
-  restartGame = () =>{
-    this.gameState = e8.global.stateHandler.getState().name;
-    e8.global.gameLoop.restart();
   }
 
   startMusic = ()=>{
@@ -88,58 +81,30 @@ class AppController {
    *
    * @returns {Promise<void>}
    */
-  #initGlobalFactories = async ()=>{
-    await e8.global.weaponFactory.init();
-    await e8.global.propulsionFactory.fetchResources();
-    await e8.global.shieldFactory.fetchResources();
-    await e8.global.explosionFactory.invoke();
+  #initHandlers = async()=>{
+    await this.fontHandler.init();
   }
 
-  /**
-   *
-   * @returns {Promise<void>}
-   */
-  #initGlobalHandlers = async()=>{
-    await e8.global.fontHandler.init();
-    await e8.global.poiHandler.init();
-    await e8.global.terminal.init();
-    await e8.global.spaceStationHandler.init();
-  }
-
-  /**
-   * Creates global factories
-   */
-  #createGlobalFactories = ()=> {
-    e8.global.weaponFactory = new WeaponFactory();
-    e8.global.propulsionFactory = new PropulsionFactory();
-    e8.global.shieldFactory = new ShieldFactory();
-    e8.global.explosionFactory = new ExplosionFactory();
-    e8.global.engineTrailFactory = new EngineTrailFactory();
-    e8.global.fuelFactory = new FuelFactory();
-  }
 
   /**
    * Creates global handlers
    */
-  #createGlobalHandlers = ()=>{
-    e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
-    e8.global.stateHandler = new StateHandler();
-    e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "" });
-    e8.global.canvasHandler = new CanvasHandler();
-    e8.global.localStorageHandler = new LocalStorageHandler();
-    e8.global.fontHandler = new FontHandler();
-    e8.global.inputHandler = new InputHandler();
-    e8.global.settingsHandler = new SettingsHandler();
-    e8.global.speechHandler = new SpeechHandler();
-    e8.global.infoHandler = new InfoHandler();
-    e8.global.poiHandler = new POIHandler();
-    e8.global.dustHandler = new DustHandler();
-    e8.global.asteroidHandler = new AsteroidHandler();
-    e8.global.hazeHandler = new HazeHandler();
-    e8.global.proceduralMusic = new ProceduralMusic();
-    e8.global.terminal = new Terminal();
-    e8.global.particleGenerator = new ParticleGenerator();
-    e8.global.backdrop = new Backdrop();
-    e8.global.spaceStationHandler = new SpaceStationHandler();
+  #createHandlers = ()=>{
+    //e8.global.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
+    this.resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
+    this.stateHandler = new StateHandler();
+    this.resourceHandler = new ResourceHandler({ resourcesBasePath: "" });
+    this.canvasHandler = new CanvasHandler();
+    this.localStorageHandler = new LocalStorageHandler();
+    this.fontHandler = new FontHandler();
+    this.inputHandler = new InputHandler();
+    this.settingsHandler = new SettingsHandler({
+      localStorageHandler: this.localStorageHandler,
+      inputHandler: this.inputHandler
+    });
+    this.speechHandler = new SpeechHandler();
+    this.infoHandler = new InfoHandler();
+    this.proceduralMusic = new ProceduralMusic();
+
   }
 }

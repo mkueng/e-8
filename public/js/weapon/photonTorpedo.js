@@ -1,6 +1,13 @@
 'use strict'
 class PhotonTorpedo extends Weapon{
 
+  static soundResource;
+  static imageResource;
+
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static imageResourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.weapon,
     name : "photonTorpedo_01",
@@ -9,6 +16,10 @@ class PhotonTorpedo extends Weapon{
     resourcePath : "/resources/weapon/photonTorpedo_01/images/"
   })
 
+  /**
+   *
+   * @type {ResourceObject}
+   */
   static soundResourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.weapon,
     id : "photonShoot",
@@ -17,14 +28,22 @@ class PhotonTorpedo extends Weapon{
     resourcePath : "/resources/sounds/photonShoot.wav"
   })
 
-  static soundResource;
-  static imageResource;
+  /**
+   *
+   * @param resourceHandler
+   * @returns {Promise<void>}
+   */
+  static async init({
+                      resourceHandler
+  }){
 
-  static async init(){
-    PhotonTorpedo.imageResource = await e8.global.resourceHandler.fetchImageResource({
+    Object.assign(this, {
+      resourceHandler
+    })
+    PhotonTorpedo.imageResource = await this.resourceHandler.fetchImageResource({
       resourceObject: PhotonTorpedo.imageResourceObject
     });
-    PhotonTorpedo.soundResource = await e8.global.resourceHandler.fetchSoundResource({
+    PhotonTorpedo.soundResource = await this.resourceHandler.fetchSoundResource({
       resourceObject: PhotonTorpedo.soundResourceObject
     });
   }

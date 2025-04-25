@@ -18,15 +18,23 @@ class GalaxyMap {
   #galaxyToScreenScaleFactor = 0;
 
   /**
-   * @Name constructor
+   *
    * @param planetMap
    * @param sunMap
+   * @param inputHandler
    */
-  constructor({ planetMap, sunMap }) {
+  constructor({
+                planetMap,
+                sunMap,
+                inputHandler
+  }) {
     this.#galaxyToScreenScaleFactor = e8.global.scaleOfGalaxy / e8.global.screenWidth;
 
-    this.#planetMap = planetMap;
-    this.#sunMap = sunMap;
+    Object.assign(this, {
+      planetMap,
+      sunMap,
+      inputHandler
+    })
     this.#planetMapKeys = Object.keys(planetMap);
 
     const filteredPlanetMap = this.filterPlanetMap({coordinatesOffset: (this.#currentOffsetX *-1)});
@@ -36,7 +44,7 @@ class GalaxyMap {
     this.#initializeGalaxyMap();
     this.drawPlanetMap(filteredPlanetMap, filteredSunMap);
 
-    e8.global.inputHandler.subscribe(this,
+    this.inputHandler.subscribe(this,
       [InputHandler.eventTypes.keyEvent
       ]
     );
@@ -246,7 +254,7 @@ class GalaxyMap {
 
     // show planets
     planetMapKeys.forEach((key) => {
-      const planet = this.#planetMap[key];
+      const planet = this.planetMap[key];
       const radius = planet.radius / 15;
       const x = scaleFactor * key + xOffset;
       const y = (planet.coordinates % (e8.global.screenHeight * 0.8) + e8.global.screenHeight * 0.1);
@@ -292,7 +300,7 @@ class GalaxyMap {
     const width = e8.global.screenWidth;
     const coordinates = PlayerShip.coordinates + coordinatesOffset * this.#range / 5000 || coordinatesOffset * this.#range / 50000;
 
-    const filteredKeys = this.#sunMap.filter(
+    const filteredKeys = this.sunMap.filter(
       (key) => key >= coordinates && key <= coordinates + this.#range
     );
 

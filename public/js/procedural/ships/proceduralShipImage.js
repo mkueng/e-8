@@ -1,12 +1,17 @@
 'use strict'
 class ProceduralShipImage {
 
-  constructor(){
+  constructor({
+                resourceHandler,
+                canvasHandler
+              }){
     this.maxShipSize = 6;
+    this.resourceHandler = resourceHandler;
+    this.canvasHandler = canvasHandler;
   }
 
   /**
-   *
+   * @name setuoCanvas
    * @param shipSize
    * @param offset
    */
@@ -14,10 +19,10 @@ class ProceduralShipImage {
                    shipSize,
                    offset
   })=>{
-    this.canvas = e8.global.canvasHandler.createOffscreenCanvas({
+    this.canvas = this.canvasHandler.createOffscreenCanvas({
       id: "spaceShip",
-      width : (shipSize+2)*offset,
-      height : offset+2,
+      width : (shipSize + 2) * offset,
+      height : offset + 2,
       container : "game"
     })
     this.ctx = this.canvas.getContext("2d");
@@ -26,7 +31,7 @@ class ProceduralShipImage {
   }
 
   /**
-   *
+   * @name fetchResources
    * @param tiles
    * @param tilesResourcePath
    * @returns {Promise<*>}
@@ -40,7 +45,7 @@ class ProceduralShipImage {
 
     for (const [type, amount] of tiles) {
       // Ensure fetchResourceBatch returns an array of promises
-      const promises = await e8.global.resourceHandler.fetchResourceBatch({
+      const promises = await this.resourceHandler.fetchResourceBatch({
         category: type,
         fileName: `${filePrefix}_${type}`,
         fileType: "png",
@@ -64,8 +69,8 @@ class ProceduralShipImage {
   }
 
   /**
-   *
-   * @returns {Promise<*>}
+   * @name getImageData
+   * @returns {Promise<{blob: Blob, imageData: (*|ImageData|Promise<{blob: *, imageData: *}>)}>}
    */
   getImageData = async ()=>{
     const blob = await this.canvas.convertToBlob();
@@ -73,9 +78,8 @@ class ProceduralShipImage {
     return ({blob, imageData});
   }
 
-
   /**
-   *
+   * @name createShape
    * @param resourceObjects
    * @param offset
    * @param filePrefix
@@ -103,11 +107,10 @@ class ProceduralShipImage {
     for (let i = 1; i <= shipSize; i++) {
       this.ctx.drawImage(getRandomImage("middle"),i*offset,0,offset,offset);
     }
-  };
-
+  }
 
   /**
-   *
+   * @name addDecoration
    * @param resourceObjects
    * @param category
    * @param startTile
@@ -136,13 +139,18 @@ class ProceduralShipImage {
     this.ctx.globalAlpha = 1
   }
 
-
+  /**
+   * @name addGradient
+   * @param shipSize
+   * @param offset
+   * @param alpha
+   */
   addGradient = ({
     shipSize,
     offset,
     alpha
   }) => {
-    const gradient = this.ctx.createLinearGradient(0,0,((shipSize+2)*offset),offset)
+    const gradient = this.ctx.createLinearGradient(0,0,((shipSize + 2) * offset),offset)
     this.ctx.globalAlpha = alpha;
     this.ctx.strokeStyle = "transparent";
     this.ctx.globalCompositeOperation = 'source-atop';
@@ -155,12 +163,10 @@ class ProceduralShipImage {
     this.ctx.fillRect(0,0,((shipSize+2)*offset),offset);
     this.ctx.closePath();
     this.ctx.globalAlpha = 1;
-
   }
 
-
   /**
-   *
+   * @name addColor
    * @param shipSize
    * @param offset
    * @param alpha
@@ -171,7 +177,7 @@ class ProceduralShipImage {
                 alpha
   })=>{
     const rgb = Util.createRandomRGB([], 150);
-    const gradient = this.ctx.createLinearGradient(0,0,((shipSize+2)*offset),offset)
+    const gradient = this.ctx.createLinearGradient(0,0,((shipSize + 2) * offset),offset)
     this.ctx.globalAlpha = alpha;
     this.ctx.strokeStyle = "transparent";
     this.ctx.globalCompositeOperation = 'source-atop';

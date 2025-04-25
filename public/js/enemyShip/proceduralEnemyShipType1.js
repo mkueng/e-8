@@ -106,11 +106,18 @@ class ProceduralEnemyShipType1 {
     }
   }
 
-  constructor({particleGenerator}){
-    console.log("particleGenerator: ", particleGenerator);
+  constructor({
+                particleGenerator,
+                resourceHandler,
+                canvasHandler
+  }){
     this.type = "EnemyShipType1";
     this.#particleGenerator = particleGenerator;
-    this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1()
+    this.#proceduralEnemyShipType1Image = new ProceduralEnemyShipImageType1({
+      particleGenerator,
+      resourceHandler,
+      canvasHandler
+    })
   }
 
   invoke = async () =>{

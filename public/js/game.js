@@ -1,3 +1,4 @@
+'use strict'
 class Game {
 
   #gameLoop
@@ -9,15 +10,17 @@ class Game {
   #freighterHandler
 
   constructor({
-                gameLoop,
                 dustHandler,
                 playerShipHandler,
                 asteroidHandler,
                 hazeHandler,
                 enemyShipHandler,
-                freighterHandler
+                freighterHandler,
+    poiHandler,
+    spaceStationHandler,
+    terminal
   }) {
-    this.#gameLoop = gameLoop;
+    this.#gameLoop = new GameLoop();
     this.#dustHandler = dustHandler;
     this.#playerShipHandler = playerShipHandler;
     this.#asteroidHandler = asteroidHandler;
