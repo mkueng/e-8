@@ -21,7 +21,8 @@ class CanvasHandler {
     hudDynamicMiddle: "hudDynamicMiddle",
     terminal: "terminal",
     terminalContent: "terminalContent",
-    planetScanner: "planetScanner"
+    planetScanner: "planetScanner",
+    gallery: "gallery"
   }
 
   #canvases = {
@@ -93,6 +94,11 @@ class CanvasHandler {
     "playerShip": {
       "id": "playerShip",
       "class": "fullscreenCanvas playerShipCanvas",
+      "alpha": true
+    },
+    "gallery": {
+      "id": "gallery",
+      "class": "galleryCanvas",
       "alpha": true
     },
     "terminal": {
@@ -185,6 +191,10 @@ class CanvasHandler {
 
   constructor(){
     e8.global.subscribeForGlobalEvents(this);
+
+  }
+
+  initCanvases(){
     this.createCanvasElements(this.#canvases);
     this.createCanvasElements(this.#staticCanvases);
   }

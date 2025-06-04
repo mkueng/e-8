@@ -88,30 +88,12 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
      })
 
 
-    this.addDecoration({
-       resourceObjects : this.#tilesResourceObjects["gadget"],
-       category : "gadget",
-       startTile : 1,
-       endTile : shipSize,
-       offset : offset,
-       filePrefix : this.#filePrefix,
-       alpha : 1,
-       globalCompositionType : "source-over"
-     })
-
-
-     this.addColor({
-       shipSize : shipSize,
-       offset : offset,
-       alpha : 0.7
-     })
 
       this.addGradient({
           shipSize : shipSize,
           offset : offset,
-          alpha : 0.5
+          alpha : 0.9
       })
-
 
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
@@ -121,7 +103,35 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       offset : offset,
       filePrefix : this.#filePrefix,
       alpha : 1,
+      globalCompositionType : "source-atop"
+    })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 0,
+      endTile : shipSize+2,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 1,
+      globalCompositionType : "source-atop"
+    })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 1,
+      endTile : shipSize+1,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 0.8,
       globalCompositionType : "source-over"
+    })
+
+    this.addColor({
+      shipSize : shipSize,
+      offset : offset,
+      alpha : 0.2
     })
 
       this.addGradient({
@@ -129,8 +139,6 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
           offset : offset,
           alpha : 0.5
       })
-
-
 
     return this.getImageData()
   }

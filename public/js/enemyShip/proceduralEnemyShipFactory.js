@@ -3,8 +3,8 @@
 class ProceduralEnemyShipFactory {
 
   static shipTypes = {
-    EnemyShipType1: ProceduralEnemyShipType1,
-    EnemyShipType2: ProceduralEnemyShipType2
+    "ProceduralEnemyShipType1": ProceduralEnemyShipType1,
+    "ProceduralEnemyShipType2": ProceduralEnemyShipType2
   }
 
   /**
@@ -36,15 +36,16 @@ class ProceduralEnemyShipFactory {
       explosionFactory,
       weaponFactory
     })
+
     this.particlesContext = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).context;
     this.particlesCanvas = canvasHandler.getCanvas(CanvasHandler.canvasTypes.explosion).canvas;
     this.enemyShipHandler = enemyShipHandler;
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType1 = new ProceduralEnemyShipType1({
+    ProceduralEnemyShipFactory.shipTypes.ProceduralEnemyShipType1 = new ProceduralEnemyShipType1({
       particleGenerator,
       resourceHandler,
       canvasHandler
     });
-    ProceduralEnemyShipFactory.shipTypes.EnemyShipType2 = new ProceduralEnemyShipType2({
+    ProceduralEnemyShipFactory.shipTypes.ProceduralEnemyShipType2 = new ProceduralEnemyShipType2({
       particleGenerator,
       resourceHandler,
       canvasHandler
@@ -56,8 +57,8 @@ class ProceduralEnemyShipFactory {
    * @returns {Promise<void>}
    */
   invoke = async () =>{
-    await ProceduralEnemyShipFactory.shipTypes.EnemyShipType1.invoke();
-    await ProceduralEnemyShipFactory.shipTypes.EnemyShipType2.invoke();
+    await ProceduralEnemyShipFactory.shipTypes.ProceduralEnemyShipType1.invoke();
+    await ProceduralEnemyShipFactory.shipTypes.ProceduralEnemyShipType2.invoke();
   }
 
   /**
@@ -65,15 +66,20 @@ class ProceduralEnemyShipFactory {
    * @param shipType
    * @param shipTypeVariation
    * @param canvas
+   * @param posX
+   * @param posY
    * @returns {Promise<unknown>}
    */
-  createShip = async ({shipType, shipTypeVariation, canvas}) => {
-    const {shipSize, shield, propulsion, spinner, playerShipTracking} = shipTypeVariation;
+  createShip = async ({shipType, shipTypeVariation, canvas, posX, posY}) => {
+    const {shipSize, shield, propulsion, spinner, weapons, playerShipTracking} = shipTypeVariation;
+
 
     return new Promise(async (resolve) => {
       const shieldInstance = this.shieldFactory.createShield({ ...shield, canvas });
+      shieldInstance.isActive = true;
+      console.log("shieldInstance:", shieldInstance);
       const propulsionInstance = this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
-      const spinnerInstance = this.propulsionFactory.createPropulsion({ ...spinner, canvas });
+      //const spinnerInstance = this.propulsionFactory.createPropulsion({ ...spinner, canvas });
 
       let terminationSequence = [];
       for (let i=0; i < shipSize; i++){
@@ -86,15 +92,10 @@ class ProceduralEnemyShipFactory {
         terminationSequence.push(explosion)
       }
 
-      let weapons = {
-        [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy]: this.weaponFactory.createWeapon({
-          type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
-          amount: 1,
-          canvas: canvas,
-          posDX: -20,
-          posDY: 12,
-        }),
-      };
+      let weaponsInstances = {};
+      weapons.forEach(weapon => {
+        weaponsInstances[weapon.type.name] = this.weaponFactory.createWeapon({...weapon,canvas})
+      })
 
       let particlesObject = new ParticlesObject({
         particles: shipTypeVariation.particles.slice(),
@@ -113,21 +114,22 @@ class ProceduralEnemyShipFactory {
         const velX = -1 * ((Math.random()*4*(1/shipSize))+3) /10;
      
         let shipObject = new EnemyShip({
+          activeWeaponID: weapons[0].type.name,
           canvas: canvas,
           height: img.height,
           imageData: shipImageData.imageData,
           particles: particlesObject,
           posDX: 0,
           posDY: 0,
-          posX: e8.global.screenWidth+e8.global.screenWidth,//+e8.global.screenWidth,
-          posY: Math.floor(Math.random() * e8.global.screenHeight),
-          posZ: velX*-0.05,
+          posX: posX || e8.global.screenWidth+e8.global.screenWidth,//+e8.global.screenWidth,
+          posY: posY || Math.floor(Math.random() * e8.global.screenHeight),
+          posZ: 3,
           shield: shieldInstance,
-          dependencies: [propulsionInstance, spinnerInstance],
+          dependencies: [propulsionInstance],
           terminationSequence: terminationSequence,
           velX: velX,
           velY: 0,
-          weapons: weapons,
+          weapons: weaponsInstances,
           width: img.width,
           image: img,
           enemyShipHandler: this.enemyShipHandler,

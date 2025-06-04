@@ -65,10 +65,11 @@ class Shield extends GameObject {
       strideX,
       strideY,
       width,
-      isActive: true,
+      isActive: false,
     })
     this.strength = strength;
     this.relatedShip = relatedShip;
+    console.log("relatedShip:",this.relatedShip);
   }
 
   /**

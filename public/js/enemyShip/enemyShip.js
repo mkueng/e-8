@@ -1,6 +1,7 @@
 'use strict'
 class EnemyShip extends GameObject {
   constructor({
+                activeWeaponID,
                 image,
                 imageData,
                 spriteSheet,
@@ -55,10 +56,12 @@ class EnemyShip extends GameObject {
     })
 
     Object.assign(this, {
+      activeWeaponID,
       dependencies,
       enemyShipHandler,
       weapons,
       shield,
+      posZ,
       terminationSequence,
       imageData,
       particles,
@@ -66,17 +69,19 @@ class EnemyShip extends GameObject {
     });
 
     if (this.weapons) {
-      this.activeWeapon = this.weapons[PhotonTorpedoEnemy];
+      this.activeWeapon = this.weapons[this.activeWeaponID];
     }
 
     if (this.shield) {
       this.shield.relatedShip = this;
+      this.shield.isActive = true;
       this.initializeShield();
     }
 
   }
 
   fireWeapon = () => {
+   // console.log("fireWeapon");
     if (this.activeWeapon.length > 0) {
       let weapon = this.activeWeapon.pop();
       weapon.active = true;
@@ -90,20 +95,24 @@ class EnemyShip extends GameObject {
   initializeShield = () => {
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
+    this.shield.isActive = true;
     GameObjectsHandler.instance.addGameObject(this.shield);
 
   }
 
   activateShield = () =>{
+    console.log("activateShield");
     this.shield.posX = this.posX;
+    console.log("this.shield.posX:", this.shield.posX );
     this.shield.posY = this.posY;
+    console.log("this.shield.posY:", this.shield.posY );
     this.shield.isActive = true;
-    SoundHandler.playFX(this.shield.sound);
-    this.shield.strength < 0 ? this.shield.strength = 1 : this.shield.strength -= 50;
+    //SoundHandler.playFX(this.shield.sound);
+    //this.shield.strength < 0 ? this.shield.strength = 1 : this.shield.strength -= 50;
   }
 
   invokeTerminationSequence = () => {
-
+/*
     let i = 0;
     for (const explosion of this.terminationSequence) {
       i++;
@@ -116,7 +125,7 @@ class EnemyShip extends GameObject {
         SoundHandler.playFX(explosion.sound)
       }, Math.random() * 100 * i)
     }
-
+*/
     this.particles.posX=this.posX;
     this.particles.posY = this.posY;
     this.particles.velX = this.velX;
@@ -146,7 +155,7 @@ class EnemyShip extends GameObject {
 
     this.activateShield();
     if (this.shield.strength <= 1){
-        this.destroy();
+        //this.destroy();
     }
     // destroy hitBy object
     if (hitBy.identification !== "playerShip" && hitBy.isDestroyable === true) {
@@ -159,8 +168,9 @@ class EnemyShip extends GameObject {
    * @param message
    * @param data
    */
+
   updateFromGameObjectsHandler = (message, data) => {
-    this.weapons[PhotonTorpedoEnemy].unshift(data);
+    this.weapons[this.activeWeaponID].unshift(data); //todo unshift with actual weaponId
   }
 
   /**
@@ -175,11 +185,15 @@ class EnemyShip extends GameObject {
     ) {
       this.fireWeapon();
     }
+    const zScale = this.posZ > 0 ? 1 / this.posZ : 1;
+
     if (this.playerShipTracking) {
       this.quotient = (PlayerShipHandler.activeShip.posY - this.posY ) / 300;
       this.posY = this.posY + this.quotient + (this.velY * dt);
+      this.posY = this.posY - PlayerShip.velY * zScale;
     } else {
       this.posY = this.posY + (this.velY * dt);
+      this.posY = this.posY - PlayerShip.velY * zScale;
     }
 
     if (this.posX >- this.width && this.posX < (e8.global.screenWidth + e8.global.screenWidth+this.width)) {

@@ -126,6 +126,7 @@ class Scripts {
     await ScriptLoader.loadScript("js/weapon/photonTorpedo.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/laser.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/photonTorpedoEnemy.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/weapon/photonTorpedoEnemy2.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/photonTorpedoFireAndForget.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/weaponFactory.js?v="+Scripts.version);
 

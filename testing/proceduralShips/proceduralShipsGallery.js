@@ -1,79 +1,135 @@
 class ProceduralShipsGallery {
 
   constructor() {
-    e8.global.canvasHandler = new CanvasHandler();
-    e8.global.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/resources" });
-    this.canvas = document.getElementById("canvas");
-    this.canvas.width = e8.global.screenWidth - 20;
-    this.canvas.height = 5000;
-    this.ctx = this.canvas.getContext("2d");
-    this.ctx.font = "15px courier,sans-serif";
-    this.ctx.fillStyle = "white";
-    this.enemyShips = {};
+    e8.global.screenHeight = 5000;
+    this.canvasHandler = new CanvasHandler();
+    this.canvasHandler.initCanvases();
+    this.resourceHandler = new ResourceHandler({ resourcesBasePath: "../../public/" });
 
+    this.propulsionFactory = new PropulsionFactory({resourceHandler: this.resourceHandler});
+    this.shieldFactory = new ShieldFactory({resourceHandler: this.resourceHandler});
+    this.explosionFactory = new ExplosionFactory({resourceHandler: this.resourceHandler});
+    this.weaponFactory = new WeaponFactory({resourceHandler: this.resourceHandler});
     this.particleGenerator = new ParticleGenerator();
-    this.enemyShips = this.createEnemyShipObjects({
-      particleGenerator: this.particleGenerator,
-      shipTypes:ProceduralEnemyShipFactory.shipTypes
-    });
-    console.log("this.enemyShips:", this.enemyShips);
-    
-    this.x = 50;
-    this.y = 50;
+
+    this.enemyShipHandler = new EnemyShipHandler({
+      canvasHandler: this.canvasHandler,
+      resourceHandler: this.resourceHandler,
+      propulsionFactory: this.propulsionFactory,
+      shieldFactory: this.shieldFactory,
+      explosionFactory: this.explosionFactory,
+      weaponFactory: this.weaponFactory,
+      particleGenerator: this.particleGenerator
+    })
+
 
     this.init().then(() => {
-      console.log("init complete");
-      Promise.all(
-        Object.values(this.enemyShips).flatMap(({ instance, variations }) =>
-          Object.values(variations).flatMap(variation =>
-            Array.from({ length: 3 }, () =>
-              this.createShip({ shipType: instance, variation }).then(shipImageData =>
-                this.drawShip({ shipImageData:shipImageData, shipType:instance.type, variation:variation})
-              )
-            )
-          )
-        )
-      );
-    });
-  }
 
-  init = async () => {
-    await Promise.all(Object.values(this.enemyShips).map(ship => ship.instance.invoke()));
-  }
+      let posY = 40;
 
-  createEnemyShipObjects({particleGenerator,shipTypes}) {
-    return Object.fromEntries(
-        Object.entries(shipTypes).map(([shipType, ShipClass]) => [
-          shipType,
-          {
-            instance: new ShipClass({ particleGenerator }),
-            variations: ShipClass.shipTypeVariations
-          }
-        ])
-    );
-  }
+      const shipTypes = ProceduralEnemyShipFactory.shipTypes
 
-  drawShip ({shipImageData, shipType, variation}) {
-    const img = new Image();
-    img.src = URL.createObjectURL(shipImageData.blob);
-    img.onload = () => {
-      this.y =this.y + img.height+50;
-      this.ctx.fillText(
-        shipType+" | " +
-        "Size: " + variation.shipSize +  " | " +
-       "Scale: " + variation.scale + " | " +
-        "Shield: " + variation.shield.type + " | " +
-        "Propulsion: " + variation.propulsion.type + " | " +
-        "Weapons: " + variation.weapons.map(type => type.resourceObject.name).join(", "),
-        this.x, this.y);
+      Object.entries(shipTypes).forEach(([key, shipType]) => {
 
-      this.ctx.drawImage(img, this.x, this.y+20);
+        let shipTypeVariations = shipType.constructor.shipTypeVariations;
+
+        Object.entries(shipTypeVariations).forEach(([key, value]) => {
+          this.createShip({
+            shipType: shipType,
+            shipTypeVariation: value,
+            posX: 300,
+            posY: posY
+          }).then(ship => {
+
+            ship.shield.animationLoop = true;
+            ship.velX = 0;
+            ship.activate();
+            setInterval(()=>{
+              ship.fireWeapon();
+            },1000)
+
+
+
+
+          })
+          posY += 150;
+        })
+      })
+
+      this.drawAnimations();
+    })
+
+    /**
+     *
+     * @param shipType
+     * @param shipTypeVariation
+     * @param posX
+     * @param posY
+     * @returns {Promise<*>}
+     */
+    this.createShip = async({shipType, shipTypeVariation, posX, posY}) => {
+      return await this.proceduralEnemyShipFactory.createShip({
+        shipType: shipType,
+        shipTypeVariation: shipTypeVariation,
+        canvas: this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.gallery).canvas,
+        posX: posX,
+        posY: posY
+      });
     }
   }
 
-  createShip = async ({ shipType, variation}) => {
-    return await shipType.createImage({
-      shipTypeVariation: variation
-    });
+  init = async () => {
+
+    await this.enemyShipHandler.init(this.canvasHandler.getCanvas(CanvasHandler.canvasTypes.gallery));
+    await this.shieldFactory.init();
+    await this.propulsionFactory.init();
+    await this.explosionFactory.init();
+    await this.weaponFactory.init();
+
+    this.proceduralEnemyShipFactory = new ProceduralEnemyShipFactory({
+      canvasHandler: this.canvasHandler,
+      resourceHandler: this.resourceHandler,
+      enemyShipHandler: this.enemyShipHandler,
+      shieldFactory: this.shieldFactory,
+      propulsionFactory: this.propulsionFactory,
+      explosionFactory: this.explosionFactory,
+      weaponFactory: this.weaponFactory,
+      particleGenerator: this.particleGenerator,
+    })
+
+    await this.proceduralEnemyShipFactory.invoke();
+
   }
+
+  /**
+   *
+   */
+  drawAnimations = () =>{
+
+
+
+    GameObjectsHandler.instance.removeGameObjects();
+    const length = GameObjectsHandler.gameObjects.length;
+    for (let i = 0; i < length; i++) {
+      GameObjectsHandler.gameObjects[i].updateStatic();
+    }
+
+    // Clear contexts
+    for (let context in GameObjectsHandler.contexts) {
+
+      GameObjectsHandler.contexts[context]
+        .clearRect(0, 0, e8.global.screenWidth, e8.global.screenHeight);
+    }
+
+    // Render game objects
+    const len = GameObjectsHandler.gameObjects.length;
+    for (let i = 0; i < len; i++) {
+      GameObjectsHandler.gameObjects[i].renderStatic();
+    }
+
+
+    requestAnimationFrame(this.drawAnimations);
+  }
+
+
 }

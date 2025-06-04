@@ -4,7 +4,7 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
   #tiles = new Map([
     ["back", 2],
     ["front", 2],
-    ["gadget" ,3],
+    ["gadget" ,6],
     ["middle", 3]
   ])
 
@@ -44,7 +44,6 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
    * @returns {Promise<ImageData>}
    */
   create = async ({ shipSize, scale })=>{
-    //console.log("shipSize:", shipSize, "scale:", scale);
     if (typeof shipSize !== 'number' || typeof scale !== 'number' || shipSize <= 0 || scale <= 0) {
       throw new Error('Invalid parameters: shipSize and scale must be positive numbers.');
     }
@@ -54,8 +53,6 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       offset : offset
     })
 
-    //console.log("this.#tilesResourceObjects:", this.#tilesResourceObjects);
-
     this.createShape({
       resourceObjects : this.#tilesResourceObjects,
       offset : offset,
@@ -64,7 +61,6 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       orientation : this.#orientation
     })
 
-
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
       category : "gadget",
@@ -76,7 +72,6 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       globalCompositionType : "source-atop"
     })
 
-
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
       category : "gadget",
@@ -84,36 +79,67 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
       endTile : shipSize+1,
       offset : offset,
       filePrefix : this.#filePrefix,
-      alpha : 0.9,
+      alpha : 1,
       globalCompositionType : "source-atop"
     })
-
 
     this.addColor({
       shipSize : shipSize,
       offset : offset,
-      alpha :0.5
+      alpha :0.4
+    })
+
+   this.addGradient({
+      shipSize : shipSize,
+      offset : offset,
+      alpha : 0.9
     })
 
     this.addDecoration({
       resourceObjects : this.#tilesResourceObjects["gadget"],
       category : "gadget",
       startTile : 1,
-      endTile : shipSize,
+      endTile : shipSize+1,
       offset : offset,
       filePrefix : this.#filePrefix,
       alpha : 1,
+      globalCompositionType : "source-atop"
+    })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 0,
+      endTile : shipSize+2,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 1,
+      globalCompositionType : "source-atop"
+    })
+
+    this.addDecoration({
+      resourceObjects : this.#tilesResourceObjects["gadget"],
+      category : "gadget",
+      startTile : 1,
+      endTile : shipSize+1,
+      offset : offset,
+      filePrefix : this.#filePrefix,
+      alpha : 0.8,
       globalCompositionType : "source-over"
     })
 
-
-   this.addGradient({
+    this.addColor({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.8
+      alpha :0.3
     })
 
-    
+    this.addGradient({
+      shipSize : shipSize,
+      offset : offset,
+      alpha : 0.4
+    })
+
     return this.getImageData()
   }
 }

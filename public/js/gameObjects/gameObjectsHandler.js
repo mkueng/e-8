@@ -23,7 +23,6 @@ class GameObjectsHandler {
        console.error(e);
     }
     GameObjectsHandler.gameObjects.push(gameObject);
-    //console.log( GameObjectsHandler.gameObjects)
   }
 
   /**
@@ -49,6 +48,5 @@ class GameObjectsHandler {
       }
     }
     GameObjectsHandler.gameObjectsToRemove.clear();
-    //console.log(GameObjectsHandler.gameObjects)
   }
 }

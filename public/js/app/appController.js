@@ -83,6 +83,7 @@ class AppController {
    */
   #initHandlers = async()=>{
     await this.fontHandler.init();
+    await this.canvasHandler.initCanvases();
   }
 
 

@@ -115,7 +115,7 @@ class GameObject {
     this.id = crypto.randomUUID();
     this.identification = identification || "";
     this.image = image;
-    this.isActive = isActive || false;
+    this.isActive = true;
     this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
     this.isDestroyable = isDestroyable || false;
     this.isHittable = isHittable || false;
@@ -223,7 +223,6 @@ class GameObject {
    */
   destroy(){
     this.isActive = false;
-    console.log("destroying", this.identification);
     GameObjectsHandler.instance.addGameObjectToRemoveQueue(this.id);
     if (this.dependencies) {
       this.destroyDependencies();
@@ -237,6 +236,80 @@ class GameObject {
     for (const dependency of this.dependencies) {
       dependency.destroy();
     }
+  }
+
+  renderStatic(){
+
+    // SpriteSheet
+    if (this.spriteSheet) {
+      if (this.animationLoop || this.currentFrame + 1 < this.frames) {
+        this.currentFrame = (this.currentFrame + 1) % this.frames;
+        if (!this.animationLoop) {
+          this.isActive = this.currentFrame !== 0;
+        }
+      }
+
+      const column = this.currentFrame % this.spriteSheetColumns;
+      const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
+      const sourceX = column * this.strideX;
+      const sourceY = row * this.strideY;
+
+      this.context.drawImage(
+        this.spriteSheet,
+        sourceX,
+        sourceY,
+        this.strideX,
+        this.strideY,
+        this.posX + this.posDX,
+        this.posY + this.posDY,
+        this.width,
+        this.height
+      );
+
+      // Image
+    } else if (this.image) {
+      this.context.drawImage(
+        this.image,
+        this.posX + this.posDX,
+        this.posY + this.posDY,
+        this.width,
+        this.height
+      );
+    }
+  }
+
+  updateStatic(){
+
+
+
+    if (this.doNotCheckOutOfBoundsLeft === false) {
+      if (this.posX + this.posDX <= -this.width) {
+        this.destroy();
+        this.dependencies.forEach(dep => dep.destroy());
+        return;
+      }
+    }
+
+    if (this.doNotCheckOutOfBoundsRight === false) {
+      if (this.posX + this.posDX > e8.global.screenWidth + this.width) {
+        this.destroy();
+        this.dependencies.forEach(dep => dep.destroy());
+        return;
+      }
+    }
+
+    this.dependencies.forEach(dep => {
+      dep.posX = this.posX;
+      dep.posY = this.posY;
+    });
+
+    this.posX = this.posX + this.velX;
+    this.velX += this.accX;
+    this.velY += this.accY;
+
+
+
+
   }
 
   /**
@@ -261,10 +334,14 @@ class GameObject {
     if (this.spriteSheet) {
       if (this.animationLoop || this.currentFrame + 1 < this.frames) {
         this.currentFrame = (this.currentFrame + 1) % this.frames;
-        if (!this.animationLoop) {
-          this.isActive = this.currentFrame !== 0;
-        }
       }
+        if (!this.animationLoop && this.currentFrame < this.frames - 1) {
+          this.currentFrame+=1;
+        } else {
+          this.currentFrame = 0;
+          this.isActive = false;
+        }
+
 
       const column = this.currentFrame % this.spriteSheetColumns;
       const row = Math.floor(this.currentFrame / this.spriteSheetColumns);

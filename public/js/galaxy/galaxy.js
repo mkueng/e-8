@@ -86,7 +86,6 @@ class Galaxy {
       const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 100000);
       const setObj = new Set(filteredKeys);
       for(const obj of setObj) {
-        console.log("obj", obj);
         if (!this.#visiblePlanets.has(obj)) {
           this.#visiblePlanets.add(obj);
           this.#createPlanet(obj).then(() => {

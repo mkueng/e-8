@@ -7,26 +7,27 @@ class ProceduralEnemyShipType2 {
     0: {
       shipSize: 2,
       scale: 1,
-      weapons: [WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      weapons: [{
+        type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
+        amount: 1,
+        posDX: -50,
+        posDY: 45
+      }
+      ],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
-        posDX: 75,
-        posDY: 7,
+        posDX: 340,
+        posDY: 31,
         isActive: true
-      },
-      spinner: {
-        type : PropulsionFactory.PROPULSION_TYPES.spinner,
-        posDX: 5,
-        posDY: 0
       },
       particles: [],
       playerShipTracking : true,
       shield: {
-        type: ShieldFactory.SHIELD_TYPES.shieldB,
-        posDX:-60,
-        posDY:-8,
-        width: 170,
-        height: 50
+        type: ShieldFactory.SHIELD_TYPES.shieldC,
+        posDX:-70,
+        posDY:7,
+        width: 280,
+        height: 90
       },
     },
     1: {
@@ -34,23 +35,24 @@ class ProceduralEnemyShipType2 {
       scale: 1,
       particles: [],
       playerShipTracking : true,
-      weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      weapons: [{
+        type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
+        amount: 10,
+        posDX: -50,
+        posDY: 45
+      }
+      ],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
-        posDX: 165,
-        posDY: 10,
+        posDX: 445,
+        posDY: 31,
         isActive: true
       },
-      spinner: {
-        type : PropulsionFactory.PROPULSION_TYPES.spinner,
-        posDX: 5,
-        posDY: 4
-      },
       shield: {
-        type: ShieldFactory.SHIELD_TYPES.shieldB,
-        posDX:-80,
-        posDY:-28,
-        width: 220,
+        type: ShieldFactory.SHIELD_TYPES.shieldC,
+        posDX:-65,
+        posDY:0,
+        width: 320,
         height:100
       },
     },
@@ -59,22 +61,23 @@ class ProceduralEnemyShipType2 {
       scale: 1,
       particles: [],
       playerShipTracking : false,
-      weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      weapons: [{
+        type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
+        amount: 10,
+        posDX: -50,
+        posDY: 45
+      }
+      ],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
-        posDX: 380,
-        posDY: 17,
+        posDX: 540,
+        posDY: 32,
         isActive: true
       },
-      spinner: {
-        type : PropulsionFactory.PROPULSION_TYPES.spinner,
-        posDX: 5,
-        posDY: 8
-      },
       shield: {
-        type: ShieldFactory.SHIELD_TYPES.shieldB,
-        posDX:-100,
-        posDY:-22,
+        type: ShieldFactory.SHIELD_TYPES.shieldC,
+        posDX:-87,
+        posDY:0,
         width: 300,
         height:100
       },
@@ -84,33 +87,39 @@ class ProceduralEnemyShipType2 {
       scale: 1,
       particles: [],
       playerShipTracking : false,
-      weapons : [ WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy],
+      weapons: [{
+        type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
+        amount: 10,
+        posDX: -50,
+        posDY: 45
+      }
+      ],
       propulsion:  {
         type : PropulsionFactory.PROPULSION_TYPES.ionB,
-        posDX: 380,
-        posDY: 17,
+        posDX: 640,
+        posDY: 32,
         isActive: true
       },
-      spinner: {
-        type : PropulsionFactory.PROPULSION_TYPES.spinner,
-        posDX: 5,
-        posDY: 8
-      },
       shield: {
-        type: ShieldFactory.SHIELD_TYPES.shieldB,
-        posDX:-100,
-        posDY:-22,
+        type: ShieldFactory.SHIELD_TYPES.shieldC,
+        posDX:-80,
+        posDY:-2,
         width: 300,
         height:100
       },
     }
   }
 
+  /**
+   *
+   * @param particleGenerator
+   * @param resourceHandler
+   * @param canvasHandler
+   */
   constructor({
                 particleGenerator,
-    resourceHandler,
-    canvasHandler
-
+                resourceHandler,
+                canvasHandler
   }){
     this.type = "EnemyShipType2";
     this.#particleGenerator = particleGenerator;
@@ -121,8 +130,11 @@ class ProceduralEnemyShipType2 {
     })
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   invoke = async () =>{
-
     await this.#proceduralEnemyShipType2Image.invoke();
     await this.#createParticlesForAllShipTypeVariations({
       shipType: this.#proceduralEnemyShipType2Image,

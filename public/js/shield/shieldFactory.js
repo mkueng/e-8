@@ -3,7 +3,8 @@ class ShieldFactory {
 
   static SHIELD_TYPES = {
     shieldA : "shieldA",
-    shieldB : "shieldB"
+    shieldB : "shieldB",
+    shieldC : "shieldC"
   }
 
   /**

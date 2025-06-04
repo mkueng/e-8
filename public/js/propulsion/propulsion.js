@@ -47,7 +47,6 @@ class Propulsion extends GameObject {
                 isActive,
                 animationLoop
               }) {
-    console.log("image", image);
     super({
       isActive: isActive || false,
       spriteSheet,

@@ -2,7 +2,7 @@
 
 class SoundHandler {
 
-  static music = new Audio("../resources/music/E-8.space_RUSH.mp3");
+  //static music = new Audio("../resources/music/E-8.space_RUSH.mp3");
 
   static audioCtx = new AudioContext();
   static fxGainNode;
@@ -38,8 +38,8 @@ class SoundHandler {
   }
 
   static async fetchAudioAndReturnAudioBuffer (source){
-    const response = await fetch(source);
-    const arrayBuffer = await response.arrayBuffer();
-    return await SoundHandler.audioCtx.decodeAudioData(arrayBuffer);
+    //const response = await fetch(source);
+    //const arrayBuffer = await response.arrayBuffer();
+    //return await SoundHandler.audioCtx.decodeAudioData(arrayBuffer);
   }
 }

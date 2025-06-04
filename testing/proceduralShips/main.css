@@ -1,0 +1,237 @@
+html {
+}
+
+
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background: black;
+    font-family: 'Bruno Ace SC', cursive;
+    font-family: 'Exo 2', sans-serif;
+    min-width: 400px;
+    min-height: 300px;
+    overflow:scroll;
+    cursor: pointer;
+    font-family: brunoAce;
+}
+#fps {
+    font-family: 'courier', cursive;
+    position: fixed;
+    bottom: 30px;
+    left: 50px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+
+#console {
+    font-family: 'courier', cursive;
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+
+#properties {
+    font-family: 'courier', cursive;
+    position: fixed;
+    top: 50px;
+    right: 150px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+#propertiesValue {
+    font-family: 'courier', cursive;
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+#gameObjects {
+    font-family: 'courier', cursive;
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+    font-size: 15px;
+    color: deepskyblue;
+    z-index: 1999;
+}
+#game {
+
+    /* background: url('../resources/backdrops/backdrop_03.jpg');
+    background-size: cover;*/
+    padding: 0;
+    margin: auto;
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: 400px;
+    min-height: 300px;
+}
+
+#version {
+    position: fixed;
+    bottom: 20px;
+    right: 50px;
+    font-size: 12px;
+    color: white;
+    z-index: 1999;
+}
+#loading-bar-inner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1999;
+}
+#loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width:500px;
+    height:500px;
+    background-image: url('../resources/backdrops/loading.png');
+    background-size: cover;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    text-align: center;
+    color: white;
+    z-index: 1999;
+}
+
+input[type="range"] {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    cursor: pointer;
+    outline: none;
+    height: 18px;
+    background: #666;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    /* creating a custom design */
+    height: 14px;
+    width: 14px;
+    background-color: #52BBB7;
+
+}
+
+@font-face {
+    font-family: brunoAce;
+    src: url(../resources/fonts/BrunoAceSC-Regular.ttf)
+}
+
+.hidden{
+    display: none;
+}
+
+.info {
+    font-family: brunoAce;
+    width: auto;
+    height: auto;
+    padding: 10px;
+    z-index: 1000;
+    color: white;
+    position: absolute;
+    left:100px;
+    border: 2px solid;
+    border-radius:5px;
+    min-width:180px;
+    overflow:hidden;
+    background-color: #333;
+    opacity: 0.5;
+
+}
+
+.infoProperties {
+    font-size:15px;
+    padding-bottom:5px;
+    padding-right:10px;
+    margin-right:10px;
+    margin-bottom:0;
+}
+
+.infoTitle {
+    text-align: center;
+    font-size: 16px;
+    border-bottom:solid;
+    padding-bottom:5px;
+    margin-bottom:10px;
+}
+
+.settings {
+    position: absolute;
+    top:50px;
+    height: 80vh;
+    width:80vw;
+    z-index: 1000;
+    color: #005F73;
+    font-family: brunoAce;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    width: 100vw;
+}
+
+.properties {
+    position: absolute;
+    margin-top:100px;
+    margin-left:50px;
+    width:300px;
+    font-size:27px;
+
+}
+.property {
+    height:30px;
+    border:solid;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+}
+.label {
+    position: absolute;
+    left: 10px;
+
+}
+.control {
+    position: absolute;
+    right: 10px;
+}
+
+
+.background {
+    display:none;
+}
+
+.sprite {
+    display:none;
+}
+
+#moon {
+    display:none;
+}
+
+#bg_glow{
+    z-index: 1;
+    position: absolute;
+    top:0;left:0;
+    height: 100%;
+    width: 100%;
+}
+

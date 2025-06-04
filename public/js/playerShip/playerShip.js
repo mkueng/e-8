@@ -425,6 +425,7 @@ class PlayerShip extends GameObject {
       posX: this.posX,
       posY: this.posY
     });
+
     GameObjectsHandler.instance.addGameObject(this.shield);
   }
 
@@ -433,6 +434,7 @@ class PlayerShip extends GameObject {
    * @private
    */
   #activateShield = () =>{
+    console.log("activateShield");
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     this.shield.isActive = true;

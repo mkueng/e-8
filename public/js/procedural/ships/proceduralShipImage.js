@@ -64,7 +64,6 @@ class ProceduralShipImage {
           resourceObjects[type][resourceObject.fileName] = resourceObject;
       });
     }
-
     return resourceObjects;
   }
 

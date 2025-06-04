@@ -4,6 +4,7 @@ class WeaponFactory {
   static WEAPON_TYPES = {
     photonTorpedo: PhotonTorpedo,
     photonTorpedoEnemy: PhotonTorpedoEnemy,
+    photonTorpedoEnemy2: PhotonTorpedoEnemy2,
     photonTorpedoFireAndForget: PhotonTorpedoFireAndForget,
     laser: Laser
   }
@@ -32,6 +33,10 @@ class WeaponFactory {
     await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy.init({
       resourceHandler: this.resourceHandler
     });
+    await WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2.init({
+      resourceHandler: this.resourceHandler
+    });
+
     await WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget.init({
       resourceHandler:this.resourceHandler
     });
@@ -48,6 +53,8 @@ class WeaponFactory {
                  posDY,
                  type
   }) {
+
+   //console.log("amount: ", amount, " type: ", type, " canvas: ", canvas, " controlAssignment: ", controlAssignment, " posDX: ", posDX, " posDY: ", posDY, "")
     /**
      * Creates weapon instances
      */

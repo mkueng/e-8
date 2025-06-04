@@ -98,6 +98,7 @@ class GameLoop {
    */
   #render = (interpolation) => {
     // Clear contexts
+
     for (let context in GameObjectsHandler.contexts) {
 
       GameObjectsHandler.contexts[context]

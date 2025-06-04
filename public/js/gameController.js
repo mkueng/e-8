@@ -6,6 +6,8 @@ class GameController {
     #playerShipHandler;
     #enemyShipHandler;
     #freighterHandler;
+    #canvasHandler;
+    #resourceHandler;
     #poiHandler;
     #terminal;
     #particleGenerator;
@@ -14,123 +16,81 @@ class GameController {
     #scanner;
     #galaxy;
     #game;
+
+
     #inputHandler
 
+    #weaponFactory;
+    #shieldFactory;
+    #propulsionFactory;
+    #explosionFactory;
+    #engineTrailFactory;
+    #playerShipFactory;
+    #fuelFactory;
+    #poiFactory;
 
+    #resizeImageWorker;
+
+
+    /**
+     *
+     * @param inputHandler
+     * @param resourceHandler
+     * @param canvasHandler
+     * @param resizeImageWorker
+     */
     constructor({
       inputHandler,
       resourceHandler,
       canvasHandler,
       resizeImageWorker
                 }) {
-        Object.assign(this, {
-            inputHandler,
-            resourceHandler,
-            canvasHandler,
-            resizeImageWorker
-        });
+
+        this.#inputHandler = inputHandler;
+        this.#resourceHandler = resourceHandler;
+        this.#canvasHandler = canvasHandler;
+        this.#resizeImageWorker  = resizeImageWorker;
     }
 
     init = async () =>{
 
+        //particleGenerator
+        this.#particleGenerator = new ParticleGenerator();
+
         this.createFactories();
         await this.initFactories();
+        this.createHandlers();
+        await this.initHandlers();
+
 
         // galaxy
         this.#galaxy = new Galaxy({
             scale:e8.global.scaleOfGalaxy,
-            canvasHandler:this.canvasHandler,
-            inputHandler: this.inputHandler
+            canvasHandler:this.#canvasHandler,
+            inputHandler: this.#inputHandler
         });
         this.#galaxy.init();
-
-        // dust
-        this.#dustHandler = new DustHandler({
-            canvasHandler: this.canvasHandler
-        });
-        await this.#dustHandler.init();
-
-        // asteroids
-        this.#asteroidHandler = new AsteroidHandler({
-            canvasHandler: this.canvasHandler,
-            resourceHandler: this.resourceHandler
-        });
-        this.#asteroidHandler.init();
-
-        // haze
-        this.#hazeHandler = new HazeHandler({
-            canvasHandler: this.canvasHandler,
-            resizeImageWorker: this.resizeImageWorker
-        });
-        await this.#hazeHandler.init();
 
         //hud
         this.#scanner = new Scanner({
             galaxy: this.#galaxy,
-            canvasHandler: this.canvasHandler
+            canvasHandler: this.#canvasHandler
 
         });
         await this.#scanner.init();
 
-        // player ship
-        this.#playerShipHandler = new PlayerShipHandler({
-            inputHandler: this.inputHandler,
-            canvasHandler: this.canvasHandler,
-            playerShipFactory: this.playerShipFactory
-
-        });
-        this.#playerShipHandler.init();
-
-        //particleGenerator
-        this.#particleGenerator = new ParticleGenerator();
-
-        // enemy ships
-        this.#enemyShipHandler = new EnemyShipHandler({
-            canvasHandler: this.canvasHandler,
-            particleGenerator:this.#particleGenerator,
-            resourceHandler: this.resourceHandler,
-            propulsionFactory: this.propulsionFactory,
-            shieldFactory: this.shieldFactory,
-            explosionFactory: this.explosionFactory,
-            weaponFactory: this.weaponFactory
-        });
-        await this.#enemyShipHandler.init();
-
-        // freighters
-        this.#freighterHandler = new FreighterHandler({
-            canvasHandler: this.canvasHandler,
-            resourceHandler: this.resourceHandler,
-            propulsionFactory: this.propulsionFactory,
-            engineTrailFactory: this.engineTrailFactory
-
-        });
-        await this.#freighterHandler.init();
-
-        //POI
-        this.#poiHandler = new POIHandler({
-            inputHandler: this.inputHandler,
-            poiFactory: this.poiFactory
-
-        });
-
         //terminal
         this.#terminal = new Terminal({
-            canvasHandler: this.canvasHandler,
-            resourceHandler: this.resourceHandler
+            canvasHandler: this.#canvasHandler,
+            resourceHandler: this.#resourceHandler
         })
 
         //backdrop
         this.#backdrop = new Backdrop({
-            canvasHandler: this.canvasHandler
+            canvasHandler: this.#canvasHandler
         });
 
-        //spaceStation
-        this.#spaceStationHandler = new SpaceStationHandler({
-            canvasHandler: this.canvasHandler,
-            resourceHandler: this.resourceHandler,
-            poiHandler: this.#poiHandler,
-            inputHandler: this.inputHandler
-        });
+
 
 
         this.#game = new Game({
@@ -147,54 +107,163 @@ class GameController {
 
     }
 
-    initFactories = async () =>{
-        await this.weaponFactory.init();
-        await this.propulsionFactory.init();
-        await this.shieldFactory.init();
-        await this.explosionFactory.init();
+    initHandlers = async () =>{
+        await this.#dustHandler.init();
+        await this.#asteroidHandler.init();
+        await this.#hazeHandler.init();
+        await this.#playerShipHandler.init();
+        await this.#enemyShipHandler.init({canvas:null});
+        await this.#freighterHandler.init();
+
     }
 
+    createHandlers = () => {
+        // dust
+        this.#dustHandler = new DustHandler({
+            canvasHandler: this.#canvasHandler
+        });
+
+        // asteroids
+        this.#asteroidHandler = new AsteroidHandler({
+            canvasHandler: this.#canvasHandler,
+            resourceHandler: this.#resourceHandler
+        });
+
+        // haze
+        this.#hazeHandler = new HazeHandler({
+            canvasHandler: this.#canvasHandler,
+            resizeImageWorker: this.#resizeImageWorker
+        });
+
+        // player ship
+        this.#playerShipHandler = new PlayerShipHandler({
+            inputHandler: this.#inputHandler,
+            canvasHandler: this.#canvasHandler,
+            playerShipFactory: this.#playerShipFactory
+
+        });
+
+        // freighters
+        this.#freighterHandler = new FreighterHandler({
+            canvasHandler: this.#canvasHandler,
+            resourceHandler: this.#resourceHandler,
+            propulsionFactory: this.#propulsionFactory,
+            engineTrailFactory: this.#engineTrailFactory
+
+        });
+
+        //POI
+        this.#poiHandler = new POIHandler({
+            inputHandler: this.#inputHandler,
+            poiFactory: this.#poiFactory
+        });
+
+        // enemy ships
+        this.#enemyShipHandler = new EnemyShipHandler({
+            canvasHandler: this.#canvasHandler,
+            particleGenerator:this.#particleGenerator,
+            resourceHandler: this.#resourceHandler,
+            propulsionFactory: this.#propulsionFactory,
+            shieldFactory: this.#shieldFactory,
+            explosionFactory: this.#explosionFactory,
+            weaponFactory: this.#weaponFactory
+        });
+
+        //spaceStation
+        this.#spaceStationHandler = new SpaceStationHandler({
+            canvasHandler: this.#canvasHandler,
+            resourceHandler: this.#resourceHandler,
+            poiHandler: this.#poiHandler,
+            inputHandler: this.#inputHandler
+        });
+    }
+
+    /**
+     * @name initFactories
+     * @returns {Promise<void>}
+     */
+    initFactories = async () =>{
+        await this.#weaponFactory.init();
+        await this.#propulsionFactory.init();
+        await this.#shieldFactory.init();
+        await this.#explosionFactory.init();
+    }
+
+
+
+
+
+    /**
+     * @name createFactories
+     */
     createFactories = () => {
 
-
-        this.engineTrailFactory = new EngineTrailFactory({
-            resourceHandler: this.resourceHandler
+        /**
+         *
+         * @type {EngineTrailFactory}
+         */
+        this.#engineTrailFactory = new EngineTrailFactory({
+            resourceHandler: this.#resourceHandler
         });
 
-        this.propulsionFactory = new PropulsionFactory({
-            resourceHandler: this.resourceHandler
+        /**
+         *
+         * @type {PropulsionFactory}
+         */
+        this.#propulsionFactory = new PropulsionFactory({
+            resourceHandler: this.#resourceHandler
         });
 
-        this.explosionFactory = new ExplosionFactory({
-            resourceHandler: this.resourceHandler
+        /**
+         *
+         * @type {ExplosionFactory}
+         */
+        this.#explosionFactory = new ExplosionFactory({
+            resourceHandler: this.#resourceHandler
         });
 
-        this.shieldFactory = new ShieldFactory({
-            resourceHandler: this.resourceHandler
+        /**
+         *
+         * @type {ShieldFactory}
+         */
+        this.#shieldFactory = new ShieldFactory({
+            resourceHandler: this.#resourceHandler
         });
 
-        this.weaponFactory = new WeaponFactory({
-            resourceHandler: this.resourceHandler
+        /**
+         *
+         * @type {WeaponFactory}
+         */
+        this.#weaponFactory = new WeaponFactory({
+            resourceHandler: this.#resourceHandler
         });
 
-        this.fuelFactory = new FuelFactory({
-            resourceHandler: this.resourceHandler
-        });
+        /**
+         *
+         * @type {FuelFactory}
+         */
+        this.#fuelFactory = new FuelFactory();
 
-
-        this.playerShipFactory = new PlayerShipFactory({
-            resourceHandler: this.resourceHandler,
-            canvasHandler: this.canvasHandler,
-            engineTrailFactory: this.engineTrailFactory,
-            propulsionFactory: this.propulsionFactory,
-            explosionFactory: this.explosionFactory,
-            shieldFactory: this.shieldFactory,
-            weaponFactory: this.weaponFactory,
-            fuelFactory: this.fuelFactory
+        /**
+         *
+         * @type {PlayerShipFactory}
+         */
+        this.#playerShipFactory = new PlayerShipFactory({
+            resourceHandler: this.#resourceHandler,
+            canvasHandler: this.#canvasHandler,
+            engineTrailFactory: this.#engineTrailFactory,
+            propulsionFactory: this.#propulsionFactory,
+            explosionFactory: this.#explosionFactory,
+            shieldFactory: this.#shieldFactory,
+            weaponFactory: this.#weaponFactory,
+            fuelFactory: this.#fuelFactory
         })
 
-
-        this.poiFactory = new PoiFactory({})
+        /**
+         *
+         * @type {PoiFactory}
+         */
+        this.#poiFactory = new PoiFactory()
 
     }
 

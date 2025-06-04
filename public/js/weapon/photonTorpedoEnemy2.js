@@ -1,12 +1,12 @@
 'use strict'
-class PhotonTorpedoEnemy extends Weapon{
+class PhotonTorpedoEnemy2 extends Weapon{
 
   static resourceObject = new ResourceObject({
     category : ResourceObject.CATEGORIES.weapon,
-    name : "photonTorpedo_02",
-    fileName : "photonTorpedo_02",
+    name : "photonTorpedo_03",
+    fileName : "photonTorpedo_03",
     fileType : ResourceObject.TYPES.png,
-    resourcePath : "/resources/weapon/photonTorpedo_02/images/"
+    resourcePath : "/resources/weapon/photonTorpedo_03/images/"
   })
 
   static imageResource;
@@ -14,8 +14,8 @@ class PhotonTorpedoEnemy extends Weapon{
   static async init({
     resourceHandler
                     }){
-    PhotonTorpedoEnemy.imageResource = await resourceHandler.fetchImageResource({
-      resourceObject: PhotonTorpedoEnemy.resourceObject
+    PhotonTorpedoEnemy2.imageResource = await resourceHandler.fetchImageResource({
+      resourceObject: PhotonTorpedoEnemy2.resourceObject
     });
   }
 
@@ -27,17 +27,17 @@ class PhotonTorpedoEnemy extends Weapon{
                }) {
     super({
         identification: "enemyWeapon",
-        uniqueIdentifier: "PhotonTorpedoEnemy",
+        uniqueIdentifier: "PhotonTorpedoEnemy2",
         controlAssignment,
         canvas: canvas,
-        image: PhotonTorpedoEnemy.imageResource.image,
-        width: PhotonTorpedoEnemy.imageResource.image.width,
-        height: PhotonTorpedoEnemy.imageResource.image.height,
+        image: PhotonTorpedoEnemy2.imageResource.image,
+        width: PhotonTorpedoEnemy2.imageResource.image.width,
+        height: PhotonTorpedoEnemy2.imageResource.image.height,
         posX: 0,
         posY: 0,
         posDX: posDX,
         posDY: posDY,
-        velX: 15,
+        velX: 17,
         velY: 0,
         isHittable: false,
         isDestroyable: false

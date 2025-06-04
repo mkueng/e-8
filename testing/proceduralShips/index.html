@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>proceduralShipsGallery</title>
-    <link rel="stylesheet" href="proceduralShipsGallery.css">
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="canvas.css">
+
 </head>
 <body>
-    <div id="game"></div>
-    <h3>procedural ships generation</h3>
-    <canvas id = "canvas" width = 2400" height = "1200"></canvas>
+
+
+    <div id="game" style="">
+
+    </div>
+
+
     <script>var e8 = e8 || {}</script>
     <script src="/../public/js/global/global.js"></script>
     <script src="/../public/js/canvas/canvasHandler.js"></script>
@@ -17,6 +23,7 @@
     <script src="/../public/js/particles/particleGenerator.js"></script>
 
     <script src ="/../public/js/gameObjects/gameObject.js"></script>
+    <script src = "/../public/js/gameObjects/gameObjectsHandler.js"></script>
     <script src ="/../public/js/resource/resourceObject.js"></script>
     <script src = "/../public/js/util/util.js"></script>
 
@@ -24,6 +31,7 @@
     <script src = "/../public/js/weapon/weapon.js"></script>
     <script src = "/../public/js/weapon/photonTorpedo.js"></script>
     <script src = "/../public/js/weapon/photonTorpedoEnemy.js"></script>
+    <script src = "/../public/js/weapon/photonTorpedoEnemy2.js"></script>
     <script src = "/../public/js/weapon/photonTorpedoFireAndForget.js"></script>
     <script src = "/../public/js/weapon/laser.js"></script>
     <script src = "/../public/js/weapon/weaponFactory.js"></script>
@@ -37,10 +45,23 @@
     <script src = "/../public/js/propulsion/propulsionTypes.js"></script>
     <script src = "/../public/js/propulsion/propulsionFactory.js"></script>
 
+    <!-- explosion -->
+    <script src = "/../public/js/explosion/explosion.js"></script>
+    <script src = "/../public/js/explosion/classAEnemyShipExplosion.js"></script>
+    <script src = "/../public/js/explosion/classAPlayerShipExplosion.js"></script>
+    <script src = "/../public/js/explosion/explosionFactory.js"></script>
+
+    <!-- sound -->
+    <script src = "/../public/js/sound/soundHandler.js"></script>
+
     <!-- shield -->
     <script src = "/../public/js/shield/shield.js"></script>
     <script src = "/../public/js/shield/shieldTypes.js"></script>
     <script src = "/../public/js/shield/shieldFactory.js"></script>
+
+    <!-- particles -->
+    <script src = "/../public/js/particles/particlesObject.js"></script>
+
 
     <!-- hull -->
     <script src = "/../public/js/enemyShip/proceduralEnemyShipType1.js"></script>
@@ -50,7 +71,9 @@
     <script src = "/../public/js/enemyShip/proceduralEnemyShipImageType1.js"></script>
     <script src = "/../public/js/enemyShip/proceduralEnemyShipImageType2.js"></script>
 
+    <script src = "/../public/js/enemyShip/enemyShipHandler.js"></script>
     <script src = "/../public/js/enemyShip/proceduralEnemyShipFactory.js"></script>
+
 
     <script src = "proceduralShipsGallery.js"></script>
 
