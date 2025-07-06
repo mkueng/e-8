@@ -48,7 +48,7 @@ class Propulsion extends GameObject {
                 animationLoop
               }) {
     super({
-      isActive: isActive || false,
+      isActive: false,
       spriteSheet,
       image,
       spriteSheetRows,

@@ -14,6 +14,8 @@ class ParticlesObject {
   }
 
   update = () => {
+    this.posX+= this.velX*10;
+    this.posY+= this.velY*10;
   }
 
   render = () => {

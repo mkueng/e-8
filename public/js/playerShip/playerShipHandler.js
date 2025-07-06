@@ -30,6 +30,7 @@ class PlayerShipHandler {
       canvas: this.#canvas,
       inputHandler : this.inputHandler
     })
+    PlayerShipHandler.activeShip.activate();
     //this.playerShipFactory.create3DShip();
   }
 

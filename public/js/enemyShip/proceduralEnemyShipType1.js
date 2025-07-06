@@ -7,9 +7,11 @@ class ProceduralEnemyShipType1 {
     0: {
       shipSize: 1,
       scale: 0.6,
+      particles: [],
+      hasPlayerShipTracking : true,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
-        amount: 10,
+        amount: 1,
         posDX: -50,
         posDY: 13
       }
@@ -25,8 +27,6 @@ class ProceduralEnemyShipType1 {
         posDX: 5,
         posDY: 0
       },
-      particles: [],
-      playerShipTracking : true,
       shield: {
         type: ShieldFactory.SHIELD_TYPES.shieldB,
         posDX:-40,
@@ -39,10 +39,10 @@ class ProceduralEnemyShipType1 {
       shipSize: 3,
       scale: 0.7,
       particles: [],
-      playerShipTracking : true,
+      hasPlayerShipTracking : true,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
-        amount: 10,
+        amount: 1,
         posDX: -50,
         posDY: 15
       }
@@ -70,10 +70,10 @@ class ProceduralEnemyShipType1 {
       shipSize: 5,
       scale: 0.8,
       particles: [],
-      playerShipTracking : false,
+      hasPlayerShipTracking : false,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
-        amount: 20,
+        amount: 1,
         posDX: -20,
         posDY: 16
       }
@@ -101,10 +101,10 @@ class ProceduralEnemyShipType1 {
       shipSize: 7,
       scale: 1.0,
       particles: [],
-      playerShipTracking : false,
+      hasPlayerShipTracking : false,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy,
-        amount: 20,
+        amount: 1,
         posDX: -50,
         posDY: 23
       }

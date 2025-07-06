@@ -7,6 +7,11 @@ class ProceduralEnemyShipFactory {
     "ProceduralEnemyShipType2": ProceduralEnemyShipType2
   }
 
+  static shipDependencies = {
+    propulsion: "Propulsion",
+    shield: "Shield"
+  }
+
   /**
    *
    * @param canvasHandler
@@ -71,13 +76,11 @@ class ProceduralEnemyShipFactory {
    * @returns {Promise<unknown>}
    */
   createShip = async ({shipType, shipTypeVariation, canvas, posX, posY}) => {
-    const {shipSize, shield, propulsion, spinner, weapons, playerShipTracking} = shipTypeVariation;
+    const {shipSize, shield, propulsion, spinner, weapons, hasPlayerShipTracking} = shipTypeVariation;
 
 
     return new Promise(async (resolve) => {
       const shieldInstance = this.shieldFactory.createShield({ ...shield, canvas });
-      shieldInstance.isActive = true;
-      console.log("shieldInstance:", shieldInstance);
       const propulsionInstance = this.propulsionFactory.createPropulsion({ ...propulsion, canvas });
       //const spinnerInstance = this.propulsionFactory.createPropulsion({ ...spinner, canvas });
 
@@ -124,8 +127,10 @@ class ProceduralEnemyShipFactory {
           posX: posX || e8.global.screenWidth+e8.global.screenWidth,//+e8.global.screenWidth,
           posY: posY || Math.floor(Math.random() * e8.global.screenHeight),
           posZ: 3,
-          shield: shieldInstance,
-          dependencies: [propulsionInstance],
+          dependencies: [
+            propulsionInstance,
+            shieldInstance
+          ],
           terminationSequence: terminationSequence,
           velX: velX,
           velY: 0,
@@ -133,7 +138,7 @@ class ProceduralEnemyShipFactory {
           width: img.width,
           image: img,
           enemyShipHandler: this.enemyShipHandler,
-          playerShipTracking : playerShipTracking
+          hasPlayerShipTracking : hasPlayerShipTracking
         });
         resolve(shipObject);
       };

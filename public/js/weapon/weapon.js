@@ -38,7 +38,7 @@ class Weapon extends GameObject {
       height,
       identification,
       image,
-      isActive: true,
+      isActive: false,
       isDestroyable,
       isHittable,
       posDX,
@@ -68,7 +68,7 @@ class Weapon extends GameObject {
   activate ({posX, posY}) {
     this.posX = this.previousPosX = posX;
     this.posY = this.previousPosY = posY;
-
+    this.isActive = true;
     GameObjectsHandler.instance.addGameObject(this);
     SoundHandler.playFX(this.sound);
   };

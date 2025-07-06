@@ -49,6 +49,7 @@ class Explosion extends GameObject {
   }
 
   update(dt) {
+    console.log("this.posX", this.posX, "this.velX", this.velX);
     this.posX = this.posX  + this.velX;
     this.posY = this.posY + this.velY;
   }

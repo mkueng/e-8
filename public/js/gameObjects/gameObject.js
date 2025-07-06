@@ -115,7 +115,7 @@ class GameObject {
     this.id = crypto.randomUUID();
     this.identification = identification || "";
     this.image = image;
-    this.isActive = true;
+    this.isActive = isActive;
     this.isContextPreventedOfBeingCleared = isContextPreventedOfBeingCleared || false;
     this.isDestroyable = isDestroyable || false;
     this.isHittable = isHittable || false;
@@ -148,13 +148,30 @@ class GameObject {
     if (canvas) {
       this.context = canvas.getContext("2d");
     }
+    if (this.dependencies && this.dependencies.length > 0) {
+      this.dependencyObjects = {};
+      this.initializeDependencyObjects();
+    }
+
+  }
+
+  /**
+   * @name initializeDependencyObjects
+   */
+  initializeDependencyObjects() {
+    for (let i = 0; i < this.dependencies.length; i++) {
+      this.dependencyObjects[this.dependencies[i].identification] = this.dependencies[i];
+      this.dependencies[i].relatedShip = this;
+      this.dependencies[i].posX = this.posX;
+      this.dependencies[i].posY = this.posY;
+    }
   }
 
   /**
    * @name addDependencies
    */
   addDependencies(){
-    this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
+    //this.dependencies.forEach(dependency => GameObjectsHandler.instance.addGameObject(dependency));
   }
 
   /**
@@ -176,12 +193,18 @@ class GameObject {
    * @name activate
    */
   activate(){
+
     this.isActive = true;
     GameObjectsHandler.instance.addGameObject(this);
+
     this.dependencies.forEach(dependency => {
+      dependency.posX = this.posX;
+      dependency.posY = this.posY;
       dependency.isActive = true;
       GameObjectsHandler.instance.addGameObject(dependency);
     });
+
+
   };
 
   fadeIn = () => {
@@ -323,7 +346,7 @@ class GameObject {
     this.previousPosX = this.posX;
     this.previousPosY = this.posY;
 
-    if (!this.isActive) return;
+    if (this.isActive === false) return;
 
     const newAlpha = this.alpha || 1;
     if (this.context.globalAlpha !== newAlpha) {
@@ -334,13 +357,14 @@ class GameObject {
     if (this.spriteSheet) {
       if (this.animationLoop || this.currentFrame + 1 < this.frames) {
         this.currentFrame = (this.currentFrame + 1) % this.frames;
-      }
-        if (!this.animationLoop && this.currentFrame < this.frames - 1) {
-          this.currentFrame+=1;
+      } else {
+        if (this.currentFrame < this.frames - 1) {
+          this.currentFrame += 1;
         } else {
           this.currentFrame = 0;
           this.isActive = false;
         }
+      }
 
 
       const column = this.currentFrame % this.spriteSheetColumns;
@@ -382,7 +406,7 @@ class GameObject {
    */
   update = (deltaTime) => {
 
-    if (!this.isActive) return;
+    if (this.isActive === false) return;
    // if (this.isFadeOut) this.fadeOut();
 
     if (this.doNotCheckOutOfBoundsLeft === false) {

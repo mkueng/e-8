@@ -47,6 +47,7 @@ class PropulsionFactory {
                         posDY,
                         isActive
   }) => {
+
     return new Propulsion({
       canvas: canvas,
       currentFrame: 0,
@@ -54,10 +55,12 @@ class PropulsionFactory {
       frames: PropulsionTypes[type].frames,
       fuelType: FuelFactory.FUEL_TYPES.xenon,
       height: PropulsionTypes[type].imageResource.image.height / PropulsionTypes[type].spriteSheetRows,
-      isActive: isActive || false,
+      isActive: isActive,
       isHittable: false,
       posDX: posDX,
       posDY: posDY,
+      posX: e8.global.screenWidth + e8.global.screenWidth,
+      posY: null,
       spriteSheetColumns: PropulsionTypes[type].spriteSheetColumns,
       spriteSheetRows: PropulsionTypes[type].spriteSheetRows,
       strideX: PropulsionTypes[type].imageResource.image.width / 1,

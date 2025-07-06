@@ -53,6 +53,8 @@ class ShieldFactory {
         isHittable: true,
         posDX: posDX,
         posDY: posDY,
+        posX: e8.global.screenWidth+e8.global.screenWidth,
+        posY: null,
         relatedShip: relatedShip,
         spriteSheetColumns: ShieldTypes[type].spriteSheetColumns,
         spriteSheetRows: ShieldTypes[type].spriteSheetRows,

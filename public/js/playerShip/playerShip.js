@@ -80,7 +80,7 @@ class PlayerShip extends GameObject {
                 width,
               }) {
     super({
-      isActive: true,
+      isActive: false,
       identification: "playerShip",
       currentFrame,
       animationLoop,
@@ -157,7 +157,7 @@ class PlayerShip extends GameObject {
     this.#initializeShield();
 
     // register playerShip and dependencies with GameObjectsHandler
-    GameObjectsHandler.instance.addGameObject(this);
+    // GameObjectsHandler.instance.addGameObject(this);
     this.addDependencies();
   }
 
@@ -425,7 +425,7 @@ class PlayerShip extends GameObject {
       posX: this.posX,
       posY: this.posY
     });
-
+    this.shield.relatedShip = this;
     GameObjectsHandler.instance.addGameObject(this.shield);
   }
 
@@ -434,7 +434,6 @@ class PlayerShip extends GameObject {
    * @private
    */
   #activateShield = () =>{
-    console.log("activateShield");
     this.shield.posX = this.posX;
     this.shield.posY = this.posY;
     this.shield.isActive = true;

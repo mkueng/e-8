@@ -17,10 +17,10 @@ class PlayerShipPropertiesClassA {
   }
 
   static generic = {
-    maxVelX: 600,
+    maxVelX: 60,
     maxVelY: 10,
-    accX: 0.165,
-    accY: 0.165,
+    accX: 0.065,
+    accY: 0.065,
   }
 
   static cargo = {
@@ -59,8 +59,8 @@ class PlayerShipPropertiesClassA {
 
   static shield = {
     type: ShieldFactory.SHIELD_TYPES.shieldA,
-    posDX: -100,
-    posDY: -100,
+    posDX: -105,
+    posDY: -120,
     width: 350,
     height: 300
   }

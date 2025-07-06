@@ -2,12 +2,15 @@
 
 class Shield extends GameObject {
 
+  #relatedShip = null;
+
   /**
    *
    * @param canvas
    * @param currentFrame
    * @param frames
    * @param height
+   * @param isActive
    * @param posDX
    * @param posDY
    * @param posX
@@ -22,13 +25,13 @@ class Shield extends GameObject {
    * @param strideX
    * @param strideY
    * @param width
-   * @param relatedShip
    */
   constructor({
                 canvas,
                 currentFrame,
                 frames,
                 height,
+                isActive,
                 posDX,
                 posDY,
                 posX,
@@ -42,8 +45,7 @@ class Shield extends GameObject {
                 stride,
                 strideX,
                 strideY,
-                width,
-                relatedShip,
+                width
               }) {
     super({
       animationLoop: false,
@@ -51,6 +53,8 @@ class Shield extends GameObject {
       currentFrame,
       frames,
       height,
+      identification: "shield",
+      isActive: isActive || false,
       isHittable: false,
       posDX,
       posDY,
@@ -64,20 +68,25 @@ class Shield extends GameObject {
       stride,
       strideX,
       strideY,
-      width,
-      isActive: false,
+      width
     })
+
     this.strength = strength;
-    this.relatedShip = relatedShip;
-    console.log("relatedShip:",this.relatedShip);
   }
 
+  set relatedShip(relatedShip) {
+      this.#relatedShip = relatedShip;
+      this.posX = relatedShip.posX;
+      this.posY = relatedShip.posY;
+
+  }
   /**
    *
    * @param deltaTime
    */
-  update(deltaTime) {
-    this.posX = this.relatedShip.posX;
-    this.posY = this.relatedShip.posY;
+  update = (deltaTime) => {
+    if (!this.isActive) return;
+    this.posX = this.#relatedShip.posX;
+    this.posY = this.#relatedShip.posY;
   }
 }
