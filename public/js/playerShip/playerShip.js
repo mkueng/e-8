@@ -523,10 +523,10 @@ class PlayerShip extends GameObject {
   #checkBounds = () => {
     if (this.posY > this.upperBoundY) {
       this.posY = this.upperBoundY;
-      this.velY = 0;
+      this.velY = this.velY-0.2;
     } else if (this.posY < 0) {
       this.posY = 0;
-      this.velY = 0;
+      this.velY = this.velY+0.2;
     }
 
     if (this.posX > this.upperBoundX) {

@@ -3,21 +3,21 @@ class PlayerShipPropertiesClassA {
   static imageResourceObjects = {
     "initial" : {
       name : "ship01ClassA",
-      filename : "SpaceShip3D-2D",
+      filename : "spaceship2",
       type : ResourceObject.TYPES.png,
       resourcePath : "/resources/ships/ship_01/images/"
     },
 
     "eagle" : {
       name : "ship01ClassA",
-      filename : "SpaceShip3D-2D",
+      filename : "spaceship2",
       type : ResourceObject.TYPES.png,
       resourcePath : "/resources/ships/ship_01/images/"
     }
   }
 
   static generic = {
-    maxVelX: 60,
+    maxVelX: 70,
     maxVelY: 10,
     accX: 0.065,
     accY: 0.065,
@@ -101,7 +101,7 @@ class PlayerShipPropertiesClassA {
       type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
       amount: 1000,
       posDX : 60,
-      posDY : 50
+      posDY : 10
     },
 
     Laser : {

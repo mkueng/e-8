@@ -37,13 +37,26 @@ class Sun extends GameObject{
   render=()=>{
   }
 
+  destroy= () =>{
+    console.log("Destroying sun");
+    if (this.sun) {
+      this.sun.remove();
+      this.sun = null;
+    }
+  }
+
   update=(deltaTime) =>{
     if (PlayerShip.velX) {
       if (this.isActive === false) return;
       this.posXCenter = this.posXCenter + this.velX*deltaTime+(PlayerShip.velX*this.posV);
+      this.posX = this.posXCenter;
       if (this.sun) {
         this.sun.style.left = this.posXCenter+"px";
 
+      }
+      if (this.posX + this.posDX <= -this.width*2) {
+        this.isActive = false;
+        this.destroy();
       }
     }
   }

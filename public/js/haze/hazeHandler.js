@@ -39,7 +39,8 @@ class HazeHandler extends Handler {
 
     img.onload =()=>{
       const size = img.width;
-      const posZ = Math.floor(Math.random()*75+5);
+      const posZ = Math.floor(Math.random()*320+320);
+      console.log("Haze created with size: " + size + " and posZ: " + posZ);
 
       if (posZ >= 60 ) canvas = this.#canvases[2];
       else  if (posZ >= 10 && posZ < 60) canvas = this.#canvases[1];

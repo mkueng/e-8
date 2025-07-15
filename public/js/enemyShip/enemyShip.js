@@ -75,12 +75,10 @@ class EnemyShip extends GameObject {
    // console.log("fireWeapon");
     if (this.activeWeapon.length > 0) {
       let weapon = this.activeWeapon.pop();
-      console.log("weapon", weapon);
-      weapon.active = true;
-      weapon.posX = this.posX;
-      weapon.posY = this.posY;
       weapon.subscriber = this;
-      GameObjectsHandler.instance.addGameObject(weapon);
+      weapon.activate({posX:this.posX, posY: this.posY, posZ:this.posZ});
+
+      //GameObjectsHandler.instance.addGameObject(weapon);
     }
   }
 
@@ -88,8 +86,11 @@ class EnemyShip extends GameObject {
     this.dependencyObjects["shield"].posX = this.posX;
     this.dependencyObjects["shield"].posY = this.posY;
     this.dependencyObjects["shield"].isActive = true;
+    this.dependencyObjects["shield"].strength -= 50;
     //SoundHandler.playFX(this.shield.sound);
-    //this.shield.strength < 0 ? this.shield.strength = 1 : this.shield.strength -= 50;
+    if (this.dependencyObjects["shield"].strength <= 0) {
+      this.destroy();
+    }
   }
 
   invokeTerminationSequence = () => {
@@ -111,9 +112,9 @@ class EnemyShip extends GameObject {
     this.particles.posY = this.posY;
     this.particles.velX = this.velX;
     this.particles.velY = this.velY;
-    console.log("this.particles velX", this.particles.velX);
     GameObjectsHandler.instance.addGameObject(this.particles);
     this.enemyShipHandler.shipDestroyed(this.id);
+
   }
 
   destroy = () => {
@@ -180,7 +181,9 @@ class EnemyShip extends GameObject {
     }
 
     if (this.posX >- this.width && this.posX < (e8.global.screenWidth + e8.global.screenWidth+this.width)) {
-      this.posX = this.posX + ((this.velX * dt) + (PlayerShip.velX / 15))
+      this.viewPortVelX = (PlayerShip.velX / 2 + this.velX) * this.vector * (1 /5) * (dt/10);
+     // console.log("enemy velX: ", this.velX);
+      this.posX = this.posX +   this.viewPortVelX;
     } else {
       this.terminate();
       this.enemyShipHandler.shipDestroyed(this.id);

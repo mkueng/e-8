@@ -49,7 +49,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
       posY: 0,
       posDX: posDX,
       posDY: posDY,
-      velX: 7,
+      velX: 10,
       velY: 0,
       isHittable: false,
       isDestroyable: false
@@ -58,7 +58,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     this.uniqueIdentifier = this.constructor.name;
     this.target = null;
     this.ready = true;
-    this.retention = 200;
+    this.retention = 300;
     this.quotient = 0;
     this.pathSmoothing = 0.03;
   }
@@ -109,6 +109,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
    * @param dt
    */
   update = (dt) => {
+    if (this.isActive === false) return;
     const isEnemyShipAlive = EnemyShipHandler.enemyShips[this.target.id];
 
     if (isEnemyShipAlive) {
@@ -120,7 +121,7 @@ class PhotonTorpedoFireAndForget extends Weapon {
     }
 
     this.posY = (this.posY + (this.posX / this.quotient) * this.pathSmoothing);
-    this.posX = this.posX + (this.velX*dt);
+    this.posX = this.posX + (this.velX*dt/10);
     const isOutsideScreen = this.posX > e8.global.screenWidth || this.posX < 0 || this.posY > e8.global.screenHeight || this.posY < 0;
 
     if (isOutsideScreen) {

@@ -21,24 +21,24 @@ e8.global.subscribeForGlobalEvents = (callback) => {
 }
 
 // galaxy
-e8.global.scaleOfGalaxy = 300000000000;
+e8.global.scaleOfGalaxy = 500000000000;
 
 e8.global.sunDistribution = {
-  seed: 333,
-  amountOfClusters: 1000,
+  seed: 111000,
+  amountOfClusters: 50000,
   range: e8.global.scaleOfGalaxy,
-  rangeWithinCluster: 1000,
+  rangeWithinCluster: 10000,
   minAmountWithinCluster: 1,
   maxAmountWithinCluster: 1
 }
 
 e8.global.planetDistribution = {
-  seed: 333,
-  amountOfClusters: 1000,
+  seed: 111000,
+  amountOfClusters: 50000,
   range: e8.global.scaleOfGalaxy,
-  rangeWithinCluster: 10000000,
+  rangeWithinCluster: 5000000,
   minAmountWithinCluster: 3,
-  maxAmountWithinCluster: 5
+  maxAmountWithinCluster: 6
 }
 
 // screenSize

@@ -26,7 +26,9 @@ class PhotonTorpedoEnemy extends Weapon{
                  controlAssignment
                }) {
     super({
+        animationLoop: false,
         identification: "enemyWeapon",
+      category: "enemyWeapon",
         uniqueIdentifier: "PhotonTorpedoEnemy",
         controlAssignment,
         canvas: canvas,
@@ -35,10 +37,12 @@ class PhotonTorpedoEnemy extends Weapon{
         height: PhotonTorpedoEnemy.imageResource.image.height,
         posX: 0,
         posY: 0,
+        posZ: 0,
         posDX: posDX,
         posDY: posDY,
-        velX: 2,
+        velX: 20,
         velY: 0,
+        vector: -1,
         isHittable: false,
         isDestroyable: false
       })

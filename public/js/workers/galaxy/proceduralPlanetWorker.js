@@ -59,9 +59,13 @@ class ProceduralPlanetWorker {
     // 2D map of the planet surface
     this.#drawMap(r,g,b,q, width, height,this.#mapContext);
     this.#wrapSphere(radius, width, height, this.#mapContext, this.#offScreenContext);
-    this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
     this.#addCloudLayer(width, height, this.#offScreenContext,stripeFactor/7);
-    this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,r,b);
+    this.#addAtmosphere(r,g,b, radius, this.#offScreenContext);
+
+
+
+
+   this.#addGradient(radius, this.#offScreenContext, "source-over", inFrontOfStar, r,r,b);
 
     // only draw image where mask is
     this.#offScreenContext.globalCompositeOperation = 'destination-in';
@@ -216,16 +220,57 @@ class ProceduralPlanetWorker {
     );
 
     gradient.addColorStop(0.0, `rgba(${r - 45}, ${g - 45}, ${b - 45}, 0.5)`);
-    gradient.addColorStop(0.45, `rgba(${r - 15}, ${g - 15}, ${b - 15}, 0.8)`);
-    gradient.addColorStop(1.0, `rgba(${r + 15}, ${g + 15}, ${b + 15}, 1)`);
+    gradient.addColorStop(0.45, `rgba(${r + 15}, ${g + 15}, ${b + 15}, 0.6)`);
+    gradient.addColorStop(1.0, `rgba(${r + 15}, ${g + 15}, ${b + 15}, 0.7)`);
 
     // Apply gradient
     offScreenCtx.save(); // Save canvas state
-    offScreenCtx.globalAlpha = 0.7;
+    offScreenCtx.globalAlpha = 1;
     offScreenCtx.globalCompositeOperation = "source-over";
     offScreenCtx.fillStyle = gradient;
-    offScreenCtx.fillRect(20, 20, radius * 2 + 30, radius * 2 + 30);
+    offScreenCtx.fillRect(20, 20, radius * 2 + 40, radius * 2 + 40);
     offScreenCtx.restore(); // Restore canvas state
+  };
+
+
+
+  #addArcGradient = (radius, offScreenCtx, compositionOperation, inFrontOfStar, r, g, b) => {
+    offScreenCtx.save();
+
+    // Parameters
+    const centerX = radius + 40;
+    const centerY = radius + 40;
+
+    // Set global settings
+    offScreenCtx.globalCompositeOperation = compositionOperation;
+    offScreenCtx.globalAlpha = 0.9;
+
+    // Create a radial gradient — with *offset inner and outer centers*
+    const lightOffset = inFrontOfStar ? 0 : radius * (-0.8); // Offset only if behind star
+    const gradient = offScreenCtx.createRadialGradient(
+      centerX - lightOffset, centerY, radius * 0.1,   // Inner center (light side)
+      centerX, centerY, radius * 1.7                        // Outer center (full sphere)
+    );
+
+    // Shadow fade colors
+    if (inFrontOfStar) {
+      gradient.addColorStop(0, "rgba(255, 255, 255, 0.4)");
+      gradient.addColorStop(0.7, "rgba(0, 0, 0, 0.3)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0.8)");
+    } else {
+      gradient.addColorStop(0, `rgba(${r + 100}, ${g + 100}, ${b + 100}, 0.7)`);
+      gradient.addColorStop(0.5, "rgba(0, 0, 0, 0.6)");
+      gradient.addColorStop(1, "rgba(0, 0, 0, 1)");
+    }
+
+    // Draw circle with gradient
+    offScreenCtx.beginPath();
+    offScreenCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    offScreenCtx.closePath();
+    offScreenCtx.fillStyle = gradient;
+    offScreenCtx.fill();
+
+    offScreenCtx.restore();
   };
 
 
@@ -234,6 +279,10 @@ class ProceduralPlanetWorker {
    * @param radius
    * @param offScreenCtx
    * @param compositionOperation
+   * @param inFrontOfStar
+   * @param r
+   * @param g
+   * @param b
    */
   #addGradient = (radius, offScreenCtx, compositionOperation, inFrontOfStar, r, g, b) => {
     offScreenCtx.save(); // Save current state
@@ -241,7 +290,7 @@ class ProceduralPlanetWorker {
     // Set global properties
     offScreenCtx.beginPath();
     offScreenCtx.globalCompositeOperation = compositionOperation;
-    offScreenCtx.globalAlpha = 1;
+    offScreenCtx.globalAlpha = 0.98
     offScreenCtx.strokeStyle = "transparent";
 
     const centerX = radius + 40;
@@ -250,18 +299,29 @@ class ProceduralPlanetWorker {
 
     let gradient;
 
-    if (inFrontOfStar) {
-      // Radial gradient for inFrontOfStar
-      gradient = offScreenCtx.createRadialGradient(centerX, centerY, 10, centerX, centerY, radius + 5);
-      gradient.addColorStop(0, "rgba(1, 1, 1, 0.5)");
-      gradient.addColorStop(0.97, "rgba(1, 1, 1, 0.5)");
-      gradient.addColorStop(1, "rgba(155, 155, 155, 0.1)");
+    if (!inFrontOfStar) {
+      gradient = offScreenCtx.createRadialGradient(centerX-(radius*2.2), centerY,0, centerX, centerY, radius *3.5);
+      gradient.addColorStop(0.505, "rgba(1, 1, 1, 0.99)");
+      gradient.addColorStop(0.52, "rgba(1, 1, 1, 0.97)");
+      gradient.addColorStop(0.8, `rgba(255, 255,255, 0.3)`);
     } else {
+
+      gradient = offScreenCtx.createRadialGradient(centerX-(radius*3), centerY,0, centerX, centerY, radius *3.5);
+      gradient.addColorStop(0.505, "rgba(1, 1, 1, 1)");
+      gradient.addColorStop(0.53, "rgba(1, 1, 1, 0.9)");
+      gradient.addColorStop(0.8, `rgba(255, 255,255, 0.6)`);
+
+
+
       // Linear gradient for behind the star
+
+      /*
       gradient = offScreenCtx.createLinearGradient(0, 0, gradientWidth, 0);
       gradient.addColorStop(0, "rgba(1, 1, 1, 1)");
-      gradient.addColorStop(0.55, "rgba(1, 1, 1, 0.9)");
-      gradient.addColorStop(1, `rgba(${r + 100}, ${g + 100}, ${b + 100}, 0.6)`);
+      gradient.addColorStop(0.57, "rgba(1, 1, 1, 0.96)");
+      gradient.addColorStop(1, `rgba(${r + 100}, ${g + 100}, ${b + 100}, 0.7)`);
+
+       */
     }
 
     // Apply the gradient
@@ -282,8 +342,8 @@ class ProceduralPlanetWorker {
    */
   #addCloudLayer = (width, height, ctx, threshold) => {
     const cloudNoise = new Noise(0.5); // Initialize cloud noise with a different range
-    const cloudFrequency = 0.005; // Frequency for clouds
-    const cloudPersistence = 0.6; // Smoothness of clouds
+    const cloudFrequency = 0.015; // Frequency for clouds
+    const cloudPersistence = 0.7; // Smoothness of clouds
     const cloudThreshold = threshold; // Noise value above which clouds are drawn
 
     ctx.globalAlpha = 0.8; // Semi-transparent clouds

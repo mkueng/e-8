@@ -137,7 +137,7 @@ class ProceduralEnemyShipImageType2 extends ProceduralShipImage {
     this.addGradient({
       shipSize : shipSize,
       offset : offset,
-      alpha : 0.4
+      alpha : 0.6
     })
 
     return this.getImageData()

@@ -11,7 +11,7 @@ class ProceduralEnemyShipType2 {
       hasPlayerShipTracking : true,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
-        amount: 1,
+        amount: 2,
         posDX: -50,
         posDY: 45
       }
@@ -37,7 +37,7 @@ class ProceduralEnemyShipType2 {
       hasPlayerShipTracking : true,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
-        amount: 1,
+        amount: 2,
         posDX: -50,
         posDY: 45
       }
@@ -63,7 +63,7 @@ class ProceduralEnemyShipType2 {
       hasPlayerShipTracking : false,
       weapons: [{
         type : WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
-        amount: 1,
+        amount: 2,
         posDX: -50,
         posDY: 45
       }
@@ -89,7 +89,7 @@ class ProceduralEnemyShipType2 {
       hasPlayerShipTracking : false,
       weapons: [{
         type: WeaponFactory.WEAPON_TYPES.photonTorpedoEnemy2,
-        amount: 1,
+        amount: 2,
         posDX: -50,
         posDY: 45
       }

@@ -40,6 +40,7 @@ class Galaxy {
     this.galaxyWorker = new Worker("../../js/workers/galaxy/galaxyWorker.js");
     this.proceduralPlanet = new ProceduralPlanet({canvas:this.canvas, galaxyWorker:this.galaxyWorker});
 
+
     let pseudoRandomClusteredDistribution = Util.pseudoRandomClusteredDistribution(
       {...e8.global.planetDistribution}
     )
@@ -81,6 +82,7 @@ class Galaxy {
    * @returns {Promise<void>}
    */
   heartBeat =  ()=>{
+    console.log("Galaxy heartBeat started");
     setInterval(() => {
       let playerShipSnapCoordinates = PlayerShip.coordinates;
       const filteredKeys = this.#planetDistributionObjectKeys.filter(key => key >= playerShipSnapCoordinates && key <= playerShipSnapCoordinates + 100000);
@@ -88,7 +90,7 @@ class Galaxy {
       for(const obj of setObj) {
         if (!this.#visiblePlanets.has(obj)) {
           this.#visiblePlanets.add(obj);
-          this.#createPlanet(obj).then(() => {
+          this.#createProceduralPlanet(obj).then(() => {
             console.log("Planet created");
           });
         }
@@ -108,7 +110,7 @@ class Galaxy {
     console.log("Creating SUN");
     const distributionEntry = this.#sunDistribution[0];
     this.#sunDistribution.shift()
-    let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 450);
+    let size = Math.min(Util.getLastNDigits(distributionEntry, 2) * 4, 200);
     if (size < 50) size = 50;
     const sun = new Sun({
       width: size,
@@ -133,9 +135,27 @@ class Galaxy {
    * @param coordinates
    * @returns {Promise<void>}
    */
-  #createPlanet = async (coordinates) => {
+  #createProceduralPlanet = async (coordinates) => {
     console.log("creating planet");
     let planetObject = await this.proceduralPlanet.create({planetData: this.#planetMap[coordinates]});
+    planetObject.posX = e8.global.screenWidth;
+    planetObject.previousPosX = e8.global.screenWidth;
+
+    this.#planetObjects[planetObject.coordinates] = planetObject;
+    GameObjectsHandler.instance.addGameObject(planetObject);
+
+    this.#subscribers.forEach(subscriber => {
+      try {
+        subscriber.updateFromGalaxy({ message: "planetObjects", payload: this.#planetObjects });
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  }
+
+  #createPreRenderedPlanet = async (coordinates) => {
+    console.log("creating pre-rendered planet");
+    let planetObject = await this.proceduralPlanet.createPreRenderedPlanet({planetData: this.#planetMap[coordinates]});
     planetObject.posX = e8.global.screenWidth;
     planetObject.previousPosX = e8.global.screenWidth;
 
@@ -161,21 +181,26 @@ class Galaxy {
     let planetMap = {};
     let radius;
     let planetSizeCounter = 1
+    let previousPlanetRadius = 150;
 
     const divisors = {
-      0: 2,
-      1: 4.6,
-      2: 2.5,
-      3: 4,
-      4: 3,
-      5: 5
+      0: 2.5,
+      1: 3.5,
+      2: 4.5,
+      3: 2
     };
 
     for (const coordinate of distribution) {
-      planetSizeCounter = (planetSizeCounter + 1) % 7;
+      planetSizeCounter = (planetSizeCounter + 1) % 4;
 
-      const divisor = divisors[planetSizeCounter] || 2;
-      radius = Math.max(Math.floor(Util.createNumericHash(coordinate, 3) / divisor), 30);
+      const divisor = divisors[planetSizeCounter];
+      radius = Math.max(Math.floor(Util.createNumericHash(coordinate, 3) / divisor), 80);
+      if (radius+50 > previousPlanetRadius && radius-50 < previousPlanetRadius) {
+        radius = previousPlanetRadius - 30;
+        //console.log(radius);
+      }
+      previousPlanetRadius = radius;
+      //console.log(radius);
 
       const oneDigit = Util.createNumericHash(coordinate,1);
       const twoDigits = Util.createNumericHash(coordinate,2);
@@ -206,6 +231,7 @@ class Galaxy {
         b: b,
         q: q
       }
+
     }
     return planetMap;
   }

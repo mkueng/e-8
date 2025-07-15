@@ -51,7 +51,7 @@ class GameLoop {
       Console.log("accumulator: " + this.#accumulator.toFixed(2));
       Console.log("interpolation: " + interpolation.toFixed(2));
       Console.log("amount of active game objects: " + GameObjectsHandler.gameObjects.length);
-      Console.log("gameObjects: "+ GameObjectsHandler.gameObjects.map(obj => obj.identification).join(", "));
+      //Console.log("gameObjects: "+ GameObjectsHandler.gameObjects.map(obj => obj.identification).join(", "));
     }
 
     this.#render(interpolation);

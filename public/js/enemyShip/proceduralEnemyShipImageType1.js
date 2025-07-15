@@ -92,7 +92,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       this.addGradient({
           shipSize : shipSize,
           offset : offset,
-          alpha : 0.9
+          alpha : 1
       })
 
     this.addDecoration({
@@ -137,7 +137,7 @@ class ProceduralEnemyShipImageType1 extends ProceduralShipImage {
       this.addGradient({
           shipSize : shipSize,
           offset : offset,
-          alpha : 0.5
+          alpha : 0.8
       })
 
     return this.getImageData()

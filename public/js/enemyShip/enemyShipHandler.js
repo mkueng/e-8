@@ -58,9 +58,11 @@ class EnemyShipHandler {
         shipType: shipType,
         shipTypeVariation: shipType.constructor.shipTypeVariations[""+variation]
       }).then(()=>{
-        this.startCreation(Math.floor(Math.random()*20000+1600))
+        this.startCreation(Math.floor(Math.random()*5000+3600))
       });
     },interval)
+
+
   }
 
   /**

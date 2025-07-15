@@ -65,9 +65,10 @@ class Weapon extends GameObject {
    * @param posX
    * @param posY
    */
-  activate ({posX, posY}) {
+  activate ({posX, posY, posZ}) {
     this.posX = this.previousPosX = posX;
     this.posY = this.previousPosY = posY;
+    this.posZ = 0;
     this.isActive = true;
     GameObjectsHandler.instance.addGameObject(this);
     SoundHandler.playFX(this.sound);

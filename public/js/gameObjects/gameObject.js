@@ -152,7 +152,6 @@ class GameObject {
       this.dependencyObjects = {};
       this.initializeDependencyObjects();
     }
-
   }
 
   /**
@@ -303,8 +302,6 @@ class GameObject {
 
   updateStatic(){
 
-
-
     if (this.doNotCheckOutOfBoundsLeft === false) {
       if (this.posX + this.posDX <= -this.width) {
         this.destroy();
@@ -425,15 +422,16 @@ class GameObject {
       }
     }
 
-    const zScale = this.posZ > 0 ? 1 / this.posZ : 1;
+    const zScale = this.posZ > 0 ? 30 / this.posZ : 1;
     this.velX += this.accX * (deltaTime / 10);
     this.velY += this.accY * (deltaTime / 10);
 
-    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale : this.velX * this.vector;
+    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * (zScale /3) : this.velX * this.vector;
     this.posX += this.viewPortVelX;
 
+
     if (!this.posYisFixed) {
-      this.posY = this.posY + PlayerShip.velY * zScale * this.vector;
+      this.posY = this.posY + PlayerShip.velY * zScale*1.2 * this.vector;
     }
 
     this.dependencies.forEach(dep => {

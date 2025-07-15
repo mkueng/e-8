@@ -43,7 +43,7 @@ class DustHandler extends Handler {
         color: this.#getRandomGrayscaleColor(velocity),
         posX: Math.random()*e8.global.screenWidth,
         posY: Math.floor(Math.random()*e8.global.screenHeight),
-        posZ: 0.03 * velocity,
+        posZ: 0.02 * velocity,
         velX: 0,
         width: Math.floor(Math.random()*3+2),
         height: Math.floor(Math.random()*2+1)

@@ -40,7 +40,7 @@ class AsteroidHandler extends Handler{
       fileType : "png",
       filePath :  "/resources/asteroids/",
       lowerLimit : 0,
-      upperLimit : 14
+      upperLimit : 20
     })
 
     for (const asteroidResourceObject of asteroidResourceObjects) {
@@ -74,8 +74,8 @@ class AsteroidHandler extends Handler{
    */
   heartBeatCallback = () => {
     if (PlayerShip.coordinates > this.#upcoming) {
-      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random() * 50000 + 10000);
-      this.invokeAsteroids(Math.floor(Math.random() * 10 + 10));
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random() * 10000 + 20000);
+      this.invokeAsteroids(Math.floor(Math.random() * 20 + 3));
     }
   }
 
@@ -94,15 +94,20 @@ class AsteroidHandler extends Handler{
    */
   invokeAsteroids = (amount) => {
     let counter = 0;
+    let asteroidLayerZ = 0;
+
     for (let i = 0; i < amount && this.#asteroids.length > 0; i++) {
       const asteroidIndex = Math.floor(Math.random() * this.#asteroids.length);
       const asteroid = this.#asteroids.splice(asteroidIndex, 1)[0];
       asteroid.posX = asteroid.previousPosX = e8.global.screenWidth+Math.floor(Math.random()*2000);
       asteroid.posY = asteroid.previousPosY = Math.random() * (e8.global.screenHeight - asteroid.width);
-      asteroid.posZ = Math.random() * 5+1;
 
-      const canvasLayer = asteroid.posZ > 3 ? 'far'
-        : asteroid.posZ > 1 ? 'middle'
+      const asteroidLayerZ = Math.floor(Math.random() * 180 + 25);
+
+      asteroid.posZ = asteroidLayerZ;
+
+      const canvasLayer = asteroid.posZ > 100 ? 'far'
+        : asteroid.posZ > 20 ? 'middle'
           : 'front';
 
       asteroid.canvas = this.#canvases[canvasLayer];
