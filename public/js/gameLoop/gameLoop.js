@@ -90,7 +90,7 @@ class GameLoop {
     // Update game objects
     const len = GameObjectsHandler.gameObjects.length;
     for (let i = 0; i < len; i++) {
-      GameObjectsHandler.gameObjects[i].update(deltaTime);
+      GameObjectsHandler.gameObjects[i].update(deltaTime /1000);
     }
   };
 

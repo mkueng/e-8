@@ -468,24 +468,24 @@ class PlayerShip extends GameObject {
   #applyControl = (direction, deltaTime) =>{
     const controlActions = {
       down: () => {
-        this.velY += this.accY * (deltaTime / 10);
+        this.velY += this.accY * deltaTime;
         this.#deactivateControls();
       },
       up: () => {
-        this.velY -= this.accY * (deltaTime / 10);
+        this.velY -= this.accY * deltaTime;
         this.#deactivateControls();
       },
       right: () => {
-        this.viewPortVelX += this.accX * (deltaTime / 10);
-        this.velX += this.accX * (deltaTime / 10);
+        this.viewPortVelX += this.accX * deltaTime;
+        this.velX += this.accX * deltaTime;
 
         this.engineTrail.createParticle({ posX: this.posX, posY: this.posY });
         this.#activateControl(0, 1);
       },
       left: () => {
-        this.viewPortVelX -= this.accX * (deltaTime / 10);
+        this.viewPortVelX -= this.accX * deltaTime;
         if (this.velX > 0) {
-          this.velX -= this.accX * (deltaTime / 10);
+          this.velX -= this.accX * deltaTime;
 
         }
         this.#activateControl(1, 0);

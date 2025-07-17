@@ -10,9 +10,9 @@ class AsteroidHandler extends Handler{
   #upcoming = 10000;
 
   constructor({
-    canvasHandler,
-    resourceHandler
-              }){
+                canvasHandler,
+                resourceHandler
+  }){
     super ()
     Object.assign(this, {
       canvasHandler,
@@ -63,7 +63,6 @@ class AsteroidHandler extends Handler{
         rotation : 5,
       })
       this.#asteroids.push(asteroid);
-
       this.heartBeat.timeout = 1000;
       this.heartBeat.callback = this.heartBeatCallback
     }
@@ -102,9 +101,8 @@ class AsteroidHandler extends Handler{
       asteroid.posX = asteroid.previousPosX = e8.global.screenWidth+Math.floor(Math.random()*2000);
       asteroid.posY = asteroid.previousPosY = Math.random() * (e8.global.screenHeight - asteroid.width);
 
-      const asteroidLayerZ = Math.floor(Math.random() * 180 + 25);
+      asteroid.posZ = Math.floor(Math.random() * 30 + 2)
 
-      asteroid.posZ = asteroidLayerZ;
 
       const canvasLayer = asteroid.posZ > 100 ? 'far'
         : asteroid.posZ > 20 ? 'middle'

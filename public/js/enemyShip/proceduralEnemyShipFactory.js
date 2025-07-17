@@ -73,9 +73,11 @@ class ProceduralEnemyShipFactory {
    * @param canvas
    * @param posX
    * @param posY
+   * @param velX
+   * @param velY
    * @returns {Promise<unknown>}
    */
-  createShip = async ({shipType, shipTypeVariation, canvas, posX, posY}) => {
+  createShip = async ({shipType, shipTypeVariation, canvas, posX, posY, velX, velY}) => {
     const {shipSize, shield, propulsion, spinner, weapons, hasPlayerShipTracking} = shipTypeVariation;
 
 
@@ -114,9 +116,12 @@ class ProceduralEnemyShipFactory {
 
       //create ship instance once ship image is loaded
       img.onload = () => {
-        const velX = ((Math.random()*8*(1/shipSize))+5);
-        console.log("velX", velX);
-     
+        velX = velX || Math.floor(((Math.random()*10*(1/shipSize))+5));
+        velY = velY || 0;
+        posX = posX || e8.global.screenWidth * 3;
+        posY = posY || Math.floor(Math.random() * e8.global.screenHeight);
+        const posZ = 2;
+
         let shipObject = new EnemyShip({
           activeWeaponID: weapons[0].type.name,
           canvas: canvas,
@@ -125,16 +130,16 @@ class ProceduralEnemyShipFactory {
           particles: particlesObject,
           posDX: 0,
           posDY: 0,
-          posX: posX || e8.global.screenWidth+e8.global.screenWidth,//+e8.global.screenWidth,
-          posY: posY || Math.floor(Math.random() * e8.global.screenHeight),
-          posZ: 2,
+          posX: posX,
+          posY: posY,
+          posZ: posZ,
           dependencies: [
             propulsionInstance,
             shieldInstance
           ],
           terminationSequence: terminationSequence,
           velX: velX,
-          velY: 0,
+          velY: velY,
           weapons: weaponsInstances,
           width: img.width,
           image: img,

@@ -25,7 +25,7 @@ class HazeHandler extends Handler {
     this.#colorKeys = Object.keys(e8.global.colors);
 
 
-    this.heartBeat.timeout=1000;
+    this.heartBeat.timeout=2000;
     this.heartBeat.callback = this.heartBeatCallBack;
 
     this.resizeImageWorker.onmessage = ({data}) =>{
@@ -39,7 +39,7 @@ class HazeHandler extends Handler {
 
     img.onload =()=>{
       const size = img.width;
-      const posZ = Math.floor(Math.random()*320+320);
+      const posZ = Math.floor(Math.random()*120+120);
       console.log("Haze created with size: " + size + " and posZ: " + posZ);
 
       if (posZ >= 60 ) canvas = this.#canvases[2];
@@ -98,7 +98,7 @@ class HazeHandler extends Handler {
   heartBeatCallBack = (data) => {
 
     if (PlayerShip.coordinates > this.#upcoming) {
-      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*105000+100000);
+      this.#upcoming = PlayerShip.coordinates + Math.floor(Math.random()*505000+500000);
       this.#invokeHaze();
     }
   }

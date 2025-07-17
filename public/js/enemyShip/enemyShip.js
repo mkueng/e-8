@@ -169,7 +169,9 @@ class EnemyShip extends GameObject {
     ) {
       this.fireWeapon();
     }
-    const zScale = this.posZ > 0 ? 1 / this.posZ : 1;
+
+
+    const zScale = this.posZ > 0 ? 100 / this.posZ : 1;
 
     if (this.hasPlayerShipTracking) {
       this.quotient = (PlayerShipHandler.activeShip.posY - this.posY ) / 300;
@@ -180,10 +182,10 @@ class EnemyShip extends GameObject {
       this.posY = this.posY - PlayerShip.velY * zScale;
     }
 
-    if (this.posX >- this.width && this.posX < (e8.global.screenWidth + e8.global.screenWidth+this.width)) {
-      this.viewPortVelX = (PlayerShip.velX / 2 + this.velX) * this.vector * (1 /5) * (dt/10);
-     // console.log("enemy velX: ", this.velX);
-      this.posX = this.posX +   this.viewPortVelX;
+    if (this.posX >- this.width && this.posX < (e8.global.screenWidth * 3 + this.width)) {
+      this.viewPortVelX = (PlayerShip.velX + this.velX) * this.vector *dt *100;
+      //console.log("enemy velX: ", this.velX);
+      this.posX = this.posX + this.viewPortVelX;
     } else {
       this.terminate();
       this.enemyShipHandler.shipDestroyed(this.id);

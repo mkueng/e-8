@@ -43,7 +43,7 @@ class ProceduralPlanet {
 
       img.onload = () => {
         let posY = (planetData.coordinates % (e8.global.screenHeight) - planetData.radius);
-        let posZ = Math.sqrt(1 / (planetData.radius*planetData.radius*2)) * 800000;
+        let posZ = Math.sqrt(1 / (planetData.radius*planetData.radius*2)) * 80000;
         let planetObject = new Planet({
           coordinates: planetData.coordinates,
           image: img,

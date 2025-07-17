@@ -1,4 +1,8 @@
 'use strict'
+
+/**
+ * @name GameObject
+ */
 class GameObject {
 
   /**
@@ -192,7 +196,6 @@ class GameObject {
    * @name activate
    */
   activate(){
-
     this.isActive = true;
     GameObjectsHandler.instance.addGameObject(this);
 
@@ -202,8 +205,6 @@ class GameObject {
       dependency.isActive = true;
       GameObjectsHandler.instance.addGameObject(dependency);
     });
-
-
   };
 
   fadeIn = () => {
@@ -221,7 +222,6 @@ class GameObject {
   }
 
   fadeOutUpdate = () => {
-
     this.alpha = this.alpha - 0.05;
     if (this.alpha <= 0) {
       this.alpha = 0;
@@ -363,7 +363,6 @@ class GameObject {
         }
       }
 
-
       const column = this.currentFrame % this.spriteSheetColumns;
       const row = Math.floor(this.currentFrame / this.spriteSheetColumns);
       const sourceX = column * this.strideX;
@@ -422,16 +421,15 @@ class GameObject {
       }
     }
 
-    const zScale = this.posZ > 0 ? 30 / this.posZ : 1;
-    this.velX += this.accX * (deltaTime / 10);
-    this.velY += this.accY * (deltaTime / 10);
+    const zScale = this.posZ > 0 ? 100 / this.posZ : 1;
+    this.velX += this.accX ;
+    this.velY += this.accY;
 
-    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * (zScale /3) : this.velX * this.vector;
+    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale * deltaTime: this.velX * this.vector;
     this.posX += this.viewPortVelX;
 
-
     if (!this.posYisFixed) {
-      this.posY = this.posY + PlayerShip.velY * zScale*1.2 * this.vector;
+      this.posY = this.posY + PlayerShip.velY * zScale * 0.1 * this.vector;
     }
 
     this.dependencies.forEach(dep => {

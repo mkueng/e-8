@@ -36,7 +36,7 @@ class Asteroid extends GameObject{
       canvas,
       doNotCheckOutOfBoundsLeft : false,
       doNotCheckOutOfBoundsRight : true,
-      hasMass: true,
+      hasMass : true,
       height,
       identification: "asteroid",
       image,
@@ -50,8 +50,8 @@ class Asteroid extends GameObject{
       velY,
       width,
       rotation,
-      vector: -1,
-      isActive: false
+      vector : -1,
+      isActive : false
     });
   }
 }
