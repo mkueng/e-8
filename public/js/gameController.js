@@ -16,10 +16,7 @@ class GameController {
     #scanner;
     #galaxy;
     #game;
-
-
-    #inputHandler
-
+    #inputHandler;
     #weaponFactory;
     #shieldFactory;
     #propulsionFactory;
@@ -28,9 +25,7 @@ class GameController {
     #playerShipFactory;
     #fuelFactory;
     #poiFactory;
-
     #resizeImageWorker;
-
 
     /**
      *
@@ -40,73 +35,70 @@ class GameController {
      * @param resizeImageWorker
      */
     constructor({
-      inputHandler,
-      resourceHandler,
-      canvasHandler,
-      resizeImageWorker
-                }) {
-
-        this.#inputHandler = inputHandler;
-        this.#resourceHandler = resourceHandler;
-        this.#canvasHandler = canvasHandler;
-        this.#resizeImageWorker  = resizeImageWorker;
+                  inputHandler,
+                  resourceHandler,
+                  canvasHandler,
+                  resizeImageWorker
+    }) {
+      this.#inputHandler = inputHandler;
+      this.#resourceHandler = resourceHandler;
+      this.#canvasHandler = canvasHandler;
+      this.#resizeImageWorker  = resizeImageWorker;
     }
 
-    init = async () =>{
-
-        //particleGenerator
-        this.#particleGenerator = new ParticleGenerator();
-
-        this.createFactories();
-        await this.initFactories();
-        this.createHandlers();
-        await this.initHandlers();
-
-
-        // galaxy
-        this.#galaxy = new Galaxy({
-            scale:e8.global.scaleOfGalaxy,
-            canvasHandler:this.#canvasHandler,
-            inputHandler: this.#inputHandler
-        });
-        this.#galaxy.init();
-
-        //hud
-        this.#scanner = new Scanner({
-            galaxy: this.#galaxy,
-            canvasHandler: this.#canvasHandler
-
-        });
-        await this.#scanner.init();
-
-        //terminal
-        this.#terminal = new Terminal({
-            canvasHandler: this.#canvasHandler,
-            resourceHandler: this.#resourceHandler
-        })
-
-        //backdrop
-        this.#backdrop = new Backdrop({
-            canvasHandler: this.#canvasHandler
-        });
-
-
-
-
-        this.#game = new Game({
-            poiHandler: this.#poiHandler,
-            terminal: this.#terminal,
-            spaceStationHandler: this.#spaceStationHandler,
-            dustHandler: this.#dustHandler,
-            playerShipHandler: this.#playerShipHandler,
-            asteroidHandler: this.#asteroidHandler,
-            hazeHandler: this.#hazeHandler,
-            enemyShipHandler: this.#enemyShipHandler,
-            freighterHandler: this.#freighterHandler
-        });
-
+    init = async () => {
+      this.#particleGenerator = new ParticleGenerator();
+      this.createFactories();
+      await this.initFactories();
+      this.createHandlers();
+      await this.initHandlers();
+      await this.setup();
+      await this.initGame();
     }
 
+    setup = async () => {
+      // galaxy
+      this.#galaxy = new Galaxy({
+        scale:e8.global.scaleOfGalaxy,
+        canvasHandler:this.#canvasHandler,
+        inputHandler: this.#inputHandler
+      });
+      this.#galaxy.init();
+
+      //hud
+      this.#scanner = new Scanner({
+        galaxy: this.#galaxy,
+        canvasHandler: this.#canvasHandler
+      });
+
+      await this.#scanner.init();
+
+      //terminal
+      this.#terminal = new Terminal({
+        canvasHandler: this.#canvasHandler,
+        resourceHandler: this.#resourceHandler
+      })
+
+      //backdrop
+      this.#backdrop = new Backdrop({
+        canvasHandler: this.#canvasHandler
+      });
+    }
+
+    initGame = async () => {
+      this.#game = new Game({
+        poiHandler : this.#poiHandler,
+        terminal : this.#terminal,
+        spaceStationHandler : this.#spaceStationHandler,
+        dustHandler : this.#dustHandler,
+        playerShipHandler : this.#playerShipHandler,
+        asteroidHandler : this.#asteroidHandler,
+        hazeHandler : this.#hazeHandler,
+        enemyShipHandler : this.#enemyShipHandler,
+        freighterHandler : this.#freighterHandler
+      });
+    }
+    
     initHandlers = async () =>{
         await this.#dustHandler.init();
         await this.#asteroidHandler.init();

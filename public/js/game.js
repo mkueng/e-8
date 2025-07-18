@@ -16,9 +16,9 @@ class Game {
                 hazeHandler,
                 enemyShipHandler,
                 freighterHandler,
-    poiHandler,
-    spaceStationHandler,
-    terminal
+                poiHandler,
+                spaceStationHandler,
+                terminal
   }) {
     this.#gameLoop = new GameLoop();
     this.#dustHandler = dustHandler;
@@ -36,7 +36,9 @@ class Game {
     this.#asteroidHandler.startHeartBeat();
     this.#hazeHandler.startHeartBeat();
     this.#enemyShipHandler.startCreation(1000);
-    await this.#freighterHandler.create();
+    //await this.#freighterHandler.create();
+
+    //show the game canvas
     document.querySelector("#game").style.display = "block";
   }
 }

@@ -1,3 +1,8 @@
+'use strict';
+
+/**
+ * @name FTLTravelStarted
+ */
 class FTLTravelStarted extends State {
   constructor(name, gameController) {
     super(name, gameController);
@@ -17,13 +22,12 @@ class FTLTravelStarted extends State {
 
 
 /**
- * GameInitialized state
+ * @name GameInitialized
  */
 class GameInitialized extends State{
   constructor(name){
     super(name);
     this.addTransition('startGame', 'GameStarted');
-
   }
 
   async enter(){
@@ -42,7 +46,7 @@ class GameInitialized extends State{
 
 
 /**
- * GameStarted state
+ * @name GameStarted
  */
 class GameStarted extends State{
   constructor(name, gameController){
@@ -67,7 +71,7 @@ class GameStarted extends State{
 }
 
 /**
- * AppInitialized state
+ * @name AppInitialized
  */
 class AppInitialized extends State {
   constructor(name) {
@@ -87,7 +91,7 @@ class AppInitialized extends State {
 }
 
 /**
- * AppStarted state
+ * @name AppStarted
  */
 class AppStarted extends State {
   constructor(name, gameController) {
@@ -103,7 +107,7 @@ class AppStarted extends State {
 }
 
 /**
- * GamePaused state
+ * @name GamePaused
  */
 class GamePaused extends State {
   constructor(name, gameController) {
@@ -124,7 +128,7 @@ class GamePaused extends State {
 }
 
 /**
- * GameRestarted state
+ * @name GameRestarted
  */
 class GameRestarted extends State {
   constructor(name, gameController) {
@@ -145,7 +149,7 @@ class GameRestarted extends State {
 }
 
 /**
- * GameEnded state
+ * @name GameEnded
  */
 class GameEnded extends State {
   constructor(name, gameController) {
@@ -165,7 +169,7 @@ class GameEnded extends State {
 }
 
 /**
- * AppEnded state
+ * @name AppEnded
  */
 class AppEnded extends State {
   constructor(name, gameController) {
