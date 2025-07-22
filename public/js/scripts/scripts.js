@@ -203,8 +203,15 @@ class Scripts {
     // spaceStation
     await ScriptLoader.loadScript("js/spaceStation/spaceStationHandler.js?v="+Scripts.version);
 
+    // ecs
+    await ScriptLoader.loadScript("js/ecs/systems.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/ecs.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/entity.js?v="+Scripts.version);
+
+
     // game
-    await ScriptLoader.loadScript("js/gameController.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/gameController_ecs.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/game.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/util/gameTelemetry.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/util/console.js?v="+Scripts.version);

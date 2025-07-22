@@ -145,8 +145,6 @@ class GameObject {
     this.vector = vector || -1;
     this.velX = velX || 0;
     this.velY = velY || 0;
-    this.viewPortVelX = 0;
-    this.viewPortVelY = 0;
     this.width = width;
 
     if (canvas) {
@@ -425,8 +423,8 @@ class GameObject {
     this.velX += this.accX ;
     this.velY += this.accY;
 
-    this.viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale * deltaTime: this.velX * this.vector;
-    this.posX += this.viewPortVelX;
+    const viewPortVelX = this.hasMass ? (PlayerShip.velX + this.velX) * this.vector * zScale * deltaTime: this.velX * this.vector;
+    this.posX += viewPortVelX;
 
     if (!this.posYisFixed) {
       this.posY = this.posY + PlayerShip.velY * zScale * 0.1 * this.vector;
