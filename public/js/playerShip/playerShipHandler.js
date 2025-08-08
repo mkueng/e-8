@@ -25,7 +25,7 @@ class PlayerShipHandler {
 
   createShip = async ()=>{
     PlayerShipHandler.activeShip = await this.playerShipFactory.createShip({
-      shipType: PlayerShipFactory.SHIP_TYPES.classA,
+      shipType: PlayerShipFactory_ecs.SHIP_TYPES.classA,
       shipImageIdentifier: "eagle",
       canvas: this.#canvas,
       inputHandler : this.inputHandler

@@ -238,9 +238,9 @@ class GameController {
 
         /**
          *
-         * @type {PlayerShipFactory}
+         * @type {PlayerShipFactory_ecs}
          */
-        this.#playerShipFactory = new PlayerShipFactory({
+        this.#playerShipFactory = new PlayerShipFactory_ecs({
             resourceHandler: this.#resourceHandler,
             canvasHandler: this.#canvasHandler,
             engineTrailFactory: this.#engineTrailFactory,

@@ -90,7 +90,7 @@ class PlayerShipPropertiesClassA {
 
     PT : {
       controlAssignment : "Space",
-      type: WeaponFactory.WEAPON_TYPES.photonTorpedo,
+      type: WeaponFactory_ecs.WEAPON_TYPES.photonTorpedo,
       amount: 2000,
       posDX: 50,
       posDY: 20
@@ -98,18 +98,18 @@ class PlayerShipPropertiesClassA {
 
     FaF : {
       controlAssignment : "KeyK",
-      type : WeaponFactory.WEAPON_TYPES.photonTorpedoFireAndForget,
+      type : WeaponFactory_ecs.WEAPON_TYPES.fireAndForget,
       amount: 1000,
       posDX : 60,
       posDY : 10
     },
-
+/*
     Laser : {
       controlAssignment : "KeyF",
       type : WeaponFactory.WEAPON_TYPES.laser,
       amount: 100,
       posDX : 92,
       posDY : 25
-    }
+    }*/
   }
 }

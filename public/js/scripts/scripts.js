@@ -122,13 +122,14 @@ class Scripts {
     await ScriptLoader.loadScript("js/workers/galaxy/sphereImageLib.js?v="+Scripts.version);
 
     // weapon
+
     await ScriptLoader.loadScript("js/weapon/weapon.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/weapon/photonTorpedo.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/weapon/photonTorpedo_ecs.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/laser.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/photonTorpedoEnemy.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/weapon/photonTorpedoEnemy2.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/weapon/photonTorpedoFireAndForget.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/weapon/weaponFactory.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/weapon/fireAndForget_ecs.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/factories/weaponFactory_ecs.js?v="+Scripts.version);
 
     // trail
     await ScriptLoader.loadScript("js/engineTrail/engineTrail.js?v="+Scripts.version);
@@ -204,18 +205,48 @@ class Scripts {
     await ScriptLoader.loadScript("js/spaceStation/spaceStationHandler.js?v="+Scripts.version);
 
     // ecs
-    await ScriptLoader.loadScript("js/ecs/systems.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/ecs.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/ecs/components.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems.js?v="+Scripts.version);
+
+    await ScriptLoader.loadScript("js/ecs/component.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/entity.js?v="+Scripts.version);
 
+    // ecs components
+    await ScriptLoader.loadScript("js/ecs/components/bounds.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/collision.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/dependency.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/dimension.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/hitBox.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/image.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/position.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/velocity.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/spriteSheet.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/sound.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/components/input.js?v="+Scripts.version);
+
+    // ecs systems
+    await ScriptLoader.loadScript("js/ecs/systems/system.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/movementSystem.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/renderSystem.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/checkBoundsSystem.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/checkCollisionSystem.js?v="+Scripts.version);
+
+    //ecs factories
+    await ScriptLoader.loadScript("js/ecs/factories/playerShipFactory_ecs.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/factories/propulsionFactory_ecs.js?v="+Scripts.version);
+
+    await ScriptLoader.loadScript("js/ecs/factories/explosionFactory_ecs.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/factories/factoryHandler.js?v="+Scripts.version);
+
+    //ecs composers
+    await ScriptLoader.loadScript("js/ecs/composers/playerShipComposer.js?v="+Scripts.version);
 
     // game
-    await ScriptLoader.loadScript("js/gameController_ecs.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/game/gameController_ecs.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/game.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/util/gameTelemetry.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/util/console.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/gameLoop/gameLoop.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/game/gameLoop_ecs.js?v="+Scripts.version);
 
   }
 }

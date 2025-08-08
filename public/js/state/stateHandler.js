@@ -24,7 +24,7 @@ class StateHandler{
     this.#fsm = new FiniteStateMachine(this);
     this.#states = [
       { name: 'AppInitialized', instance: new AppInitialized('AppInitialized') },
-      { name: 'AppStarted', instance: new AppStarted('AppStarted', ) },
+      { name: 'AppStarted', instance: new AppStarted('AppStarted' ) },
       { name: "GameInitialized", instance: new GameInitialized("GameInitialized")},
       { name: 'GameStarted', instance: new GameStarted('GameStarted') },
       { name: 'GamePaused', instance: new GamePaused('GamePaused') },
@@ -33,7 +33,7 @@ class StateHandler{
     ];
 
     this.#fsm.registerStates(this.#states);
-    this.#fsm.setState('AppStarted');
+    //this.#fsm.setState("AppStarted")
   }
 
   subscribe(subscriber){

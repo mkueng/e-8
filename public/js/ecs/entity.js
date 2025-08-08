@@ -8,7 +8,7 @@ ECS.entityGroups = {
   projectiles : [],
   explosions : [],
   asteroids : [],
-  planets : []
+  planets : [],
 };
 
 ECS.entityFactory = (components) => {
@@ -25,30 +25,8 @@ ECS.entityFactory = (components) => {
   return entity;
 }
 
-const playerShip = ECS.entityFactory({
-  position: ECS.componentFactory('position', ECS.component.position),
-  velocity: ECS.componentFactory('velocity', ECS.component.velocity),
-  image: ECS.componentFactory('image', ECS.component.image),
-  collision: ECS.componentFactory('collision', ECS.component.collision),
-  dependency: ECS.componentFactory('dependency', ECS.component.dependency),
-  //hitBox: ECS.componentFactory('hitBox', ECS.component.hitBox)
 
-});
-console.log("playerShip:", playerShip);
-ECS.registerEntityToGroups(playerShip);
-
-for (let i = 0; i <10000; i++) {
-  const asteroid = ECS.entityFactory({
-    position: ECS.componentFactory('position', ECS.component.position),
-    velocity: ECS.componentFactory('velocity', ECS.component.velocity),
-    image: ECS.componentFactory('image', ECS.component.image),
-    collision: ECS.componentFactory('collision', ECS.component.collision),
-    dimension: ECS.componentFactory('dimension', ECS.component.dimension),
-    dependency: ECS.componentFactory('dependency', ECS.component.dependency),
-  });
-  ECS.registerEntityToGroups(asteroid);
-}
-console.log("ECS.groups:", ECS.groups);
+/*
 let lastFrameTime = performance.now();
 
 gameLoop();
@@ -76,3 +54,4 @@ function gameLoop(currentTime) {
   });
 
 }
+*/

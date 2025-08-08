@@ -22,11 +22,11 @@ class State {
   }
 
   enter() {
-    console.log(`%centering state: ${this.#name}`, 'color: lightgreen;');
+    console.log(`%centering state: ${this.#name}`, 'color: yellow;');
   }
 
   exit() {
-    console.log(`%cexiting state: ${this.#name}`, 'color: green;');
+    console.log(`%cexiting state: ${this.#name}`, 'color: orange;');
   }
 }
 

@@ -5,7 +5,7 @@ ECS.system = ECS.system || {};
  * @type {{movement: string[], renderImage: string[], renderSpriteSheet: string[], checkBounds: string[], checkCollision: string[]}}
  */
 ECS.systemRequirements = {
-  movement: ["position","velocity","dependency"],
+  movement: ["position","velocity"],
   renderImage: ["image"],
   renderSpriteSheet: ["spriteSheet"],
   checkBounds: ["position", "dimension"],

@@ -1,5 +1,8 @@
 'use strict'
 
+/**
+ * @class AppController_ecs
+ */
 class AppController_ecs {
 
   #gameController;
@@ -9,59 +12,89 @@ class AppController_ecs {
   #localStorageHandler;
   #fontHandler;
   #inputHandler;
+  #soundHandler;
   #settingsHandler;
   #speechHandler;
   #infoHandler;
+  #factoryHandler;
   #proceduralMusic;
   #resizeImageWorker;
+
+  /**
+   * @name AppController_ecs
+   */
   constructor() {
   }
 
+  /**
+   * Initializes the application controller
+   * @returns {Promise<void>}
+   */
   init = async () => {
     await this.#loadScripts();
-
-    SoundHandler.setFXGain({percentage: 0});
-    SoundHandler.setMusicGain({percentage: 0});
+    this.#createHandlers();
+    this.#stateHandler.setState("AppStarted");
 
     this.#createWorkers();
-    this.#createHandlers();
+
 
     await this.#initHandlers();
     this.#initEventListeners();
 
+    SoundHandler.setFXGain({percentage: 0});
+    SoundHandler.setMusicGain({percentage: 0});
+
     this.#stateHandler.setState("AppInitialized");
+
     await this.#stateHandler.trigger(StateHandler.actions.initializeGame);
     await this.#stateHandler.trigger(StateHandler.actions.startGame);
+
   }
 
+  /**
+   * Initializes the game controller
+   * @returns {Promise<void>}
+   */
   initGame = async()=>{
-  }
-
-  startGame = async()=>{
     this.#gameController = new GameController_ecs({
       inputHandler: this.#inputHandler,
       resourceHandler: this.#resourceHandler,
       canvasHandler: this.#canvasHandler,
-      resizeImageWorker: this.#resizeImageWorker
+      resizeImageWorker: this.#resizeImageWorker,
+      factoryHandler: this.#factoryHandler
     });
-    await this.#gameController.init();
-    await this.#gameController.startGame();
 
-    document.querySelector("#loading").style.display = "none";
-    document.addEventListener("keydown", this.startMusic, true);
-    document.addEventListener("mousedown", this.startMusic, true);
+    await this.#gameController.init();
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
+  startGame = async()=>{
+    await this.#gameController.startGame();
+    document.querySelector("#loading").style.display = "none";
+    document.querySelector("#game").style.display = "block";
+  }
+
+  /**
+   * Starts the music when the user interacts with the page
+   */
   startMusic = ()=>{
     //SoundHandler.playMusic();
-    document.removeEventListener("keydown", this.startMusic, true);
-    document.removeEventListener("mousedown", this.startMusic, true);
   }
 
+  /**
+   * Loads necessary scripts for the application
+   * @returns {Promise<void>}
+   */
   #loadScripts = async() =>{
     await Scripts.getInstance().loadScripts();
   }
 
+  /**
+   * Initializes event listeners for window resize and visibility change
+   */
   #initEventListeners = () =>{
     window.addEventListener(e8.global.events.resize, (evt) => {
       e8.global.currentWidth = window.innerWidth;
@@ -89,7 +122,7 @@ class AppController_ecs {
   }
 
   /**
-   *
+   * Initializes handlers
    * @returns {Promise<void>}
    */
   #initHandlers = async()=>{
@@ -97,26 +130,34 @@ class AppController_ecs {
     await this.#canvasHandler.initCanvases();
   }
 
+  /**
+   * Creates web workers
+   */
   #createWorkers = ()=>{
     this.#resizeImageWorker = new Worker('js/workers/resizeImageWorker.js');
   }
 
   /**
-   * Creates global handlers
+   * Creates handlers
    */
   #createHandlers = ()=>{
     this.#stateHandler = new StateHandler();
     this.#resourceHandler = new ResourceHandler({ resourcesBasePath: "" });
     this.#canvasHandler = new CanvasHandler();
+    this.#soundHandler = new SoundHandler();
     this.#localStorageHandler = new LocalStorageHandler();
     this.#fontHandler = new FontHandler();
     this.#inputHandler = new InputHandler();
+    this.#speechHandler = new SpeechHandler();
+    this.#infoHandler = new InfoHandler();
+    this.#proceduralMusic = new ProceduralMusic();
     this.#settingsHandler = new SettingsHandler({
       localStorageHandler: this.#localStorageHandler,
       inputHandler: this.#inputHandler
     });
-    this.#speechHandler = new SpeechHandler();
-    this.#infoHandler = new InfoHandler();
-    this.#proceduralMusic = new ProceduralMusic();
+    this.#factoryHandler = new FactoryHandler({
+      resourceHandler: this.#resourceHandler,
+      canvasHandler: this.#canvasHandler
+    });
   }
 }

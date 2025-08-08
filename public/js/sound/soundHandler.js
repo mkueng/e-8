@@ -26,7 +26,7 @@ class SoundHandler {
     SoundHandler.fxGainNode.connect(SoundHandler.audioCtx.destination)
   }
 
-  static playMusic(){
+  playMusic(){
     SoundHandler.music.play();
   }
 
@@ -38,8 +38,8 @@ class SoundHandler {
   }
 
   static async fetchAudioAndReturnAudioBuffer (source){
-    //const response = await fetch(source);
-    //const arrayBuffer = await response.arrayBuffer();
-    //return await SoundHandler.audioCtx.decodeAudioData(arrayBuffer);
+    const response = await fetch(source);
+    const arrayBuffer = await response.arrayBuffer();
+    return await SoundHandler.audioCtx.decodeAudioData(arrayBuffer);
   }
 }

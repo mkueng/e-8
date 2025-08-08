@@ -41,14 +41,14 @@ class FiniteStateMachine {
    * @param name
    * @returns {null}
    */
-  setState = (name) => {
+  setState = async (name) => {
     if (this.states[name]) {
       if (this.currentState) {
         this.currentState.exit();
         this.#stateHandler.publish(this.currentState);
       }
       this.currentState = this.states[name];
-      this.currentState.enter();
+      await this.currentState.enter();
       this.#stateHandler.publish(this.currentState);
 
     } else {
@@ -63,15 +63,16 @@ class FiniteStateMachine {
    * @param action
    * @returns {null}
    */
-  trigger = (action) => {
-
-
+  trigger = async (action) => {
     if (this.currentState && this.currentState.transitions[action]) {
       const nextState = this.currentState.transitions[action];
-      this.setState(nextState);
+      return await this.setState(nextState);
     } else {
-      console.error(`Invalid action "${action}" for current state: "${this.currentState.name}"`);
+      console.error(
+        `Invalid action "${action}" for current state: "${this.currentState ? this.currentState.name : 'none'}"`
+      );
+      return this.currentState;
     }
-    return this.currentState;
+
   }
 }

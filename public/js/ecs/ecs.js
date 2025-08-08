@@ -17,4 +17,5 @@ ECS.registerEntityToGroups = function (entity) {
       ECS.groups[systemName].push(entity);
     }
   }
+
 };
