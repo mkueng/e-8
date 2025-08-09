@@ -136,7 +136,7 @@ class GameLoop_ecs {
    */
   init = () => {
     // Only reset previousTimeStamp in init
-    this.groups = ECS.groups;
+    this.groups = ECS.systemGroups;
     console.log("this.groups", this.groups);
     this.#previousTimeStamp = performance.now();
   };

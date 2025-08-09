@@ -1,7 +1,7 @@
 class Scripts {
   // Private instance stored in a closure
   static #instance = null;
-  static version  = "0.26";
+  static version  = "0.26-ecs";
 
   // Private constructor to prevent direct instantiation
   constructor() {
@@ -206,10 +206,7 @@ class Scripts {
 
     // ecs
     await ScriptLoader.loadScript("js/ecs/ecs.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/ecs/systems.js?v="+Scripts.version);
 
-    await ScriptLoader.loadScript("js/ecs/component.js?v="+Scripts.version);
-    await ScriptLoader.loadScript("js/ecs/entity.js?v="+Scripts.version);
 
     // ecs components
     await ScriptLoader.loadScript("js/ecs/components/bounds.js?v="+Scripts.version);
