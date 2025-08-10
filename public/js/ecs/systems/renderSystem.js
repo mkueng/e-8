@@ -3,4 +3,8 @@ class RenderSystem extends System{
     super(['entity', 'interpolation']);
   }
 
+  update = () =>{
+    console.log("render System ");
+  }
+
 }

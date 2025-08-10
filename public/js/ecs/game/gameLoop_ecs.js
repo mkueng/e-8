@@ -113,6 +113,8 @@ class GameLoop_ecs {
    * @param interpolation
    */
   #render = (interpolation) => {
+
+    this.#systems["renderSystem"].update();
     // Clear contexts
 
     /*
