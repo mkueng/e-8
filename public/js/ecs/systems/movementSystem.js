@@ -7,9 +7,9 @@ class MovementSystem extends System {
     //const matches = this.getMatchingEntities(entities);
 
     for (const entity of entities) {
-      const { position, velocity } = entity.components;
-
+      const { position, velocity, input } = entity.components;
       const zScale = position.posZ > 0 ? 100 / position.posZ : 1;
+
       if (ECS.component.input.keys["ArrowRight"] === true) {
         velocity.accelerationX += 0.01;
       } else if (ECS.component.input.keys["ArrowRight"] === false) {
