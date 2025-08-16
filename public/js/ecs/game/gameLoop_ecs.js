@@ -114,7 +114,8 @@ class GameLoop_ecs {
    */
   #render = (interpolation) => {
 
-    this.#systems["renderSystem"].update();
+    this.#systems.renderSystem.render(this.groups.render,interpolation);
+
     // Clear contexts
 
     /*

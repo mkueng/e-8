@@ -77,8 +77,7 @@ ECS.componentFactory = function (name, data) {
  */
 ECS.systemRequirements = {
   movement: ["position","velocity"],
-  renderImage: ["image"],
-  renderSpriteSheet: ["spriteSheet"],
+  render: ["image"],
   checkBounds: ["position", "dimension"],
   checkCollision: ["position", "hitBox"],
 }

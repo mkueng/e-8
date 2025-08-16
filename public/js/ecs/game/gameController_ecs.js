@@ -39,9 +39,12 @@ class GameController_ecs {
 
     window.addEventListener('keydown', (e) => {
       ECS.component.input.keys[e.code] = true;
-
+      console.log("ECS.component.input.keys",  ECS.component.input.keys);
     });
-    window.addEventListener('keyup', e => ECS.component.input.keys[e.code] = false);
+    window.addEventListener('keyup', (e) =>  {
+      ECS.component.input.keys[e.code] = false;
+      console.log("ECS.component.input.keys",  ECS.component.input.keys);
+    });
 
     window.addEventListener('mousemove', e => {
       ECS.component.input.mouse.x = e.clientX;

@@ -33,9 +33,7 @@ class PlayerShipFactory_ecs {
                         canvas
   }){
 
-
     const imageResource = await this.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
-
 
     const ship = ECS.entityFactory({
       position: ECS.componentFactory('position', ECS.component.position),
@@ -53,9 +51,9 @@ class PlayerShipFactory_ecs {
     ship.components.image.context = canvas.context;
 
     ship.components.position.posX = 100;
-    ship.components.position.posY = 100;
-    ship.components.position.previousPosX = 100;
-    ship.components.position.previousPosY = 100;
+    ship.components.position.posY = 700;
+    ship.components.position.previousPosX = ship.components.position.posX;
+    ship.components.position.previousPosY = ship.components.position.posY;
     ship.components.position.posZ = 1;
 
     ship.isActive = false;

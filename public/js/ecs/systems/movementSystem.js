@@ -10,6 +10,17 @@ class MovementSystem extends System {
       const { position, velocity } = entity.components;
 
       const zScale = position.posZ > 0 ? 100 / position.posZ : 1;
+      if (ECS.component.input.keys["ArrowRight"] === true) {
+        velocity.accelerationX += 0.01;
+      } else if (ECS.component.input.keys["ArrowRight"] === false) {
+        velocity.accelerationX = 0;
+      } else
+
+      if (ECS.component.input.keys["ArrowLeft"] === true) {
+        velocity.accelerationX -= 0.011;
+      } else if (ECS.component.input.keys["ArrowLeft"] === false) {
+        velocity.accelerationX = 0;
+      }
       velocity.velX += velocity.accelerationX;
       velocity.velY += velocity.accelerationY;
 
