@@ -84,8 +84,8 @@ class GameController_ecs {
       movementSystem: this.#movementSystem, checkCollisionSystem: this.#checkCollisionSystem,
         renderSystem: this.#renderSystem
     }});
-
-    gameLoop.start();
     console.log("Player ship created:", playerShip);
+    gameLoop.start();
+
   }
 }

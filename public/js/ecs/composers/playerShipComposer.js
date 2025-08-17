@@ -35,6 +35,8 @@ class PlayerShipComposer{
 
       ECS.registerEntityToGroups(baseShip);
 
+      return (baseShip)
+
 
 
 /*

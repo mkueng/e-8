@@ -40,7 +40,8 @@ class PlayerShipFactory_ecs {
       velocity: ECS.componentFactory('velocity', ECS.component.velocity),
       image: ECS.componentFactory('image', ECS.component.image),
       collision: ECS.componentFactory('collision', ECS.component.collision),
-      hitBox: ECS.componentFactory('hitBox', ECS.component.hitBox)
+      hitBox: ECS.componentFactory('hitBox', ECS.component.hitBox),
+      bounds: ECS.componentFactory('bounds', ECS.component.bounds)
     })
 
     ship.components.image.image = imageResource;
@@ -51,12 +52,23 @@ class PlayerShipFactory_ecs {
     ship.components.image.context = canvas.context;
 
     ship.components.position.posX = 100;
-    ship.components.position.posY = 700;
+    ship.components.position.posY = 200;
     ship.components.position.previousPosX = ship.components.position.posX;
     ship.components.position.previousPosY = ship.components.position.posY;
     ship.components.position.posZ = 1;
 
-    ship.isActive = false;
+    ship.components.velocity.velX = 0;
+    ship.components.velocity.velY = 0;
+    ship.components.velocity.maxVelX = 5;
+    ship.components.velocity.maxVelY = 5;
+
+    ship.components.upperBoundX = 300;
+    ship.components.lowerBoundX = 0;
+    ship.components.upperBoundY = 400;
+    ship.components.lowerBoundY = 0;
+
+
+    ship.isActive = true;
 
     return ship;
   }

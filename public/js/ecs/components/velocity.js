@@ -6,6 +6,8 @@ ECS.component.velocity = {
   velX: 0,
   velY: 0,
   velZ: 0,
+  maxVelX: 0,
+  maxVelY: 0,
   accelerationX: 0,
   accelerationY: 0,
   accelerationZ: 0,

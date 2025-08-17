@@ -3,8 +3,8 @@
  * @type {{posX: number, posY: number, width: number, height: number}}
  */
 ECS.component.bounds = {
-  posX:0,
-  posY:0,
-  width: 0,
-  height: 0
+  upperBoundX: 0,
+  upperBoundY: 0,
+  lowerBoundX: 0,
+  lowerBoundY: 0
 }

@@ -7,20 +7,20 @@ class MovementSystem extends System {
     //const matches = this.getMatchingEntities(entities);
 
     for (const entity of entities) {
-      const { position, velocity, input } = entity.components;
+      const { position, velocity, bounds} = entity.components;
+
       const zScale = position.posZ > 0 ? 100 / position.posZ : 1;
 
-      if (ECS.component.input.keys["ArrowRight"] === true) {
-        velocity.accelerationX += 0.01;
-      } else if (ECS.component.input.keys["ArrowRight"] === false) {
-        velocity.accelerationX = 0;
-      } else
+      if (ECS.component.input.keys["ArrowRight"] === true ) {
+        velocity.accelerationX += 0.001;
+      }
 
       if (ECS.component.input.keys["ArrowLeft"] === true) {
-        velocity.accelerationX -= 0.011;
-      } else if (ECS.component.input.keys["ArrowLeft"] === false) {
-        velocity.accelerationX = 0;
+        velocity.accelerationX -= 0.001;
       }
+
+      https://chatgpt.com/share/68a219b3-d324-800b-af05-d8879e98cc2e
+
       velocity.velX += velocity.accelerationX;
       velocity.velY += velocity.accelerationY;
 
