@@ -89,6 +89,7 @@ class GameLoop_ecs {
    */
   #update = (deltaTime) => {
 
+    this.#systems["playerShipControlSystem"].update(this.groups["player"],deltaTime,0,0);
     this.#systems["movementSystem"].update(this.groups["movement"],deltaTime,0,0);
     this.#systems["checkCollisionSystem"].update(this.groups["collision"]);
 

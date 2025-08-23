@@ -39,7 +39,8 @@ ECS.systemGroups = ECS.systemGroups || {
   render: [],
   collision: [],
   input: [],
-  checkBounds: []
+  checkBounds: [],
+  player: []
 };
 
 /**
@@ -77,6 +78,7 @@ ECS.componentFactory = function (name, data) {
  */
 ECS.systemRequirements = {
   movement: ["position","velocity"],
+  player: ["position","velocity","bounds","image","collision","hitBox","input"],
   render: ["image"],
   checkBounds: ["position", "dimension"],
   checkCollision: ["position", "hitBox"],

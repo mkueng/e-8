@@ -8,6 +8,8 @@ ECS.component.velocity = {
   velZ: 0,
   maxVelX: 0,
   maxVelY: 0,
+  viewPortVelX: 0,
+  viewPortVelY: 0,
   accelerationX: 0,
   accelerationY: 0,
   accelerationZ: 0,

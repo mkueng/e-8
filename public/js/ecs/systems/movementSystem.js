@@ -1,37 +1,29 @@
 class MovementSystem extends System {
-  constructor() {
+  constructor(playerEntity) {
     super(['position', 'velocity']);
+    this.playerEntity = playerEntity;
   }
 
-  update(entities, deltaTime, playerShipVelX, playerShipVelY) {
+  update(entities, deltaTime) {
     //const matches = this.getMatchingEntities(entities);
 
     for (const entity of entities) {
       const { position, velocity, bounds} = entity.components;
 
+      const playerVelocity = this.playerEntity.components.velocity;
       const zScale = position.posZ > 0 ? 100 / position.posZ : 1;
-
-      if (ECS.component.input.keys["ArrowRight"] === true ) {
-        velocity.accelerationX += 0.001;
-      }
-
-      if (ECS.component.input.keys["ArrowLeft"] === true) {
-        velocity.accelerationX -= 0.001;
-      }
-
-      https://chatgpt.com/share/68a219b3-d324-800b-af05-d8879e98cc2e
-
+      
       velocity.velX += velocity.accelerationX;
       velocity.velY += velocity.accelerationY;
 
-      const viewPortVelX = velocity.hasMass
-        ? (playerShipVelX + velocity.velX) * velocity.vector * zScale * deltaTime
+      velocity.viewPortVelX = velocity.hasMass
+        ? (playerVelocity.velX + velocity.velX) * velocity.vector * zScale * deltaTime
         : velocity.velX * velocity.vector;
 
-      position.posX += viewPortVelX;
+      position.posX += velocity.viewPortVelX;
 
       if (!position.posYisFixed) {
-        position.posY += playerShipVelY * zScale * 0.1 * velocity.vector;
+        position.posY += playerVelocity.velY * zScale * 0.1 * velocity.vector;
       }
 
       /*

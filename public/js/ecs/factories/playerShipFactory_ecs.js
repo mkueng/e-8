@@ -41,7 +41,8 @@ class PlayerShipFactory_ecs {
       image: ECS.componentFactory('image', ECS.component.image),
       collision: ECS.componentFactory('collision', ECS.component.collision),
       hitBox: ECS.componentFactory('hitBox', ECS.component.hitBox),
-      bounds: ECS.componentFactory('bounds', ECS.component.bounds)
+      bounds: ECS.componentFactory('bounds', ECS.component.bounds),
+      input: ECS.componentFactory('input', ECS.component.input)
     })
 
     ship.components.image.image = imageResource;

@@ -6,8 +6,10 @@ class GameController_ecs {
   #explosionFactory;
 
   #movementSystem;
+  #playerShipMovementSystem;
   #checkCollisionSystem;
   #checkBoundsSystem;
+  #playerShipControlSystem;
   #renderSystem;
 
   constructor ({
@@ -63,8 +65,10 @@ class GameController_ecs {
 
   createSystems = async () => {
     this.#movementSystem = new MovementSystem();
+    this.#playerShipMovementSystem = new PlayerShipMovementSystem();
     this.#checkCollisionSystem = new CheckCollisionSystem();
     this.#renderSystem = new RenderSystem();
+    this.#playerShipControlSystem = new PlayerShipControlSystem();
     console.log("ECS systems created");
   }
 
@@ -80,9 +84,13 @@ class GameController_ecs {
 
   startGame = async () => {
     let playerShip = await this.playerShipComposer.composePlayerShip();
-    let gameLoop = new GameLoop_ecs({systems:{
-      movementSystem: this.#movementSystem, checkCollisionSystem: this.#checkCollisionSystem,
-        renderSystem: this.#renderSystem
+    let gameLoop = new GameLoop_ecs({
+      systems:{
+        movementSystem: this.#movementSystem,
+        playerShipMovementSystem: this.#playerShipMovementSystem,
+        checkCollisionSystem: this.#checkCollisionSystem,
+        renderSystem: this.#renderSystem,
+        playerShipControlSystem: this.#playerShipControlSystem
     }});
     console.log("Player ship created:", playerShip);
     gameLoop.start();

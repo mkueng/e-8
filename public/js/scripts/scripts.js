@@ -224,9 +224,11 @@ class Scripts {
     // ecs systems
     await ScriptLoader.loadScript("js/ecs/systems/system.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/systems/movementSystem.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/playerShipMovementSystem.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/systems/renderSystem.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/systems/checkBoundsSystem.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/systems/checkCollisionSystem.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/systems/playerShipControlSystem.js?v="+Scripts.version);
 
     //ecs factories
     await ScriptLoader.loadScript("js/ecs/factories/playerShipFactory_ecs.js?v="+Scripts.version);
