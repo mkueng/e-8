@@ -233,7 +233,7 @@ class PlayerShip extends GameObject {
     hitBy.object.destroy();
   }
 
-  /**
+  /**2
    * @name update
    * @param deltaTime
    */

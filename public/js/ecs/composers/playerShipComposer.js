@@ -34,10 +34,7 @@ class PlayerShipComposer{
       })
 
       ECS.registerEntityToGroups(baseShip);
-
       return (baseShip)
-
-
 
 /*
     let photonTorpedo = await this.weaponFactory.createWeapon({

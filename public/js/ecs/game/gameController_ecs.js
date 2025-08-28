@@ -38,7 +38,14 @@ class GameController_ecs {
 
     await this.createSystems();
     await this.createComposers();
+    this.addEventListeners();
 
+  }
+
+  /**
+   *
+   */
+  addEventListeners = () => {
     window.addEventListener('keydown', (e) => {
       ECS.component.input.keys[e.code] = true;
       console.log("ECS.component.input.keys",  ECS.component.input.keys);
@@ -59,10 +66,14 @@ class GameController_ecs {
     })
     window.addEventListener('mouseup', (e) => {
       ECS.component.input.mouse.buttons[e.button] = false;
-    
+
     });
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   createSystems = async () => {
     this.#movementSystem = new MovementSystem();
     this.#playerShipMovementSystem = new PlayerShipMovementSystem();
@@ -72,6 +83,10 @@ class GameController_ecs {
     console.log("ECS systems created");
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   createComposers = async () => {
     this.playerShipComposer = new PlayerShipComposer({
       playerShipFactory: this.#playerShipFactory,
@@ -82,6 +97,10 @@ class GameController_ecs {
     console.log("Composers created");
   }
 
+  /**
+   *
+   * @returns {Promise<void>}
+   */
   startGame = async () => {
     let playerShip = await this.playerShipComposer.composePlayerShip();
     let gameLoop = new GameLoop_ecs({
