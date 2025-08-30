@@ -207,6 +207,9 @@ class Scripts {
     // ecs
     await ScriptLoader.loadScript("js/ecs/ecs.js?v="+Scripts.version);
 
+    // ecs factories
+    await ScriptLoader.loadScript("js/ecs/componentFactory.js?v="+Scripts.version);
+    await ScriptLoader.loadScript("js/ecs/entityFactory.js?v="+Scripts.version);
 
     // ecs components
     await ScriptLoader.loadScript("js/ecs/components/bounds.js?v="+Scripts.version);

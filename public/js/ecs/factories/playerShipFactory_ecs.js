@@ -7,10 +7,14 @@ class PlayerShipFactory_ecs {
   }
 
   constructor({
+                componentFactory,
+                entityFactory,
                 resourceHandler,
                 canvasHandler
   }) {
     Object.assign(this, {
+      componentFactory,
+      entityFactory,
       resourceHandler,
       canvasHandler
     })
@@ -35,14 +39,14 @@ class PlayerShipFactory_ecs {
 
     const imageResource = await this.resourceHandler.fetchImageResource({resourceObject: shipType["imageResourceObjects"][shipImageIdentifier]});
 
-    const ship = ECS.entityFactory({
-      position: ECS.componentFactory('position', ECS.component.position),
-      velocity: ECS.componentFactory('velocity', ECS.component.velocity),
-      image: ECS.componentFactory('image', ECS.component.image),
-      collision: ECS.componentFactory('collision', ECS.component.collision),
-      hitBox: ECS.componentFactory('hitBox', ECS.component.hitBox),
-      bounds: ECS.componentFactory('bounds', ECS.component.bounds),
-      input: ECS.componentFactory('input', ECS.component.input)
+    const ship = this.entityFactory({
+      position: this.componentFactory.createComponent("position"),
+      velocity: this.componentFactory.createComponent("velocity"),
+      image: this.componentFactory.createComponent("image"),
+      collision: this.componentFactory.createComponent("collision"),
+      hitBox: this.componentFactory.createComponent("hitBox"),
+      bounds: this.componentFactory.createComponent("bounds"),
+      input: this.componentFactory.createComponent("input")
     })
 
     ship.components.image.image = imageResource;
