@@ -1,6 +1,6 @@
 /**
  *
- * @type {{posX: number, posY: number, width: number, height: number}}
+ * @type {Readonly<{upperBoundX: number, upperBoundY: number, lowerBoundX: number, lowerBoundY: number}>}
  */
 ECS.component.bounds = Object.freeze({
   upperBoundX: 0,

@@ -14,9 +14,8 @@ class FactoryHandler {
 
 
     this.#factoryTypes = {
-      playerShipFactory: PlayerShipFactory_ecs,
-      //propulsion : PropulsionFactory_ecs,
-      //enemyShip: EnemyShipFactory_ecs,
+      componentFactory: ComponentFactory,
+      entityFactory: EntityFactory,
       weaponFactory: WeaponFactory_ecs,
       explosionFactory: ExplosionFactory_ecs
     }

@@ -1,7 +1,6 @@
 "use strict";
 class GameController_ecs {
 
-  #playerShipFactory;
   #weaponFactory;
   #explosionFactory;
 
@@ -32,7 +31,6 @@ class GameController_ecs {
   init = async () => {
     // Initialize the ECS framework, handlers, and other components
     await this.factoryHandler.init();
-    this.#playerShipFactory = this.factoryHandler.getFactory("playerShipFactory");
     this.#weaponFactory = this.factoryHandler.getFactory("weaponFactory");
     this.#explosionFactory = this.factoryHandler.getFactory("explosionFactory");
 
@@ -89,7 +87,8 @@ class GameController_ecs {
    */
   createComposers = async () => {
     this.playerShipComposer = new PlayerShipComposer({
-      playerShipFactory: this.#playerShipFactory,
+
+      componentFactory: this.#componentFactory,
       weaponFactory: this.#weaponFactory,
       explosionFactory: this.#explosionFactory,
       canvasHandler: this.canvasHandler

@@ -234,7 +234,6 @@ class Scripts {
     await ScriptLoader.loadScript("js/ecs/systems/playerShipControlSystem.js?v="+Scripts.version);
 
     //ecs factories
-    await ScriptLoader.loadScript("js/ecs/factories/playerShipFactory_ecs.js?v="+Scripts.version);
     await ScriptLoader.loadScript("js/ecs/factories/propulsionFactory_ecs.js?v="+Scripts.version);
 
     await ScriptLoader.loadScript("js/ecs/factories/explosionFactory_ecs.js?v="+Scripts.version);
